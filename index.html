@@ -1,21 +1,37 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <title>nav.md</title>
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300&display=swap" rel="stylesheet" />
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  <link
+    href="https://fonts.googleapis.com/css2?family=Geist:wght@300&display=swap"
+    rel="stylesheet"
+  />
 
-    html, body { width: 100%; }
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html,
+    body {
+      width: 100%;
+    }
 
     body {
       background-color: #111111;
       color: #888888;
-      font-family: 'Geist', 'Helvetica Neue', sans-serif;
+      font-family: "Geist", "Helvetica Neue", sans-serif;
       font-weight: 300;
       font-size: 16px;
       line-height: 25px;
@@ -50,31 +66,85 @@
       }
     }
 
-    /* ─ Fade-in on load ─ */
+    /* Fade-in on load */
+
     .fade-in {
       opacity: 0;
       transform: translateY(5px);
       animation: fadeUp 0.55s ease forwards;
     }
+
     @keyframes fadeUp {
-      to { opacity: 1; transform: translateY(0); }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
-    .title         { animation-delay: 0.05s; }
-    .bio           { animation-delay: 0.18s; }
-    .current       { animation-delay: 0.31s; }
-    .ticker-wrap   { animation-delay: 0.44s; }
-    .links-section { animation-delay: 0.52s; }
-    .time-section  { animation-delay: 0.60s; }
 
-    p { color: #888888; margin-top: 0; }
+    .title {
+      animation-delay: 0.05s;
+    }
 
-    .bio           { margin-bottom: 0; }
-    .current       { margin-top: 25px; }
-    .links-section { margin-top: 25px; }
-    .links-section p { margin-top: 0; }
-    .time-section  { margin-top: 25px; padding-bottom: 40px; }
+    .bio {
+      animation-delay: 0.18s;
+    }
 
-    /* ─ Title ─ */
+    .current {
+      animation-delay: 0.31s;
+    }
+
+    .ticker-wrap {
+      animation-delay: 0.44s;
+    }
+
+    .links-section {
+      animation-delay: 0.52s;
+    }
+
+    .blog-section {
+      animation-delay: 0.56s;
+    }
+
+    .time-section {
+      animation-delay: 0.60s;
+    }
+
+    p {
+      color: #888888;
+      margin-top: 0;
+    }
+
+    .bio {
+      margin-bottom: 0;
+    }
+
+    .current {
+      margin-top: 25px;
+    }
+
+    .links-section {
+      margin-top: 25px;
+    }
+
+    .links-section p {
+      margin-top: 0;
+    }
+
+    .blog-section {
+      margin-top: 25px;
+    }
+
+    .blog-section p {
+      margin-top: 0;
+    }
+
+    .time-section {
+      margin-top: 25px;
+      padding-bottom: 40px;
+    }
+
+    /* Title */
+
     .title {
       color: #ffffff;
       margin-bottom: 25px;
@@ -82,22 +152,27 @@
       display: inline-block;
     }
 
-    /* ── nav name ── */
+    /* nav name */
+
     .nav-name {
       color: #ffffff;
       font-weight: 300;
       cursor: default;
     }
 
-    /* ─ mac text ─ */
+    /* Mac text */
+
     .mac-text {
       color: #ffffff;
-      font-family: -apple-system, 'Helvetica Neue', sans-serif;
+      font-family: -apple-system, "Helvetica Neue", sans-serif;
       cursor: default;
       display: inline;
       transition: opacity 0.2s ease;
     }
-    .mac-text:hover { opacity: 0.6; }
+
+    .mac-text:hover {
+      opacity: 0.6;
+    }
 
     .apple-svg {
       display: inline-block;
@@ -108,36 +183,120 @@
       fill: #ffffff;
     }
 
-    /* ─ Links ─ */
+    /* Links */
+
     a {
       color: #ffffff;
       text-decoration: none;
       transition: opacity 0.2s ease;
     }
-    a:hover { opacity: 0.5; }
 
-    #clock { color: #888888; font-size: 16px; line-height: 25px; font-weight: 300; }
+    a:hover {
+      opacity: 0.5;
+    }
+
+    /* Blog list */
+
+    .blog-entry {
+      display: flex;
+      gap: 12px;
+      align-items: baseline;
+    }
+
+    .blog-date {
+      color: #555555;
+      font-size: 14px;
+      flex-shrink: 0;
+      min-width: 72px;
+    }
+
+    .blog-empty {
+      color: #555555;
+    }
+
+    #clock {
+      color: #888888;
+      font-size: 16px;
+      line-height: 25px;
+      font-weight: 300;
+    }
   </style>
 </head>
+
 <body>
   <div class="container">
     <div class="title fade-in">nav.md</div>
 
     <p class="bio fade-in copy">
-      <span class="normal-line">hi. i'm <span class="nav-name">nav</span>, a software engineer and designer</span>
-      <span class="normal-line">based in australia. I care about how things feel</span>
-      <span class="normal-line">as much as how they work.</span>
+      <span class="normal-line">
+        hi. i'm <span class="nav-name">nav</span>, a software engineer and designer
+      </span>
+
+      <span class="normal-line">
+        based in australia. I care about how things feel
+      </span>
+
+      <span class="normal-line">
+        as much as how they work.
+      </span>
     </p>
 
     <p class="current fade-in copy">
-      <span class="normal-line">right now, im building software for <span class="mac-text"><svg class="apple-svg" viewBox="2 0 17 22" xmlns="http://www.w3.org/2000/svg"><path d="M18.71 19.5C17.88 20.74 17 21.95 15.66 21.97C14.32 22 13.89 21.18 12.37 21.18C10.84 21.18 10.37 21.95 9.09997 22C7.78997 22.05 6.79997 20.68 5.95997 19.47C4.24997 17 2.93997 12.45 4.69997 9.39C5.56997 7.87 7.12997 6.91 8.81997 6.88C10.1 6.86 11.32 7.75 12.11 7.75C12.89 7.75 14.37 6.68 15.92 6.84C16.57 6.87 18.39 7.1 19.56 8.82C19.47 8.88 17.39 10.1 17.41 12.63C17.44 15.65 20.06 16.66 20.09 16.67C20.06 16.74 19.67 18.11 18.71 19.5ZM13 3.5C13.73 2.67 14.94 2.04 15.94 2C16.07 3.17 15.6 4.35 14.9 5.19C14.21 6.04 13.07 6.7 11.95 6.61C11.8 5.46 12.36 4.26 13 3.5Z"/></svg>&#8202;mac</span>,</span>
-      <span class="normal-line">as well as other fun <span class="nav-name">terminal</span> based programs</span>
-   
+      <span class="normal-line">
+        right now, im building software for
+        <span class="mac-text">
+          <svg
+            class="apple-svg"
+            viewBox="2 0 17 22"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M18.71 19.5C17.88 20.74 17 21.95 15.66 21.97C14.32 22 13.89 21.18 12.37 21.18C10.84 21.18 10.37 21.95 9.09997 22C7.78997 22.05 6.79997 20.68 5.95997 19.47C4.24997 17 2.93997 12.45 4.69997 9.39C5.56997 7.87 7.12997 6.91 8.81997 6.88C10.1 6.86 11.32 7.75 12.11 7.75C12.89 7.75 14.37 6.68 15.92 6.84C16.57 6.87 18.39 7.1 19.56 8.82C19.47 8.88 17.39 10.1 17.41 12.63C17.44 15.65 20.06 16.66 20.09 16.67C20.06 16.74 19.67 18.11 18.71 19.5ZM13 3.5C13.73 2.67 14.94 2.04 15.94 2C16.07 3.17 15.6 4.35 14.9 5.19C14.21 6.04 13.07 6.7 11.95 6.61C11.8 5.46 12.36 4.26 13 3.5Z"
+            />
+          </svg>
+          &#8202;mac
+        </span>,
+      </span>
+
+      <span class="normal-line">
+        as well as other fun <span class="nav-name">terminal</span> based programs
+      </span>
+    </p>
+
     <div class="links-section fade-in">
       <p>find me</p>
-      <p><a href="https://github.com/adeveloperduck" target="_blank">github</a> - it still works</p>
-      <p><a href="https://discord.com/users/1337320225066061911" target="_blank">discord</a> - same day replies</p>
-      <p><a id="email-link" href="mailto:navneet.dagdiya@gmail.com">email</a> - 50-50 i respond</p>
+
+      <p>
+        <a href="https://github.com/navthings" target="_blank">github</a>
+        - it still works
+      </p>
+
+      <p>
+        <a href="https://ollama.com/navthings" target="_blank">ollama</a>
+        - models i've pushed
+      </p>
+
+      <p>
+        <a href="https://orcid.org/0009-0002-2764-866X" target="_blank">orcid</a>
+        - research id
+      </p>
+
+      <p>
+        <a id="email-link" href="mailto:navneet.dagdiya@gmail.com">
+          email
+        </a>
+        - 50-50 i respond
+      </p>
+    </div>
+
+    <div class="blog-section fade-in">
+      <p>blog</p>
+
+      <div id="blog-list">
+        <p class="blog-empty">
+          nothing posted yet. check back soon.
+        </p>
+      </div>
     </div>
 
     <div class="time-section fade-in">
@@ -145,32 +304,76 @@
     </div>
   </div>
 
-  
-
   <script>
     function updateClock() {
       const now = new Date();
-      const timeStr = now.toLocaleTimeString('en-AU', {
-        hour: 'numeric', minute: '2-digit', hour12: true,
-        timeZone: 'Australia/Perth'
-      }).toLowerCase();
-      document.getElementById('clock').textContent = timeStr + ' in perth';
+
+      const timeStr = now
+        .toLocaleTimeString("en-AU", {
+          hour: "numeric",
+          minute: "2-digit",
+          hour12: true,
+          timeZone: "Australia/Perth",
+        })
+        .toLowerCase();
+
+      document.getElementById("clock").textContent =
+        timeStr + " in perth";
     }
+
     updateClock();
     setInterval(updateClock, 1000);
 
-    const emailLink = document.getElementById('email-link');
-    emailLink.addEventListener('click', function(e) {
+    const emailLink = document.getElementById("email-link");
+
+    emailLink.addEventListener("click", function (e) {
       e.preventDefault();
-      navigator.clipboard.writeText('navneet.dagdiya@gmail.com').catch(() => {});
-      const orig = emailLink.textContent;
-      emailLink.textContent = 'copied.';
-      emailLink.style.opacity = '0.5';
+
+      navigator.clipboard
+        .writeText("navneet.dagdiya@gmail.com")
+        .catch(() => {});
+
+      const originalText = emailLink.textContent;
+
+      emailLink.textContent = "copied.";
+      emailLink.style.opacity = "0.5";
+
       setTimeout(() => {
-        emailLink.textContent = orig;
-        emailLink.style.opacity = '';
+        emailLink.textContent = originalText;
+        emailLink.style.opacity = "";
       }, 1800);
     });
+
+    // Blog posts
+    // Add entries here as you write them, newest first.
+    // Example:
+    // { date: "2026-09-11", title: "first post", url: "/blog/first-post.html" }
+
+    const posts = [
+      // { date: "2026-09-11", title: "hello world", url: "#" },
+    ];
+
+    if (posts.length) {
+      const list = document.getElementById("blog-list");
+
+      list.innerHTML = posts
+        .map(function (post) {
+          return (
+            '<p class="blog-entry">' +
+            '<span class="blog-date">' +
+            post.date +
+            "</span>" +
+            '<a href="' +
+            post.url +
+            '">' +
+            post.title +
+            "</a>" +
+            "</p>"
+          );
+        })
+        .join("");
+    }
   </script>
 </body>
 </html>
+```
