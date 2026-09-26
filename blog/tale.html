@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>tale: bedtime stories for my little brother · nav.md</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Geist:wght@300&family=Geist+Mono:wght@300&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="post.css" />
+</head>
+
+<body>
+  <div class="container">
+    <a class="back" href="../"><span>&larr;</span> nav.md</a>
+
+    <div class="post-title">tale: bedtime stories for my little brother</div>
+    <div class="post-date">2026-09-12</div>
+
+    <article class="post">
+      <p>my little brother kept asking me for bedtime stories, so i built something that could tell them.</p>
+      <p>tale is lilstory scaled up: about 50m parameters instead of 8m, 13 layers, still llama-style and still trained on tinystories on my mac. i also fixed a couple of things lilstory did badly. the learning rate now warms up, then eases off along a curve instead of staying fixed the whole time. and it gets exported to gguf, the format llama.cpp and ollama use, so it runs fast locally.</p>
+      <pre>ollama run navthings/tale</pre>
+      <p>the version that's up has only trained for 2,000 steps, so it's an early release. it writes simple tinystories-style text and still loses the thread sometimes. it's meant to stay small. it only needs to tell a short story.</p>
+      <p><a href="https://github.com/navthings/tale" target="_blank">code on github</a></p>
+    </article>
+
+    <div class="post-foot">
+      <a href="dataset-size-paper.html">&larr; my first paper: does more data help a tiny model?</a>
+      <a href="lilbase.html">lilbase: a 297m model on a free kaggle tpu &rarr;</a>
+    </div>
+  </div>
+
+  <script src="post.js"></script>
+</body>
+</html>

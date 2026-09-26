@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>my first paper: does more data help a tiny model? · nav.md</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Geist:wght@300&family=Geist+Mono:wght@300&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="post.css" />
+</head>
+
+<body>
+  <div class="container">
+    <a class="back" href="../"><span>&larr;</span> nav.md</a>
+
+    <div class="post-title">my first paper: does more data help a tiny model?</div>
+    <div class="post-date">2026-09-05</div>
+
+    <article class="post">
+      <p>i wanted to know how much the amount of training data matters when everything else stays exactly the same. so i took lilstory's setup and trained it four times, on 1%, 5%, 10% and 15% of tinystories. same model, same tokenizer, same learning rate and batch size, 5,000 steps each.</p>
+      <table>
+      <tr><th>data</th><th class="num">stories</th><th class="num">train loss</th><th class="num">val loss</th></tr>
+      <tr><td>1%</td><td class="num">22k</td><td class="num">1.329</td><td class="num">2.402</td></tr>
+      <tr><td>5%</td><td class="num">110k</td><td class="num">1.701</td><td class="num">1.932</td></tr>
+      <tr class="me"><td>10%</td><td class="num">220k</td><td class="num">1.826</td><td class="num">1.816</td></tr>
+      <tr><td>15%</td><td class="num">330k</td><td class="num">1.737</td><td class="num">1.837</td></tr>
+      </table>
+      <p>lower is better. validation loss is measured on stories the model never trained on, so that's the number that matters.</p>
+      <p>the 1% model is the clearest result. its training loss is the best of the four but its validation loss is the worst. it memorised its 22k stories instead of learning how stories work. as the data grows, the gap between the two shrinks, and at 10% they're basically equal.</p>
+      <p>15% not beating 10% surprised me. my best guess is the step count. every model got the same 5,000 steps, so they all read about the same amount of text, and the 15% model probably never got through all of its data. the difference is also small enough that it could just be noise.</p>
+      <p>it's up on zenodo: <a href="https://doi.org/10.5281/zenodo.22340667" target="_blank">the effect of corpus size on the performance of a llm</a></p>
+    </article>
+
+    <div class="post-foot">
+      <a href="lilstory.html">&larr; lilstory: 8m parameters of tiny stories</a>
+      <a href="tale.html">tale: bedtime stories for my little brother &rarr;</a>
+    </div>
+  </div>
+
+  <script src="post.js"></script>
+</body>
+</html>

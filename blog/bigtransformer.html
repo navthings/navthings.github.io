@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>bigtransformer: same idea, a whole text file · nav.md</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Geist:wght@300&family=Geist+Mono:wght@300&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="post.css" />
+</head>
+
+<body>
+  <div class="container">
+    <a class="back" href="../"><span>&larr;</span> nav.md</a>
+
+    <div class="post-title">bigtransformer: same idea, a whole text file</div>
+    <div class="post-date">2026-08-31</div>
+
+    <article class="post">
+      <p>the next day i made it read a file instead of one sentence. bigtransformer trains on a text file, asks how many words of context to use, then keeps predicting the next word for as long as you want.</p>
+      <p>it slides a window over the file. with a context of 4, every run of 4 words becomes a question and the word after it is the answer. the model got a bit bigger too, 16 numbers per word instead of 8.</p>
+      <p>this is where working with whole words started to hurt. every different word gets its own slot, so "cat" and "cats" have nothing to do with each other, and any word that isn't in the file can't exist at all. real models split text into tokens, which are pieces of words, for exactly this reason. so that's what i did next.</p>
+      <p><a href="https://github.com/navthings/bigtransformer" target="_blank">code on github</a></p>
+    </article>
+
+    <div class="post-foot">
+      <a href="liltransformer.html">&larr; a transformer that only knows one sentence</a>
+      <a href="lilstory.html">lilstory: 8m parameters of tiny stories &rarr;</a>
+    </div>
+  </div>
+
+  <script src="post.js"></script>
+</body>
+</html>

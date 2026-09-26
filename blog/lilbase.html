@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>lilbase: a 297m model on a free kaggle tpu · nav.md</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Geist:wght@300&family=Geist+Mono:wght@300&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="post.css" />
+</head>
+
+<body>
+  <div class="container">
+    <a class="back" href="../"><span>&larr;</span> nav.md</a>
+
+    <div class="post-title">lilbase: a 297m model on a free kaggle tpu</div>
+    <div class="post-date">2026-09-23</div>
+
+    <article class="post">
+      <p>everything before this trained on my laptop. for lilbase i wanted a proper base model, one that has read a real chunk of the internet, and a macbook air was never going to get there. kaggle gives out free time on a tpu v5e-8, which is 8 of google's ai chips, so i moved there and rewrote the training in jax.</p>
+      <p>it's 297m parameters, llama-style: 24 layers, 1024 wide, 16 query heads sharing 4 key-value heads, with the llama tokenizer. it read 6.1 billion tokens of <a href="https://huggingface.co/datasets/HuggingFaceFW/fineweb-edu" target="_blank">fineweb-edu</a>, which is about right for its size by the chinchilla rule of roughly 20 tokens per parameter. each step is 524,288 tokens split across the 8 chips, and one kaggle session gets about 8.4 hours before it has to save and stop.</p>
+      <figure><img src="https://raw.githubusercontent.com/navthings/lilbase/main/assets/vs_gpt2_dark2.png" alt="lilbase vs gpt-2 on three benchmarks" loading="lazy"><figcaption>lilbase vs gpt-2 small</figcaption></figure>
+      <table>
+      <tr><th>benchmark</th><th class="num">lilbase</th><th class="num">gpt-2 124m</th></tr>
+      <tr><td>hellaswag</td><td class="num">41.0%</td><td class="num">31.1%</td></tr>
+      <tr><td>arc-easy</td><td class="num">50.5%</td><td class="num">39.5%</td></tr>
+      <tr><td>lambada</td><td class="num">28.7%</td><td class="num">32.6%</td></tr>
+      </table>
+      <p>it beats gpt-2 small on two of three and loses on lambada. to be fair to gpt-2, it's from 2019, it read different data, and lilbase is more than twice its size. it's a fun comparison, not a fair fight.</p>
+      <p>things that went wrong: kaggle sometimes hands out a broken tpu with 1 working chip instead of 8, so the script now refuses to start unless it sees all 8. and doubling the batch ran out of chip memory by about 400mb.</p>
+      <pre>ollama run navthings/lilbase "The water cycle begins when"</pre>
+      <p>it's a base model, so it continues text rather than answering questions. the grammar is solid and the facts are confidently made up.</p>
+      <p><a href="https://github.com/navthings/lilbase" target="_blank">code on github</a></p>
+    </article>
+
+    <div class="post-foot">
+      <a href="tale.html">&larr; tale: bedtime stories for my little brother</a>
+      <a href="lilchat.html">teaching lilbase to talk &rarr;</a>
+    </div>
+  </div>
+
+  <script src="post.js"></script>
+</body>
+</html>
