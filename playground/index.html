@@ -4,6 +4,16 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+  <!-- firefox-based browsers dont get webgpu here, so give them all their cpu cores instead -->
+  <script>
+    window.coi = {
+      shouldRegister: () => /firefox/i.test(navigator.userAgent),
+      shouldDeregister: () => !/firefox/i.test(navigator.userAgent),
+      quiet: true,
+    };
+  </script>
+  <script src="coi-serviceworker.js"></script>
+
   <title>playground · nav.md</title>
 
   <meta name="description" content="talk to my models in your browser. they download once and run on your own computer." />
@@ -30,6 +40,7 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Geist:wght@300&display=swap"
     rel="stylesheet"
+    crossorigin="anonymous"
   />
 
   <style>
