@@ -51,6 +51,7 @@
       <p>it does not know things. it told me the capital of australia is melbourne, then perth on another try. 17 + 25 was 48, and then "so, the answer is 17". i asked for a haiku about a cat that hates mondays and got 20 lines ending with "a reminder that we are all brothers" over and over.</p>
       <p>thats not really a finetuning problem, 297m params just doesnt know much. turning the temperature down from 0.7 to 0.4 helps a bit tho, it gave a normal reply to "hi" 12 out of 12 times instead of 8 out of 12.</p>
       <pre>ollama run navthings/lilchat</pre>
+      <p>or just <a href="../playground/?model=lilchat">try it in your browser</a>, no install.</p>
       <h2>next</h2>
       <p>the real fix is a bigger base model, which is <a href="https://github.com/navthings/sprout" target="_blank">sprout</a>. 523m params, 12 billion tokens from fineweb-edu, dclm, cosmopedia and project gutenberg, back on the kaggle tpu. its about a third of the way through training and when its done it gets the same finetune.</p>
     </article>

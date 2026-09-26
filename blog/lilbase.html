@@ -54,6 +54,7 @@
       <p>it beats gpt-2 small on hellaswag and arc-easy and loses on lambada. to be fair gpt-2 is from 2019, trained on different data, and lilbase is more than twice its size, so its not exactly a fair fight lol</p>
       <p>stuff that went wrong: kaggle sometimes gives you a broken tpu with only 1 chip working instead of 8, so now the script just refuses to run unless it sees all 8. also doubling the batch size ran out of memory by like 400mb.</p>
       <pre>ollama run navthings/lilbase "The water cycle begins when"</pre>
+      <p>or just <a href="../playground/?model=lilbase">try it in your browser</a>, no install.</p>
       <p>its a base model so it just continues whatever you give it instead of answering. it gets grammar right and makes up most facts.</p>
       <p><a href="https://github.com/navthings/lilbase" target="_blank">code</a></p>
     </article>
