@@ -342,6 +342,16 @@
     const WASM = { default: "https://cdn.jsdelivr.net/npm/@wllama/wllama@3.6.1/esm/wasm/wllama.wasm" };
     const TEMPS = [0.2, 0.4, 0.6, 0.8, 1.0];
 
+    // safari passes wllama's memory64 check but cant actually run that build, so point it at the compat build
+    const UA = navigator.userAgent;
+    const WEBKIT = /iPhone|iPad|iPod/.test(UA) || (/Safari/.test(UA) && !/Chrome|Chromium|Edg|Android/.test(UA));
+    const COMPAT = "https://cdn.jsdelivr.net/npm/@wllama/wllama-compat@3.6.1/wasm/";
+
+    function useCompat(w) {
+      const base = w.getWorkerResources.bind(w);
+      w.getWorkerResources = () => ({ ...base(), wasmPath: COMPAT + "wllama.wasm", jsPath: COMPAT + "wllama.js", compat: true });
+    }
+
     // chat models get a conversation, the rest continue whatever you start
     const MODELS = [
       { id: "lilchat", repo: "navthings/lilchat", file: "lilchat-q4_k_m.gguf", size: "274mb", mode: "chat",
@@ -365,6 +375,7 @@
     let busy = false;
     let aborter = null;
     let loadToken = 0;
+    let loading = null;
     const state = {};
 
     function renderModels() {
@@ -419,6 +430,7 @@
       ui.box.placeholder = "loading...";
       setReady(false);
       setState(m, "loading");
+      loading = m;
 
       if (llm) {
         await llm.exit().catch(() => {});
@@ -430,6 +442,7 @@
         const Wllama = await engine;
         if (!Wllama) throw new Error("engine didnt download");
         next = new Wllama(WASM, { suppressNativeLog: true });
+        if (WEBKIT) useCompat(next);
         await next.loadModelFromUrl("https://huggingface.co/" + m.repo + "/resolve/main/" + m.file, {
           n_ctx: m.ctx,
           progressCallback: ({ loaded, total }) => {
@@ -439,6 +452,7 @@
       } catch (err) {
         if (token !== loadToken) return;
         console.error(err);
+        loading = null;
         setState(m, "failed");
         ui.box.placeholder = "couldnt load it, try again?";
         return;
@@ -450,6 +464,7 @@
       }
 
       llm = next;
+      loading = null;
       setState(m, "loaded");
       setReady(true);
       if (m.mode === "chat") {
@@ -582,6 +597,15 @@
       ui.box.style.height = "auto";
       ui.box.style.height = ui.box.scrollHeight + "px";
     }
+
+    window.addEventListener("unhandledrejection", (e) => {
+      if (!loading) return;
+      console.error(e.reason);
+      loadToken++;
+      setState(loading, "failed");
+      ui.box.placeholder = "couldnt load it in this browser, try chrome?";
+      loading = null;
+    });
 
     ui.box.addEventListener("input", autosize);
     ui.box.addEventListener("keydown", (e) => {
