@@ -220,6 +220,7 @@
       font-size: 16px;
       line-height: 25px;
       max-height: 200px;
+      overflow-y: hidden;
       transition: border-color 0.2s ease;
     }
 
@@ -593,9 +594,12 @@
       if (matchMedia("(hover: hover)").matches) ui.box.focus();
     }
 
+    // +1 for the bottom border, otherwise safari decides it needs a scrollbar
     function autosize() {
       ui.box.style.height = "auto";
-      ui.box.style.height = ui.box.scrollHeight + "px";
+      const h = ui.box.scrollHeight + 1;
+      ui.box.style.height = h + "px";
+      ui.box.style.overflowY = h > 200 ? "auto" : "hidden";
     }
 
     window.addEventListener("unhandledrejection", (e) => {
