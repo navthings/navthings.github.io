@@ -245,6 +245,16 @@
       text-align: right;
     }
 
+    .ff {
+      margin-top: 25px;
+      font-size: 14px;
+      color: #aaaaaa;
+    }
+
+    .ff[hidden] {
+      display: none;
+    }
+
     .note {
       margin-top: 40px;
       padding-bottom: 40px;
@@ -295,6 +305,9 @@
         <p class="fade-in" style="animation-delay: 0.18s">
           my models, running in your browser. pick one, it downloads once, then runs on your own computer. nothing you type gets sent anywhere.
         </p>
+        <p class="ff" id="ff" hidden>
+          heads up, youre on firefox (or something built on it like zen), which runs these on your cpu so theyre pretty slow. safari or chrome use your gpu and are way faster.
+        </p>
       </section>
 
       <section class="fade-in" style="animation-delay: 0.26s">
@@ -316,13 +329,15 @@
       </section>
 
       <p class="note fade-in" style="animation-delay: 0.34s">
-        runs with <a href="https://github.com/ngxson/wllama" target="_blank">wllama</a>, which is llama.cpp in your browser. uses your gpu if it can. the models are all on <a href="https://huggingface.co/navthings" target="_blank">hugging face</a>. theyre small, so they make stuff up. a lot.
+        runs on <a href="https://github.com/ngxson/wllama" target="_blank">wllama</a>, which is llama.cpp in your browser. the models are on <a href="https://huggingface.co/navthings" target="_blank">hugging face</a>. theyre small, so they make stuff up. a lot.
       </p>
     </div>
   </div>
 
   <script type="module">
-    import { Wllama } from "https://cdn.jsdelivr.net/npm/@wllama/wllama@3.6.1/esm/index.js";
+    // loaded lazily so the page still shows up if the engine cant download
+    const engine = import("https://cdn.jsdelivr.net/npm/@wllama/wllama@3.6.1/esm/index.js").then((mod) => mod.Wllama)
+      .catch((err) => (console.error(err), null));
 
     const WASM = { default: "https://cdn.jsdelivr.net/npm/@wllama/wllama@3.6.1/esm/wasm/wllama.wasm" };
     const TEMPS = [0.2, 0.4, 0.6, 0.8, 1.0];
@@ -410,8 +425,11 @@
         llm = null;
       }
 
-      const next = new Wllama(WASM, { suppressNativeLog: true });
+      let next = null;
       try {
+        const Wllama = await engine;
+        if (!Wllama) throw new Error("engine didnt download");
+        next = new Wllama(WASM, { suppressNativeLog: true });
         await next.loadModelFromUrl("https://huggingface.co/" + m.repo + "/resolve/main/" + m.file, {
           n_ctx: m.ctx,
           progressCallback: ({ loaded, total }) => {
@@ -583,6 +601,7 @@
     };
     ui.temp.onclick = () => setTemp(TEMPS[(TEMPS.indexOf(temp) + 1) % TEMPS.length]);
 
+    if (/firefox/i.test(navigator.userAgent)) $("ff").hidden = false;
     renderModels();
     const preset = MODELS.find((m) => m.id === new URLSearchParams(location.search).get("model"));
     if (preset) pick(preset);
