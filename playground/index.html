@@ -4,11 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- firefox-based browsers dont get webgpu here, so give them all their cpu cores instead -->
+  <!-- the multithreading worker broke firefox, this just removes it from browsers that installed it -->
   <script>
     window.coi = {
-      shouldRegister: () => /firefox/i.test(navigator.userAgent),
-      shouldDeregister: () => !/firefox/i.test(navigator.userAgent),
+      shouldRegister: () => false,
+      shouldDeregister: () => true,
       quiet: true,
     };
   </script>
