@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>not found · navthings</title>
+
+  <meta name="theme-color" content="#111111" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Geist:wght@300&display=swap"
+    rel="stylesheet"
+  />
+
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #111111;
+      color: #888888;
+      font-family: "Geist", "Helvetica Neue", sans-serif;
+      font-weight: 300;
+      font-size: 16px;
+      line-height: 25px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    .container {
+      padding: 80px 40px 60px 116px;
+      max-width: calc(116px + 32rem + 40px);
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 60px 32px 48px 32px;
+      }
+    }
+
+    a {
+      color: #ffffff;
+      text-decoration: none;
+      transition: opacity 0.2s ease;
+    }
+
+    a:hover {
+      opacity: 0.5;
+    }
+
+    section {
+      margin-top: 25px;
+    }
+
+    .code {
+      color: #ffffff;
+    }
+
+    .fade-in {
+      opacity: 0;
+      transform: translateY(5px);
+      animation: fadeUp 0.55s ease forwards;
+    }
+
+    @keyframes fadeUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .fade-in {
+        animation: none;
+        opacity: 1;
+        transform: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <a class="fade-in" href="/" style="animation-delay: 0.05s">navthings</a>
+
+    <section>
+      <p class="code fade-in" style="animation-delay: 0.12s">404</p>
+      <p class="fade-in" style="animation-delay: 0.2s">
+        this page doesnt exist. i asked lilchat where it went and it said melbourne, so thats no help.
+      </p>
+    </section>
+
+    <section class="fade-in" style="animation-delay: 0.3s">
+      <p><a href="/">home</a> - the actual site</p>
+      <p><a href="/playground/">playground</a> - talk to my models</p>
+    </section>
+  </div>
+</body>
+</html>
