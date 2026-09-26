@@ -6,11 +6,11 @@
 
   <title>playground · nav.md</title>
 
-  <meta name="description" content="chat with my models in your browser. they download once and run on your own computer." />
+  <meta name="description" content="talk to my models in your browser. they download once and run on your own computer." />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="nav.md" />
   <meta property="og:title" content="playground" />
-  <meta property="og:description" content="chat with my models in your browser. they download once and run on your own computer." />
+  <meta property="og:description" content="talk to my models in your browser. they download once and run on your own computer." />
   <meta property="og:url" content="https://navthings.github.io/playground/" />
   <meta property="og:image" content="https://navthings.github.io/og.png?v=2" />
   <meta property="og:image:width" content="1200" />
@@ -18,7 +18,7 @@
   <meta property="og:image:alt" content="nav.md, training small language models from scratch" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="playground" />
-  <meta name="twitter:description" content="chat with my models in your browser. they download once and run on your own computer." />
+  <meta name="twitter:description" content="talk to my models in your browser. they download once and run on your own computer." />
   <meta name="twitter:image" content="https://navthings.github.io/og.png?v=2" />
   <meta name="theme-color" content="#111111" />
   <link rel="icon" type="image/svg+xml" href="../favicon.svg" />
@@ -28,7 +28,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
-    href="https://fonts.googleapis.com/css2?family=Geist:wght@300&family=Geist+Mono:wght@300&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Geist:wght@300&display=swap"
     rel="stylesheet"
   />
 
@@ -55,7 +55,10 @@
 
     .container {
       padding: 80px 40px 60px 116px;
-      max-width: calc(116px + 38rem + 40px);
+    }
+
+    .col {
+      max-width: 32rem;
     }
 
     @media (max-width: 600px) {
@@ -80,7 +83,9 @@
       background: none;
       border: none;
       font: inherit;
+      line-height: inherit;
       cursor: pointer;
+      text-align: left;
     }
 
     button:disabled {
@@ -88,62 +93,19 @@
       cursor: default;
     }
 
-    .back {
-      display: inline-block;
-      margin-bottom: 25px;
-    }
-
     .title {
       color: #ffffff;
-    }
-
-    .intro {
-      max-width: 34rem;
       margin-bottom: 25px;
     }
 
-    .label {
-      margin-bottom: 0;
+    section {
+      margin-top: 25px;
     }
 
-    /* model picker */
-
-    .models {
-      margin-bottom: 25px;
-    }
+    /* models, laid out like the links on the home page */
 
     .model {
-      display: flex;
-      gap: 12px;
-      align-items: baseline;
-      width: 100%;
-      text-align: left;
-      color: #888888;
-    }
-
-    .model .name {
-      color: #666666;
-      min-width: 72px;
-      transition: color 0.2s ease;
-    }
-
-    .model .size {
-      color: #555555;
-      font-size: 14px;
-      min-width: 52px;
-      font-variant-numeric: tabular-nums;
-    }
-
-    .model .what {
-      color: #555555;
-      transition: color 0.2s ease;
-    }
-
-    .model.on .name {
-      color: #ffffff;
-    }
-
-    .model.on .what {
+      display: block;
       color: #888888;
     }
 
@@ -151,78 +113,63 @@
       opacity: 1 !important;
     }
 
+    .model .name {
+      color: #ffffff;
+      transition: opacity 0.2s ease;
+    }
+
     .model:hover .name {
-      color: #cccccc;
+      opacity: 0.5;
     }
 
-    @media (max-width: 600px) {
-      .model {
-        flex-wrap: wrap;
-        gap: 0 12px;
-        margin-bottom: 6px;
-      }
-
-      .model .what {
-        width: 100%;
-      }
-    }
-
-    /* status line */
-
-    .status {
-      font-size: 14px;
+    .model .state {
       color: #555555;
-      min-height: 25px;
+      font-size: 14px;
       font-variant-numeric: tabular-nums;
+      margin-left: 4px;
     }
 
-    .bar {
-      height: 1px;
-      background: #1f1f1f;
-      margin: 6px 0 25px;
-      max-width: 38rem;
-      overflow: hidden;
+    .model.on .state {
+      color: #888888;
     }
 
-    .bar i {
-      display: block;
-      height: 100%;
-      width: 0;
-      background: #ffffff;
-      transition: width 0.2s ease;
-    }
+    /* conversation */
 
-    /* output */
+    #chat[hidden] {
+      display: none;
+    }
 
     .log {
-      max-width: 38rem;
-      margin-bottom: 20px;
+      margin-bottom: 25px;
     }
 
-    .turn {
-      margin-bottom: 20px;
+    .log:empty {
+      display: none;
+    }
+
+    .msg {
       white-space: pre-wrap;
-      word-wrap: break-word;
+      overflow-wrap: anywhere;
     }
 
-    .turn .who {
-      display: block;
-      color: #555555;
-      font-size: 14px;
-    }
-
-    .turn.you {
+    .msg.you {
       color: #ffffff;
+      margin-top: 25px;
     }
 
-    .turn.bot {
-      color: #aaaaaa;
+    .msg.you:first-child {
+      margin-top: 0;
+    }
+
+    .msg.bot {
+      color: #888888;
+      margin-top: 4px;
     }
 
     .story {
       white-space: pre-wrap;
-      word-wrap: break-word;
-      color: #aaaaaa;
+      overflow-wrap: anywhere;
+      color: #888888;
     }
 
     .story b {
@@ -230,14 +177,14 @@
       font-weight: 300;
     }
 
-    .cursor::after {
+    .typing::after {
       content: "";
       display: inline-block;
-      width: 7px;
-      height: 15px;
-      margin-left: 2px;
-      vertical-align: -2px;
-      background: #888888;
+      width: 6px;
+      height: 14px;
+      margin-left: 3px;
+      vertical-align: -1px;
+      background: #555555;
       animation: blink 1s steps(2, start) infinite;
     }
 
@@ -247,90 +194,49 @@
       }
     }
 
-    /* input */
-
-    .input {
-      max-width: 38rem;
-      border-top: 1px solid #1f1f1f;
-      padding-top: 16px;
-    }
-
     textarea {
+      display: block;
       width: 100%;
       background: none;
       border: none;
+      border-bottom: 1px solid #222222;
+      border-radius: 0;
+      padding-bottom: 8px;
       outline: none;
       resize: none;
       color: #ffffff;
       font: inherit;
+      font-size: 16px;
       line-height: 25px;
-      min-height: 25px;
       max-height: 200px;
+      transition: border-color 0.2s ease;
+    }
+
+    textarea:focus {
+      border-bottom-color: #444444;
     }
 
     textarea::placeholder {
       color: #444444;
     }
 
-    textarea:disabled {
-      color: #444444;
-    }
-
     .actions {
       display: flex;
-      gap: 20px;
-      align-items: baseline;
+      gap: 16px;
       margin-top: 10px;
       font-size: 14px;
     }
 
-    .actions .spacer {
-      flex: 1;
-    }
-
-    .temp {
+    .actions .stats {
+      margin-left: auto;
       color: #555555;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .temp output {
-      color: #888888;
-      min-width: 24px;
       font-variant-numeric: tabular-nums;
-    }
-
-    input[type="range"] {
-      -webkit-appearance: none;
-      appearance: none;
-      width: 80px;
-      height: 1px;
-      background: #333333;
-      outline: none;
-    }
-
-    input[type="range"]::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      width: 9px;
-      height: 9px;
-      border-radius: 50%;
-      background: #ffffff;
-      cursor: pointer;
-    }
-
-    input[type="range"]::-moz-range-thumb {
-      width: 9px;
-      height: 9px;
-      border: none;
-      border-radius: 50%;
-      background: #ffffff;
-      cursor: pointer;
+      text-align: right;
     }
 
     .note {
-      max-width: 34rem;
       margin-top: 40px;
+      padding-bottom: 40px;
       font-size: 14px;
       color: #555555;
     }
@@ -354,21 +260,14 @@
       }
     }
 
-    .pop {
-      animation: fadeUp 0.35s ease forwards;
-      opacity: 0;
-      transform: translateY(4px);
-    }
-
     @media (prefers-reduced-motion: reduce) {
-      .fade-in,
-      .pop {
+      .fade-in {
         animation: none;
         opacity: 1;
         transform: none;
       }
 
-      .cursor::after {
+      .typing::after {
         animation: none;
       }
     }
@@ -377,122 +276,123 @@
 
 <body>
   <div class="container">
-    <a class="back fade-in" href="../" style="animation-delay: 0.05s">nav.md</a>
+    <div class="col">
+      <a class="fade-in" href="../" style="animation-delay: 0.05s">nav.md</a>
 
-    <div class="title fade-in" style="animation-delay: 0.1s">playground</div>
-    <p class="intro fade-in" style="animation-delay: 0.18s">
-      my models, running in your browser. pick one and it downloads once, then runs on your own computer. nothing you type gets sent anywhere.
-    </p>
+      <section>
+        <div class="title fade-in" style="animation-delay: 0.1s">playground</div>
+        <p class="fade-in" style="animation-delay: 0.18s">
+          my models, running in your browser. pick one, it downloads once, then runs on your own computer. nothing you type gets sent anywhere.
+        </p>
+      </section>
 
-    <div class="models fade-in" id="models" style="animation-delay: 0.26s"></div>
+      <section class="fade-in" style="animation-delay: 0.26s">
+        <p>models</p>
+        <div id="models"></div>
+      </section>
 
-    <div class="fade-in" style="animation-delay: 0.34s">
-      <div class="status" id="status">pick a model</div>
-      <div class="bar"><i id="bar"></i></div>
-
-      <div class="log" id="log"></div>
-
-      <div class="input">
-        <textarea id="box" rows="1" placeholder="pick a model first" disabled></textarea>
+      <section id="chat" hidden>
+        <p id="chat-label"></p>
+        <div class="log" id="log"></div>
+        <textarea id="box" rows="1"></textarea>
         <div class="actions">
-          <button id="go" disabled>send</button>
+          <button id="go">send</button>
           <button id="stop" hidden>stop</button>
-          <button id="clear" disabled>clear</button>
-          <span class="spacer"></span>
-          <label class="temp">temp <input id="temp" type="range" min="0.1" max="1.2" step="0.1" value="0.7" /><output id="tempv">0.7</output></label>
+          <button id="clear">clear</button>
+          <button id="temp" title="how random it gets">temp 0.4</button>
+          <span class="stats" id="stats"></span>
         </div>
-      </div>
-    </div>
+      </section>
 
-    <p class="note fade-in" style="animation-delay: 0.42s">
-      runs with <a href="https://github.com/ngxson/wllama" target="_blank">wllama</a> (llama.cpp in webassembly), on your gpu if your browser has webgpu. the models are all on <a href="https://huggingface.co/navthings" target="_blank">hugging face</a>. they're small, so they make stuff up. a lot.
-    </p>
+      <p class="note fade-in" style="animation-delay: 0.34s">
+        runs with <a href="https://github.com/ngxson/wllama" target="_blank">wllama</a>, which is llama.cpp in your browser. uses your gpu if it can. the models are all on <a href="https://huggingface.co/navthings" target="_blank">hugging face</a>. theyre small, so they make stuff up. a lot.
+      </p>
+    </div>
   </div>
 
   <script type="module">
     import { Wllama } from "https://cdn.jsdelivr.net/npm/@wllama/wllama@3.6.1/esm/index.js";
 
     const WASM = { default: "https://cdn.jsdelivr.net/npm/@wllama/wllama@3.6.1/esm/wasm/wllama.wasm" };
+    const TEMPS = [0.2, 0.4, 0.6, 0.8, 1.0];
 
-    // chat models get a transcript, the rest continue whatever you start
+    // chat models get a conversation, the rest continue whatever you start
     const MODELS = [
-      {
-        id: "lilchat", repo: "navthings/lilchat", file: "lilchat-q4_k_m.gguf", size: "274mb", mode: "chat",
-        what: "the chat one. very confident, knows nothing", ctx: 1024, temp: 0.4, max: 300,
-        post: "../blog/lilchat.html",
-      },
-      {
-        id: "lilbase", repo: "navthings/lilbase", file: "lilbase-q4_k_m.gguf", size: "274mb", mode: "text",
-        what: "base model, continues whatever you start", ctx: 1024, temp: 0.8, max: 200,
-        start: "The water cycle begins when", post: "../blog/lilbase.html",
-      },
-      {
-        id: "tale", repo: "navthings/tale", file: "tale-q8_0.gguf", size: "52mb", mode: "text",
-        what: "bedtime stories", ctx: 384, temp: 0.8, max: 250,
-        start: "Once upon a time", post: "../blog/tale.html",
-      },
-      {
-        id: "lilstory", repo: "navthings/lilstory", file: "lilstory.gguf", size: "17mb", mode: "text",
-        what: "even tinier bedtime stories", ctx: 256, temp: 0.8, max: 180,
-        start: "Once upon a time", stop: ["[EOS]"], post: "../blog/lilstory.html",
-      },
+      { id: "lilchat", repo: "navthings/lilchat", file: "lilchat-q4_k_m.gguf", size: "274mb", mode: "chat",
+        what: "the chat one. very confident, knows nothing", ctx: 1024, temp: 0.4, max: 300 },
+      { id: "lilbase", repo: "navthings/lilbase", file: "lilbase-q4_k_m.gguf", size: "274mb", mode: "text",
+        what: "continues whatever you start", ctx: 1024, temp: 0.8, max: 200, start: "The water cycle begins when" },
+      { id: "tale", repo: "navthings/tale", file: "tale-q8_0.gguf", size: "52mb", mode: "text",
+        what: "bedtime stories", ctx: 384, temp: 0.8, max: 250, start: "Once upon a time" },
+      { id: "lilstory", repo: "navthings/lilstory", file: "lilstory.gguf", size: "17mb", mode: "text",
+        what: "tinier bedtime stories", ctx: 256, temp: 0.8, max: 180, start: "Once upon a time", stop: ["[EOS]"] },
     ];
 
     const $ = (id) => document.getElementById(id);
-    const els = { models: $("models"), status: $("status"), bar: $("bar"), log: $("log"), box: $("box"),
-      go: $("go"), stop: $("stop"), clear: $("clear"), temp: $("temp"), tempv: $("tempv") };
+    const ui = { models: $("models"), chat: $("chat"), label: $("chat-label"), log: $("log"), box: $("box"),
+      go: $("go"), stop: $("stop"), clear: $("clear"), temp: $("temp"), stats: $("stats") };
 
     let llm = null;
     let current = null;
     let history = [];
+    let temp = 0.4;
     let busy = false;
     let aborter = null;
     let loadToken = 0;
+    const state = {};
 
-    function setStatus(text) {
-      els.status.textContent = text;
+    function renderModels() {
+      ui.models.innerHTML = "";
+      for (const m of MODELS) {
+        const b = document.createElement("button");
+        b.className = "model" + (current === m ? " on" : "");
+        b.innerHTML = '<span class="name">' + m.id + "</span> - " + m.what +
+          '<span class="state">' + (state[m.id] || m.size) + "</span>";
+        b.onclick = () => pick(m);
+        ui.models.appendChild(b);
+      }
     }
 
-    function setBar(frac) {
-      els.bar.style.width = Math.round(frac * 100) + "%";
+    function setState(m, text) {
+      state[m.id] = text;
+      renderModels();
     }
 
     function escapeHtml(s) {
       return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
     }
 
-    function renderPicker() {
-      els.models.innerHTML = "";
-      for (const m of MODELS) {
-        const b = document.createElement("button");
-        b.className = "model" + (current && current.id === m.id ? " on" : "");
-        b.innerHTML = '<span class="name">' + m.id + '</span><span class="size">' + m.size + '</span><span class="what">' + m.what + "</span>";
-        b.onclick = () => pick(m);
-        els.models.appendChild(b);
-      }
+    function setTemp(t) {
+      temp = t;
+      ui.temp.textContent = "temp " + t.toFixed(1);
     }
 
-    function lockInput(locked) {
-      els.box.disabled = locked;
-      els.go.disabled = locked;
-      els.clear.disabled = locked;
+    function setReady(ready) {
+      ui.box.disabled = !ready;
+      ui.go.disabled = !ready;
+      ui.clear.disabled = !ready;
     }
 
     async function pick(m) {
+      if (current === m && llm) return;
       if (busy && aborter) aborter.abort();
-      if (current && current.id === m.id && llm) return;
       const token = ++loadToken;
+      if (current && current !== m && state[current.id] !== "failed") delete state[current.id];
       current = m;
       history = [];
-      renderPicker();
-      lockInput(true);
-      els.box.placeholder = "loading " + m.id + "...";
-      els.box.value = "";
-      els.log.innerHTML = "";
-      els.temp.value = m.temp;
-      els.tempv.value = m.temp;
-      setBar(0);
-      setStatus("loading " + m.id);
+      setTemp(m.temp);
+
+      ui.chat.hidden = false;
+      ui.chat.classList.remove("fade-in");
+      void ui.chat.offsetWidth;
+      ui.chat.classList.add("fade-in");
+      ui.label.textContent = m.id;
+      ui.log.innerHTML = "";
+      ui.stats.textContent = "";
+      ui.box.value = "";
+      ui.box.placeholder = "loading...";
+      setReady(false);
+      setState(m, "loading");
 
       if (llm) {
         await llm.exit().catch(() => {});
@@ -501,22 +401,17 @@
 
       const next = new Wllama(WASM, { suppressNativeLog: true });
       try {
-        await next.loadModelFromUrl(
-          "https://huggingface.co/" + m.repo + "/resolve/main/" + m.file,
-          {
-            n_ctx: m.ctx,
-            progressCallback: ({ loaded, total }) => {
-              if (token !== loadToken || !total) return;
-              setBar(loaded / total);
-              setStatus("downloading " + m.id + "  " + Math.round((loaded / total) * 100) + "%");
-            },
-          }
-        );
+        await next.loadModelFromUrl("https://huggingface.co/" + m.repo + "/resolve/main/" + m.file, {
+          n_ctx: m.ctx,
+          progressCallback: ({ loaded, total }) => {
+            if (token === loadToken && total) setState(m, Math.round((loaded / total) * 100) + "%");
+          },
+        });
       } catch (err) {
         if (token !== loadToken) return;
         console.error(err);
-        setStatus("couldnt load " + m.id + ": " + (err.message || err));
-        setBar(0);
+        setState(m, "failed");
+        ui.box.placeholder = "couldnt load it, try again?";
         return;
       }
 
@@ -526,97 +421,91 @@
       }
 
       llm = next;
-      setBar(1);
-      const gpu = llm.isSupportWebGPU() ? "on your gpu" : "on your cpu";
-      setStatus(m.id + " is ready, running " + gpu);
-      lockInput(false);
+      setState(m, "loaded");
+      setReady(true);
       if (m.mode === "chat") {
-        els.go.textContent = "send";
-        els.box.placeholder = "say something";
+        ui.go.textContent = "send";
+        ui.box.placeholder = "say something";
       } else {
-        els.go.textContent = "go";
-        els.box.placeholder = "start some text and it'll keep going";
-        els.box.value = m.start;
+        ui.go.textContent = "go";
+        ui.box.placeholder = "start some text";
+        ui.box.value = m.start;
       }
       autosize();
-      els.box.focus();
+      if (matchMedia("(hover: hover)").matches) ui.box.focus();
     }
 
     // same format lilchat was trained on: [INST] you [/INST] reply</s>
     function chatPrompt(turns) {
       let p = "";
       for (const t of turns) {
-        if (t.role === "user") p += "[INST] " + t.content.trim() + " [/INST]";
-        else p += " " + t.content.trim() + "</s>";
+        p += t.role === "user" ? "[INST] " + t.content.trim() + " [/INST]" : " " + t.content.trim() + "</s>";
       }
       return p;
     }
 
     function fitHistory() {
-      // rough budget: ~4 chars a token, leave room for the reply
       const budget = (current.ctx - current.max) * 3.5;
       while (history.length > 1 && chatPrompt(history).length > budget) history.splice(0, 2);
     }
 
-    function addTurn(who, cls, text) {
+    function addMsg(cls, text) {
       const d = document.createElement("div");
-      d.className = "turn pop " + cls;
-      d.innerHTML = '<span class="who">' + who + "</span>";
-      const body = document.createElement("span");
-      body.textContent = text;
-      d.appendChild(body);
-      els.log.appendChild(d);
-      return body;
+      d.className = "msg fade-in " + cls;
+      d.style.animationDuration = "0.35s";
+      d.textContent = text;
+      ui.log.appendChild(d);
+      return d;
     }
 
     async function run() {
       if (!llm || busy) return;
-      const text = els.box.value.trim();
+      const text = ui.box.value.trim();
       if (!text) return;
       const m = current;
 
       busy = true;
       aborter = new AbortController();
-      lockInput(true);
-      els.go.hidden = true;
-      els.stop.hidden = false;
+      setReady(false);
+      ui.go.hidden = true;
+      ui.stop.hidden = false;
+      ui.stats.textContent = "";
 
       let prompt;
       let out;
-      let storyEl;
       if (m.mode === "chat") {
         history.push({ role: "user", content: text });
         fitHistory();
-        addTurn("you", "you", text);
-        out = addTurn(m.id, "bot", "");
-        out.classList.add("cursor");
-        els.box.value = "";
+        addMsg("you", text);
+        out = addMsg("bot typing", "");
+        ui.box.value = "";
         prompt = chatPrompt(history);
       } else {
-        els.log.innerHTML = "";
-        storyEl = document.createElement("div");
-        storyEl.className = "story pop";
-        storyEl.innerHTML = "<b>" + escapeHtml(text) + "</b>";
+        ui.log.innerHTML = "";
+        const story = document.createElement("div");
+        story.className = "story fade-in";
+        story.style.animationDuration = "0.35s";
+        story.innerHTML = "<b>" + escapeHtml(text) + "</b>";
         out = document.createElement("span");
-        out.className = "cursor";
-        storyEl.appendChild(out);
-        els.log.appendChild(storyEl);
+        out.className = "typing";
+        story.appendChild(out);
+        ui.log.appendChild(story);
         prompt = text;
       }
       autosize();
 
       let reply = "";
-      let pieces = 0;
+      let count = 0;
       let t0 = 0;
-      setStatus("thinking");
+      let failed = false;
       try {
         await llm.createCompletion({
           prompt,
           stream: true,
           abortSignal: aborter.signal,
           max_tokens: m.max,
-          temperature: parseFloat(els.temp.value),
-          temp: parseFloat(els.temp.value),
+          temperature: temp,
+          temp,
           top_k: 40,
           penalty_repeat: 1.1,
           penalty_last_n: 64,
@@ -625,23 +514,19 @@
             const piece = chunk.choices && chunk.choices[0] ? chunk.choices[0].text : "";
             if (!piece) return;
             if (!t0) t0 = performance.now();
-            pieces++;
+            count++;
             reply += piece;
             out.textContent = m.mode === "chat" ? reply.trimStart() : reply;
-            if (pieces % 8 === 0) {
-              const secs = (performance.now() - t0) / 1000;
-              if (secs > 0.3) setStatus("writing  " + (pieces / secs).toFixed(1) + " tok/s");
-            }
           },
         });
       } catch (err) {
-        if (err.name !== "AbortError" && !aborter.signal.aborted) {
+        if (!aborter.signal.aborted) {
           console.error(err);
-          setStatus("something broke: " + (err.message || err));
+          failed = true;
         }
       }
 
-      out.classList.remove("cursor");
+      out.classList.remove("typing");
       if (m.mode === "chat") {
         const clean = reply.trim();
         if (clean) history.push({ role: "assistant", content: clean });
@@ -650,47 +535,45 @@
           history.pop();
         }
       } else {
-        els.box.value = text;
+        ui.box.value = text;
       }
 
       const secs = t0 ? (performance.now() - t0) / 1000 : 0;
-      if (!els.status.textContent.startsWith("something broke")) {
-        setStatus(pieces && secs ? pieces + " tokens, " + (pieces / secs).toFixed(1) + " tok/s" : "done");
-      }
+      ui.stats.textContent = failed ? "something broke" : count && secs > 0.2 ? Math.round(count / secs) + " tok/s" : "";
       busy = false;
       aborter = null;
-      els.stop.hidden = true;
-      els.go.hidden = false;
-      lockInput(false);
-      els.box.focus();
+      ui.stop.hidden = true;
+      ui.go.hidden = false;
+      setReady(true);
+      autosize();
+      if (matchMedia("(hover: hover)").matches) ui.box.focus();
     }
 
     function autosize() {
-      els.box.style.height = "auto";
-      els.box.style.height = els.box.scrollHeight + "px";
+      ui.box.style.height = "auto";
+      ui.box.style.height = ui.box.scrollHeight + "px";
     }
 
-    els.box.addEventListener("input", autosize);
-    els.box.addEventListener("keydown", (e) => {
+    ui.box.addEventListener("input", autosize);
+    ui.box.addEventListener("keydown", (e) => {
       if (e.key === "Enter" && !e.shiftKey) {
         e.preventDefault();
         run();
       }
     });
-    els.go.onclick = run;
-    els.stop.onclick = () => aborter && aborter.abort();
-    els.clear.onclick = () => {
+    ui.go.onclick = run;
+    ui.stop.onclick = () => aborter && aborter.abort();
+    ui.clear.onclick = () => {
       history = [];
-      els.log.innerHTML = "";
-      if (current && current.mode === "text") els.box.value = current.start;
+      ui.log.innerHTML = "";
+      ui.stats.textContent = "";
+      if (current && current.mode === "text") ui.box.value = current.start;
       autosize();
-      setStatus(current ? current.id + " is ready" : "pick a model");
     };
-    els.temp.oninput = () => (els.tempv.value = els.temp.value);
+    ui.temp.onclick = () => setTemp(TEMPS[(TEMPS.indexOf(temp) + 1) % TEMPS.length]);
 
-    renderPicker();
-    const fromUrl = new URLSearchParams(location.search).get("model");
-    const preset = MODELS.find((m) => m.id === fromUrl);
+    renderModels();
+    const preset = MODELS.find((m) => m.id === new URLSearchParams(location.search).get("model"));
     if (preset) pick(preset);
   </script>
 </body>
