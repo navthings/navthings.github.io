@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>my first paper: does more data help a tiny model? · nav.md</title>
+  <title>i wrote a paper on how much data matters · nav.md</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -17,13 +17,13 @@
 
 <body>
   <div class="container">
-    <a class="back" href="../"><span>&larr;</span> nav.md</a>
+    <a class="back" href="../">nav.md</a>
 
-    <div class="post-title">my first paper: does more data help a tiny model?</div>
+    <div class="post-title">i wrote a paper on how much data matters</div>
     <div class="post-date">2026-09-05</div>
 
     <article class="post">
-      <p>i wanted to know how much the amount of training data matters when everything else stays exactly the same. so i took lilstory's setup and trained it four times, on 1%, 5%, 10% and 15% of tinystories. same model, same tokenizer, same learning rate and batch size, 5,000 steps each.</p>
+      <p>i wanted to see how much the amount of data actually matters if you keep everything else the same. so i trained lilstory 4 times on 1%, 5%, 10% and 15% of tinystories. same model, same settings, 5000 steps each.</p>
       <table>
       <tr><th>data</th><th class="num">stories</th><th class="num">train loss</th><th class="num">val loss</th></tr>
       <tr><td>1%</td><td class="num">22k</td><td class="num">1.329</td><td class="num">2.402</td></tr>
@@ -31,15 +31,15 @@
       <tr class="me"><td>10%</td><td class="num">220k</td><td class="num">1.826</td><td class="num">1.816</td></tr>
       <tr><td>15%</td><td class="num">330k</td><td class="num">1.737</td><td class="num">1.837</td></tr>
       </table>
-      <p>lower is better. validation loss is measured on stories the model never trained on, so that's the number that matters.</p>
-      <p>the 1% model is the clearest result. its training loss is the best of the four but its validation loss is the worst. it memorised its 22k stories instead of learning how stories work. as the data grows, the gap between the two shrinks, and at 10% they're basically equal.</p>
-      <p>15% not beating 10% surprised me. my best guess is the step count. every model got the same 5,000 steps, so they all read about the same amount of text, and the 15% model probably never got through all of its data. the difference is also small enough that it could just be noise.</p>
-      <p>it's up on zenodo: <a href="https://doi.org/10.5281/zenodo.22340667" target="_blank">the effect of corpus size on the performance of a llm</a></p>
+      <p>lower is better, and val loss is the one that matters since its on stories the model never saw.</p>
+      <p>the 1% one is the funniest. best training loss out of all of them but the worst val loss, it just memorised its 22k stories lol. the more data i gave it the smaller that gap got, and at 10% theyre pretty much the same.</p>
+      <p>15% was slightly worse than 10% which i didnt expect. i think its because every model only got 5000 steps, so the 15% one probably never even got through all its data. the difference is tiny too so it could just be noise.</p>
+      <p>its on zenodo if you wanna read the whole thing: <a href="https://doi.org/10.5281/zenodo.22340667" target="_blank">the effect of corpus size on the performance of a llm</a></p>
     </article>
 
     <div class="post-foot">
-      <a href="lilstory.html">&larr; lilstory: 8m parameters of tiny stories</a>
-      <a href="tale.html">tale: bedtime stories for my little brother &rarr;</a>
+      <a class="prev" href="lilstory.html"><span class="label">older</span>lilstory, my first real language model</a>
+      <a class="next" href="tale.html"><span class="label">newer</span>tale, bedtime stories for my little brother</a>
     </div>
   </div>
 

@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>lilstory: 8m parameters of tiny stories · nav.md</title>
+  <title>lilstory, my first real language model · nav.md</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -17,24 +17,23 @@
 
 <body>
   <div class="container">
-    <a class="back" href="../"><span>&larr;</span> nav.md</a>
+    <a class="back" href="../">nav.md</a>
 
-    <div class="post-title">lilstory: 8m parameters of tiny stories</div>
+    <div class="post-title">lilstory, my first real language model</div>
     <div class="post-date">2026-09-04</div>
 
     <article class="post">
-      <p>lilstory is the first one that's an actual language model. 8.2 million parameters, llama-style, trained from scratch on <a href="https://huggingface.co/datasets/roneneldan/TinyStories" target="_blank">tinystories</a>, a dataset of short simple stories made for small models like this.</p>
-      <p>what changed from the transformer toys:</p>
-      <p><strong>a real tokenizer.</strong> byte-pair encoding learns common chunks of words from the data. mine has 8,000 of them.<br><strong>a real architecture.</strong> the llama model from hugging face transformers, with 4 layers, 256 wide, 4 attention heads and a context of 384 tokens.<br><strong>a real training loop.</strong> adamw at a learning rate of 0.001, batches of 32, on my macbook's gpu.</p>
-      <p>it writes little stories that mostly make sense, then wander off. it was also the first thing i put on ollama, so anyone can run it with one command:</p>
+      <p>ok this one is an actual language model. 8.2m params, llama style, trained from scratch on <a href="https://huggingface.co/datasets/roneneldan/TinyStories" target="_blank">tinystories</a> (a dataset of simple little stories made for tiny models like this).</p>
+      <p>i trained my own tokenizer this time (bpe, 8000 tokens), used the llama model from hugging face (4 layers, 256 wide, 4 heads, 384 tokens of context) and trained it on my macbooks gpu.</p>
+      <p>it writes little stories that mostly make sense and then kinda wander off. its also my first model on ollama so you can just run it:</p>
       <pre>ollama run navthings/lilstory</pre>
-      <p>i also used it for a small experiment on how much training data matters, which turned into my first paper. that's the next post.</p>
-      <p><a href="https://github.com/navthings/lilstory" target="_blank">code on github</a></p>
+      <p>i also ended up using it for a paper, thats the next post :)</p>
+      <p><a href="https://github.com/navthings/lilstory" target="_blank">code</a></p>
     </article>
 
     <div class="post-foot">
-      <a href="bigtransformer.html">&larr; bigtransformer: same idea, a whole text file</a>
-      <a href="dataset-size-paper.html">my first paper: does more data help a tiny model? &rarr;</a>
+      <a class="prev" href="bigtransformer.html"><span class="label">older</span>bigtransformer, now it reads a whole file</a>
+      <a class="next" href="dataset-size-paper.html"><span class="label">newer</span>i wrote a paper on how much data matters</a>
     </div>
   </div>
 

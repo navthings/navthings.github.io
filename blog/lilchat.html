@@ -17,28 +17,28 @@
 
 <body>
   <div class="container">
-    <a class="back" href="../"><span>&larr;</span> nav.md</a>
+    <a class="back" href="../">nav.md</a>
 
     <div class="post-title">teaching lilbase to talk</div>
     <div class="post-date">2026-09-26</div>
 
     <article class="post">
-      <p>a base model just continues whatever you give it. ask it a question and it's as likely to write five more questions as to answer. turning it into a chat model means finetuning it on conversations so it learns the pattern: someone says something, the assistant answers, then stops.</p>
-      <p>i did this one overnight on my macbook air, in mlx. the data is <a href="https://huggingface.co/datasets/HuggingFaceTB/smol-smoltalk" target="_blank">smol-smoltalk</a>, and the model only gets graded on the assistant's replies, not the user's messages. it ran 1,136 steps of 32k tokens, about 37m tokens. that's only around 12% of the dataset, but it's what the laptop could do in a night.</p>
-      <p>on conversations it had never seen, loss went from 2.230 for plain lilbase to 1.337.</p>
+      <p>a base model just continues text. if you ask it a question itll probably write 5 more questions instead of answering. to make it a chat model you finetune it on a bunch of conversations so it learns the pattern: you say something, it answers, it stops.</p>
+      <p>i did this overnight on my macbook air with mlx. used <a href="https://huggingface.co/datasets/HuggingFaceTB/smol-smoltalk" target="_blank">smol-smoltalk</a> as the data, and it only gets trained on the assistant replies. it did 1,136 steps of 32k tokens, about 37m tokens total, which is only like 12% of the dataset but thats what my laptop could do in a night.</p>
+      <p>loss on conversations it hadnt seen went from 2.230 (plain lilbase) to 1.337.</p>
       <h2>what works</h2>
-      <p>say "hi" and it answers "Hello! How can I help you today?" and stops. that sounds boring, but plain lilbase answers the same prompt by repeating the chat formatting forever. it does numbered lists and code blocks, and it wrote a correct one-line function to reverse a string (then explained it completely wrong).</p>
-      <h2>what doesn't</h2>
-      <p>it doesn't know things. it told me the capital of australia is melbourne, and on another try, perth. 17 + 25 came out as 48, followed by "so, the answer is 17". i asked for a haiku about a cat who hates mondays and got twenty lines ending in "a reminder that we are all brothers", over and over.</p>
-      <p>that isn't a bug in the finetune. finetuning teaches the format, not facts, and a 297m model that read 6 billion tokens just doesn't know much. turning the randomness (temperature) down from 0.7 to 0.4 helps though: 12 out of 12 normal replies to "hi" instead of 8 out of 12.</p>
+      <p>if you say "hi" it says "Hello! How can I help you today?" and stops. doesnt sound impressive but plain lilbase just repeats the chat formatting forever when you do that. it does lists and code blocks, and it wrote a correct one line function to reverse a string (then explained it completely wrong lol).</p>
+      <h2>what doesnt</h2>
+      <p>it does not know things. it told me the capital of australia is melbourne, then perth on another try. 17 + 25 was 48, and then "so, the answer is 17". i asked for a haiku about a cat that hates mondays and got 20 lines ending with "a reminder that we are all brothers" over and over.</p>
+      <p>thats not really the finetunes fault. finetuning teaches it how to talk, not facts, and 297m params just doesnt know much. turning the temperature down from 0.7 to 0.4 helps a bit tho, it gave a normal reply to "hi" 12 out of 12 times instead of 8 out of 12.</p>
       <pre>ollama run navthings/lilchat</pre>
       <h2>next</h2>
-      <p>the real fix is a bigger base model that has read more, and that's <a href="https://github.com/navthings/sprout" target="_blank">sprout</a>: 523m parameters, 12 billion tokens from a mix of fineweb-edu, dclm, cosmopedia and project gutenberg, back on the kaggle tpu. it's about a third of the way through training. when it's done, it goes through the same finetune.</p>
+      <p>the real fix is a bigger base model, which is <a href="https://github.com/navthings/sprout" target="_blank">sprout</a>. 523m params, 12 billion tokens from fineweb-edu, dclm, cosmopedia and project gutenberg, back on the kaggle tpu. its about a third of the way through training and when its done it gets the same finetune.</p>
     </article>
 
     <div class="post-foot">
-      <a href="lilbase.html">&larr; lilbase: a 297m model on a free kaggle tpu</a>
-      <span class="dim">latest</span>
+      <a class="prev" href="lilbase.html"><span class="label">older</span>lilbase, 297m params on a free tpu</a>
+      <span></span>
     </div>
   </div>
 

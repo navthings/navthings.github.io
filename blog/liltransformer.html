@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>a transformer that only knows one sentence · nav.md</title>
+  <title>my first transformer (it only knows one sentence) · nav.md</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -17,23 +17,23 @@
 
 <body>
   <div class="container">
-    <a class="back" href="../"><span>&larr;</span> nav.md</a>
+    <a class="back" href="../">nav.md</a>
 
-    <div class="post-title">a transformer that only knows one sentence</div>
+    <div class="post-title">my first transformer (it only knows one sentence)</div>
     <div class="post-date">2026-08-30</div>
 
     <article class="post">
-      <p>this was the first ml thing i made. you type a sentence, pick a word from it, and it guesses the word that comes next.</p>
-      <p>the catch is that your sentence is the whole training set. it splits the sentence on spaces, gives every word a number, and trains on every "words so far, then the next word" pair in it. so it isn't really predicting anything, it's memorising. but all the parts of a real transformer are in there: an embedding that turns words into numbers, attention, a layer that turns the result back into a guess over the words it knows, and a loss that says how wrong the guess was.</p>
-      <p>it's tiny. each word is 8 numbers, there are 2 attention heads and a single layer, all in pytorch.</p>
+      <p>first ml thing i ever made lol. you give it a sentence, pick a word from it, and it tries to guess the next word.</p>
+      <p>the thing is it only ever trains on the sentence you give it, so its not really predicting anything, its just memorising. but it has all the actual transformer parts (embeddings, attention, the output layer, the loss, adam) so i got to see how they all fit together without some library hiding everything.</p>
+      <p>its super tiny. each word is 8 numbers, 2 attention heads, 1 layer, all in pytorch.</p>
       <pre>python3 mdl.py</pre>
-      <p>the point was to see the whole loop run with nothing hidden. once i'd watched the loss drop on a sentence i typed myself, the big models stopped feeling like magic.</p>
-      <p><a href="https://github.com/navthings/liltransformer" target="_blank">code on github</a></p>
+      <p>watching the loss go down on a sentence i literally just typed was pretty cool ngl</p>
+      <p><a href="https://github.com/navthings/liltransformer" target="_blank">code</a></p>
     </article>
 
     <div class="post-foot">
-      <span class="dim">first post</span>
-      <a href="bigtransformer.html">bigtransformer: same idea, a whole text file &rarr;</a>
+      <span></span>
+      <a class="next" href="bigtransformer.html"><span class="label">newer</span>bigtransformer, now it reads a whole file</a>
     </div>
   </div>
 

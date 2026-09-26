@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>bigtransformer: same idea, a whole text file · nav.md</title>
+  <title>bigtransformer, now it reads a whole file · nav.md</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -17,21 +17,21 @@
 
 <body>
   <div class="container">
-    <a class="back" href="../"><span>&larr;</span> nav.md</a>
+    <a class="back" href="../">nav.md</a>
 
-    <div class="post-title">bigtransformer: same idea, a whole text file</div>
+    <div class="post-title">bigtransformer, now it reads a whole file</div>
     <div class="post-date">2026-08-31</div>
 
     <article class="post">
-      <p>the next day i made it read a file instead of one sentence. bigtransformer trains on a text file, asks how many words of context to use, then keeps predicting the next word for as long as you want.</p>
-      <p>it slides a window over the file. with a context of 4, every run of 4 words becomes a question and the word after it is the answer. the model got a bit bigger too, 16 numbers per word instead of 8.</p>
-      <p>this is where working with whole words started to hurt. every different word gets its own slot, so "cat" and "cats" have nothing to do with each other, and any word that isn't in the file can't exist at all. real models split text into tokens, which are pieces of words, for exactly this reason. so that's what i did next.</p>
-      <p><a href="https://github.com/navthings/bigtransformer" target="_blank">code on github</a></p>
+      <p>made this the day after liltransformer. instead of one sentence it reads a whole text file, you pick how many words it looks at, and it keeps predicting words for as long as you want. probably.</p>
+      <p>its basically the same model just a bit bigger, 16 numbers per word instead of 8.</p>
+      <p>problem is it works with whole words. so "cat" and "cats" are completely different things to it, and it literally cant say a word that isnt in the file. thats why real models use tokenizers, which is what i did next.</p>
+      <p><a href="https://github.com/navthings/bigtransformer" target="_blank">code</a></p>
     </article>
 
     <div class="post-foot">
-      <a href="liltransformer.html">&larr; a transformer that only knows one sentence</a>
-      <a href="lilstory.html">lilstory: 8m parameters of tiny stories &rarr;</a>
+      <a class="prev" href="liltransformer.html"><span class="label">older</span>my first transformer (it only knows one sentence)</a>
+      <a class="next" href="lilstory.html"><span class="label">newer</span>lilstory, my first real language model</a>
     </div>
   </div>
 
