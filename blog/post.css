@@ -52,15 +52,6 @@ a:hover {
   margin-bottom: 25px;
 }
 
-.back span {
-  display: inline-block;
-  transition: transform 0.25s ease;
-}
-
-.back:hover span {
-  transform: translateX(-3px);
-}
-
 .post-title {
   color: #ffffff;
 }
@@ -173,8 +164,19 @@ figcaption {
   font-size: 14px;
 }
 
-.post-foot .dim {
+.post-foot a {
+  display: flex;
+  flex-direction: column;
+  max-width: 48%;
+}
+
+.post-foot .next {
+  text-align: right;
+}
+
+.post-foot .label {
   color: #555555;
+  font-size: 12px;
 }
 
 .reveal {
