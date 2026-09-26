@@ -105,7 +105,7 @@
     }
 
     .time-section {
-      animation-delay: 0.60s;
+      animation-delay: 0.95s;
     }
 
     p {
@@ -207,6 +207,31 @@
       font-size: 14px;
       flex-shrink: 0;
       min-width: 72px;
+    }
+
+    .blog-entry a {
+      display: inline-block;
+      transition: opacity 0.2s ease, transform 0.25s ease;
+    }
+
+    .blog-entry a:hover {
+      transform: translateX(3px);
+    }
+
+    @media (max-width: 600px) {
+      .blog-entry {
+        flex-direction: column;
+        gap: 0;
+        margin-bottom: 8px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .fade-in {
+        animation: none;
+        opacity: 1;
+        transform: none;
+      }
     }
 
     .blog-empty {
@@ -343,22 +368,27 @@
       }, 1800);
     });
 
-    // Blog posts
-    // Add entries here as you write them, newest first.
-    // Example:
-    // { date: "2026-09-11", title: "first post", url: "/blog/first-post.html" }
+    // newest first
 
     const posts = [
-      // { date: "2026-09-11", title: "hello world", url: "#" },
+      { date: "2026-09-26", title: "teaching lilbase to talk", url: "blog/lilchat.html" },
+      { date: "2026-09-23", title: "lilbase: a 297m model on a free kaggle tpu", url: "blog/lilbase.html" },
+      { date: "2026-09-12", title: "tale: bedtime stories for my little brother", url: "blog/tale.html" },
+      { date: "2026-09-05", title: "my first paper: does more data help a tiny model?", url: "blog/dataset-size-paper.html" },
+      { date: "2026-09-04", title: "lilstory: 8m parameters of tiny stories", url: "blog/lilstory.html" },
+      { date: "2026-08-31", title: "bigtransformer: same idea, a whole text file", url: "blog/bigtransformer.html" },
+      { date: "2026-08-30", title: "a transformer that only knows one sentence", url: "blog/liltransformer.html" },
     ];
 
     if (posts.length) {
       const list = document.getElementById("blog-list");
 
       list.innerHTML = posts
-        .map(function (post) {
+        .map(function (post, i) {
           return (
-            '<p class="blog-entry">' +
+            '<p class="blog-entry fade-in" style="animation-delay: ' +
+            (0.62 + i * 0.05).toFixed(2) +
+            's">' +
             '<span class="blog-date">' +
             post.date +
             "</span>" +
