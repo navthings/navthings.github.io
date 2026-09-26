@@ -27,10 +27,10 @@
       <p>i did this overnight on my macbook air with mlx. used <a href="https://huggingface.co/datasets/HuggingFaceTB/smol-smoltalk" target="_blank">smol-smoltalk</a> as the data, and it only gets trained on the assistant replies. it did 1,136 steps of 32k tokens, about 37m tokens total, which is only like 12% of the dataset but thats what my laptop could do in a night.</p>
       <p>loss on conversations it hadnt seen went from 2.230 (plain lilbase) to 1.337.</p>
       <h2>what works</h2>
-      <p>if you say "hi" it says "Hello! How can I help you today?" and stops. doesnt sound impressive but plain lilbase just repeats the chat formatting forever when you do that. it does lists and code blocks, and it wrote a correct one line function to reverse a string (then explained it completely wrong lol).</p>
+      <p>if you say "hi" it says "Hello! How can I help you today?" and stops. plain lilbase just repeats the chat formatting forever when you do that. it does lists and code blocks, and it wrote a correct one line function to reverse a string (then explained it completely wrong lol).</p>
       <h2>what doesnt</h2>
       <p>it does not know things. it told me the capital of australia is melbourne, then perth on another try. 17 + 25 was 48, and then "so, the answer is 17". i asked for a haiku about a cat that hates mondays and got 20 lines ending with "a reminder that we are all brothers" over and over.</p>
-      <p>thats not really the finetunes fault. finetuning teaches it how to talk, not facts, and 297m params just doesnt know much. turning the temperature down from 0.7 to 0.4 helps a bit tho, it gave a normal reply to "hi" 12 out of 12 times instead of 8 out of 12.</p>
+      <p>thats not really a finetuning problem, 297m params just doesnt know much. turning the temperature down from 0.7 to 0.4 helps a bit tho, it gave a normal reply to "hi" 12 out of 12 times instead of 8 out of 12.</p>
       <pre>ollama run navthings/lilchat</pre>
       <h2>next</h2>
       <p>the real fix is a bigger base model, which is <a href="https://github.com/navthings/sprout" target="_blank">sprout</a>. 523m params, 12 billion tokens from fineweb-edu, dclm, cosmopedia and project gutenberg, back on the kaggle tpu. its about a third of the way through training and when its done it gets the same finetune.</p>
