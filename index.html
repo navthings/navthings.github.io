@@ -291,12 +291,6 @@
       color: #555555;
     }
 
-    #clock {
-      color: #888888;
-      font-size: 16px;
-      line-height: 25px;
-      font-weight: 300;
-    }
   </style>
 </head>
 
@@ -337,11 +331,7 @@
           </svg>
           &#8202;mac
         </span>
-        and free tpus.
-      </span>
-
-      <span class="normal-line">
-        you can talk to them in the <a href="playground/">playground</a>
+        and free tpus
       </span>
     </p>
 
@@ -382,30 +372,12 @@
     </div>
 
     <div class="time-section fade-in">
-      <span id="clock"></span>
+      <a href="playground/">playground</a>
+      - talk to my models in your browser
     </div>
   </div>
 
   <script>
-    function updateClock() {
-      const now = new Date();
-
-      const timeStr = now
-        .toLocaleTimeString("en-AU", {
-          hour: "numeric",
-          minute: "2-digit",
-          hour12: true,
-          timeZone: "Australia/Perth",
-        })
-        .toLowerCase();
-
-      document.getElementById("clock").textContent =
-        timeStr + " in perth";
-    }
-
-    updateClock();
-    setInterval(updateClock, 1000);
-
     const emailLink = document.getElementById("email-link");
 
     emailLink.addEventListener("click", function (e) {
@@ -439,7 +411,7 @@
     ];
 
     // newest few on the home page, the rest fold out
-    const SHOWN = 3;
+    const SHOWN = 1;
 
     function entry(post, delay) {
       return (
