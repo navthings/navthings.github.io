@@ -321,6 +321,10 @@ function email() {
     const original = label.textContent;
     el.addEventListener("click", (e) => {
       e.preventDefault();
+      if (!navigator.clipboard) {
+        window.location.href = "mailto:navneet.dagdiya@gmail.com";
+        return;
+      }
       navigator.clipboard.writeText("navneet.dagdiya@gmail.com").then(
         () => {
           label.textContent = "copied.";
