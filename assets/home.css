@@ -459,6 +459,7 @@ html.intro .hero [data-reveal].in {
 .tk b {
   padding: 3px 6px;
   border-radius: 7px;
+  transition: box-shadow 0.15s ease;
   background: var(--bg);
   font-weight: 400;
   font-size: 16px;
@@ -469,6 +470,14 @@ html.intro .hero [data-reveal].in {
 
 .tk.cut b {
   background: #ffe2d4;
+}
+
+.tk.same b {
+  box-shadow: inset 0 0 0 1.5px var(--ink);
+}
+
+.tk.same i {
+  color: var(--ink);
 }
 
 .tk i {

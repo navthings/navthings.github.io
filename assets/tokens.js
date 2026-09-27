@@ -157,6 +157,7 @@
       chip.innerHTML = "<b></b><i></i>";
       chip.firstChild.textContent = label(t.id);
       chip.lastChild.textContent = t.id;
+      chip.dataset.id = t.id;
       if (!reduce) {
         chip.classList.add("new");
         chip.style.setProperty("--k", stagger ? fresh : 0);
@@ -181,6 +182,16 @@
     box.style.height = "auto";
     box.style.height = box.scrollHeight + "px";
   }
+
+  // hovering a piece shows every other place the model sees that same number
+  let lit = [];
+  out.addEventListener("pointerover", (e) => {
+    const chip = e.target.closest(".tk");
+    lit.forEach((c) => c.classList.remove("same"));
+    lit = chip ? Array.from(out.querySelectorAll('.tk[data-id="' + chip.dataset.id + '"]')) : [];
+    if (lit.length > 1) lit.forEach((c) => c.classList.add("same"));
+  });
+  out.addEventListener("pointerleave", () => lit.forEach((c) => c.classList.remove("same")));
 
   box.addEventListener("input", () => {
     fit();
