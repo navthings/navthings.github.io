@@ -3,7 +3,7 @@
   <channel>
     <title>navthings</title>
     <link>https://navthings.github.io/</link>
-    <description>training small language models from scratch, on a mac and free tpus.</description>
+    <description>nav, machine learning engineer and researcher. notes on pretraining, finetuning and scaling experiments.</description>
     <language>en</language>
     <atom:link href="https://navthings.github.io/feed.xml" rel="self" type="application/rss+xml" />
     <item>
