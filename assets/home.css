@@ -663,13 +663,67 @@ html:not(.js) .stage {
   }
 }
 
+/* short screens: clear the pill up top and shrink the grid so the whole thing fits */
 @media (max-width: 860px) and (max-height: 720px) {
+  .scale-pin {
+    padding-top: 56px;
+    gap: 24px;
+  }
+
   .scale-num {
     font-size: 72px;
   }
 
   .steps {
     margin-top: 20px;
+  }
+
+  .stages {
+    margin-top: 20px;
+  }
+
+  .scale-end {
+    margin-top: 16px;
+  }
+
+  .dots {
+    max-width: min(460px, 44vh);
+    max-width: min(460px, 44svh);
+  }
+}
+
+/* landscape phones and short windows: side by side again, with the grid sized off the height */
+@media (max-height: 640px) and (min-aspect-ratio: 5/4) {
+  .scale-pin {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-content: normal;
+    gap: 32px;
+  }
+
+  .scale-num {
+    margin-top: 8px;
+    font-size: clamp(64px, 16vh, 120px);
+  }
+
+  .steps {
+    margin-top: 16px;
+    font-size: 14px;
+  }
+
+  .stages {
+    margin-top: 18px;
+    min-height: 80px;
+  }
+
+  .scale-end {
+    margin-top: 12px;
+  }
+
+  .dots {
+    width: min(74vh, 40vw);
+    width: min(74svh, 40vw);
+    max-width: none;
+    justify-self: end;
   }
 }
 
