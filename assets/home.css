@@ -223,6 +223,13 @@ html.intro .hero [data-reveal].in {
   transition: background-color 0.2s ease, color 0.3s ease;
 }
 
+/* the number is tiny, so the grab area reaches past it for thumbs */
+.knob::after {
+  content: "";
+  position: absolute;
+  inset: -14px -16px;
+}
+
 .knob:hover,
 .knob.held {
   background: var(--surface);
