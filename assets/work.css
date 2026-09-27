@@ -237,7 +237,8 @@
   transition-delay: calc(var(--k) * 70ms + 200ms);
 }
 
-.live .chips8 span::after {
+.live .chips8 span::after,
+html:not(.js) .chips8 span::after {
   transform: none;
 }
 
@@ -341,7 +342,7 @@ tr.hi td {
 }
 
 .pair .was {
-  color: var(--ink-3);
+  color: var(--ink-4);
 }
 
 .pair .track {
@@ -360,7 +361,8 @@ tr.hi td {
   transition: width 1.4s var(--ease) 0.3s;
 }
 
-.live .pair .track b {
+.live .pair .track b,
+html:not(.js) .pair .track b {
   width: var(--w);
 }
 
@@ -444,7 +446,8 @@ tr.hi td {
   transition: width 1.4s var(--ease) 0.2s;
 }
 
-.live .meter-track b {
+.live .meter-track b,
+html:not(.js) .meter-track b {
   width: var(--w);
 }
 
@@ -489,12 +492,14 @@ tr.hi td {
   transition-delay: calc(var(--k) * 60ms + 200ms);
 }
 
-.live .tries-dots i.ok {
+.live .tries-dots i.ok,
+html:not(.js) .tries-dots i.ok {
   background: var(--ink);
   transform: none;
 }
 
-.live .tries-dots i.no {
+.live .tries-dots i.no,
+html:not(.js) .tries-dots i.no {
   background: var(--ink-3);
   transform: scale(0.72);
 }

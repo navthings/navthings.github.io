@@ -224,6 +224,7 @@ function nav() {
   function setLabel(text) {
     if (text === label) return;
     const first = label === null;
+    if (first) now.textContent = "";
     label = text;
     const span = document.createElement("span");
     span.textContent = text;

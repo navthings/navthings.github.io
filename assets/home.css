@@ -83,7 +83,7 @@ html.intro .hero [data-reveal].in {
 }
 
 .hero-title .soft {
-  color: var(--ink-3);
+  color: var(--ink-4);
 }
 
 .chunk {
@@ -282,7 +282,7 @@ html.intro .hero [data-reveal].in {
   font-size: 0.4em;
   letter-spacing: -0.04em;
   margin-left: 0.06em;
-  color: var(--ink-3);
+  color: var(--ink-4);
 }
 
 .steps {
@@ -329,7 +329,8 @@ html.intro .hero [data-reveal].in {
   transition: opacity 0.5s ease, transform 0.7s var(--ease), filter 0.5s ease;
 }
 
-.stage.on {
+.stage.on,
+html:not(.js) .stage {
   opacity: 1;
   transform: none;
   filter: none;
@@ -643,7 +644,8 @@ html.intro .hero [data-reveal].in {
   transition-delay: calc(var(--k) * 90ms + 150ms);
 }
 
-.live .hbar b {
+.live .hbar b,
+html:not(.js) .hbar b {
   width: var(--w);
 }
 
@@ -654,7 +656,8 @@ html.intro .hero [data-reveal].in {
   transition-delay: calc(var(--k) * 90ms + 700ms);
 }
 
-.live .hbar em {
+.live .hbar em,
+html:not(.js) .hbar em {
   opacity: 1;
 }
 
@@ -678,7 +681,8 @@ html.intro .hero [data-reveal].in {
   transition: opacity 0.4s ease, transform 0.6s var(--ease);
 }
 
-.bubble.on {
+.bubble.on,
+html:not(.js) .bubble {
   opacity: 1;
   transform: none;
 }
@@ -740,7 +744,8 @@ html.intro .hero [data-reveal].in {
   transition: opacity 0.6s ease;
 }
 
-.chat-note.on {
+.chat-note.on,
+html:not(.js) .chat-note {
   opacity: 1;
 }
 
@@ -873,7 +878,8 @@ html.intro .hero [data-reveal].in {
   transition-delay: calc(var(--k) * 250ms + 200ms);
 }
 
-.live .mini-row .track b {
+.live .mini-row .track b,
+html:not(.js) .mini-row .track b {
   width: var(--w, 100%);
 }
 
@@ -960,7 +966,8 @@ html.intro .hero [data-reveal].in {
   background: var(--ink);
 }
 
-.live .train-track b {
+.live .train-track b,
+html:not(.js) .train-track b {
   width: 33%;
 }
 
@@ -1204,4 +1211,27 @@ html.intro .hero [data-reveal].in {
   .play-card {
     grid-template-columns: 1fr;
   }
+}
+
+/* without javascript the size section is just the final numbers */
+
+html:not(.js) .scale {
+  height: auto;
+}
+
+html:not(.js) .scale-pin {
+  position: relative;
+  height: auto;
+  padding-top: 80px;
+  padding-bottom: 80px;
+}
+
+html:not(.js) .stage {
+  position: relative;
+  margin-bottom: 14px;
+}
+
+html:not(.js) .steps .bar,
+html:not(.js) .dots {
+  display: none;
 }
