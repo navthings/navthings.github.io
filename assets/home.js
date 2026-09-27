@@ -35,7 +35,7 @@
 
     if (reduce) {
       toks.forEach((t) => t.classList.add("on"));
-      return;
+      return toks;
     }
 
     const caret = document.createElement("span");
@@ -53,6 +53,94 @@
 
     const fontsReady = document.fonts ? document.fonts.ready : Promise.resolve();
     Promise.race([fontsReady, new Promise((r) => setTimeout(r, 700))]).then(() => setTimeout(next, 250));
+    return toks;
+  }
+
+  // drag the temperature and the headline starts sampling less likely words, the way a model does
+  function temperature(toks) {
+    const input = document.getElementById("temp");
+    if (!input || !toks) return;
+    const out = document.getElementById("temp-out");
+    const note = document.getElementById("temp-note");
+    const hint = note.textContent;
+
+    const ALT = {
+      hi: ["hey", "hello", "oi", "g'day"],
+      train: ["build", "teach", "grow", "bake", "raise"],
+      small: ["tiny", "little", "smol", "pocket", "large"],
+      language: ["story", "chat", "word", "llama"],
+      models: ["llamas", "robots", "parrots", "guys"],
+    };
+    const slots = toks
+      .filter((el) => ALT[el.textContent])
+      .map((el) => ({ els: [el], orig: [el.textContent], alts: ALT[el.textContent].map((a) => [a]) }));
+    const from = toks.find((el) => el.textContent === "from");
+    const scratch = toks.find((el) => el.textContent === "scratch");
+    if (from && scratch) {
+      slots.push({ els: [from, scratch], orig: ["from", "scratch"], alts: [["by", "hand"], ["from", "zero"], ["on", "a mac"], ["in", "melbourne"]] });
+    }
+    const stop = toks[toks.length - 1];
+    if (stop && stop.textContent === ".") slots.push({ els: [stop], orig: ["."], alts: [["!"], ["?"], ["!!"]], hot: true });
+
+    // lower temperature keeps to the first, likelier alternatives
+    function pick(alts, t) {
+      const w = alts.map((_, k) => Math.exp(-k / (t * 1.6)));
+      let r = Math.random() * w.reduce((a, b) => a + b, 0);
+      for (let k = 0; k < w.length; k++) if ((r -= w[k]) <= 0) return alts[k];
+      return alts[alts.length - 1];
+    }
+
+    function set(slot, words) {
+      slot.els.forEach((el, i) => {
+        if (el.textContent === words[i]) return;
+        el.textContent = words[i];
+        el.classList.remove("re");
+        void el.offsetWidth;
+        el.classList.add("re");
+      });
+    }
+
+    function sample(t) {
+      for (const slot of slots) {
+        const chance = slot.hot ? clamp((t - 1.1) / 0.4) * 0.6 : clamp((t - 0.3) / 0.9) * 0.85;
+        set(slot, Math.random() < chance ? pick(slot.alts, t) : slot.orig);
+      }
+    }
+
+    function caption(t) {
+      if (t < 0.05) return "always picks the most likely word";
+      if (t < 0.5) return "about what lilchat runs at";
+      if (t < 0.85) return "starting to get creative";
+      if (t < 1.2) return "confidently wrong, like lilchat";
+      return "its just making stuff up now";
+    }
+
+    let timer = 0;
+    function loop() {
+      const t = parseFloat(input.value);
+      clearTimeout(timer);
+      if (t <= 0.3) {
+        slots.forEach((slot) => set(slot, slot.orig));
+        return;
+      }
+      sample(t);
+      timer = setTimeout(loop, 1250 - t * 520);
+    }
+
+    input.addEventListener("input", () => {
+      const t = parseFloat(input.value);
+      out.textContent = t.toFixed(1);
+      note.textContent = caption(t);
+      input.style.setProperty("--fill", ((t / 1.5) * 100).toFixed(1) + "%");
+      input.classList.toggle("hot", t > 1.1);
+      if (!timer || t <= 0.3) loop();
+    });
+    input.addEventListener("change", loop);
+    input.addEventListener("dblclick", () => {
+      input.value = 0;
+      input.dispatchEvent(new Event("input"));
+    });
+    note.dataset.hint = hint;
   }
 
   // hero drifts and fades as you leave it
@@ -233,7 +321,7 @@
     });
   }
 
-  tokens();
+  temperature(tokens());
   heroOut();
   scale();
   stack();

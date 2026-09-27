@@ -132,6 +132,103 @@
   margin-top: 32px;
 }
 
+/* temperature dial */
+
+.temp {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px;
+  margin-top: 40px;
+  color: var(--ink-3);
+}
+
+.temp label {
+  min-width: 64px;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.temp output {
+  font-variant-numeric: tabular-nums;
+}
+
+.temp input {
+  --fill: 0%;
+  -webkit-appearance: none;
+  appearance: none;
+  width: 168px;
+  height: 22px;
+  background: transparent;
+  cursor: grab;
+}
+
+.temp input:active {
+  cursor: grabbing;
+}
+
+.temp input::-webkit-slider-runnable-track {
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(var(--ink), var(--ink)) 0 0 / var(--fill) 100% no-repeat, var(--surface-2);
+}
+
+.temp input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  margin-top: -7px;
+  border-radius: 50%;
+  background: var(--ink);
+  box-shadow: 0 0 0 4px var(--bg);
+  transition: transform 0.25s var(--ease), background-color 0.3s ease;
+}
+
+.temp input:active::-webkit-slider-thumb {
+  transform: scale(1.3);
+}
+
+.temp input.hot::-webkit-slider-thumb {
+  background: var(--accent);
+}
+
+.temp input::-moz-range-track {
+  height: 2px;
+  border-radius: 2px;
+  background: var(--surface-2);
+}
+
+.temp input::-moz-range-progress {
+  height: 2px;
+  border-radius: 2px;
+  background: var(--ink);
+}
+
+.temp input::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--ink);
+  box-shadow: 0 0 0 4px var(--bg);
+}
+
+.temp input.hot::-moz-range-thumb {
+  background: var(--accent);
+}
+
+.temp input:focus-visible {
+  outline: none;
+}
+
+.temp input:focus-visible::-webkit-slider-thumb {
+  box-shadow: 0 0 0 4px var(--bg), 0 0 0 6px var(--ink);
+}
+
+.tok.re::before {
+  animation: chip 0.9s ease forwards;
+}
+
 /* statement */
 
 .statement {

@@ -61,6 +61,11 @@
           <a class="btn dark" href="#work"><span class="inner">see the work</span></a>
           <a class="btn" href="playground/"><span class="inner">talk to my models</span></a>
         </div>
+        <div class="temp" data-reveal style="--d: 1.5s">
+          <label for="temp" class="mono">temp <output id="temp-out" for="temp">0.0</output></label>
+          <input id="temp" type="range" min="0" max="1.5" step="0.05" value="0" aria-describedby="temp-note" />
+          <span class="mono" id="temp-note">drag it, this is what temperature does to a model</span>
+        </div>
       </div>
     </section>
 
