@@ -140,7 +140,9 @@
   color: #fff;
 }
 
+.model.on:not(.loading) .bar,
 .model.on:not(.loading) .bar b {
+  background: transparent;
   opacity: 0;
 }
 
@@ -257,6 +259,36 @@
   }
 }
 
+.suggest {
+  margin-top: 20px;
+  font-size: 14px;
+  color: var(--ink-3);
+}
+
+.suggest a {
+  color: var(--ink-2);
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 100% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+}
+
+.suggest-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.suggest-row .btn {
+  background: var(--bg);
+  box-shadow: none;
+}
+
+.suggest-row .btn:hover {
+  background: #fafafa;
+}
+
 .composer {
   display: flex;
   align-items: flex-end;
@@ -273,7 +305,37 @@
   box-shadow: 0 0 0 1px var(--ink-3), 0 10px 30px -14px rgba(0, 0, 0, 0.18);
 }
 
-.log:empty + .composer {
+.log:empty + .suggest {
+  margin-top: 20px;
+  font-size: 14px;
+  color: var(--ink-3);
+}
+
+.suggest a {
+  color: var(--ink-2);
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 100% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+}
+
+.suggest-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.suggest-row .btn {
+  background: var(--bg);
+  box-shadow: none;
+}
+
+.suggest-row .btn:hover {
+  background: #fafafa;
+}
+
+.composer {
   margin-top: 20px;
 }
 

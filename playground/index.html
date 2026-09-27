@@ -82,6 +82,10 @@
           <span class="stats cap" id="stats"></span>
         </div>
         <div class="log" id="log" aria-live="polite"></div>
+        <div class="suggest" id="suggest" hidden>
+          <p>try what i tried in <a href="../blog/lilchat.html">the post</a>:</p>
+          <div class="suggest-row"></div>
+        </div>
         <div class="composer">
           <textarea id="box" rows="1" aria-label="message"></textarea>
           <button id="go" class="btn dark">send</button>
@@ -195,6 +199,38 @@
     function setState(m, text) {
       state[m.id] = text;
       renderModels();
+      if (m === current) {
+        const busyText = text === "loading" ? "starting" : /%$/.test(text) ? "downloading " + text + " of " + m.size : text === "failed" ? "couldnt load" : "";
+        ui.label.textContent = m.id + (busyText ? ", " + busyText : "");
+      }
+    }
+
+    // the exact prompts from the lilchat post, so anyone can check what i found
+    const TRIES = ["hi", "whats the capital of australia?", "whats 17 + 25?", "write a haiku about a cat that hates mondays"];
+    const suggest = $("suggest");
+    function renderSuggest() {
+      const show = current && current.mode === "chat" && !history.length && llm && !busy;
+      suggest.hidden = !show;
+      if (!show) return;
+      const row = suggest.querySelector(".suggest-row");
+      if (row.childElementCount) return;
+      for (const text of TRIES) {
+        const b = document.createElement("button");
+        b.className = "btn line small";
+        b.textContent = text;
+        b.onclick = () => {
+          ui.box.value = text;
+          run();
+        };
+        row.appendChild(b);
+      }
+    }
+
+    // keep the newest message in view while it streams, unless you've scrolled up to read
+    function follow() {
+      const r = ui.box.getBoundingClientRect();
+      const gap = r.bottom - window.innerHeight + 24;
+      if (gap > 0 && gap < 400) window.scrollBy(0, gap);
     }
 
     function escapeHtml(s) {
@@ -230,6 +266,7 @@
       ui.log.innerHTML = "";
       ui.stats.textContent = "";
       ui.box.value = "";
+      suggest.hidden = true;
       ui.box.placeholder = "loading...";
       setReady(false);
       setState(m, "loading");
@@ -270,6 +307,7 @@
       loading = null;
       setState(m, "loaded");
       setReady(true);
+      renderSuggest();
       if (m.mode === "chat") {
         ui.go.textContent = "send";
         ui.box.placeholder = "say something";
@@ -309,6 +347,7 @@
       d.style.animationDuration = "0.35s";
       d.textContent = text;
       ui.log.appendChild(d);
+      follow();
       return d;
     }
 
@@ -321,6 +360,7 @@
       busy = true;
       aborter = new AbortController();
       setReady(false);
+      renderSuggest();
       ui.go.hidden = true;
       ui.stop.hidden = false;
       ui.stats.textContent = "";
@@ -373,6 +413,7 @@
             const live = (performance.now() - t0) / 1000;
             if (count % 4 === 0 && live > 0.5) ui.stats.textContent = Math.round(count / live) + " tok/s";
             out.textContent = m.mode === "chat" ? reply.trimStart() : reply;
+            follow();
           },
         });
       } catch (err) {
@@ -404,6 +445,7 @@
       ui.stop.hidden = true;
       ui.go.hidden = false;
       setReady(true);
+      renderSuggest();
       autosize();
       if (matchMedia("(hover: hover)").matches) ui.box.focus();
     }
@@ -437,6 +479,7 @@
     ui.clear.onclick = () => {
       history = [];
       ui.log.innerHTML = "";
+      renderSuggest();
       ui.stats.textContent = "";
       if (current && current.mode === "text") ui.box.value = current.start;
       autosize();
