@@ -123,7 +123,7 @@
       <div class="cs-sec" data-reveal data-label="the data">
         <h2 class="cs-h">the data</h2>
         <div class="cs-text">
-          <p>lilbase only read fineweb-edu. sprout reads <strong>12 billion tokens</strong> from four sources, mixed by share.</p>
+          <p>lilbase only read fineweb-edu. sprout reads <strong>12 billion tokens</strong> from four sources, mixed by share. books get cut into 16,000 character chunks first, about 4k tokens each, so one novel cant fill a whole run of batches.</p>
           <div class="fig mix" data-live>
             <div class="mix-bar">
               <b style="--w: 55%; --c: var(--ink); --k: 0"></b><b style="--w: 25%; --c: #5f5f5f; --k: 1"></b><b style="--w: 10%; --c: #a3a3a0; --k: 2"></b><b style="--w: 10%; --c: #d0d0cc; --k: 3"></b>
@@ -154,23 +154,25 @@
       <div class="cs-sec" data-reveal data-label="training">
         <h2 class="cs-h">training</h2>
         <div class="cs-text">
-          <p>adamw keeps two extra numbers for every parameter, which adds up fast at 523m. so the optimizer state is <strong>sharded across the 8 chips</strong>: every chip keeps a full copy of the weights, but only its own eighth of the optimizer state.</p>
+          <p>adamw keeps two extra numbers for every parameter, which adds up fast at 523m. so the optimizer state is <strong>sharded across the 8 chips</strong>. gradients are reduce-scattered, so each chip only receives the slice it owns, runs adamw on that slice, then the updated slices are all-gathered back into full weights.</p>
           <div class="fig" data-live>
             <div class="shards"><span class="sq" style="--k: 0"><i style="--s: 0"></i></span><span class="sq" style="--k: 1"><i style="--s: 1"></i></span><span class="sq" style="--k: 2"><i style="--s: 2"></i></span><span class="sq" style="--k: 3"><i style="--s: 3"></i></span><span class="sq" style="--k: 4"><i style="--s: 4"></i></span><span class="sq" style="--k: 5"><i style="--s: 5"></i></span><span class="sq" style="--k: 6"><i style="--s: 6"></i></span><span class="sq" style="--k: 7"><i style="--s: 7"></i></span></div>
             <div class="chips8-note"><span>8 chips, each with the full weights</span><span>and 1/8 of the optimizer state</span></div>
           </div>
-          <p>the learning rate follows a <strong>wsd schedule</strong>: warm up, hold it flat, then decay over the last 15% of training. the long flat middle means the run doesnt have to commit to an exact length up front.</p>
+          <p>the learning rate follows a <strong>wsd schedule</strong>: 1500 steps of linear warmup to 3e-4, hold it flat, then decay linearly to 10% of that over the last 15% of training. the total token count can still change between sessions as long as the decay hasnt started, so the run doesnt have to commit to an exact length up front.</p>
           <div class="fig wsd" data-live>
-            <svg viewBox="0 0 600 150" role="img" aria-label="the shape of a warmup, stable, decay learning rate schedule">
-              <line class="wsd-axis" x1="0" y1="130" x2="600" y2="130" />
-              <path class="wsd-line" d="M0 130 L24 26 L510 26 L600 122" />
+            <svg viewBox="0 0 650 150" role="img" aria-label="the learning rate schedule: 1500 warmup steps to 3e-4, flat, then a linear decay to 3e-5 over the last 15 percent of about 22,900 steps">
+              <line class="wsd-axis" x1="0" y1="130" x2="650" y2="130" />
+              <path class="wsd-line" d="M0 130 L39.3 26 L510 26 L600 119.6" />
               <line class="wsd-mark" x1="510" y1="16" x2="510" y2="130" />
-              <text x="0" y="146">warmup</text>
-              <text x="267" y="14" text-anchor="middle">flat</text>
+              <text x="46" y="18">3e-4</text>
+              <text x="608" y="124">3e-5</text>
+              <text x="0" y="146">warmup, 1500 steps</text>
               <text x="600" y="146" text-anchor="end">decay, last 15%</text>
             </svg>
-            <p class="cap muted">the shape of it, not the actual numbers</p>
+            <p class="cap muted">to scale, about 22,900 steps of 524,288 tokens</p>
           </div>
+          <p>each session gets about 8.4 hours before kaggle ends it at 9. the next one finds the newest checkpoint on its own and carries on with the data position, optimizer state, schedule and loss history exactly where they were.</p>
         </div>
       </div>
       <div class="cs-sec" data-reveal data-label="goals">
