@@ -397,6 +397,71 @@ function lives() {
   for (const el of $$("[data-live]")) io.observe(el);
 }
 
+// the same curve as --ease, so a number can land exactly when its bar does
+function bezier(x1, y1, x2, y2) {
+  const at = (a, b, t) => 3 * a * t * (1 - t) ** 2 + 3 * b * t * t * (1 - t) + t ** 3;
+  return (x) => {
+    let lo = 0;
+    let hi = 1;
+    for (let i = 0; i < 20; i++) {
+      const mid = (lo + hi) / 2;
+      if (at(x1, x2, mid) < x) lo = mid;
+      else hi = mid;
+    }
+    return at(y1, y2, (lo + hi) / 2);
+  };
+}
+
+// numbers count up as they arrive, the ones on bars ride along with their bar
+function counters() {
+  if (reduce) return;
+  const ease = bezier(0.2, 0.7, 0.1, 1);
+  const els = $$(".hbar em, .cs-meta dd, .specs dd").filter((el) => !el.children.length && /^\d/.test(el.textContent.trim()));
+  const info = new Map();
+  for (const el of els) {
+    const text = el.textContent;
+    const m = text.match(/\d[\d,]*(?:\.\d+)?/);
+    const decimals = (m[0].split(".")[1] || "").length;
+    const commas = m[0].includes(",");
+    const fmt = (v) => {
+      const n = commas ? v.toLocaleString("en-US", { minimumFractionDigits: decimals, maximumFractionDigits: decimals }) : v.toFixed(decimals);
+      return text.slice(0, m.index) + n + text.slice(m.index + m[0].length);
+    };
+    info.set(el, { text, fmt, target: parseFloat(m[0].replace(/,/g, "")) });
+    el.textContent = fmt(0);
+  }
+
+  function run(el, delay, duration) {
+    const { text, fmt, target } = info.get(el);
+    const start = performance.now() + delay;
+    const step = (now) => {
+      const p = Math.min(1, Math.max(0, (now - start) / duration));
+      el.textContent = p < 1 ? fmt(target * ease(p)) : text;
+      if (p < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }
+
+  const io = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        io.unobserve(entry.target);
+        run(entry.target, 150, 1100);
+      }
+    },
+    { threshold: 0.6 }
+  );
+  for (const el of els) {
+    const live = el.closest("[data-live]");
+    if (el.matches(".hbar em") && live) {
+      const k = parseFloat(el.parentElement.style.getPropertyValue("--k")) || 0;
+      live.addEventListener("live", () => run(el, 150 + k * 90, 1200), { once: true });
+    } else io.observe(el);
+  }
+  window.addEventListener("beforeprint", () => els.forEach((el) => (el.textContent = info.get(el).text)));
+}
+
 // printing skips the scroll, so everything that would have animated in shows up as it ends
 function printable() {
   window.addEventListener("beforeprint", () => {
@@ -556,6 +621,7 @@ email();
 footer();
 followers();
 lives();
+counters();
 printable();
 scribbles();
 requestAnimationFrame(tick);

@@ -261,16 +261,12 @@ html.intro .hero [data-reveal].in {
 }
 
 .area-row {
+  position: relative;
   display: grid;
   grid-template-columns: minmax(0, 260px) minmax(0, 1fr) auto;
   gap: 32px;
   align-items: baseline;
   padding: 26px 0;
-  border-top: 1px solid var(--line);
-}
-
-.area-row:last-child {
-  border-bottom: 1px solid var(--line);
 }
 
 .area-name {
@@ -749,9 +745,10 @@ html:not(.js) .hbar b {
 
 .hbar em {
   font-style: normal;
+  font-variant-numeric: tabular-nums;
   opacity: 0;
-  transition: opacity 0.5s ease;
-  transition-delay: calc(var(--k) * 90ms + 700ms);
+  transition: opacity 0.4s ease;
+  transition-delay: calc(var(--k) * 90ms + 150ms);
 }
 
 .live .hbar em,
@@ -1136,19 +1133,45 @@ html:not(.js) .train-track b {
 }
 
 .post-row {
+  position: relative;
   display: grid;
   grid-template-columns: 128px minmax(0, 1fr) auto;
   gap: 24px;
   align-items: baseline;
   padding: 22px 0;
-  border-top: 1px solid var(--line);
   font-size: clamp(19px, 2.1vw, 26px);
   line-height: 1.25;
   letter-spacing: -0.03em;
 }
 
-.post-row:last-child {
-  border-bottom: 1px solid var(--line);
+/* the rules between rows draw across as each row arrives */
+.area-row::before,
+.post-row::before,
+.area-row:last-child::after,
+.post-row:last-child::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 1px;
+  background: var(--line);
+  transform-origin: 0 50%;
+  transition: transform 1.3s var(--ease) calc(var(--d, 0s) + 0.1s);
+}
+
+.area-row:last-child::after,
+.post-row:last-child::after {
+  top: auto;
+  bottom: 0;
+  transition-delay: calc(var(--d, 0s) + 0.25s);
+}
+
+.js .area-row:not(.in)::before,
+.js .post-row:not(.in)::before,
+.js .area-row:not(.in)::after,
+.js .post-row:not(.in)::after {
+  transform: scaleX(0);
 }
 
 .post-row .t {

@@ -29,8 +29,24 @@
 }
 
 .cs-meta > div {
+  position: relative;
   padding-top: 14px;
-  border-top: 1px solid var(--line);
+}
+
+.cs-meta > div::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 1px;
+  background: var(--line);
+  transform-origin: 0 50%;
+  transition: transform 1.3s var(--ease) calc(var(--d, 0s) + 0.1s);
+}
+
+.js .cs-meta > div:not(.in)::before {
+  transform: scaleX(0);
 }
 
 .cs-meta dt {
