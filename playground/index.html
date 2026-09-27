@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script>document.documentElement.classList.add("js")</script>
 
   <!-- the multithreading worker broke firefox, this just removes it from browsers that installed it -->
   <script>
@@ -30,311 +31,94 @@
   <meta name="twitter:title" content="playground" />
   <meta name="twitter:description" content="talk to my models in your browser. they download once and run on your own computer." />
   <meta name="twitter:image" content="https://navthings.github.io/og.png?v=3" />
-  <meta name="theme-color" content="#111111" />
+  <meta name="theme-color" content="#ffffff" />
   <link rel="icon" type="image/svg+xml" href="../favicon.svg" />
   <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png" />
   <link rel="apple-touch-icon" href="../apple-touch-icon.png" />
 
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Geist:wght@300&display=swap"
-    rel="stylesheet"
-    crossorigin="anonymous"
-  />
-
-  <style>
-    *,
-    *::before,
-    *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      background-color: #111111;
-      color: #888888;
-      font-family: "Geist", "Helvetica Neue", sans-serif;
-      font-weight: 300;
-      font-size: 16px;
-      line-height: 25px;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      overflow-x: hidden;
-    }
-
-    .container {
-      padding: 80px 40px 60px 116px;
-    }
-
-    .col {
-      max-width: 32rem;
-    }
-
-    @media (max-width: 600px) {
-      .container {
-        padding: 60px 32px 48px 32px;
-      }
-    }
-
-    a,
-    button {
-      color: #ffffff;
-      text-decoration: none;
-      transition: opacity 0.2s ease;
-    }
-
-    a:hover,
-    button:hover:not(:disabled) {
-      opacity: 0.5;
-    }
-
-    button {
-      background: none;
-      border: none;
-      font: inherit;
-      line-height: inherit;
-      cursor: pointer;
-      text-align: left;
-    }
-
-    button:disabled {
-      color: #444444;
-      cursor: default;
-    }
-
-    .title {
-      color: #ffffff;
-      margin-bottom: 25px;
-    }
-
-    section {
-      margin-top: 25px;
-    }
-
-    /* models, laid out like the links on the home page */
-
-    .model {
-      display: block;
-      color: #888888;
-    }
-
-    .model:hover {
-      opacity: 1 !important;
-    }
-
-    .model .name {
-      color: #ffffff;
-      transition: opacity 0.2s ease;
-    }
-
-    .model:hover .name {
-      opacity: 0.5;
-    }
-
-    .model .state {
-      color: #555555;
-      font-size: 14px;
-      font-variant-numeric: tabular-nums;
-      margin-left: 4px;
-    }
-
-    .model.on .state {
-      color: #888888;
-    }
-
-    /* conversation */
-
-    #chat[hidden] {
-      display: none;
-    }
-
-    .log {
-      margin-bottom: 25px;
-    }
-
-    .log:empty {
-      display: none;
-    }
-
-    .msg {
-      white-space: pre-wrap;
-      overflow-wrap: anywhere;
-    }
-
-    .msg.you {
-      color: #ffffff;
-      margin-top: 25px;
-    }
-
-    .msg.you:first-child {
-      margin-top: 0;
-    }
-
-    .msg.bot {
-      color: #888888;
-      margin-top: 4px;
-    }
-
-    .story {
-      white-space: pre-wrap;
-      overflow-wrap: anywhere;
-      color: #888888;
-    }
-
-    .story b {
-      color: #ffffff;
-      font-weight: 300;
-    }
-
-    .typing::after {
-      content: "";
-      display: inline-block;
-      width: 6px;
-      height: 14px;
-      margin-left: 3px;
-      vertical-align: -1px;
-      background: #555555;
-      animation: blink 1s steps(2, start) infinite;
-    }
-
-    @keyframes blink {
-      to {
-        visibility: hidden;
-      }
-    }
-
-    textarea {
-      display: block;
-      width: 100%;
-      background: none;
-      border: none;
-      border-bottom: 1px solid #222222;
-      border-radius: 0;
-      padding-bottom: 8px;
-      outline: none;
-      resize: none;
-      color: #ffffff;
-      font: inherit;
-      font-size: 16px;
-      line-height: 25px;
-      max-height: 200px;
-      overflow-y: hidden;
-      transition: border-color 0.2s ease;
-    }
-
-    textarea:focus {
-      border-bottom-color: #444444;
-    }
-
-    textarea::placeholder {
-      color: #444444;
-    }
-
-    .actions {
-      display: flex;
-      gap: 16px;
-      margin-top: 10px;
-      font-size: 14px;
-    }
-
-    .actions .stats {
-      margin-left: auto;
-      color: #555555;
-      font-variant-numeric: tabular-nums;
-      text-align: right;
-    }
-
-    .ff {
-      margin-top: 25px;
-      font-size: 14px;
-      color: #aaaaaa;
-    }
-
-    .ff[hidden] {
-      display: none;
-    }
-
-    .note {
-      margin-top: 40px;
-      padding-bottom: 40px;
-      font-size: 14px;
-      color: #555555;
-    }
-
-    .note a {
-      color: #888888;
-    }
-
-    /* same fade as the home page */
-
-    .fade-in {
-      opacity: 0;
-      transform: translateY(5px);
-      animation: fadeUp 0.55s ease forwards;
-    }
-
-    @keyframes fadeUp {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      .fade-in {
-        animation: none;
-        opacity: 1;
-        transform: none;
-      }
-
-      .typing::after {
-        animation: none;
-      }
-    }
-  </style>
+  <link rel="preload" href="../assets/fonts/geist.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="../assets/site.css" />
+  <link rel="stylesheet" href="playground.css" />
 </head>
 
-<body>
-  <div class="container">
-    <div class="col">
-      <a class="fade-in" href="../" style="animation-delay: 0.05s">navthings</a>
+<body data-native-scroll>
+  <a class="skip" href="#main">skip to content</a>
 
-      <section>
-        <div class="title fade-in" style="animation-delay: 0.1s">playground</div>
-        <p class="fade-in" style="animation-delay: 0.18s">
-          my models, running in your browser. pick one, it downloads once, then runs on your own computer. nothing you type gets sent anywhere.
+  <header class="nav">
+    <a class="brand" href="../" aria-label="navthings, home"><img src="../favicon.svg" alt="" /><span>navthings</span></a>
+    <nav class="links" aria-label="main">
+      <span class="blob"></span>
+      <a href="../#work">work</a>
+      <a href="../#writing">writing</a>
+      <a href="./" class="on">playground</a>
+      <a class="pill" href="mailto:navneet.dagdiya@gmail.com" data-email>email</a>
+    </nav>
+  </header>
+
+  <main class="sheet" id="main">
+    <div class="pg wrap wide">
+      <section class="pg-head">
+        <p class="cs-kicker mono" data-reveal><a href="../work/playground.html">how this works</a></p>
+        <h1 class="pg-title" style="view-transition-name: t-playground" data-words>talk to my models.</h1>
+        <p class="pg-lede" data-reveal style="--d: 0.25s">
+          they run right here in your browser. pick one, it downloads once, then runs on your own computer. nothing you type gets sent anywhere.
         </p>
-        <p class="ff" id="ff" hidden>
-          heads up, youre on firefox (or something built on it like zen), which runs these on your cpu so theyre pretty slow. safari or chrome use your gpu and are way faster.
+        <p class="ff sq" id="ff" hidden>
+          <span class="live-dot"></span>
+          <span>heads up, youre on firefox (or something built on it like zen), which runs these on your cpu so theyre pretty slow. safari or chrome use your gpu and are way faster.</span>
         </p>
       </section>
 
-      <section class="fade-in" style="animation-delay: 0.26s">
-        <p>models</p>
-        <div id="models"></div>
+      <section class="pg-models" aria-label="models" data-reveal style="--d: 0.35s">
+        <div id="models" class="models"></div>
       </section>
 
-      <section id="chat" hidden>
-        <p id="chat-label"></p>
-        <div class="log" id="log"></div>
-        <textarea id="box" rows="1"></textarea>
+      <section id="chat" class="chat-panel sq" hidden>
+        <div class="chat-top">
+          <p id="chat-label" class="chat-name"></p>
+          <span class="stats mono" id="stats"></span>
+        </div>
+        <div class="log" id="log" aria-live="polite"></div>
+        <div class="composer">
+          <textarea id="box" rows="1" aria-label="message"></textarea>
+          <button id="go" class="btn dark">send</button>
+          <button id="stop" class="btn" hidden>stop</button>
+        </div>
         <div class="actions">
-          <button id="go">send</button>
-          <button id="stop" hidden>stop</button>
-          <button id="clear">clear</button>
-          <button id="temp" title="how random it gets">temp 0.4</button>
-          <span class="stats" id="stats"></span>
+          <button id="clear" class="btn line small">clear</button>
+          <button id="temp" class="btn line small" title="how random it gets">temp 0.4</button>
         </div>
       </section>
 
-      <p class="note fade-in" style="animation-delay: 0.34s">
-        runs on <a href="https://github.com/ngxson/wllama" target="_blank">wllama</a>, which is llama.cpp in your browser. the models are on <a href="https://huggingface.co/navthings" target="_blank">hugging face</a>. theyre small, so they make stuff up. a lot.
+      <p class="note" data-reveal>
+        runs on <a href="https://github.com/ngxson/wllama" target="_blank" rel="noopener">wllama</a>, which is llama.cpp in your browser. the models are on <a href="https://huggingface.co/navthings" target="_blank" rel="noopener">hugging face</a>. theyre small, so they make stuff up. a lot.
       </p>
     </div>
-  </div>
+  </main>
 
+  <footer class="foot">
+    <div class="foot-top">
+      <div>
+        <p class="foot-say">say hi. <span>maybe i'll reply.</span></p>
+        <button class="btn" type="button" data-email><span class="inner">copy my email</span></button>
+        <p class="hint">50-50 i respond</p>
+      </div>
+      <nav class="foot-links" aria-label="elsewhere">
+        <a href="https://github.com/navthings" target="_blank" rel="noopener">github <span>- it still works</span></a>
+        <a href="https://huggingface.co/navthings" target="_blank" rel="noopener">hugging face <span>- the weights</span></a>
+        <a href="https://ollama.com/navthings" target="_blank" rel="noopener">ollama <span>- models i've pushed</span></a>
+        <a href="https://orcid.org/0009-0002-2764-866X" target="_blank" rel="noopener">orcid <span>- research id</span></a>
+        <a href="https://doi.org/10.5281/zenodo.22340667" target="_blank" rel="noopener">zenodo <span>- the paper</span></a>
+        <a href="../feed.xml">rss <span>- new posts</span></a>
+      </nav>
+    </div>
+    <div class="foot-mark">
+      <svg viewBox="66 64 384 378" aria-hidden="true" data-mark></svg>
+      <div class="meta">navthings, made in australia<br /><button type="button" data-top>back to top</button></div>
+    </div>
+  </footer>
+
+  <script src="../assets/site.js"></script>
   <script type="module">
     // loaded lazily so the page still shows up if the engine cant download
     const engine = import("https://cdn.jsdelivr.net/npm/@wllama/wllama@3.6.1/esm/index.js").then((mod) => mod.Wllama)
@@ -379,16 +163,31 @@
     let loading = null;
     const state = {};
 
+    const tiles = {};
+
+    // tiles are built once and updated in place so the download bar can animate
     function renderModels() {
-      ui.models.innerHTML = "";
       for (const m of MODELS) {
-        const b = document.createElement("button");
-        b.className = "model" + (current === m ? " on" : "");
-        b.innerHTML = '<span class="name">' + m.id + "</span> - " + m.what +
-          '<span class="state">' + (state[m.id] || m.size) + "</span>";
-        b.onclick = () => pick(m);
-        ui.models.appendChild(b);
+        let b = tiles[m.id];
+        if (!b) {
+          b = document.createElement("button");
+          b.className = "model sq";
+          b.innerHTML = '<span class="m-top"><span class="name">' + m.id + '</span><span class="state"></span></span>' +
+            '<span class="what">' + m.what + '</span><span class="bar"><b></b></span>';
+          b.onclick = () => pick(m);
+          ui.models.appendChild(b);
+          tiles[m.id] = b;
+        }
+        const s = state[m.id] || m.size;
+        const pct = s === "loaded" ? 100 : /%$/.test(s) ? parseInt(s, 10) : 0;
+        b.classList.toggle("on", current === m);
+        b.classList.toggle("loading", s === "loading" || /%$/.test(s));
+        b.classList.toggle("failed", s === "failed");
+        b.setAttribute("aria-pressed", current === m);
+        b.querySelector(".state").textContent = s;
+        b.querySelector(".bar b").style.width = pct + "%";
       }
+      if (window.site) window.site.squircles(ui.models);
     }
 
     function setState(m, text) {
@@ -424,6 +223,7 @@
       ui.chat.classList.remove("fade-in");
       void ui.chat.offsetWidth;
       ui.chat.classList.add("fade-in");
+      if (window.site) window.site.squircles(ui.chat);
       ui.label.textContent = m.id;
       ui.log.innerHTML = "";
       ui.stats.textContent = "";
@@ -477,6 +277,13 @@
         ui.box.value = m.start;
       }
       autosize();
+      if (pending && m === preset) {
+        ui.box.value = pending;
+        pending = null;
+        autosize();
+        run();
+        return;
+      }
       if (matchMedia("(hover: hover)").matches) ui.box.focus();
     }
 
@@ -630,8 +437,10 @@
     ui.temp.onclick = () => setTemp(TEMPS[(TEMPS.indexOf(temp) + 1) % TEMPS.length]);
 
     if (/firefox/i.test(navigator.userAgent)) $("ff").hidden = false;
+    const params = new URLSearchParams(location.search);
+    const preset = MODELS.find((m) => m.id === params.get("model"));
+    let pending = preset ? (params.get("q") || "").trim().slice(0, 500) : "";
     renderModels();
-    const preset = MODELS.find((m) => m.id === new URLSearchParams(location.search).get("model"));
     if (preset) pick(preset);
   </script>
 </body>
