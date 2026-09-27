@@ -84,6 +84,7 @@
         <h2 class="cs-h">how it works</h2>
         <div class="cs-text">
           <p>it runs on <a href="https://github.com/ngxson/wllama" target="_blank" rel="noopener">wllama</a>, which is llama.cpp compiled to webassembly. you pick a model, the page pulls the gguf file straight from <a href="https://huggingface.co/navthings" target="_blank" rel="noopener">hugging face</a>, and then everything happens on your machine.</p>
+          <p>on chrome every layer gets offloaded to the gpu through webgpu. firefox doesnt get webgpu in this build, so it runs on the cpu.</p>
           <p>this site is just static files on github pages. <strong>theres no server doing any of it</strong>, so nothing you type gets sent anywhere.</p>
         </div>
       </div>
@@ -107,7 +108,7 @@
       <div class="cs-sec" data-reveal data-label="what broke">
         <h2 class="cs-h">what broke</h2>
         <div class="cs-text">
-          <p><strong>safari.</strong> it says it supports the faster memory64 build of wllama, then cant actually run it. so on safari the page quietly points the engine at the compat build instead.</p>
+          <p><strong>safari.</strong> it passes wllamas memory64 check, then cant actually run that build. so on safari the page points the engine at the compat build instead, which swaps jspi for asyncify and drops memory64. it still gets webgpu, but its noticeably slower than chrome.</p>
           <p><strong>firefox.</strong> it runs the models on one cpu core, so theyre slow. i tried turning on multithreading with a service worker that adds the headers github pages cant send. it broke the page, so i undid it, and now the page removes that worker from anyone who got it. firefox users get a heads up instead.</p>
           <p>the engine also loads lazily, so if it cant download for some reason the page still shows up and tells you, instead of just being blank.</p>
         </div>
