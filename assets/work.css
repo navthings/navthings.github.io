@@ -743,9 +743,14 @@ html:not(.js) .shards i {
   stroke: var(--ink);
   stroke-width: 2;
   stroke-linejoin: round;
-  stroke-dasharray: 800;
-  stroke-dashoffset: 800;
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
   transition: stroke-dashoffset 1.6s var(--ease) 0.2s;
+}
+
+.wsd-line.faint {
+  stroke: #c9c9c6;
+  transition-delay: 0.6s;
 }
 
 .live .wsd-line,

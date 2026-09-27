@@ -123,6 +123,8 @@
             <div><dt>steps</dt><dd>11,634</dd></div>
             <div><dt>vocab</dt><dd>32k</dd></div>
             <div><dt>matmuls</dt><dd>bf16</dd></div>
+            <div><dt>schedule</dt><dd>1000 warmup, cosine to 10%</dd></div>
+            <div><dt>held out for eval</dt><dd>first 1500 docs</dd></div>
           </dl>
           <p>the chinchilla idea is that a model should read about 20 tokens for every parameter it has. heres where lilbase and sprout land, one bar per model, one tick per token read for each parameter.</p>
           <div class="fig ratio" data-live>
