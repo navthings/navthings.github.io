@@ -88,6 +88,12 @@
   opacity: 1;
 }
 
+@media (hover: hover) {
+  .tl-item:hover .tl-node.lit {
+    transform: scale(1.15);
+  }
+}
+
 /* same weights as lilbase, finetuned, so the same size but hollow */
 .tl-node.ring {
   background: var(--bg);
