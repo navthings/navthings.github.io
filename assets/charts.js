@@ -51,7 +51,8 @@
       const bottom = a.values.map((v, i) => `${x(i)},${y(v)}`).reverse();
       s += `<polygon class="gap" points="${top.concat(bottom).join(" ")}" fill="#0f0f0f" fill-opacity="0.045"/>`;
 
-      for (const note of cfg.notes || []) {
+      // the notes need room, on a phone the legend and tooltip carry it
+      for (const note of W > 420 ? cfg.notes || [] : []) {
         const nx = x(note.at);
         if (note.kind === "gap") {
           const y1 = y(b.values[note.at]) + 10;

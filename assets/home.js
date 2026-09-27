@@ -139,6 +139,7 @@
     if (!knob || !toks) return;
     const value = knob.querySelector(".knob-v");
     const note = document.getElementById("temp-note");
+    if (!window.site.finePointer) note.textContent = ". tap the number.";
 
     const ALT = {
       hi: ["hey", "hello", "oi", "g'day"],
