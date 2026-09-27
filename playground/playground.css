@@ -297,6 +297,12 @@ textarea::placeholder {
   color: var(--ink-3);
 }
 
+/* the whole composer shows focus, so the textarea itself doesn't need a ring */
+textarea:focus,
+textarea:focus-visible {
+  outline: none;
+}
+
 .composer .btn {
   flex-shrink: 0;
 }

@@ -545,6 +545,10 @@ svg {
   transition-delay: calc(var(--k) * 0.45s);
 }
 
+.scrib-svg.measuring path {
+  transition: none !important;
+}
+
 .drawn > .scrib-svg path,
 [data-scrib-on="hover"]:hover > .scrib-svg path {
   stroke-dashoffset: 0;

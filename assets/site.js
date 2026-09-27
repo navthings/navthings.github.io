@@ -492,6 +492,8 @@ function scribbles(root = document) {
       svg.setAttribute("viewBox", `${-pad} ${-pad} ${w + pad * 2} ${h + pad * 2}`);
       svg.style.cssText = `left:${-pad}px;top:${-pad}px;width:${w + pad * 2}px;height:${h + pad * 2}px`;
       const sw = Math.min(4, Math.max(1.7, fs * 0.034));
+      // measure with transitions off, otherwise a new path flashes fully drawn before it hides itself
+      svg.classList.add("measuring");
       svg.innerHTML = scribblePaths(kind, w, h, seeded(seed), fs)
         .map((d, i) => `<path d="${d}" stroke-width="${sw.toFixed(2)}" style="--k:${i}"/>`)
         .join("");
@@ -500,6 +502,8 @@ function scribbles(root = document) {
         path.style.strokeDasharray = len;
         path.style.setProperty("--len", len);
       }
+      svg.getBoundingClientRect();
+      svg.classList.remove("measuring");
     };
     new ResizeObserver(draw).observe(el);
     if (el.dataset.scribOn === "hover") continue;
