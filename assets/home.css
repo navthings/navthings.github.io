@@ -249,325 +249,6 @@ html.intro .hero [data-reveal].in {
   max-width: 21ch;
 }
 
-/* a neural net with no libraries */
-
-.scratch {
-  padding-bottom: clamp(80px, 14vh, 160px);
-}
-
-.scratch-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
-  gap: clamp(32px, 5vw, 80px);
-  align-items: center;
-}
-
-.scratch-copy .soft {
-  margin-top: 18px;
-  max-width: 30rem;
-  font-size: 17px;
-  line-height: 1.6;
-}
-
-.scratch-copy .row {
-  margin-top: 24px;
-}
-
-.digits {
-  --r: 36px;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 150px;
-  gap: 20px 24px;
-  padding: clamp(18px, 2.6vw, 28px);
-  background: var(--surface);
-}
-
-.pad {
-  position: relative;
-  aspect-ratio: 1;
-  border-radius: 22px;
-  background: var(--bg);
-  box-shadow: inset 0 0 0 1px var(--line);
-  overflow: hidden;
-}
-
-.pad canvas {
-  display: block;
-  width: 100%;
-  height: 100%;
-  cursor: crosshair;
-  touch-action: none;
-}
-
-.pad p {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  color: var(--ink-4);
-  font-size: 15px;
-  pointer-events: none;
-}
-
-.digits-side {
-  display: flex;
-  flex-direction: column;
-  gap: 22px;
-}
-
-.guess span {
-  display: block;
-  font-size: 13px;
-  color: var(--ink-3);
-}
-
-.guess b {
-  display: block;
-  font-size: 88px;
-  line-height: 0.9;
-  letter-spacing: -0.05em;
-  font-weight: 450;
-  font-variant-numeric: tabular-nums;
-}
-
-.seen canvas {
-  width: 112px;
-  height: 112px;
-  border-radius: 10px;
-  background: var(--bg);
-  image-rendering: pixelated;
-  box-shadow: inset 0 0 0 1px var(--line);
-}
-
-.seen .cap,
-.hidden .cap {
-  display: block;
-  margin-top: 8px;
-  color: var(--ink-3);
-}
-
-.hidden > div {
-  display: grid;
-  grid-template-columns: repeat(8, 12px);
-  gap: 5px;
-}
-
-.hidden i {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: var(--ink);
-  opacity: 0.08;
-  transition: opacity 0.2s ease;
-}
-
-.outs {
-  grid-column: 1 / -1;
-  display: grid;
-  grid-template-columns: repeat(10, minmax(0, 1fr));
-  gap: 8px;
-  list-style: none;
-}
-
-.outs li {
-  display: flex;
-  flex-direction: column-reverse;
-  align-items: center;
-  gap: 6px;
-  font-size: 13px;
-  color: var(--ink-3);
-  font-variant-numeric: tabular-nums;
-}
-
-.outs b {
-  display: block;
-  width: 100%;
-  max-width: 24px;
-  height: 56px;
-  border-radius: 4px 4px 0 0;
-  background: linear-gradient(to top, #c9c9c6 calc(var(--v) * 100%), transparent 0);
-  box-shadow: inset 0 -1px 0 var(--line);
-  transition: background 0.2s ease;
-}
-
-.outs li.top {
-  color: var(--ink);
-}
-
-.outs li.top b {
-  background: linear-gradient(to top, var(--ink) calc(var(--v) * 100%), transparent 0);
-}
-
-.digits-btns {
-  grid-column: 1 / -1;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.digits-btns .btn {
-  background: var(--bg);
-}
-
-/* the tokenizer */
-
-.reads-grid {
-  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
-}
-
-/* the heading comes first for screen readers, the card still sits on the left */
-.reads-card {
-  order: -1;
-}
-
-.reads-card {
-  --r: 36px;
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-  padding: clamp(18px, 2.6vw, 28px);
-  background: var(--surface);
-}
-
-.tok-in {
-  display: block;
-  width: 100%;
-  padding: 14px 18px;
-  border: 0;
-  border-radius: 18px;
-  background: var(--bg);
-  box-shadow: inset 0 0 0 1px var(--line);
-  color: var(--ink);
-  font: inherit;
-  font-size: clamp(18px, 1.7vw, 22px);
-  line-height: 1.4;
-  letter-spacing: -0.02em;
-  resize: none;
-  overflow: hidden;
-  transition: box-shadow 0.2s ease;
-}
-
-.tok-in:focus {
-  outline: none;
-  box-shadow: inset 0 0 0 1px var(--ink-3);
-}
-
-.tok-out {
-  display: flex;
-  flex-wrap: wrap;
-  align-content: flex-start;
-  gap: 8px 3px;
-  min-height: 112px;
-}
-
-.tk {
-  display: inline-flex;
-  flex-direction: column;
-  align-items: flex-start;
-}
-
-.tk b {
-  padding: 3px 6px;
-  border-radius: 7px;
-  transition: box-shadow 0.15s ease;
-  background: var(--bg);
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 1.35;
-  white-space: pre;
-  color: var(--ink);
-}
-
-.tk.cut b {
-  background: #ffe2d4;
-}
-
-.tk.same b {
-  box-shadow: inset 0 0 0 1.5px var(--ink);
-}
-
-.tk.same i {
-  color: var(--ink);
-}
-
-.tk i {
-  margin-top: 3px;
-  padding-left: 6px;
-  font-style: normal;
-  font-size: 10.5px;
-  font-variant-numeric: tabular-nums;
-  color: var(--ink-3);
-}
-
-.tk.new {
-  animation: tk-in 0.35s var(--ease) both;
-  animation-delay: calc(var(--k, 0) * 22ms);
-}
-
-@keyframes tk-in {
-  from {
-    opacity: 0;
-    transform: translateY(6px);
-  }
-}
-
-.tok-stats {
-  color: var(--ink-3);
-}
-
-.tok-try {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.tok-try .btn {
-  background: var(--bg);
-}
-
-@media (max-width: 900px) {
-  .scratch-grid,
-  .reads-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .reads-card {
-    order: 0;
-  }
-}
-
-@media (max-width: 520px) {
-  .digits {
-    grid-template-columns: 1fr;
-  }
-
-  .digits-side {
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-items: flex-start;
-    gap: 18px;
-  }
-
-  .guess b {
-    font-size: 64px;
-  }
-
-  .seen canvas {
-    width: 84px;
-    height: 84px;
-  }
-
-  .hidden > div {
-    grid-template-columns: repeat(8, 9px);
-    gap: 4px;
-  }
-
-  .hidden i {
-    width: 9px;
-    height: 9px;
-  }
-}
-
 /* what i work on */
 
 .areas {
@@ -1565,6 +1246,24 @@ html:not(.js) .train-track b {
   max-width: 28rem;
 }
 
+.play-card .soft + .soft {
+  margin-top: 12px;
+}
+
+.play-card .soft a {
+  color: var(--ink);
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 100% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size 0.4s var(--ease);
+}
+
+.play-card .soft a:hover {
+  background-size: 0% 1px;
+  background-position: 100% 100%;
+}
+
 .ask {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
@@ -1692,11 +1391,6 @@ html:not(.js) .dots {
   display: none;
 }
 
-/* the digit pad and the tokenizer need javascript to do anything */
-html:not(.js) .digits,
-html:not(.js) .reads-card {
-  display: none;
-}
 
 @media print {
   .scale {

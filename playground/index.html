@@ -68,6 +68,7 @@
         <p class="pg-lede" data-reveal style="--d: 0.25s">
           they run right here in your browser. pick one, it downloads once, then runs on your own computer. nothing you type gets sent anywhere.
         </p>
+        <p class="pg-more cap" data-reveal style="--d: 0.35s">further down: <a href="#tokenizer">lilstory's tokenizer</a> and <a href="#digits">a digit net with no libraries</a></p>
         <p class="ff sq" id="ff" hidden>
           <span>heads up, youre on firefox (or something built on it like zen), which runs these on your cpu so theyre pretty slow. chrome runs them on your gpu and is way faster.</span>
         </p>
@@ -102,6 +103,59 @@
       <p class="note" data-reveal>
         runs on <a href="https://github.com/ngxson/wllama" target="_blank" rel="noopener">wllama</a>, which is llama.cpp in your browser. the models are on <a href="https://huggingface.co/navthings" target="_blank" rel="noopener">hugging face</a>. theyre small, so they make stuff up. a lot.
       </p>
+
+      <section class="pg-demo reads" id="tokenizer" data-label="the tokenizer">
+        <div class="demo-grid reads-grid">
+          <div class="demo-copy">
+            <h2 class="h-section" data-words>how a model reads.</h2>
+            <p class="soft" data-reveal>a model never sees the text itself. it gets cut into pieces first, and every piece is just a number. this is lilstory's tokenizer, 8,000 pieces it learned from about 2 million kids stories.</p>
+            <p class="soft" data-reveal>words it saw a lot are one piece, anything else gets chopped up. duck is one token, tpu is t, p, u. my all lowercase headline costs 3 more tokens than the capitalised one, because the stories it learned from use proper capitals.</p>
+            <div class="row" data-reveal>
+              <a class="btn line small" href="https://github.com/navthings/lilstory" target="_blank" rel="noopener"><span class="inner">the tokenizer</span></a>
+            </div>
+          </div>
+          <div class="reads-card sq" data-tokenizer="../assets/data/lilstory-tokenizer.bin" data-reveal="scale">
+            <textarea class="tok-in" rows="2" maxlength="300" spellcheck="false" autocomplete="off" aria-label="text for the tokenizer">Once upon a time, a little duck trained a transformer on a tpu.</textarea>
+            <div class="tok-out" aria-hidden="true"></div>
+            <p class="tok-stats cap" aria-live="polite"></p>
+            <div class="tok-try">
+              <button class="btn small line" type="button" data-say="Once upon a time, a little duck found a shiny red ball in the park."><span class="inner">a kids story</span></button>
+              <button class="btn small line" type="button" data-say="pretraining a 523m param model with sharded adamw"><span class="inner">ml words</span></button>
+              <button class="btn small line" type="button" data-say="hi, i'm nav. i build language models and research how they learn."><span class="inner">my headline</span></button>
+              <button class="btn small line" type="button" data-say="Hi, I'm Nav. I build language models and research how they learn."><span class="inner">with capitals</span></button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="pg-demo" id="digits" data-label="no libraries">
+        <div class="demo-grid">
+          <div class="demo-copy">
+            <h2 class="h-section" data-words>a neural net with no libraries.</h2>
+            <p class="soft" data-reveal>no numpy, no pytorch, no mlx. every weight is a number in a python list, and backprop is written out by hand as loops. 784 pixels in, 32 hidden neurons, 10 outputs, about 25k weights. it gets 90.5% of the mnist test set right.</p>
+            <p class="soft" data-reveal>draw a digit, or show it a real one from the test set it never saw. its running the exact weights it learned.</p>
+            <div class="row" data-reveal>
+              <a class="btn line small" href="https://github.com/navthings/sllm" target="_blank" rel="noopener"><span class="inner">the code</span></a>
+            </div>
+          </div>
+          <div class="digits sq" data-digits="../assets/data/sllm-mnist.bin" data-reveal="scale">
+            <div class="pad">
+              <canvas role="img" aria-label="drawing pad, draw a digit here"></canvas>
+              <p>draw a digit</p>
+            </div>
+            <div class="digits-side">
+              <div class="guess"><span>its guess</span><b>?</b></div>
+              <div class="seen"><canvas width="28" height="28" aria-hidden="true"></canvas><span class="cap">what it sees, 28 x 28</span></div>
+              <div class="hidden" aria-hidden="true"><div><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><span class="cap">32 hidden neurons</span></div>
+            </div>
+            <ol class="outs" role="list" aria-label="how strongly each output fires"><li style="--v: 0"><span>0</span><b></b></li><li style="--v: 0"><span>1</span><b></b></li><li style="--v: 0"><span>2</span><b></b></li><li style="--v: 0"><span>3</span><b></b></li><li style="--v: 0"><span>4</span><b></b></li><li style="--v: 0"><span>5</span><b></b></li><li style="--v: 0"><span>6</span><b></b></li><li style="--v: 0"><span>7</span><b></b></li><li style="--v: 0"><span>8</span><b></b></li><li style="--v: 0"><span>9</span><b></b></li></ol>
+            <div class="digits-btns">
+              <button class="btn small line" type="button" data-real="../assets/data/mnist-samples.bin"><span class="inner">show it a real one</span></button>
+              <button class="btn small line" type="button" data-clear><span class="inner">clear</span></button>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   </main>
 
@@ -127,6 +181,8 @@
   </footer>
 
   <script src="../assets/site.js"></script>
+  <script src="../assets/tokens.js"></script>
+  <script src="../assets/digits.js"></script>
   <script type="module">
     // loaded lazily so the page still shows up if the engine cant download
     const engine = import("https://cdn.jsdelivr.net/npm/@wllama/wllama@3.6.1/esm/index.js").then((mod) => mod.Wllama)
@@ -496,7 +552,7 @@
     setReady(false);
     ui.clear.parentElement.hidden = true;
     ui.label.textContent = "no model yet";
-    ui.box.placeholder = "pick a model up there first";
+    ui.box.placeholder = "pick a model first";
     if (preset) pick(preset);
   </script>
 </body>
