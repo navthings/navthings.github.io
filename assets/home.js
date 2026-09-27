@@ -318,7 +318,7 @@
       const filled = Math.floor(v + 0.001);
 
       for (let i = 0; i < COUNT; i++) {
-        const want = i < filled ? (stage === 3 && i >= VALUES[2] ? "dot hot" : "dot on") : "dot";
+        const want = i < filled ? (i >= VALUES[2] ? "dot hot" : "dot on") : "dot";
         if (state[i] !== want) {
           dots[i].className = want;
           state[i] = want;
