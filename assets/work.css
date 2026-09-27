@@ -7,7 +7,7 @@
 .cs-title {
   margin-top: 28px;
   width: fit-content;
-  font-size: clamp(68px, 13vw, 196px);
+  font-size: clamp(min(68px, 17.5vw), 13vw, 196px);
   line-height: 0.88;
   letter-spacing: -0.065em;
   font-weight: 450;
