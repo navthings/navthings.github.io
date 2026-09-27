@@ -36,16 +36,19 @@
 <body>
   <a class="skip" href="#main">skip to content</a>
 
-  <header class="nav">
-    <a class="brand" href="../" aria-label="navthings, home"><img src="../favicon.svg" alt="" /><span>navthings</span></a>
-    <nav class="links" aria-label="main">
-      <span class="blob"></span>
-      <a href="../#work">work</a>
-      <a href="../#writing">writing</a>
-      <a href="../playground/">playground</a>
-      <a class="pill" href="mailto:navneet.dagdiya@gmail.com" data-email>email</a>
-    </nav>
-    <span class="progress"></span>
+  <header class="nav" data-label="the paper" data-current="work">
+    <div class="island">
+      <span class="island-fill" aria-hidden="true"></span>
+      <a class="island-mark" href="../" aria-label="navthings, home"><img src="../favicon.svg" alt="" /></a>
+      <span class="island-now" aria-hidden="true"></span>
+      <nav class="island-links" aria-label="main">
+        <a class="home" href="../">navthings</a>
+        <a href="../#work">work</a>
+        <a href="../#writing">writing</a>
+        <a href="../playground/">playground</a>
+        <a href="mailto:navneet.dagdiya@gmail.com" data-email>email</a>
+      </nav>
+    </div>
   </header>
 
   <main class="sheet" id="main">
@@ -83,14 +86,14 @@
     </section>
 
     <section class="cs-body wrap wide">
-      <div class="cs-sec" data-reveal>
+      <div class="cs-sec" data-reveal data-label="the setup">
         <h2 class="cs-h">the setup</h2>
         <div class="cs-text">
           <p>one model, <a href="../blog/lilstory.html">lilstory</a>, trained four times on <strong>1%, 5%, 10% and 15%</strong> of <a href="https://huggingface.co/datasets/roneneldan/TinyStories" target="_blank" rel="noopener">tinystories</a>. same size, same settings, 5000 steps each. the only thing that changes is how much it gets to read.</p>
           <p>lower loss is better, and val loss is the one that matters, since its measured on stories the model never saw.</p>
         </div>
       </div>
-      <div class="cs-sec" data-reveal>
+      <div class="cs-sec" data-reveal data-label="what happened">
         <h2 class="cs-h">what happened</h2>
         <div class="cs-text">
           <p>the 1% one had the best training loss and the worst val loss. it basically just <strong>memorised its 22k stories</strong> lol. the more data i gave it the smaller that gap got, and at 10% theyre pretty much the same.</p>
@@ -113,14 +116,14 @@
           </figure>
         </div>
       </div>
-      <div class="cs-sec" data-reveal>
+      <div class="cs-sec" data-reveal data-label="the weird one">
         <h2 class="cs-h">the weird one</h2>
         <div class="cs-text">
           <p>15% was slightly worse than 10%, which i didnt expect. i think its because every model only got 5000 steps, so the 15% one probably never even got through all its data.</p>
           <p>the difference is tiny too, <strong>0.021</strong>, so it could just be noise.</p>
         </div>
       </div>
-      <div class="cs-sec" data-reveal>
+      <div class="cs-sec" data-reveal data-label="read it">
         <h2 class="cs-h">read it</h2>
         <div class="cs-text">
           <p>its on zenodo if you wanna read the whole thing: <a href="https://doi.org/10.5281/zenodo.22340667" target="_blank" rel="noopener">the effect of corpus size on the performance of a llm</a>.</p>
@@ -141,7 +144,7 @@
 
   </main>
 
-  <footer class="foot">
+  <footer class="foot" data-label="say hi">
     <div class="foot-top">
       <div>
         <p class="foot-say">say hi. <span>maybe i'll reply.</span></p>

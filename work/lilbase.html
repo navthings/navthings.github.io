@@ -36,16 +36,19 @@
 <body>
   <a class="skip" href="#main">skip to content</a>
 
-  <header class="nav">
-    <a class="brand" href="../" aria-label="navthings, home"><img src="../favicon.svg" alt="" /><span>navthings</span></a>
-    <nav class="links" aria-label="main">
-      <span class="blob"></span>
-      <a href="../#work">work</a>
-      <a href="../#writing">writing</a>
-      <a href="../playground/">playground</a>
-      <a class="pill" href="mailto:navneet.dagdiya@gmail.com" data-email>email</a>
-    </nav>
-    <span class="progress"></span>
+  <header class="nav" data-label="lilbase" data-current="work">
+    <div class="island">
+      <span class="island-fill" aria-hidden="true"></span>
+      <a class="island-mark" href="../" aria-label="navthings, home"><img src="../favicon.svg" alt="" /></a>
+      <span class="island-now" aria-hidden="true"></span>
+      <nav class="island-links" aria-label="main">
+        <a class="home" href="../">navthings</a>
+        <a href="../#work">work</a>
+        <a href="../#writing">writing</a>
+        <a href="../playground/">playground</a>
+        <a href="mailto:navneet.dagdiya@gmail.com" data-email>email</a>
+      </nav>
+    </div>
   </header>
 
   <main class="sheet" id="main">
@@ -96,14 +99,14 @@
     </section>
 
     <section class="cs-body wrap wide">
-      <div class="cs-sec" data-reveal>
+      <div class="cs-sec" data-reveal data-label="why">
         <h2 class="cs-h">why</h2>
         <div class="cs-text">
           <p>everything before this was trained on my laptop. tinystories is great for learning, but its simple little stories. i wanted a proper base model, one thats actually read a decent chunk of the internet.</p>
           <p>my macbook air was never gonna do that. kaggle gives you free time on a <strong>tpu v5e-8</strong>, which is 8 of googles ai chips, so i rewrote the whole thing in jax and moved it there.</p>
         </div>
       </div>
-      <div class="cs-sec" data-reveal>
+      <div class="cs-sec" data-reveal data-label="the model">
         <h2 class="cs-h">the model</h2>
         <div class="cs-text">
           <p>its llama style, same as everything since lilstory, just a lot bigger. it read <strong>6.1 billion tokens</strong> of <a href="https://huggingface.co/datasets/HuggingFaceFW/fineweb-edu" target="_blank" rel="noopener">fineweb-edu</a>, which is about the right amount for its size. thats the chinchilla thing, around 20 tokens per param.</p>
@@ -119,7 +122,7 @@
           </dl>
         </div>
       </div>
-      <div class="cs-sec" data-reveal>
+      <div class="cs-sec" data-reveal data-label="how it ran">
         <h2 class="cs-h">how it ran</h2>
         <div class="cs-text">
           <p>each step is <strong>524,288 tokens</strong>, split evenly over the 8 chips. so every chip chews through 65,536 tokens, then they all agree on one update.</p>
@@ -130,14 +133,14 @@
           <p>the catch is a kaggle session only lasts about <strong>8.4 hours</strong>. so the script saves a checkpoint and stops before its time runs out, and the next session picks up from there.</p>
         </div>
       </div>
-      <div class="cs-sec" data-reveal>
+      <div class="cs-sec" data-reveal data-label="what went wrong">
         <h2 class="cs-h">what went wrong</h2>
         <div class="cs-text">
           <p>kaggle sometimes gives you a broken tpu with <strong>only 1 chip working instead of 8</strong>. so now the script just refuses to run unless it sees all 8.</p>
           <p>i also tried doubling the batch size. it ran out of memory by like <strong>400mb</strong>. so close.</p>
         </div>
       </div>
-      <div class="cs-sec" data-reveal>
+      <div class="cs-sec" data-reveal data-label="how it did">
         <h2 class="cs-h">how it did</h2>
         <div class="cs-text">
           <p>it beats gpt-2 small on hellaswag and arc-easy and loses on lambada. to be fair gpt-2 is from 2019, trained on different data, and lilbase is more than twice its size, so its not exactly a fair fight lol.</p>
@@ -161,7 +164,7 @@
 
   </main>
 
-  <footer class="foot">
+  <footer class="foot" data-label="say hi">
     <div class="foot-top">
       <div>
         <p class="foot-say">say hi. <span>maybe i'll reply.</span></p>

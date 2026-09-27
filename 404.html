@@ -70,14 +70,19 @@
 </head>
 
 <body data-native-scroll>
-  <header class="nav">
-    <a class="brand" href="/" aria-label="navthings, home"><img src="/favicon.svg" alt="" /><span>navthings</span></a>
-    <nav class="links" aria-label="main">
-      <span class="blob"></span>
-      <a href="/#work">work</a>
-      <a href="/#writing">writing</a>
-      <a href="/playground/">playground</a>
-    </nav>
+  <header class="nav" data-label="lost">
+    <div class="island">
+      <span class="island-fill" aria-hidden="true"></span>
+      <a class="island-mark" href="/" aria-label="navthings, home"><img src="/favicon.svg" alt="" /></a>
+      <span class="island-now" aria-hidden="true"></span>
+      <nav class="island-links" aria-label="main">
+        <a class="home" href="/">navthings</a>
+        <a href="/#work">work</a>
+        <a href="/#writing">writing</a>
+        <a href="/playground/">playground</a>
+        <a href="mailto:navneet.dagdiya@gmail.com" data-email>email</a>
+      </nav>
+    </div>
   </header>
 
   <main class="lost wrap">

@@ -23,7 +23,7 @@ function requestTick() {
 }
 
 if (!reduce && window.Lenis && !document.body.hasAttribute("data-native-scroll")) {
-  lenis = new window.Lenis({ autoRaf: true, lerp: 0.11, anchors: { offset: -24 } });
+  lenis = new window.Lenis({ autoRaf: true, lerp: 0.11 });
   lenis.on("scroll", tick);
 } else {
   window.addEventListener("scroll", requestTick, { passive: true });
@@ -191,63 +191,97 @@ function magnetic() {
   }
 }
 
-// nav hides going down, comes back going up, and the blob sits under the hovered or current link
+// the nav is one pill: it shows which part of the page you're in and opens into the menu
 function nav() {
   const bar = document.querySelector(".nav");
-  if (!bar) return;
-  const links = bar.querySelector(".links");
-  const blob = links && links.querySelector(".blob");
-  const progress = bar.querySelector(".progress");
+  const el = bar && bar.querySelector(".island");
+  if (!el) return;
+  const now = el.querySelector(".island-now");
+  const links = el.querySelector(".island-links");
+  const fill = el.querySelector(".island-fill");
+  const foot = document.querySelector(".foot");
+  const sheet = document.querySelector(".sheet");
+  const fallback = bar.dataset.label || "navthings";
+  const current = bar.dataset.current || "";
+  const anchors = $$("a", links);
+  anchors.forEach((a, i) => a.style.setProperty("--i", i));
+  const labelled = $$("[data-label]").filter((n) => n !== bar && n !== foot);
+  let label = null;
+  let open = false;
+  let closeTimer = 0;
+
+  function size() {
+    const text = now.querySelector("span:not(.out)");
+    const closed = 50 + (text ? text.offsetWidth : 0) + 20;
+    const opened = 44 + links.offsetWidth + 8;
+    el.style.setProperty("--w", Math.round(open ? opened : closed) + "px");
+  }
+
+  function setLabel(text) {
+    if (text === label) return;
+    const first = label === null;
+    label = text;
+    const span = document.createElement("span");
+    span.textContent = text;
+    for (const old of $$("span:not(.out)", now)) {
+      if (first || reduce) old.remove();
+      else {
+        old.classList.add("out");
+        setTimeout(() => old.remove(), 420);
+      }
+    }
+    if (!first && !reduce) span.classList.add("in");
+    now.appendChild(span);
+    for (const a of anchors) a.classList.toggle("on", a.textContent === text || a.textContent === current);
+    size();
+  }
+
+  function setOpen(v) {
+    clearTimeout(closeTimer);
+    if (v === open) return;
+    open = v;
+    el.classList.toggle("open", v);
+    size();
+  }
+
+  el.addEventListener("pointerenter", (e) => e.pointerType === "mouse" && setOpen(true));
+  el.addEventListener("pointerleave", (e) => {
+    if (e.pointerType === "mouse") closeTimer = setTimeout(() => setOpen(false), 160);
+  });
+  el.addEventListener("focusin", () => setOpen(true));
+  el.addEventListener("focusout", (e) => !el.contains(e.relatedTarget) && setOpen(false));
+  // on touch the first tap opens it, links only work once it is open
+  el.addEventListener("click", (e) => {
+    if (!open && !e.target.closest(".island-mark")) {
+      e.preventDefault();
+      setOpen(true);
+    }
+  });
+  document.addEventListener("pointerdown", (e) => !el.contains(e.target) && setOpen(false));
+  document.addEventListener("keydown", (e) => e.key === "Escape" && setOpen(false));
+
+  setLabel(fallback);
+  new ResizeObserver(size).observe(links);
+  requestAnimationFrame(() => el.classList.add("ready"));
+  if (document.fonts) document.fonts.ready.then(size);
+
   let lastY = window.scrollY;
-  let current = null;
-
-  function moveBlob(a) {
-    if (!blob) return;
-    if (!a) {
-      blob.style.opacity = "0";
-      return;
-    }
-    blob.style.opacity = "1";
-    blob.style.width = a.offsetWidth + "px";
-    blob.style.transform = `translateX(${a.offsetLeft}px)`;
-  }
-
-  if (links) {
-    for (const a of $$("a:not(.pill)", links)) a.addEventListener("pointerenter", () => moveBlob(a));
-    links.addEventListener("pointerleave", () => moveBlob(current));
-  }
-
-  // links that point at a section on this page light up while you are in it
-  const spy = $$("a[href*='#']", links || bar)
-    .map((a) => ({ a, el: document.getElementById(a.hash.slice(1)) }))
-    .filter((s) => s.el);
-
   onScroll.push((y, vh) => {
-    bar.classList.toggle("solid", y > 24);
-    if (y > 240 && y > lastY + 4) bar.classList.add("away");
-    else if (y < lastY - 4 || y < 240) bar.classList.remove("away");
-    lastY = y;
+    let text = fallback;
+    for (const n of labelled) {
+      if (n.getBoundingClientRect().top < vh * 0.4) text = n.dataset.label;
+      else break;
+    }
+    // the footer is sticky and always sits behind the sheet, so go by how much the sheet has uncovered
+    const uncovered = sheet ? vh - sheet.getBoundingClientRect().bottom : 0;
+    if (foot && foot.dataset.label && uncovered > vh * 0.45) text = foot.dataset.label;
+    setLabel(text);
 
-    if (progress) {
-      const max = document.documentElement.scrollHeight - vh;
-      progress.style.transform = `scaleX(${max > 0 ? clamp(y / max) : 0})`;
-    }
-
-    let active = null;
-    for (const s of spy) {
-      const r = s.el.getBoundingClientRect();
-      if (r.top < vh * 0.4 && r.bottom > vh * 0.4) active = s.a;
-    }
-    if (active !== current && (!links || !links.matches(":hover"))) {
-      if (current) current.classList.remove("on");
-      current = active;
-      if (current) current.classList.add("on");
-      moveBlob(current);
-    } else if (active !== current) {
-      if (current) current.classList.remove("on");
-      current = active;
-      if (current) current.classList.add("on");
-    }
+    const max = document.documentElement.scrollHeight - vh;
+    fill.style.setProperty("--p", max > 0 ? clamp(y / max).toFixed(4) : 0);
+    el.classList.toggle("light", !!foot && uncovered > vh - 40);
+    if (open && Math.abs(y - lastY) > 60 && !el.matches(":hover")) setOpen(false);
+    if (!open) lastY = y;
   });
 
   for (const a of $$("a[href^='#']")) {
@@ -255,6 +289,7 @@ function nav() {
       const target = document.getElementById(a.hash.slice(1));
       if (!target) return;
       e.preventDefault();
+      setOpen(false);
       scrollToTarget(target);
       history.replaceState(null, "", a.hash);
     });
@@ -288,7 +323,7 @@ async function footer() {
   for (const b of $$("[data-top]")) b.addEventListener("click", () => scrollToTarget(0));
 
   const mark = foot.querySelector("[data-mark]");
-  const icon = document.querySelector(".brand img");
+  const icon = document.querySelector(".island-mark img");
   if (!mark || !icon) return;
   try {
     const svg = await (await fetch(icon.src)).text();
@@ -308,10 +343,11 @@ async function footer() {
   });
   if (reduce) return;
 
+  const sheet = document.querySelector(".sheet");
   onScroll.push((y, vh) => {
-    const r = foot.getBoundingClientRect();
-    if (r.top > vh) return;
-    const p = clamp((vh - r.top) / r.height);
+    const uncovered = vh - sheet.getBoundingClientRect().bottom;
+    if (uncovered <= 0) return;
+    const p = clamp(uncovered / foot.offsetHeight);
     const draw = clamp((p - 0.2) / 0.6);
     shapes.forEach((s, i) => {
       s.style.strokeDashoffset = (lengths[i] * (1 - draw)).toFixed(1);

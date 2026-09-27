@@ -35,26 +35,27 @@
 <body>
   <a class="skip" href="#main">skip to content</a>
 
-  <header class="nav">
-    <a class="brand" href="./" aria-label="navthings, home"><img src="favicon.svg" alt="" /><span>navthings</span></a>
-    <nav class="links" aria-label="main">
-      <span class="blob"></span>
-      <a href="#work">work</a>
-      <a href="#writing">writing</a>
-      <a href="playground/">playground</a>
-      <a class="pill" href="mailto:navneet.dagdiya@gmail.com" data-email>email</a>
-    </nav>
+  <header class="nav" data-label="navthings">
+    <div class="island">
+      <span class="island-fill" aria-hidden="true"></span>
+      <a class="island-mark" href="./" aria-label="navthings, home"><img src="favicon.svg" alt="" /></a>
+      <span class="island-now" aria-hidden="true"></span>
+      <nav class="island-links" aria-label="main">
+        <a class="home" href="./">navthings</a>
+        <a href="#work">work</a>
+        <a href="#writing">writing</a>
+        <a href="playground/">playground</a>
+        <a href="mailto:navneet.dagdiya@gmail.com" data-email>email</a>
+      </nav>
+    </div>
   </header>
 
   <main class="sheet" id="main">
     <section class="hero wrap">
       <div class="hero-inner">
-        <a class="tag" href="#sprout" data-reveal style="--d: 0.05s"><span class="live-dot"></span>training sprout right now, 523m params</a>
         <h1 class="hero-title" data-tokens>hi, i'm nav. i train small language models <span class="soft">from scratch.</span></h1>
         <p class="hero-sub" data-reveal style="--d: 1.15s">
-          on my
-          <span class="mac"><svg viewBox="2 0 17 22" aria-hidden="true"><path d="M18.71 19.5C17.88 20.74 17 21.95 15.66 21.97C14.32 22 13.89 21.18 12.37 21.18C10.84 21.18 10.37 21.95 9.09997 22C7.78997 22.05 6.79997 20.68 5.95997 19.47C4.24997 17 2.93997 12.45 4.69997 9.39C5.56997 7.87 7.12997 6.91 8.81997 6.88C10.1 6.86 11.32 7.75 12.11 7.75C12.89 7.75 14.37 6.68 15.92 6.84C16.57 6.87 18.39 7.1 19.56 8.82C19.47 8.88 17.39 10.1 17.41 12.63C17.44 15.65 20.06 16.66 20.09 16.67C20.06 16.74 19.67 18.11 18.71 19.5ZM13 3.5C13.73 2.67 14.94 2.04 15.94 2C16.07 3.17 15.6 4.35 14.9 5.19C14.21 6.04 13.07 6.7 11.95 6.61C11.8 5.46 12.36 4.26 13 3.5Z" /></svg>&#8202;mac</span>
-          and free tpus, from australia. software engineer and designer, i care about how things feel as much as how they work.
+          software engineer and designer in australia. i do it all on my <span class="mac"><svg viewBox="3 1.9 17.2 20.2" aria-hidden="true"><path d="M18.71 19.5C17.88 20.74 17 21.95 15.66 21.97C14.32 22 13.89 21.18 12.37 21.18C10.84 21.18 10.37 21.95 9.09997 22C7.78997 22.05 6.79997 20.68 5.95997 19.47C4.24997 17 2.93997 12.45 4.69997 9.39C5.56997 7.87 7.12997 6.91 8.81997 6.88C10.1 6.86 11.32 7.75 12.11 7.75C12.89 7.75 14.37 6.68 15.92 6.84C16.57 6.87 18.39 7.1 19.56 8.82C19.47 8.88 17.39 10.1 17.41 12.63C17.44 15.65 20.06 16.66 20.09 16.67C20.06 16.74 19.67 18.11 18.71 19.5ZM13 3.5C13.73 2.67 14.94 2.04 15.94 2C16.07 3.17 15.6 4.35 14.9 5.19C14.21 6.04 13.07 6.7 11.95 6.61C11.8 5.46 12.36 4.26 13 3.5Z" /></svg>mac</span> and free tpus. right now that's <a href="#sprout">sprout</a>, 523m params and about a third of the way through.
         </p>
         <div class="row" data-reveal style="--d: 1.3s">
           <a class="btn dark" href="#work"><span class="inner">see the work</span></a>
@@ -67,7 +68,7 @@
       <p class="scrub">every model on here was trained on my macbook air or a free kaggle tpu. no cluster, no lab, just a lot of overnight runs.</p>
     </section>
 
-    <section class="scale" aria-label="how big the models got">
+    <section class="scale" aria-label="how big the models got" data-label="the models">
       <div class="scale-pin wrap">
         <div>
           <p class="label">one dot is a million parameters</p>
@@ -88,7 +89,7 @@
       </div>
     </section>
 
-    <section class="work wrap wide" id="work">
+    <section class="work wrap wide" id="work" data-label="work">
       <div class="section-head">
         <p class="label" data-reveal>work</p>
         <h2 class="h-section" data-words>the models, and everything that went wrong making them.</h2>
@@ -213,7 +214,7 @@
 
         <article class="card sq" data-live style="--i: 4" id="sprout">
           <div class="card-text">
-            <div class="card-top"><span class="mono">training now</span><span class="tag line"><span class="live-dot"></span>in progress</span></div>
+            <div class="card-top"><span class="mono">training now</span><span class="tag line">still training</span></div>
             <div>
               <h3 class="card-title">sprout</h3>
               <p class="card-desc">the fix for lilchat not knowing anything is a bigger base model. this is that. when it finishes it gets the same chat finetune.</p>
@@ -242,7 +243,7 @@
       </div>
     </section>
 
-    <section class="more wrap wide">
+    <section class="more wrap wide" data-label="earlier stuff">
       <p class="label" data-reveal>earlier, and smaller</p>
       <div class="tiles" data-stagger="0.08">
         <a class="tile sq" href="blog/tale.html" data-reveal="scale">
@@ -264,7 +265,7 @@
       </div>
     </section>
 
-    <section class="writing wrap wide" id="writing">
+    <section class="writing wrap wide" id="writing" data-label="writing">
       <div class="section-head">
         <p class="label" data-reveal>writing</p>
         <h2 class="h-section" data-words>short posts about each model. mostly what broke.</h2>
@@ -283,7 +284,7 @@
       </div>
     </section>
 
-    <section class="play wrap wide" id="play">
+    <section class="play wrap wide" id="play" data-label="playground">
       <div class="play-card sq" data-reveal="scale">
         <div>
           <p class="label">playground</p>
@@ -307,7 +308,7 @@
     </section>
   </main>
 
-  <footer class="foot">
+  <footer class="foot" data-label="say hi">
     <div class="foot-top">
       <div>
         <p class="foot-say">say hi. <span>maybe i'll reply.</span></p>

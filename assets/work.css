@@ -110,6 +110,7 @@
 }
 
 .cs-text {
+  min-width: 0;
   max-width: 40rem;
   font-size: clamp(17px, 1.4vw, 19px);
   line-height: 1.65;
@@ -170,7 +171,7 @@
 
 @media (max-width: 760px) {
   .cs-sec {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: 12px;
   }
 

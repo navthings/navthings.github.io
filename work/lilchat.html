@@ -36,16 +36,19 @@
 <body>
   <a class="skip" href="#main">skip to content</a>
 
-  <header class="nav">
-    <a class="brand" href="../" aria-label="navthings, home"><img src="../favicon.svg" alt="" /><span>navthings</span></a>
-    <nav class="links" aria-label="main">
-      <span class="blob"></span>
-      <a href="../#work">work</a>
-      <a href="../#writing">writing</a>
-      <a href="../playground/">playground</a>
-      <a class="pill" href="mailto:navneet.dagdiya@gmail.com" data-email>email</a>
-    </nav>
-    <span class="progress"></span>
+  <header class="nav" data-label="lilchat" data-current="work">
+    <div class="island">
+      <span class="island-fill" aria-hidden="true"></span>
+      <a class="island-mark" href="../" aria-label="navthings, home"><img src="../favicon.svg" alt="" /></a>
+      <span class="island-now" aria-hidden="true"></span>
+      <nav class="island-links" aria-label="main">
+        <a class="home" href="../">navthings</a>
+        <a href="../#work">work</a>
+        <a href="../#writing">writing</a>
+        <a href="../playground/">playground</a>
+        <a href="mailto:navneet.dagdiya@gmail.com" data-email>email</a>
+      </nav>
+    </div>
   </header>
 
   <main class="sheet" id="main">
@@ -75,7 +78,7 @@
     </section>
 
     <section class="cs-body wrap wide">
-      <div class="cs-sec" data-reveal>
+      <div class="cs-sec" data-reveal data-label="the idea">
         <h2 class="cs-h">the idea</h2>
         <div class="cs-text">
           <p>to make a chat model you finetune it on a bunch of conversations, so it learns the pattern: <strong>you say something, it answers, it stops.</strong></p>
@@ -86,7 +89,7 @@
           </div>
         </div>
       </div>
-      <div class="cs-sec" data-reveal>
+      <div class="cs-sec" data-reveal data-label="training">
         <h2 class="cs-h">training</h2>
         <div class="cs-text">
           <p>i did it overnight on my macbook air with mlx. the data is <a href="https://huggingface.co/datasets/HuggingFaceTB/smol-smoltalk" target="_blank" rel="noopener">smol-smoltalk</a>, and it only gets trained on the assistant replies, so it learns to answer rather than to write your half of the chat.</p>
@@ -97,14 +100,14 @@
           </div>
         </div>
       </div>
-      <div class="cs-sec" data-reveal>
+      <div class="cs-sec" data-reveal data-label="what works">
         <h2 class="cs-h">what works</h2>
         <div class="cs-text">
           <p>if you say "hi" it says "Hello! How can I help you today?" and stops. plain lilbase just repeats the chat formatting forever when you do that.</p>
           <p>it does lists and code blocks, and it wrote a correct one line function to reverse a string. then explained it completely wrong.</p>
         </div>
       </div>
-      <div class="cs-sec" data-reveal>
+      <div class="cs-sec" data-reveal data-label="what doesnt">
         <h2 class="cs-h">what doesnt</h2>
         <div class="cs-text">
           <p>it does not know things. it told me the capital of australia is <strong>melbourne</strong>, then <strong>perth</strong> on another try. 17 + 25 was 48, and then "so, the answer is 17".</p>
@@ -112,7 +115,7 @@
           <p>thats not really a finetuning problem. 297m params just doesnt know much.</p>
         </div>
       </div>
-      <div class="cs-sec" data-reveal>
+      <div class="cs-sec" data-reveal data-label="one knob">
         <h2 class="cs-h">one knob</h2>
         <div class="cs-text">
           <p>turning the temperature down helps a bit. out of 12 tries saying "hi", heres how often it gave a normal reply.</p>
@@ -123,7 +126,7 @@
           <p>so the playground runs lilchat at 0.4 by default.</p>
         </div>
       </div>
-      <div class="cs-sec" data-reveal>
+      <div class="cs-sec" data-reveal data-label="next">
         <h2 class="cs-h">next</h2>
         <div class="cs-text">
           <p>the real fix is a bigger base model, which is <a href="https://github.com/navthings/sprout" target="_blank" rel="noopener">sprout</a>. 523m params, 12 billion tokens from fineweb-edu, dclm, cosmopedia and project gutenberg, back on the kaggle tpu. when its done it gets the same finetune.</p>
@@ -145,7 +148,7 @@
 
   </main>
 
-  <footer class="foot">
+  <footer class="foot" data-label="say hi">
     <div class="foot-top">
       <div>
         <p class="foot-say">say hi. <span>maybe i'll reply.</span></p>

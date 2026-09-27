@@ -153,148 +153,215 @@ svg {
   max-width: calc(var(--wide) + var(--gutter) * 2);
 }
 
-/* nav */
+/* nav: one pill that shows where you are, and opens into the menu */
 
 .nav {
   position: fixed;
   z-index: 50;
-  top: 0;
+  top: 14px;
   left: 0;
   right: 0;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 18px var(--gutter);
+  justify-content: center;
   pointer-events: none;
-  transition: transform 0.6s var(--ease);
-  view-transition-name: nav;
 }
 
-.nav > * {
+.island {
+  --w: 150px;
+  position: relative;
+  width: var(--w);
+  height: 46px;
+  border-radius: 999px;
+  background: #0f0f0f;
+  color: #fff;
+  overflow: hidden;
   pointer-events: auto;
+  cursor: pointer;
+  box-shadow: 0 12px 32px -14px rgba(0, 0, 0, 0.45), inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+  view-transition-name: island;
+  transition: background-color 0.45s ease, box-shadow 0.45s ease, transform 0.5s var(--ease);
 }
 
-.nav.away {
-  transform: translateY(-110%);
+.island.ready {
+  transition: width 0.65s cubic-bezier(0.32, 0.72, 0, 1), background-color 0.45s ease, box-shadow 0.45s ease,
+    transform 0.5s var(--ease);
 }
 
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 15px;
-  letter-spacing: -0.01em;
-  padding: 6px 12px 6px 6px;
-  border-radius: 999px;
-  transition: background-color 0.3s ease;
+.island:active:not(.open) {
+  transform: scale(0.97);
 }
 
-.brand img {
-  width: 26px;
-  height: 26px;
-  border-radius: 8px;
+.island-fill {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.4);
+  transform-origin: 0 50%;
+  transform: scaleX(var(--p, 0));
+  pointer-events: none;
+}
+
+.island-mark {
+  position: absolute;
+  z-index: 1;
+  left: 7px;
+  top: 7px;
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+}
+
+.island-mark img {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
   transition: transform 0.6s var(--ease);
 }
 
-.brand:hover img {
-  transform: rotate(-12deg) scale(1.06);
+.island-mark:hover img {
+  transform: rotate(-14deg) scale(1.06);
 }
 
-.links {
-  position: relative;
+.island-now {
+  position: absolute;
+  left: 50px;
+  top: 0;
+  height: 100%;
+  font-size: 14px;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  pointer-events: none;
+  transition: opacity 0.25s ease, filter 0.3s ease, transform 0.5s var(--ease);
+}
+
+.island-now span {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: max-content;
+  transform: translateY(-50%);
+}
+
+.island-now span.in {
+  animation: roll-in 0.55s var(--ease) both;
+}
+
+.island-now span.out {
+  animation: roll-out 0.4s ease both;
+}
+
+@keyframes roll-in {
+  from {
+    opacity: 0;
+    filter: blur(4px);
+    transform: translateY(40%);
+  }
+}
+
+@keyframes roll-out {
+  to {
+    opacity: 0;
+    filter: blur(4px);
+    transform: translateY(-140%);
+  }
+}
+
+.island-links {
+  position: absolute;
+  left: 44px;
+  top: 0;
+  height: 100%;
+  width: max-content;
   display: flex;
   align-items: center;
-  gap: 2px;
-  padding: 4px;
-  border-radius: 999px;
   font-size: 14px;
-  transition: background-color 0.4s ease, box-shadow 0.4s ease;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
 }
 
-.nav.solid .links,
-.nav.solid .brand {
-  background: rgba(255, 255, 255, 0.78);
-  -webkit-backdrop-filter: saturate(1.6) blur(14px);
-  backdrop-filter: saturate(1.6) blur(14px);
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05), 0 6px 20px -8px rgba(0, 0, 0, 0.12);
+.island-links a {
+  padding: 6px 11px;
+  color: #8c8c8c;
+  opacity: 0;
+  filter: blur(4px);
+  transform: translateX(-6px);
+  pointer-events: none;
+  transition: color 0.2s ease, opacity 0.25s ease, filter 0.25s ease, transform 0.4s var(--ease);
 }
 
-.links a {
-  position: relative;
-  z-index: 1;
-  padding: 6px 14px;
-  border-radius: 999px;
-  color: var(--ink-2);
-  transition: color 0.25s ease;
-}
-
-.links a:hover,
-.links a.on {
-  color: var(--ink);
-}
-
-.links .pill {
+.island-links a.home {
   color: #fff;
-  background: var(--ink);
-  margin-left: 4px;
+  margin-right: 4px;
 }
 
-.links .pill:hover {
+.island-links a:hover,
+.island-links a.on {
   color: #fff;
 }
 
-.links .blob {
-  position: absolute;
-  z-index: 0;
-  top: 4px;
-  left: 0;
-  height: calc(100% - 8px);
-  width: 0;
-  border-radius: 999px;
-  background: var(--surface-2);
+.island.open .island-now {
   opacity: 0;
-  transition: transform 0.45s var(--ease), width 0.45s var(--ease), opacity 0.25s ease;
+  filter: blur(4px);
+  transform: translateX(10px);
 }
 
-.progress {
-  position: absolute;
-  left: 18px;
-  right: 18px;
-  bottom: -1px;
-  height: 1.5px;
-  border-radius: 2px;
-  background: var(--ink);
-  transform-origin: 0 50%;
-  transform: scaleX(0);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.nav.solid .progress {
+.island.open .island-links a {
   opacity: 1;
+  filter: none;
+  transform: none;
+  pointer-events: auto;
+  transition-delay: 0s, calc(0.12s + var(--i) * 0.035s), calc(0.12s + var(--i) * 0.035s), calc(0.08s + var(--i) * 0.035s);
+}
+
+/* over the dark footer it flips to white */
+
+.island.light {
+  background: #fff;
+  color: var(--ink);
+  box-shadow: 0 12px 32px -14px rgba(0, 0, 0, 0.6);
+}
+
+.island.light .island-fill {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.island.light .island-links a {
+  color: #8a8a8a;
+}
+
+.island.light .island-links a.home,
+.island.light .island-links a:hover,
+.island.light .island-links a.on {
+  color: var(--ink);
 }
 
 @media (max-width: 640px) {
   .nav {
-    padding: 12px 12px;
+    top: 10px;
   }
 
-  .brand span {
+  .island-links a.home {
     display: none;
   }
 
-  .brand {
-    padding: 6px;
+  .island-links a {
+    padding: 6px 9px;
   }
+}
 
-  .links {
-    font-size: 13.5px;
-  }
+::view-transition-group(island) {
+  overflow: clip;
+  border-radius: 999px;
+  animation-duration: 0.65s;
+  animation-timing-function: cubic-bezier(0.32, 0.72, 0, 1);
+}
 
-  .links a {
-    padding: 6px 10px;
-  }
+::view-transition-old(island),
+::view-transition-new(island) {
+  inline-size: auto;
+  block-size: 100%;
 }
 
 /* buttons */

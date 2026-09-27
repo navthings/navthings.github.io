@@ -36,16 +36,19 @@
 <body>
   <a class="skip" href="#main">skip to content</a>
 
-  <header class="nav">
-    <a class="brand" href="../" aria-label="navthings, home"><img src="../favicon.svg" alt="" /><span>navthings</span></a>
-    <nav class="links" aria-label="main">
-      <span class="blob"></span>
-      <a href="../#work">work</a>
-      <a href="../#writing">writing</a>
-      <a href="../playground/">playground</a>
-      <a class="pill" href="mailto:navneet.dagdiya@gmail.com" data-email>email</a>
-    </nav>
-    <span class="progress"></span>
+  <header class="nav" data-label="playground" data-current="work">
+    <div class="island">
+      <span class="island-fill" aria-hidden="true"></span>
+      <a class="island-mark" href="../" aria-label="navthings, home"><img src="../favicon.svg" alt="" /></a>
+      <span class="island-now" aria-hidden="true"></span>
+      <nav class="island-links" aria-label="main">
+        <a class="home" href="../">navthings</a>
+        <a href="../#work">work</a>
+        <a href="../#writing">writing</a>
+        <a href="../playground/">playground</a>
+        <a href="mailto:navneet.dagdiya@gmail.com" data-email>email</a>
+      </nav>
+    </div>
   </header>
 
   <main class="sheet" id="main">
@@ -77,21 +80,21 @@
     </section>
 
     <section class="cs-body wrap wide">
-      <div class="cs-sec" data-reveal>
+      <div class="cs-sec" data-reveal data-label="how it works">
         <h2 class="cs-h">how it works</h2>
         <div class="cs-text">
           <p>it runs on <a href="https://github.com/ngxson/wllama" target="_blank" rel="noopener">wllama</a>, which is llama.cpp compiled to webassembly. you pick a model, the page pulls the gguf file straight from <a href="https://huggingface.co/navthings" target="_blank" rel="noopener">hugging face</a>, and then everything happens on your machine.</p>
           <p>this site is just static files on github pages. <strong>theres no server doing any of it</strong>, so nothing you type gets sent anywhere.</p>
         </div>
       </div>
-      <div class="cs-sec" data-reveal>
+      <div class="cs-sec" data-reveal data-label="making it fit">
         <h2 class="cs-h">making it fit</h2>
         <div class="cs-text">
           <p>the two big ones are quantized to 4 bit (<code>q4_k_m</code>), which gets them down to 274mb. tale is 8 bit at 52mb and lilstory is only 17mb.</p>
           <p>the context is small too. <strong>1024 tokens</strong> for lilchat and lilbase, 384 for tale, 256 for lilstory. when a chat gets too long, the page drops the oldest turns so theres always room left for a reply.</p>
         </div>
       </div>
-      <div class="cs-sec" data-reveal>
+      <div class="cs-sec" data-reveal data-label="talking to lilchat">
         <h2 class="cs-h">talking to lilchat</h2>
         <div class="cs-text">
           <p>lilchat only understands the format it was trained on, so the page rebuilds the whole conversation in that format every time you send something, and stops as soon as the model writes <code>[INST]</code> or <code>&lt;/s&gt;</code>.</p>
@@ -101,7 +104,7 @@
           </div>
         </div>
       </div>
-      <div class="cs-sec" data-reveal>
+      <div class="cs-sec" data-reveal data-label="what broke">
         <h2 class="cs-h">what broke</h2>
         <div class="cs-text">
           <p><strong>safari.</strong> it says it supports the faster memory64 build of wllama, then cant actually run it. so on safari the page quietly points the engine at the compat build instead.</p>
@@ -124,7 +127,7 @@
 
   </main>
 
-  <footer class="foot">
+  <footer class="foot" data-label="say hi">
     <div class="foot-top">
       <div>
         <p class="foot-say">say hi. <span>maybe i'll reply.</span></p>

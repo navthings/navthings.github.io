@@ -14,10 +14,6 @@
   will-change: transform, opacity;
 }
 
-.hero .tag {
-  margin-bottom: 36px;
-}
-
 .hero-title {
   font-size: clamp(46px, min(7.4vw, 13.5vh), 118px);
   line-height: 0.97;
@@ -103,17 +99,32 @@
   color: var(--ink-2);
 }
 
+.hero-sub a {
+  color: var(--ink);
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 100% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size 0.4s var(--ease);
+}
+
+.hero-sub a:hover {
+  background-size: 0% 1px;
+  background-position: 100% 100%;
+}
+
+/* the apple sits on the baseline at cap height, like it does in sf */
 .mac {
   color: var(--ink);
   white-space: nowrap;
-  font-family: -apple-system, "Helvetica Neue", var(--sans);
 }
 
 .mac svg {
   display: inline-block;
-  width: 0.8em;
-  height: 0.8em;
-  vertical-align: -0.06em;
+  height: 0.84em;
+  width: auto;
+  margin-right: 0.16em;
+  vertical-align: -0.07em;
   fill: currentColor;
 }
 
