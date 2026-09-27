@@ -181,21 +181,6 @@ html.intro .hero [data-reveal].in {
   background-position: 100% 100%;
 }
 
-/* the apple sits on the baseline at cap height, like it does in sf */
-.mac {
-  color: var(--ink);
-  white-space: nowrap;
-}
-
-.mac svg {
-  display: inline-block;
-  height: 0.84em;
-  width: auto;
-  margin-right: 0.16em;
-  vertical-align: -0.07em;
-  fill: currentColor;
-}
-
 .hero .row {
   margin-top: 32px;
 }
