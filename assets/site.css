@@ -15,7 +15,8 @@
   --surface: #f4f4f2;
   --surface-2: #eaeae7;
   --accent: #ff4f00;
-  --gutter: clamp(20px, 8vw, 116px);
+  /* on very wide screens the column centres itself, below that it keeps the left edge */
+  --gutter: max(clamp(20px, 8vw, 116px), calc((100vw - 1440px) / 2));
   --wide: 1180px;
   --ease: cubic-bezier(0.2, 0.7, 0.1, 1);
   --ease-in: cubic-bezier(0.5, 0, 0.75, 0);
