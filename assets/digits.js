@@ -13,6 +13,9 @@
 
   let W1, B1, W2, B2;
   let loading = null;
+  let samples = null;
+  let nextSample = 0;
+  let real = false;
 
   // same layout as the python lists: 32x784 hidden weights, 32 biases, 10x32 output weights, 10 biases
   function load() {
@@ -59,6 +62,7 @@
   }
 
   function clearPad() {
+    real = false;
     ctx.clearRect(0, 0, pad.width, pad.height);
     seenCtx.clearRect(0, 0, 28, 28);
     hint.hidden = false;
@@ -83,6 +87,7 @@
 
   pad.addEventListener("pointerdown", (e) => {
     e.preventDefault();
+    if (real) clearPad();
     pad.setPointerCapture(e.pointerId);
     load();
     drawing = true;
@@ -220,8 +225,7 @@
     return { h, o };
   }
 
-  function run() {
-    const x = toInput();
+  function run(x = toInput(), answer) {
     if (!x) return clearPad();
     const { h, o } = forward(x);
 
@@ -241,9 +245,53 @@
       li.classList.toggle("top", k === best);
     });
     guess.textContent = best;
-    guessNote.textContent = o[best] > 0.5 ? "it thinks" : "not sure, but maybe";
+    if (answer !== undefined) guessNote.textContent = (best === answer ? "right, its a " : "wrong, its a ") + answer;
+    else guessNote.textContent = o[best] > 0.5 ? "it thinks" : "not sure, but maybe";
   }
 
+  // real digits from the mnist test set it never trained on, a few of them ones it gets wrong
+  function showReal() {
+    if (!samples) {
+      samples = fetch(realBtn.dataset.real)
+        .then((r) => {
+          if (!r.ok) throw new Error("samples " + r.status);
+          return r.arrayBuffer();
+        })
+        .then((buf) => new Uint8Array(buf));
+    }
+    Promise.all([load(), samples])
+      .then(([, data]) => {
+        if (!W1) return;
+        const k = nextSample++ % (data.length / 785);
+        const answer = data[k * 785];
+        const px = data.subarray(k * 785 + 1, (k + 1) * 785);
+
+        const tmp = document.createElement("canvas");
+        tmp.width = tmp.height = 28;
+        const t = tmp.getContext("2d");
+        const img = t.createImageData(28, 28);
+        px.forEach((v, i) => {
+          img.data[i * 4] = img.data[i * 4 + 1] = img.data[i * 4 + 2] = 15;
+          img.data[i * 4 + 3] = v;
+        });
+        t.putImageData(img, 0, 0);
+        clearPad();
+        const size = pad.clientWidth;
+        ctx.imageSmoothingEnabled = true;
+        ctx.drawImage(tmp, 0, 0, size, size);
+        hint.hidden = true;
+        real = true;
+        run(Float32Array.from(px, (v) => v / 255), answer);
+      })
+      .catch((err) => {
+        console.error("couldnt load the test digits", err);
+        guessNote.textContent = "couldnt load them";
+        samples = null;
+      });
+  }
+
+  const realBtn = root.querySelector("[data-real]");
+  realBtn.addEventListener("click", showReal);
   root.querySelector("[data-clear]").addEventListener("click", clearPad);
   new ResizeObserver(fit).observe(pad);
 })();

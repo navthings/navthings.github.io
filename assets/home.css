@@ -398,9 +398,14 @@ html.intro .hero [data-reveal].in {
   background: linear-gradient(to top, var(--ink) calc(var(--v) * 100%), transparent 0);
 }
 
-.digits .clear {
+.digits-btns {
   grid-column: 1 / -1;
-  justify-self: start;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.digits-btns .btn {
   background: var(--bg);
 }
 
