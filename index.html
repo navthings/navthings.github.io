@@ -88,6 +88,30 @@
       <p class="scrub">i like understanding a model all the way down. the tokenizer, the training run, why the loss does what it does, and getting it running somewhere people can actually use it.</p>
     </section>
 
+    <section class="scratch reads wrap wide" data-label="the tokenizer">
+      <div class="scratch-grid reads-grid">
+        <div class="reads-card sq" data-tokenizer="assets/data/lilstory-tokenizer.bin" data-reveal="scale">
+          <textarea class="tok-in" rows="2" maxlength="300" spellcheck="false" autocomplete="off" aria-label="text for the tokenizer">Once upon a time, a little duck trained a transformer on a tpu.</textarea>
+          <div class="tok-out" aria-hidden="true"></div>
+          <p class="tok-stats cap" aria-live="polite"></p>
+          <div class="tok-try">
+            <button class="btn small line" type="button" data-say="Once upon a time, a little duck found a shiny red ball in the park."><span class="inner">a kids story</span></button>
+            <button class="btn small line" type="button" data-say="pretraining a 523m param model with sharded adamw"><span class="inner">ml words</span></button>
+            <button class="btn small line" type="button" data-say="hi, i'm nav. i build language models and research how they learn."><span class="inner">my headline</span></button>
+            <button class="btn small line" type="button" data-say="Hi, I'm Nav. I build language models and research how they learn."><span class="inner">with capitals</span></button>
+          </div>
+        </div>
+        <div class="scratch-copy">
+          <h2 class="h-section" data-words>how a model reads.</h2>
+          <p class="soft" data-reveal>it never sees letters. text gets cut into pieces and every piece is a number. this is lilstory's tokenizer, 8,000 pieces it learned from about 2 million kids stories.</p>
+          <p class="soft" data-reveal>words it saw a lot are one piece, anything else gets chopped up. duck is one token, tpu is t, p, u. my all lowercase headline costs 3 more tokens than the capitalised one, because the stories it learned from use proper capitals.</p>
+          <div class="row" data-reveal>
+            <a class="btn line small" href="https://github.com/navthings/lilstory" target="_blank" rel="noopener"><span class="inner">the tokenizer</span></a>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section class="scratch wrap wide" data-label="no libraries">
       <div class="scratch-grid">
         <div class="scratch-copy">
@@ -363,6 +387,7 @@
   <script src="assets/site.js"></script>
   <script src="assets/charts.js"></script>
   <script src="assets/home.js"></script>
+  <script src="assets/tokens.js"></script>
   <script src="assets/digits.js"></script>
 </body>
 </html>
