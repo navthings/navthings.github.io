@@ -3,11 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script>document.documentElement.classList.add("js")</script>
 
   <title>teaching lilbase to talk · navthings</title>
 
   <meta name="description" content="a base model just continues text. if you ask it a question itll probably write 5 more questions instead of answering. to make it a chat model you finetune..." />
-  <meta property="og:type" content="website" />
+  <meta property="og:type" content="article" />
+  <meta property="article:published_time" content="2026-09-26" />
   <meta property="og:site_name" content="navthings" />
   <meta property="og:title" content="teaching lilbase to talk" />
   <meta property="og:description" content="a base model just continues text. if you ask it a question itll probably write 5 more questions instead of answering. to make it a chat model you finetune..." />
@@ -20,48 +22,87 @@
   <meta name="twitter:title" content="teaching lilbase to talk" />
   <meta name="twitter:description" content="a base model just continues text. if you ask it a question itll probably write 5 more questions instead of answering. to make it a chat model you finetune..." />
   <meta name="twitter:image" content="https://navthings.github.io/og.png?v=3" />
-  <meta name="theme-color" content="#111111" />
+  <meta name="theme-color" content="#ffffff" />
   <link rel="icon" type="image/svg+xml" href="../favicon.svg" />
   <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png" />
   <link rel="apple-touch-icon" href="../apple-touch-icon.png" />
+  <link rel="alternate" type="application/rss+xml" title="navthings" href="../feed.xml" />
 
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Geist:wght@300&family=Geist+Mono:wght@300&display=swap"
-    rel="stylesheet"
-  />
+  <link rel="preload" href="../assets/fonts/geist.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="../assets/site.css" />
   <link rel="stylesheet" href="post.css" />
 </head>
 
 <body>
-  <div class="container">
-    <a class="back" href="../">navthings</a>
+  <a class="skip" href="#main">skip to content</a>
 
-    <div class="post-title">teaching lilbase to talk</div>
-    <div class="post-date">2026-09-26</div>
+  <header class="nav">
+    <a class="brand" href="../" aria-label="navthings, home"><img src="../favicon.svg" alt="" /><span>navthings</span></a>
+    <nav class="links" aria-label="main">
+      <span class="blob"></span>
+      <a href="../#work">work</a>
+      <a href="../#writing">writing</a>
+      <a href="../playground/">playground</a>
+      <a class="pill" href="mailto:navneet.dagdiya@gmail.com" data-email>email</a>
+    </nav>
+    <span class="progress"></span>
+  </header>
 
-    <article class="post">
-      <p>a base model just continues text. if you ask it a question itll probably write 5 more questions instead of answering. to make it a chat model you finetune it on a bunch of conversations so it learns the pattern: you say something, it answers, it stops.</p>
-      <p>i did this overnight on my macbook air with mlx. used <a href="https://huggingface.co/datasets/HuggingFaceTB/smol-smoltalk" target="_blank">smol-smoltalk</a> as the data, and it only gets trained on the assistant replies. it did 1,136 steps of 32k tokens, about 37m tokens total, which is only like 12% of the dataset but thats what my laptop could do in a night.</p>
-      <p>loss on conversations it hadnt seen went from 2.230 (plain lilbase) to 1.337.</p>
-      <h2>what works</h2>
-      <p>if you say "hi" it says "Hello! How can I help you today?" and stops. plain lilbase just repeats the chat formatting forever when you do that. it does lists and code blocks, and it wrote a correct one line function to reverse a string (then explained it completely wrong lol).</p>
-      <h2>what doesnt</h2>
-      <p>it does not know things. it told me the capital of australia is melbourne, then perth on another try. 17 + 25 was 48, and then "so, the answer is 17". i asked for a haiku about a cat that hates mondays and got 20 lines ending with "a reminder that we are all brothers" over and over.</p>
-      <p>thats not really a finetuning problem, 297m params just doesnt know much. turning the temperature down from 0.7 to 0.4 helps a bit tho, it gave a normal reply to "hi" 12 out of 12 times instead of 8 out of 12.</p>
-      <pre>ollama run navthings/lilchat</pre>
-      <p>or just <a href="../playground/?model=lilchat">try it in your browser</a>, no install.</p>
-      <h2>next</h2>
-      <p>the real fix is a bigger base model, which is <a href="https://github.com/navthings/sprout" target="_blank">sprout</a>. 523m params, 12 billion tokens from fineweb-edu, dclm, cosmopedia and project gutenberg, back on the kaggle tpu. its about a third of the way through training and when its done it gets the same finetune.</p>
+  <main class="sheet" id="main">
+    <article class="post-wrap wrap">
+      <header class="post-head">
+        <p class="crumbs mono" data-reveal><a href="../#writing">writing</a><span>/</span><time datetime="2026-09-26">2026-09-26</time></p>
+        <h1 class="post-title" style="view-transition-name: p-lilchat">teaching lilbase to talk</h1>
+      </header>
+
+      <div class="post">
+        <p data-reveal>a base model just continues text. if you ask it a question itll probably write 5 more questions instead of answering. to make it a chat model you finetune it on a bunch of conversations so it learns the pattern: you say something, it answers, it stops.</p>
+        <p data-reveal>i did this overnight on my macbook air with mlx. used <a href="https://huggingface.co/datasets/HuggingFaceTB/smol-smoltalk" target="_blank" rel="noopener">smol-smoltalk</a> as the data, and it only gets trained on the assistant replies. it did 1,136 steps of 32k tokens, about 37m tokens total, which is only like 12% of the dataset but thats what my laptop could do in a night.</p>
+        <p data-reveal>loss on conversations it hadnt seen went from 2.230 (plain lilbase) to 1.337.</p>
+        <h2 data-reveal>what works</h2>
+        <p data-reveal>if you say "hi" it says "Hello! How can I help you today?" and stops. plain lilbase just repeats the chat formatting forever when you do that. it does lists and code blocks, and it wrote a correct one line function to reverse a string (then explained it completely wrong lol).</p>
+        <h2 data-reveal>what doesnt</h2>
+        <p data-reveal>it does not know things. it told me the capital of australia is melbourne, then perth on another try. 17 + 25 was 48, and then "so, the answer is 17". i asked for a haiku about a cat that hates mondays and got 20 lines ending with "a reminder that we are all brothers" over and over.</p>
+        <p data-reveal>thats not really a finetuning problem, 297m params just doesnt know much. turning the temperature down from 0.7 to 0.4 helps a bit tho, it gave a normal reply to "hi" 12 out of 12 times instead of 8 out of 12.</p>
+        <pre data-reveal class="sq">ollama run navthings/lilchat</pre>
+        <p data-reveal>or just <a href="../playground/?model=lilchat">try it in your browser</a>, no install.</p>
+        <h2 data-reveal>next</h2>
+        <p data-reveal>the real fix is a bigger base model, which is <a href="https://github.com/navthings/sprout" target="_blank" rel="noopener">sprout</a>. 523m params, 12 billion tokens from fineweb-edu, dclm, cosmopedia and project gutenberg, back on the kaggle tpu. its about a third of the way through training and when its done it gets the same finetune.</p>
+      </div>
+
+      <a class="post-callout sq" href="../work/lilchat.html" data-reveal>
+        <span><span class="label">theres a case study for this</span><b>the longer version, with the chat format and more numbers</b></span>
+        <span class="btn dark small"><span class="inner">read it</span></span>
+      </a>
+      <nav class="post-foot" aria-label="more posts" data-reveal>
+        <a class="prev sq" href="lilbase.html"><span class="label">older</span>lilbase, 297m params on a free tpu</a>
+      </nav>
     </article>
+  </main>
 
-    <div class="post-foot">
-      <a class="prev" href="lilbase.html"><span class="label">older</span>lilbase, 297m params on a free tpu</a>
-      <span></span>
+  <footer class="foot">
+    <div class="foot-top">
+      <div>
+        <p class="foot-say">say hi. <span>maybe i'll reply.</span></p>
+        <button class="btn" type="button" data-email><span class="inner">copy my email</span></button>
+        <p class="hint">50-50 i respond</p>
+      </div>
+      <nav class="foot-links" aria-label="elsewhere">
+        <a href="https://github.com/navthings" target="_blank" rel="noopener">github <span>- it still works</span></a>
+        <a href="https://huggingface.co/navthings" target="_blank" rel="noopener">hugging face <span>- the weights</span></a>
+        <a href="https://ollama.com/navthings" target="_blank" rel="noopener">ollama <span>- models i've pushed</span></a>
+        <a href="https://orcid.org/0009-0002-2764-866X" target="_blank" rel="noopener">orcid <span>- research id</span></a>
+        <a href="https://doi.org/10.5281/zenodo.22340667" target="_blank" rel="noopener">zenodo <span>- the paper</span></a>
+        <a href="../feed.xml">rss <span>- new posts</span></a>
+      </nav>
     </div>
-  </div>
+    <div class="foot-mark">
+      <svg viewBox="66 64 384 378" aria-hidden="true" data-mark></svg>
+      <div class="meta">navthings, made in australia<br /><button type="button" data-top>back to top</button></div>
+    </div>
+  </footer>
 
-  <script src="post.js"></script>
+  <script src="../assets/vendor/lenis.min.js"></script>
+  <script src="../assets/site.js"></script>
 </body>
 </html>

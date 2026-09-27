@@ -3,11 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script>document.documentElement.classList.add("js")</script>
 
   <title>i wrote a paper on how much data matters · navthings</title>
 
   <meta name="description" content="i wanted to see how much the amount of data actually matters if you keep everything else the same. so i trained lilstory 4 times on 1%, 5%, 10% and 15% of..." />
-  <meta property="og:type" content="website" />
+  <meta property="og:type" content="article" />
+  <meta property="article:published_time" content="2026-09-05" />
   <meta property="og:site_name" content="navthings" />
   <meta property="og:title" content="i wrote a paper on how much data matters" />
   <meta property="og:description" content="i wanted to see how much the amount of data actually matters if you keep everything else the same. so i trained lilstory 4 times on 1%, 5%, 10% and 15% of..." />
@@ -20,50 +22,90 @@
   <meta name="twitter:title" content="i wrote a paper on how much data matters" />
   <meta name="twitter:description" content="i wanted to see how much the amount of data actually matters if you keep everything else the same. so i trained lilstory 4 times on 1%, 5%, 10% and 15% of..." />
   <meta name="twitter:image" content="https://navthings.github.io/og.png?v=3" />
-  <meta name="theme-color" content="#111111" />
+  <meta name="theme-color" content="#ffffff" />
   <link rel="icon" type="image/svg+xml" href="../favicon.svg" />
   <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png" />
   <link rel="apple-touch-icon" href="../apple-touch-icon.png" />
+  <link rel="alternate" type="application/rss+xml" title="navthings" href="../feed.xml" />
 
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Geist:wght@300&family=Geist+Mono:wght@300&display=swap"
-    rel="stylesheet"
-  />
+  <link rel="preload" href="../assets/fonts/geist.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="../assets/site.css" />
   <link rel="stylesheet" href="post.css" />
 </head>
 
 <body>
-  <div class="container">
-    <a class="back" href="../">navthings</a>
+  <a class="skip" href="#main">skip to content</a>
 
-    <div class="post-title">i wrote a paper on how much data matters</div>
-    <div class="post-date">2026-09-05</div>
+  <header class="nav">
+    <a class="brand" href="../" aria-label="navthings, home"><img src="../favicon.svg" alt="" /><span>navthings</span></a>
+    <nav class="links" aria-label="main">
+      <span class="blob"></span>
+      <a href="../#work">work</a>
+      <a href="../#writing">writing</a>
+      <a href="../playground/">playground</a>
+      <a class="pill" href="mailto:navneet.dagdiya@gmail.com" data-email>email</a>
+    </nav>
+    <span class="progress"></span>
+  </header>
 
-    <article class="post">
-      <p>i wanted to see how much the amount of data actually matters if you keep everything else the same. so i trained lilstory 4 times on 1%, 5%, 10% and 15% of tinystories. same model, same settings, 5000 steps each.</p>
-      <table>
-      <tr><th>data</th><th class="num">stories</th><th class="num">train loss</th><th class="num">val loss</th></tr>
-      <tr><td>1%</td><td class="num">22k</td><td class="num">1.329</td><td class="num">2.402</td></tr>
-      <tr><td>5%</td><td class="num">110k</td><td class="num">1.701</td><td class="num">1.932</td></tr>
-      <tr class="me"><td>10%</td><td class="num">220k</td><td class="num">1.826</td><td class="num">1.816</td></tr>
-      <tr><td>15%</td><td class="num">330k</td><td class="num">1.737</td><td class="num">1.837</td></tr>
-      </table>
-      <p>lower is better, and val loss is the one that matters since its on stories the model never saw.</p>
-      <p>the 1% one had the best training loss but the worst val loss, it basically just memorised its 22k stories lol. the more data i gave it the smaller that gap got, and at 10% theyre pretty much the same.</p>
-      <figure><img src="img/paper-1pct.png" alt="1% run: train loss keeps dropping while validation loss flattens out and creeps back up" loading="lazy"><figcaption>1% of the data. train loss (blue) keeps going down, val loss (orange) gives up and creeps back up</figcaption></figure>
-      <figure><img src="img/paper-10pct.png" alt="10% run: train and validation loss stay together the whole way" loading="lazy"><figcaption>10% of the data. the two lines stay together the whole way</figcaption></figure>
-      <p>15% was slightly worse than 10% which i didnt expect. i think its because every model only got 5000 steps, so the 15% one probably never even got through all its data. the difference is tiny too so it could just be noise.</p>
-      <p>its on zenodo if you wanna read the whole thing: <a href="https://doi.org/10.5281/zenodo.22340667" target="_blank">the effect of corpus size on the performance of a llm</a></p>
+  <main class="sheet" id="main">
+    <article class="post-wrap wrap">
+      <header class="post-head">
+        <p class="crumbs mono" data-reveal><a href="../#writing">writing</a><span>/</span><time datetime="2026-09-05">2026-09-05</time></p>
+        <h1 class="post-title" style="view-transition-name: p-dataset-size-paper">i wrote a paper on how much data matters</h1>
+      </header>
+
+      <div class="post">
+        <p data-reveal>i wanted to see how much the amount of data actually matters if you keep everything else the same. so i trained lilstory 4 times on 1%, 5%, 10% and 15% of tinystories. same model, same settings, 5000 steps each.</p>
+        <table data-reveal>
+        <tr><th>data</th><th class="num">stories</th><th class="num">train loss</th><th class="num">val loss</th></tr>
+        <tr><td>1%</td><td class="num">22k</td><td class="num">1.329</td><td class="num">2.402</td></tr>
+        <tr><td>5%</td><td class="num">110k</td><td class="num">1.701</td><td class="num">1.932</td></tr>
+        <tr class="me"><td>10%</td><td class="num">220k</td><td class="num">1.826</td><td class="num">1.816</td></tr>
+        <tr><td>15%</td><td class="num">330k</td><td class="num">1.737</td><td class="num">1.837</td></tr>
+        </table>
+        <p data-reveal>lower is better, and val loss is the one that matters since its on stories the model never saw.</p>
+        <p data-reveal>the 1% one had the best training loss but the worst val loss, it basically just memorised its 22k stories lol. the more data i gave it the smaller that gap got, and at 10% theyre pretty much the same.</p>
+        <figure data-reveal><div class="dark-fig sq"><img src="img/paper-1pct.png" alt="1% run: train loss keeps dropping while validation loss flattens out and creeps back up" loading="lazy" /></div><figcaption>1% of the data. train loss (blue) keeps going down, val loss (orange) gives up and creeps back up</figcaption></figure>
+        <figure data-reveal><div class="dark-fig sq"><img src="img/paper-10pct.png" alt="10% run: train and validation loss stay together the whole way" loading="lazy" /></div><figcaption>10% of the data. the two lines stay together the whole way</figcaption></figure>
+        <p data-reveal>15% was slightly worse than 10% which i didnt expect. i think its because every model only got 5000 steps, so the 15% one probably never even got through all its data. the difference is tiny too so it could just be noise.</p>
+        <p data-reveal>its on zenodo if you wanna read the whole thing: <a href="https://doi.org/10.5281/zenodo.22340667" target="_blank" rel="noopener">the effect of corpus size on the performance of a llm</a></p>
+      </div>
+
+      <a class="post-callout sq" href="../work/corpus-size.html" data-reveal>
+        <span><span class="label">theres a case study for this</span><b>the longer version, with interactive charts</b></span>
+        <span class="btn dark small"><span class="inner">read it</span></span>
+      </a>
+      <nav class="post-foot" aria-label="more posts" data-reveal>
+        <a class="prev sq" href="lilstory.html"><span class="label">older</span>lilstory, my first real language model</a>
+        <a class="next sq" href="tale.html"><span class="label">newer</span>tale, bedtime stories for my little brother</a>
+      </nav>
     </article>
+  </main>
 
-    <div class="post-foot">
-      <a class="prev" href="lilstory.html"><span class="label">older</span>lilstory, my first real language model</a>
-      <a class="next" href="tale.html"><span class="label">newer</span>tale, bedtime stories for my little brother</a>
+  <footer class="foot">
+    <div class="foot-top">
+      <div>
+        <p class="foot-say">say hi. <span>maybe i'll reply.</span></p>
+        <button class="btn" type="button" data-email><span class="inner">copy my email</span></button>
+        <p class="hint">50-50 i respond</p>
+      </div>
+      <nav class="foot-links" aria-label="elsewhere">
+        <a href="https://github.com/navthings" target="_blank" rel="noopener">github <span>- it still works</span></a>
+        <a href="https://huggingface.co/navthings" target="_blank" rel="noopener">hugging face <span>- the weights</span></a>
+        <a href="https://ollama.com/navthings" target="_blank" rel="noopener">ollama <span>- models i've pushed</span></a>
+        <a href="https://orcid.org/0009-0002-2764-866X" target="_blank" rel="noopener">orcid <span>- research id</span></a>
+        <a href="https://doi.org/10.5281/zenodo.22340667" target="_blank" rel="noopener">zenodo <span>- the paper</span></a>
+        <a href="../feed.xml">rss <span>- new posts</span></a>
+      </nav>
     </div>
-  </div>
+    <div class="foot-mark">
+      <svg viewBox="66 64 384 378" aria-hidden="true" data-mark></svg>
+      <div class="meta">navthings, made in australia<br /><button type="button" data-top>back to top</button></div>
+    </div>
+  </footer>
 
-  <script src="post.js"></script>
+  <script src="../assets/vendor/lenis.min.js"></script>
+  <script src="../assets/site.js"></script>
 </body>
 </html>

@@ -3,11 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script>document.documentElement.classList.add("js")</script>
 
   <title>my first transformer (it only knows one sentence) · navthings</title>
 
   <meta name="description" content="first ml thing i ever made lol. you give it a sentence, pick a word from it, and it tries to guess the next word." />
-  <meta property="og:type" content="website" />
+  <meta property="og:type" content="article" />
+  <meta property="article:published_time" content="2026-08-30" />
   <meta property="og:site_name" content="navthings" />
   <meta property="og:title" content="my first transformer (it only knows one sentence)" />
   <meta property="og:description" content="first ml thing i ever made lol. you give it a sentence, pick a word from it, and it tries to guess the next word." />
@@ -20,41 +22,76 @@
   <meta name="twitter:title" content="my first transformer (it only knows one sentence)" />
   <meta name="twitter:description" content="first ml thing i ever made lol. you give it a sentence, pick a word from it, and it tries to guess the next word." />
   <meta name="twitter:image" content="https://navthings.github.io/og.png?v=3" />
-  <meta name="theme-color" content="#111111" />
+  <meta name="theme-color" content="#ffffff" />
   <link rel="icon" type="image/svg+xml" href="../favicon.svg" />
   <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png" />
   <link rel="apple-touch-icon" href="../apple-touch-icon.png" />
+  <link rel="alternate" type="application/rss+xml" title="navthings" href="../feed.xml" />
 
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Geist:wght@300&family=Geist+Mono:wght@300&display=swap"
-    rel="stylesheet"
-  />
+  <link rel="preload" href="../assets/fonts/geist.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="../assets/site.css" />
   <link rel="stylesheet" href="post.css" />
 </head>
 
 <body>
-  <div class="container">
-    <a class="back" href="../">navthings</a>
+  <a class="skip" href="#main">skip to content</a>
 
-    <div class="post-title">my first transformer (it only knows one sentence)</div>
-    <div class="post-date">2026-08-30</div>
+  <header class="nav">
+    <a class="brand" href="../" aria-label="navthings, home"><img src="../favicon.svg" alt="" /><span>navthings</span></a>
+    <nav class="links" aria-label="main">
+      <span class="blob"></span>
+      <a href="../#work">work</a>
+      <a href="../#writing">writing</a>
+      <a href="../playground/">playground</a>
+      <a class="pill" href="mailto:navneet.dagdiya@gmail.com" data-email>email</a>
+    </nav>
+    <span class="progress"></span>
+  </header>
 
-    <article class="post">
-      <p>first ml thing i ever made lol. you give it a sentence, pick a word from it, and it tries to guess the next word.</p>
-      <p>the thing is it only ever trains on the sentence you give it, so its not really predicting anything, its just memorising. but it has all the actual transformer parts (embeddings, attention, the output layer, the loss, adam)</p>
-      <p>its super tiny. each word is 8 numbers, 2 attention heads, 1 layer, all in pytorch.</p>
-      <pre>python3 mdl.py</pre>
-      <p><a href="https://github.com/navthings/liltransformer" target="_blank">code</a></p>
+  <main class="sheet" id="main">
+    <article class="post-wrap wrap">
+      <header class="post-head">
+        <p class="crumbs mono" data-reveal><a href="../#writing">writing</a><span>/</span><time datetime="2026-08-30">2026-08-30</time></p>
+        <h1 class="post-title" style="view-transition-name: p-liltransformer">my first transformer (it only knows one sentence)</h1>
+      </header>
+
+      <div class="post">
+        <p data-reveal>first ml thing i ever made lol. you give it a sentence, pick a word from it, and it tries to guess the next word.</p>
+        <p data-reveal>the thing is it only ever trains on the sentence you give it, so its not really predicting anything, its just memorising. but it has all the actual transformer parts (embeddings, attention, the output layer, the loss, adam)</p>
+        <p data-reveal>its super tiny. each word is 8 numbers, 2 attention heads, 1 layer, all in pytorch.</p>
+        <pre data-reveal class="sq">python3 mdl.py</pre>
+        <p data-reveal><a href="https://github.com/navthings/liltransformer" target="_blank" rel="noopener">code</a></p>
+      </div>
+
+      <nav class="post-foot" aria-label="more posts" data-reveal>
+        <a class="next sq" href="bigtransformer.html"><span class="label">newer</span>bigtransformer, now it reads a whole file</a>
+      </nav>
     </article>
+  </main>
 
-    <div class="post-foot">
-      <span></span>
-      <a class="next" href="bigtransformer.html"><span class="label">newer</span>bigtransformer, now it reads a whole file</a>
+  <footer class="foot">
+    <div class="foot-top">
+      <div>
+        <p class="foot-say">say hi. <span>maybe i'll reply.</span></p>
+        <button class="btn" type="button" data-email><span class="inner">copy my email</span></button>
+        <p class="hint">50-50 i respond</p>
+      </div>
+      <nav class="foot-links" aria-label="elsewhere">
+        <a href="https://github.com/navthings" target="_blank" rel="noopener">github <span>- it still works</span></a>
+        <a href="https://huggingface.co/navthings" target="_blank" rel="noopener">hugging face <span>- the weights</span></a>
+        <a href="https://ollama.com/navthings" target="_blank" rel="noopener">ollama <span>- models i've pushed</span></a>
+        <a href="https://orcid.org/0009-0002-2764-866X" target="_blank" rel="noopener">orcid <span>- research id</span></a>
+        <a href="https://doi.org/10.5281/zenodo.22340667" target="_blank" rel="noopener">zenodo <span>- the paper</span></a>
+        <a href="../feed.xml">rss <span>- new posts</span></a>
+      </nav>
     </div>
-  </div>
+    <div class="foot-mark">
+      <svg viewBox="66 64 384 378" aria-hidden="true" data-mark></svg>
+      <div class="meta">navthings, made in australia<br /><button type="button" data-top>back to top</button></div>
+    </div>
+  </footer>
 
-  <script src="post.js"></script>
+  <script src="../assets/vendor/lenis.min.js"></script>
+  <script src="../assets/site.js"></script>
 </body>
 </html>
