@@ -61,6 +61,7 @@ html.intro .hero [data-reveal].in {
 /* hero */
 
 .hero {
+  min-height: 100vh;
   min-height: 100svh;
   display: flex;
   flex-direction: column;
@@ -692,6 +693,7 @@ html:not(.js) .stage {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1.12fr);
   gap: clamp(28px, 4vw, 56px);
+  min-height: min(640px, calc(100vh - 130px));
   min-height: min(640px, calc(100svh - 130px));
   padding: clamp(24px, 3.4vw, 44px);
   background: var(--surface);
