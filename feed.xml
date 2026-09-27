@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>navthings</title>
+    <link>https://navthings.github.io/</link>
+    <description>training small language models from scratch, on a mac and free tpus.</description>
+    <language>en</language>
+    <atom:link href="https://navthings.github.io/feed.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>teaching lilbase to talk</title>
+      <link>https://navthings.github.io/blog/lilchat.html</link>
+      <guid>https://navthings.github.io/blog/lilchat.html</guid>
+      <pubDate>Sat, 26 Sep 2026 09:00:00 +0000</pubDate>
+      <description>a base model just continues text. if you ask it a question itll probably write 5 more questions instead of answering. to make it a chat model you finetune it on a bunch of conversations so it learns the pattern: you say something, it answers, it stops.</description>
+    </item>
+    <item>
+      <title>lilbase, 297m params on a free tpu</title>
+      <link>https://navthings.github.io/blog/lilbase.html</link>
+      <guid>https://navthings.github.io/blog/lilbase.html</guid>
+      <pubDate>Wed, 23 Sep 2026 09:00:00 +0000</pubDate>
+      <description>everything before this was trained on my laptop, but i wanted to make a proper base model, like one thats actually read a decent chunk of the internet. my macbook air was never gonna do that. kaggle gives you free time on a tpu v5e-8 (8 of googles ai chips) so i rewrote the whole thing in jax and moved it there.</description>
+    </item>
+    <item>
+      <title>tale, bedtime stories for my little brother</title>
+      <link>https://navthings.github.io/blog/tale.html</link>
+      <guid>https://navthings.github.io/blog/tale.html</guid>
+      <pubDate>Sat, 12 Sep 2026 09:00:00 +0000</pubDate>
+      <description>my little brother kept asking me for bedtime stories so i made a model that tells them.</description>
+    </item>
+    <item>
+      <title>i wrote a paper on how much data matters</title>
+      <link>https://navthings.github.io/blog/dataset-size-paper.html</link>
+      <guid>https://navthings.github.io/blog/dataset-size-paper.html</guid>
+      <pubDate>Sat, 05 Sep 2026 09:00:00 +0000</pubDate>
+      <description>i wanted to see how much the amount of data actually matters if you keep everything else the same. so i trained lilstory 4 times on 1%, 5%, 10% and 15% of tinystories. same model, same settings, 5000 steps each.</description>
+    </item>
+    <item>
+      <title>lilstory, my first real language model</title>
+      <link>https://navthings.github.io/blog/lilstory.html</link>
+      <guid>https://navthings.github.io/blog/lilstory.html</guid>
+      <pubDate>Fri, 04 Sep 2026 09:00:00 +0000</pubDate>
+      <description>ok this one is an actual language model. 8.2m params, llama style, trained from scratch on tinystories (a dataset of simple little stories made for tiny models like this).</description>
+    </item>
+    <item>
+      <title>bigtransformer, now it reads a whole file</title>
+      <link>https://navthings.github.io/blog/bigtransformer.html</link>
+      <guid>https://navthings.github.io/blog/bigtransformer.html</guid>
+      <pubDate>Mon, 31 Aug 2026 09:00:00 +0000</pubDate>
+      <description>made this the day after liltransformer. instead of one sentence it reads a whole text file, you pick how many words it looks at, and it keeps predicting words for as long as you want. probably.</description>
+    </item>
+    <item>
+      <title>my first transformer (it only knows one sentence)</title>
+      <link>https://navthings.github.io/blog/liltransformer.html</link>
+      <guid>https://navthings.github.io/blog/liltransformer.html</guid>
+      <pubDate>Sun, 30 Aug 2026 09:00:00 +0000</pubDate>
+      <description>first ml thing i ever made lol. you give it a sentence, pick a word from it, and it tries to guess the next word.</description>
+    </item>
+  </channel>
+</rss>

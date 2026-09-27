@@ -3,14 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script>document.documentElement.classList.add("js")</script>
 
   <title>navthings</title>
 
-  <meta name="description" content="training small language models from scratch, on a mac and free tpus." />
+  <meta name="description" content="i'm nav. i train small language models from scratch, on a macbook air and free tpus." />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="navthings" />
   <meta property="og:title" content="navthings" />
-  <meta property="og:description" content="training small language models from scratch, on a mac and free tpus." />
+  <meta property="og:description" content="i'm nav. i train small language models from scratch, on a macbook air and free tpus." />
   <meta property="og:url" content="https://navthings.github.io/" />
   <meta property="og:image" content="https://navthings.github.io/og.png?v=3" />
   <meta property="og:image:width" content="1200" />
@@ -18,436 +19,319 @@
   <meta property="og:image:alt" content="navthings, training small language models from scratch" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="navthings" />
-  <meta name="twitter:description" content="training small language models from scratch, on a mac and free tpus." />
+  <meta name="twitter:description" content="i'm nav. i train small language models from scratch, on a macbook air and free tpus." />
   <meta name="twitter:image" content="https://navthings.github.io/og.png?v=3" />
-  <meta name="theme-color" content="#111111" />
+  <meta name="theme-color" content="#ffffff" />
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png" />
   <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+  <link rel="alternate" type="application/rss+xml" title="navthings" href="feed.xml" />
 
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Geist:wght@300&display=swap"
-    rel="stylesheet"
-  />
-
-  <style>
-    *,
-    *::before,
-    *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    html,
-    body {
-      width: 100%;
-    }
-
-    body {
-      background-color: #111111;
-      color: #888888;
-      font-family: "Geist", "Helvetica Neue", sans-serif;
-      font-weight: 300;
-      font-size: 16px;
-      line-height: 25px;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      overflow-x: hidden;
-    }
-
-    .container {
-      padding-left: 116px;
-      padding-top: 80px;
-      padding-right: 40px;
-    }
-
-    .copy {
-      max-width: 32rem;
-    }
-
-    .normal-line {
-      display: block;
-    }
-
-    .container + .container {
-      padding-top: 0;
-    }
-
-    @media (max-width: 600px) {
-      .normal-line {
-        display: inline;
-      }
-
-      .container {
-        padding-left: 32px;
-        padding-right: 32px;
-        padding-top: 60px;
-      }
-    }
-
-    /* Fade-in on load */
-
-    .fade-in {
-      opacity: 0;
-      transform: translateY(5px);
-      animation: fadeUp 0.55s ease forwards;
-    }
-
-    @keyframes fadeUp {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .title {
-      animation-delay: 0.05s;
-    }
-
-    .bio {
-      animation-delay: 0.18s;
-    }
-
-    .current {
-      animation-delay: 0.31s;
-    }
-
-    .ticker-wrap {
-      animation-delay: 0.44s;
-    }
-
-    .links-section {
-      animation-delay: 0.70s;
-    }
-
-    .blog-section {
-      animation-delay: 0.44s;
-    }
-
-    .time-section {
-      animation-delay: 0.95s;
-    }
-
-    p {
-      color: #888888;
-      margin-top: 0;
-    }
-
-    .bio {
-      margin-bottom: 0;
-    }
-
-    .current {
-      margin-top: 25px;
-    }
-
-    .links-section {
-      margin-top: 25px;
-    }
-
-    .links-section p {
-      margin-top: 0;
-    }
-
-    .blog-section {
-      margin-top: 25px;
-    }
-
-    .blog-section p {
-      margin-top: 0;
-    }
-
-    .time-section {
-      margin-top: 25px;
-      padding-bottom: 40px;
-    }
-
-    /* Title */
-
-    .title {
-      color: #ffffff;
-      margin-bottom: 25px;
-      cursor: default;
-      display: inline-block;
-    }
-
-    /* nav name */
-
-    .nav-name {
-      color: #ffffff;
-      font-weight: 300;
-      cursor: default;
-    }
-
-    /* Mac text */
-
-    .mac-text {
-      color: #ffffff;
-      font-family: -apple-system, "Helvetica Neue", sans-serif;
-      cursor: default;
-      display: inline;
-      transition: opacity 0.2s ease;
-    }
-
-    .mac-text:hover {
-      opacity: 0.6;
-    }
-
-    .apple-svg {
-      display: inline-block;
-      vertical-align: middle;
-      margin-top: -3px;
-      width: 13px;
-      height: 13px;
-      fill: #ffffff;
-    }
-
-    /* Links */
-
-    a {
-      color: #ffffff;
-      text-decoration: none;
-      transition: opacity 0.2s ease;
-    }
-
-    a:hover {
-      opacity: 0.5;
-    }
-
-    /* Blog list */
-
-    .blog-entry {
-      display: flex;
-      gap: 12px;
-      align-items: baseline;
-    }
-
-    .blog-date {
-      color: #555555;
-      font-size: 14px;
-      flex-shrink: 0;
-      min-width: 72px;
-    }
-
-    .blog-entry a {
-      display: inline-block;
-      transition: opacity 0.2s ease, transform 0.25s ease;
-    }
-
-    .blog-entry a:hover {
-      transform: translateX(3px);
-    }
-
-    @media (max-width: 600px) {
-      .blog-entry {
-        flex-direction: column;
-        gap: 0;
-        margin-bottom: 8px;
-      }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      .fade-in {
-        animation: none;
-        opacity: 1;
-        transform: none;
-      }
-    }
-
-    .blog-more {
-      display: grid;
-      grid-template-rows: 0fr;
-      transition: grid-template-rows 0.4s ease;
-    }
-
-    .blog-more.open {
-      grid-template-rows: 1fr;
-    }
-
-    .blog-more > div {
-      overflow: hidden;
-    }
-
-    .blog-toggle {
-      background: none;
-      border: none;
-      padding: 0;
-      font: inherit;
-      font-size: 14px;
-      line-height: 25px;
-      color: #555555;
-      cursor: pointer;
-      transition: color 0.2s ease;
-    }
-
-    .blog-toggle:hover {
-      color: #ffffff;
-    }
-
-    .blog-empty {
-      color: #555555;
-    }
-
-  </style>
+  <link rel="preload" href="assets/fonts/geist.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="assets/site.css" />
+  <link rel="stylesheet" href="assets/home.css" />
 </head>
 
 <body>
-  <div class="container">
-    <div class="title fade-in">navthings</div>
+  <a class="skip" href="#main">skip to content</a>
 
-    <p class="bio fade-in copy">
-      <span class="normal-line">
-        hi. i'm <span class="nav-name">nav</span>, a software engineer and designer
-      </span>
-
-      <span class="normal-line">
-        based in australia. I care about how things feel
-      </span>
-
-      <span class="normal-line">
-        as much as how they work.
-      </span>
-    </p>
-
-    <p class="current fade-in copy">
-      <span class="normal-line">
-        right now, im training small <span class="nav-name">language models</span>
-      </span>
-
-      <span class="normal-line">
-        from scratch, on my
-        <span class="mac-text">
-          <svg
-            class="apple-svg"
-            viewBox="2 0 17 22"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M18.71 19.5C17.88 20.74 17 21.95 15.66 21.97C14.32 22 13.89 21.18 12.37 21.18C10.84 21.18 10.37 21.95 9.09997 22C7.78997 22.05 6.79997 20.68 5.95997 19.47C4.24997 17 2.93997 12.45 4.69997 9.39C5.56997 7.87 7.12997 6.91 8.81997 6.88C10.1 6.86 11.32 7.75 12.11 7.75C12.89 7.75 14.37 6.68 15.92 6.84C16.57 6.87 18.39 7.1 19.56 8.82C19.47 8.88 17.39 10.1 17.41 12.63C17.44 15.65 20.06 16.66 20.09 16.67C20.06 16.74 19.67 18.11 18.71 19.5ZM13 3.5C13.73 2.67 14.94 2.04 15.94 2C16.07 3.17 15.6 4.35 14.9 5.19C14.21 6.04 13.07 6.7 11.95 6.61C11.8 5.46 12.36 4.26 13 3.5Z"
-            />
-          </svg>
-          &#8202;mac
-        </span>
-        and free tpus
-      </span>
-    </p>
-
-    <div class="blog-section fade-in">
-      <p>blog</p>
-
-      <div id="blog-list">
-        <p class="blog-empty">
-          nothing posted yet. check back soon.
-        </p>
-      </div>
-    </div>
-
-    <div class="links-section fade-in">
-      <p>find me</p>
-
-      <p>
-        <a href="https://github.com/navthings" target="_blank">github</a>
-        - it still works
-      </p>
-
-      <p>
-        <a href="https://ollama.com/navthings" target="_blank">ollama</a>
-        - models i've pushed
-      </p>
-
-      <p>
-        <a href="https://orcid.org/0009-0002-2764-866X" target="_blank">orcid</a>
-        - research id
-      </p>
-
-      <p>
-        <a id="email-link" href="mailto:navneet.dagdiya@gmail.com">
-          email
-        </a>
-        - 50-50 i respond
-      </p>
-    </div>
-
-    <div class="time-section fade-in">
+  <header class="nav">
+    <a class="brand" href="./" aria-label="navthings, home"><img src="favicon.svg" alt="" /><span>navthings</span></a>
+    <nav class="links" aria-label="main">
+      <span class="blob"></span>
+      <a href="#work">work</a>
+      <a href="#writing">writing</a>
       <a href="playground/">playground</a>
-      - talk to my models in your browser
+      <a class="pill" href="mailto:navneet.dagdiya@gmail.com" data-email>email</a>
+    </nav>
+  </header>
+
+  <main class="sheet" id="main">
+    <section class="hero wrap">
+      <div class="hero-inner">
+        <a class="tag" href="#sprout" data-reveal style="--d: 0.05s"><span class="live-dot"></span>training sprout right now, 523m params</a>
+        <h1 class="hero-title" data-tokens>hi, i'm nav. i train small language models <span class="soft">from scratch.</span></h1>
+        <p class="hero-sub" data-reveal style="--d: 1.15s">
+          on my
+          <span class="mac"><svg viewBox="2 0 17 22" aria-hidden="true"><path d="M18.71 19.5C17.88 20.74 17 21.95 15.66 21.97C14.32 22 13.89 21.18 12.37 21.18C10.84 21.18 10.37 21.95 9.09997 22C7.78997 22.05 6.79997 20.68 5.95997 19.47C4.24997 17 2.93997 12.45 4.69997 9.39C5.56997 7.87 7.12997 6.91 8.81997 6.88C10.1 6.86 11.32 7.75 12.11 7.75C12.89 7.75 14.37 6.68 15.92 6.84C16.57 6.87 18.39 7.1 19.56 8.82C19.47 8.88 17.39 10.1 17.41 12.63C17.44 15.65 20.06 16.66 20.09 16.67C20.06 16.74 19.67 18.11 18.71 19.5ZM13 3.5C13.73 2.67 14.94 2.04 15.94 2C16.07 3.17 15.6 4.35 14.9 5.19C14.21 6.04 13.07 6.7 11.95 6.61C11.8 5.46 12.36 4.26 13 3.5Z" /></svg>&#8202;mac</span>
+          and free tpus, from australia. software engineer and designer, i care about how things feel as much as how they work.
+        </p>
+        <div class="row" data-reveal style="--d: 1.3s">
+          <a class="btn dark" href="#work"><span class="inner">see the work</span></a>
+          <a class="btn" href="playground/"><span class="inner">talk to my models</span></a>
+        </div>
+      </div>
+    </section>
+
+    <section class="statement wrap">
+      <p class="scrub">every model on here was trained on my macbook air or a free kaggle tpu. no cluster, no lab, just a lot of overnight runs and a laptop that gets pretty warm.</p>
+    </section>
+
+    <section class="scale" aria-label="how big the models got">
+      <div class="scale-pin wrap">
+        <div>
+          <p class="label">one dot is a million parameters</p>
+          <div class="scale-num" aria-live="off"><span id="scale-n">0</span><span class="unit">m</span></div>
+          <div class="steps" aria-hidden="true">
+            <span>lilstory</span><span>tale</span><span>lilbase</span><span>sprout</span>
+            <i class="bar"></i>
+          </div>
+          <div class="stages">
+            <p class="stage"><span class="mono">sep 4 · lilstory</span>my first real language model. 8.2m params, tinystories, my own tokenizer, trained on the mac.</p>
+            <p class="stage"><span class="mono">sep 12 · tale</span>around 50m params. bedtime stories for my little brother, still on the mac.</p>
+            <p class="stage"><span class="mono">sep 23 · lilbase</span>297m params, 6.1 billion tokens. too big for the laptop so it moved to a free tpu.</p>
+            <p class="stage"><span class="mono">now · sprout</span>523m params and 12 billion tokens. about a third of the way through training.</p>
+          </div>
+          <p class="scale-end">8.2m to 523m in under a month.</p>
+        </div>
+        <div class="dots" id="dots" aria-hidden="true"></div>
+      </div>
+    </section>
+
+    <section class="work wrap wide" id="work">
+      <div class="section-head">
+        <p class="label" data-reveal>work</p>
+        <h2 class="h-section" data-words>the models, and everything that went wrong making them.</h2>
+      </div>
+
+      <div class="stack">
+        <article class="card sq" data-live style="--i: 0">
+          <div class="card-text">
+            <div class="card-top"><span class="mono">sep 2026 · pretraining</span><span class="tag line">case study</span></div>
+            <div>
+              <h3 class="card-title" style="view-transition-name: t-lilbase">lilbase</h3>
+              <p class="card-desc">a proper base model, trained from scratch on a free kaggle tpu. it beats gpt-2 small on two of three benchmarks.</p>
+              <dl class="facts">
+                <div><dt>params</dt><dd>297m</dd></div>
+                <div><dt>read</dt><dd>6.1b tokens</dd></div>
+                <div><dt>trained on</dt><dd>tpu v5e-8</dd></div>
+              </dl>
+              <div class="row">
+                <a class="btn dark small" href="work/lilbase.html"><span class="inner">read the case study</span></a>
+                <a class="btn small" href="playground/?model=lilbase"><span class="inner">try it</span></a>
+              </div>
+            </div>
+          </div>
+          <div class="card-vis sq">
+            <div class="legend"><span><i style="background: var(--ink)"></i>lilbase</span><span><i style="background: #c9c9c6"></i>gpt-2 small, 124m</span></div>
+            <div class="hbars">
+              <div class="hbar-group"><span>hellaswag</span>
+                <div class="hbar" style="--k: 0"><b style="--w: 68.3%; background: var(--ink)"></b><em>41.0%</em></div>
+                <div class="hbar" style="--k: 1"><b style="--w: 51.8%; background: #c9c9c6"></b><em>31.1%</em></div>
+              </div>
+              <div class="hbar-group"><span>arc-easy</span>
+                <div class="hbar" style="--k: 2"><b style="--w: 84.2%; background: var(--ink)"></b><em>50.5%</em></div>
+                <div class="hbar" style="--k: 3"><b style="--w: 65.8%; background: #c9c9c6"></b><em>39.5%</em></div>
+              </div>
+              <div class="hbar-group"><span>lambada</span>
+                <div class="hbar" style="--k: 4"><b style="--w: 47.8%; background: var(--ink)"></b><em>28.7%</em></div>
+                <div class="hbar" style="--k: 5"><b style="--w: 54.3%; background: #c9c9c6"></b><em>32.6%</em></div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="card sq" data-live style="--i: 1">
+          <div class="card-text">
+            <div class="card-top"><span class="mono">sep 2026 · finetuning</span><span class="tag line">case study</span></div>
+            <div>
+              <h3 class="card-title" style="view-transition-name: t-lilchat">lilchat</h3>
+              <p class="card-desc">lilbase taught to hold a conversation, overnight on my macbook air with mlx. very confident. knows nothing.</p>
+              <dl class="facts">
+                <div><dt>finetuned on</dt><dd>37m tokens</dd></div>
+                <div><dt>val loss</dt><dd>2.230 to 1.337</dd></div>
+                <div><dt>trained on</dt><dd>macbook air</dd></div>
+              </dl>
+              <div class="row">
+                <a class="btn dark small" href="work/lilchat.html"><span class="inner">read the case study</span></a>
+                <a class="btn small" href="playground/?model=lilchat"><span class="inner">talk to it</span></a>
+              </div>
+            </div>
+          </div>
+          <div class="card-vis sq">
+            <div class="chat" data-chat>
+              <div class="bubble you">hi</div>
+              <div class="bubble bot">Hello! How can I help you today?</div>
+              <div class="bubble you">whats the capital of australia?</div>
+              <div class="bubble bot">The capital of Australia is Melbourne.</div>
+              <span class="chat-note mono">(it's canberra)</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="card sq" data-live style="--i: 2">
+          <div class="card-text">
+            <div class="card-top"><span class="mono">sep 2026 · research</span><span class="tag line">case study</span></div>
+            <div>
+              <h3 class="card-title" style="view-transition-name: t-paper">the paper</h3>
+              <p class="card-desc">same model, four amounts of data. with 1% of tinystories it just memorised everything. at 10% the gap between train and val loss was basically gone.</p>
+              <dl class="facts">
+                <div><dt>runs</dt><dd>4 × 5000 steps</dd></div>
+                <div><dt>best val loss</dt><dd>1.816</dd></div>
+                <div><dt>published on</dt><dd>zenodo</dd></div>
+              </dl>
+              <div class="row">
+                <a class="btn dark small" href="work/corpus-size.html"><span class="inner">read the case study</span></a>
+                <a class="btn small" href="https://doi.org/10.5281/zenodo.22340667" target="_blank" rel="noopener"><span class="inner">the paper</span></a>
+              </div>
+            </div>
+          </div>
+          <div class="card-vis sq">
+            <div class="legend"><span><i style="background: var(--ink)"></i>val loss</span><span><i style="background: #c9c9c6"></i>train loss</span></div>
+            <div class="chart" data-chart="paper" style="margin-top: 20px"></div>
+          </div>
+        </article>
+
+        <article class="card sq" data-live style="--i: 3">
+          <div class="card-text">
+            <div class="card-top"><span class="mono">sep 2026 · web</span><span class="tag line">case study</span></div>
+            <div>
+              <h3 class="card-title" style="view-transition-name: t-playground">playground</h3>
+              <p class="card-desc">all my models, running in your browser tab. they download once and run on your own computer, so nothing you type goes anywhere.</p>
+              <dl class="facts">
+                <div><dt>models</dt><dd>4</dd></div>
+                <div><dt>smallest</dt><dd>17mb</dd></div>
+                <div><dt>runs on</dt><dd>llama.cpp, in wasm</dd></div>
+              </dl>
+              <div class="row">
+                <a class="btn dark small" href="work/playground.html"><span class="inner">read the case study</span></a>
+                <a class="btn small" href="playground/"><span class="inner">open it</span></a>
+              </div>
+            </div>
+          </div>
+          <div class="card-vis sq">
+            <div class="mini">
+              <div class="mini-row"><span>lilchat</span><span class="track"><b style="--k: 0; --t: 2.2s"></b></span><span class="size">274mb</span></div>
+              <div class="mini-row"><span>lilbase</span><span class="track"><b style="--k: 1; --t: 2.2s"></b></span><span class="size">274mb</span></div>
+              <div class="mini-row"><span>tale</span><span class="track"><b style="--k: 2; --t: 0.9s"></b></span><span class="size">52mb</span></div>
+              <div class="mini-row"><span>lilstory</span><span class="track"><b style="--k: 3; --t: 0.5s"></b></span><span class="size">17mb</span></div>
+            </div>
+            <div class="mini-input"><span>Once upon a time</span><span class="btn dark">go</span></div>
+            <p class="mini-note">nothing leaves your computer.</p>
+          </div>
+        </article>
+
+        <article class="card sq" data-live style="--i: 4" id="sprout">
+          <div class="card-text">
+            <div class="card-top"><span class="mono">training now</span><span class="tag line"><span class="live-dot"></span>in progress</span></div>
+            <div>
+              <h3 class="card-title">sprout</h3>
+              <p class="card-desc">the fix for lilchat not knowing anything is a bigger base model. this is that. when it finishes it gets the same chat finetune.</p>
+              <dl class="facts">
+                <div><dt>params</dt><dd>523m</dd></div>
+                <div><dt>reading</dt><dd>12b tokens</dd></div>
+                <div><dt>trained on</dt><dd>kaggle tpu</dd></div>
+              </dl>
+              <div class="row">
+                <a class="btn dark small" href="https://github.com/navthings/sprout" target="_blank" rel="noopener"><span class="inner">follow along</span></a>
+              </div>
+            </div>
+          </div>
+          <div class="card-vis sq">
+            <div class="train">
+              <div class="train-top"><span>tokens read</span><span class="mono">as of sep 26</span></div>
+              <div class="train-num">about a third</div>
+              <div class="train-track"><b></b></div>
+              <div class="train-ticks"><span>0</span><span>4b</span><span>8b</span><span>12b</span></div>
+              <div class="row">
+                <span class="tag">fineweb-edu</span><span class="tag">dclm</span><span class="tag">cosmopedia</span><span class="tag">project gutenberg</span>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="more wrap wide">
+      <p class="label" data-reveal>earlier, and smaller</p>
+      <div class="tiles" data-stagger="0.08">
+        <a class="tile sq" href="blog/tale.html" data-reveal="scale">
+          <span class="mono muted">sep 12 · ~50m params</span>
+          <div><h3>tale</h3><p>bedtime stories for my little brother. lilstory, but bigger.</p></div>
+        </a>
+        <a class="tile sq" href="blog/lilstory.html" data-reveal="scale">
+          <span class="mono muted">sep 4 · 8.2m params</span>
+          <div><h3>lilstory</h3><p>my first real language model, with my own tokenizer. it writes little stories that kinda wander off.</p></div>
+        </a>
+        <a class="tile sq" href="blog/bigtransformer.html" data-reveal="scale">
+          <span class="mono muted">aug 31 · whole words</span>
+          <div><h3>bigtransformer</h3><p>reads a whole text file and keeps predicting words for as long as you want. probably.</p></div>
+        </a>
+        <a class="tile sq" href="blog/liltransformer.html" data-reveal="scale">
+          <span class="mono muted">aug 30 · 1 layer</span>
+          <div><h3>liltransformer</h3><p>the first ml thing i ever made. it only knows one sentence.</p></div>
+        </a>
+      </div>
+    </section>
+
+    <section class="writing wrap wide" id="writing">
+      <div class="section-head">
+        <p class="label" data-reveal>writing</p>
+        <h2 class="h-section" data-words>short posts about each model. mostly what broke.</h2>
+      </div>
+      <div class="posts follow" data-stagger="0.05">
+        <a class="post-row" href="blog/lilchat.html" data-reveal><span class="mono">2026-09-26</span><span class="t">teaching lilbase to talk</span><span class="mono kind">finetuning</span></a>
+        <a class="post-row" href="blog/lilbase.html" data-reveal><span class="mono">2026-09-23</span><span class="t">lilbase, 297m params on a free tpu</span><span class="mono kind">pretraining</span></a>
+        <a class="post-row" href="blog/tale.html" data-reveal><span class="mono">2026-09-12</span><span class="t">tale, bedtime stories for my little brother</span><span class="mono kind">model</span></a>
+        <a class="post-row" href="blog/dataset-size-paper.html" data-reveal><span class="mono">2026-09-05</span><span class="t">i wrote a paper on how much data matters</span><span class="mono kind">research</span></a>
+        <a class="post-row" href="blog/lilstory.html" data-reveal><span class="mono">2026-09-04</span><span class="t">lilstory, my first real language model</span><span class="mono kind">model</span></a>
+        <a class="post-row" href="blog/bigtransformer.html" data-reveal><span class="mono">2026-08-31</span><span class="t">bigtransformer, now it reads a whole file</span><span class="mono kind">basics</span></a>
+        <a class="post-row" href="blog/liltransformer.html" data-reveal><span class="mono">2026-08-30</span><span class="t">my first transformer (it only knows one sentence)</span><span class="mono kind">basics</span></a>
+      </div>
+      <div class="row" data-reveal>
+        <a class="btn line small" href="feed.xml"><span class="inner">rss</span></a>
+      </div>
+    </section>
+
+    <section class="play wrap wide" id="play">
+      <div class="play-card sq" data-reveal="scale">
+        <div>
+          <p class="label">playground</p>
+          <h2 class="h-section">talk to my models, right here in your browser.</h2>
+          <p class="soft">pick one and say something. it downloads once, then runs on your own computer. theyre small, so they make stuff up. a lot.</p>
+        </div>
+        <form class="ask" action="playground/" method="get" data-ask>
+          <fieldset class="chips">
+            <legend class="mono" style="margin-bottom: 10px">model</legend>
+            <label><input type="radio" name="model" value="lilchat" checked data-placeholder="say something" /><span>lilchat <small>274mb</small></span></label>
+            <label><input type="radio" name="model" value="lilbase" data-placeholder="The water cycle begins when" /><span>lilbase <small>274mb</small></span></label>
+            <label><input type="radio" name="model" value="tale" data-placeholder="Once upon a time" /><span>tale <small>52mb</small></span></label>
+            <label><input type="radio" name="model" value="lilstory" data-placeholder="Once upon a time" /><span>lilstory <small>17mb</small></span></label>
+          </fieldset>
+          <div class="field">
+            <input name="q" type="text" placeholder="say something" autocomplete="off" aria-label="what to say" />
+            <button class="btn dark" type="submit"><span class="inner">send</span></button>
+          </div>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <div class="foot-top">
+      <div>
+        <p class="foot-say">say hi. <span>maybe i'll reply.</span></p>
+        <button class="btn" type="button" data-email><span class="inner">copy my email</span></button>
+        <p class="hint">50-50 i respond</p>
+      </div>
+      <nav class="foot-links" aria-label="elsewhere">
+        <a href="https://github.com/navthings" target="_blank" rel="noopener">github <span>- it still works</span></a>
+        <a href="https://huggingface.co/navthings" target="_blank" rel="noopener">hugging face <span>- the weights</span></a>
+        <a href="https://ollama.com/navthings" target="_blank" rel="noopener">ollama <span>- models i've pushed</span></a>
+        <a href="https://orcid.org/0009-0002-2764-866X" target="_blank" rel="noopener">orcid <span>- research id</span></a>
+        <a href="https://doi.org/10.5281/zenodo.22340667" target="_blank" rel="noopener">zenodo <span>- the paper</span></a>
+        <a href="feed.xml">rss <span>- new posts</span></a>
+      </nav>
     </div>
-  </div>
+    <div class="foot-mark">
+      <svg viewBox="66 64 384 378" aria-hidden="true" data-mark></svg>
+      <div class="meta">navthings, made in australia<br /><button type="button" data-top>back to top</button></div>
+    </div>
+  </footer>
 
-  <script>
-    const emailLink = document.getElementById("email-link");
-
-    emailLink.addEventListener("click", function (e) {
-      e.preventDefault();
-
-      navigator.clipboard
-        .writeText("navneet.dagdiya@gmail.com")
-        .catch(() => {});
-
-      const originalText = emailLink.textContent;
-
-      emailLink.textContent = "copied.";
-      emailLink.style.opacity = "0.5";
-
-      setTimeout(() => {
-        emailLink.textContent = originalText;
-        emailLink.style.opacity = "";
-      }, 1800);
-    });
-
-    // newest first
-
-    const posts = [
-      { date: "2026-09-26", title: "teaching lilbase to talk", url: "blog/lilchat.html" },
-      { date: "2026-09-23", title: "lilbase, 297m params on a free tpu", url: "blog/lilbase.html" },
-      { date: "2026-09-12", title: "tale, bedtime stories for my little brother", url: "blog/tale.html" },
-      { date: "2026-09-05", title: "i wrote a paper on how much data matters", url: "blog/dataset-size-paper.html" },
-      { date: "2026-09-04", title: "lilstory, my first real language model", url: "blog/lilstory.html" },
-      { date: "2026-08-31", title: "bigtransformer, now it reads a whole file", url: "blog/bigtransformer.html" },
-      { date: "2026-08-30", title: "my first transformer (it only knows one sentence)", url: "blog/liltransformer.html" },
-    ];
-
-    // newest few on the home page, the rest fold out
-    const SHOWN = 1;
-
-    function entry(post, delay) {
-      return (
-        '<p class="blog-entry fade-in" style="animation-delay: ' + delay.toFixed(2) + 's">' +
-        '<span class="blog-date">' + post.date + "</span>" +
-        '<a href="' + post.url + '">' + post.title + "</a>" +
-        "</p>"
-      );
-    }
-
-    if (posts.length) {
-      const list = document.getElementById("blog-list");
-      const rest = posts.slice(SHOWN);
-
-      list.innerHTML =
-        posts.slice(0, SHOWN).map((post, i) => entry(post, 0.48 + i * 0.05)).join("") +
-        (rest.length
-          ? '<div class="blog-more" id="blog-more"><div></div></div>' +
-            '<button class="blog-toggle fade-in" id="blog-toggle" style="animation-delay: ' +
-            (0.48 + SHOWN * 0.05).toFixed(2) + 's" aria-expanded="false">' +
-            posts.length + " posts, show all</button>"
-          : "");
-
-      if (rest.length) {
-        const more = document.getElementById("blog-more");
-        const toggle = document.getElementById("blog-toggle");
-
-        toggle.addEventListener("click", function () {
-          const open = !more.classList.contains("open");
-          if (open) more.firstChild.innerHTML = rest.map((post, i) => entry(post, i * 0.04)).join("");
-          more.classList.toggle("open", open);
-          toggle.setAttribute("aria-expanded", open);
-          toggle.textContent = open ? "show less" : posts.length + " posts, show all";
-        });
-      }
-    }
-  </script>
+  <script src="assets/vendor/lenis.min.js"></script>
+  <script src="assets/site.js"></script>
+  <script src="assets/charts.js"></script>
+  <script src="assets/home.js"></script>
 </body>
 </html>

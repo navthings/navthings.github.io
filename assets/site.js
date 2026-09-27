@@ -125,8 +125,14 @@ const revealObserver = new IntersectionObserver(
   (entries) => {
     for (const entry of entries) {
       if (!entry.isIntersecting) continue;
-      entry.target.classList.add("in");
-      revealObserver.unobserve(entry.target);
+      const el = entry.target;
+      el.classList.add("in");
+      revealObserver.unobserve(el);
+      // once it has arrived, hand transitions back to the element's own hover styles
+      if (el.hasAttribute("data-reveal")) {
+        const delay = parseFloat(getComputedStyle(el).getPropertyValue("--d")) || 0;
+        setTimeout(() => el.removeAttribute("data-reveal"), delay * 1000 + 1200);
+      }
     }
   },
   { rootMargin: "0px 0px -8% 0px", threshold: 0.12 }
@@ -276,29 +282,59 @@ function email() {
 }
 
 // the hand drawn mark in the footer draws itself as the footer comes into view
-function footer() {
+async function footer() {
   const foot = document.querySelector(".foot");
   if (!foot) return;
-  const mark = foot.querySelector(".foot-mark svg");
-  const shapes = mark ? $$("path, circle", mark) : [];
+  for (const b of $$("[data-top]")) b.addEventListener("click", () => scrollToTarget(0));
+
+  const mark = foot.querySelector("[data-mark]");
+  const icon = document.querySelector(".brand img");
+  if (!mark || !icon) return;
+  try {
+    const svg = await (await fetch(icon.src)).text();
+    const glyph = new DOMParser().parseFromString(svg, "image/svg+xml").querySelector("g");
+    if (!glyph) return;
+    mark.innerHTML = glyph.innerHTML;
+  } catch (err) {
+    console.error("couldnt load the footer mark", err);
+    return;
+  }
+
+  const shapes = $$("path, circle", mark);
   const lengths = shapes.map((s) => s.getTotalLength());
   shapes.forEach((s, i) => {
     s.style.strokeDasharray = lengths[i];
     s.style.strokeDashoffset = reduce ? 0 : lengths[i];
   });
+  if (reduce) return;
 
-  for (const b of $$("[data-top]")) b.addEventListener("click", () => scrollToTarget(0));
-
-  if (reduce || !mark) return;
   onScroll.push((y, vh) => {
     const r = foot.getBoundingClientRect();
+    if (r.top > vh) return;
     const p = clamp((vh - r.top) / r.height);
-    const draw = clamp((p - 0.25) / 0.6);
+    const draw = clamp((p - 0.2) / 0.6);
     shapes.forEach((s, i) => {
       s.style.strokeDashoffset = (lengths[i] * (1 - draw)).toFixed(1);
     });
-    mark.style.setProperty("--fill", clamp((draw - 0.75) / 0.25).toFixed(3));
+    mark.style.setProperty("--fill", clamp((draw - 0.7) / 0.3).toFixed(3));
   });
+  requestTick();
+}
+
+// anything marked data-live gets .live once most of it is on screen
+function lives() {
+  const io = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        entry.target.classList.add("live");
+        entry.target.dispatchEvent(new CustomEvent("live"));
+        io.unobserve(entry.target);
+      }
+    },
+    { threshold: 0.35 }
+  );
+  for (const el of $$("[data-live]")) io.observe(el);
 }
 
 // rows in a list get a soft background that glides from one to the next
@@ -330,4 +366,5 @@ nav();
 email();
 footer();
 followers();
+lives();
 requestAnimationFrame(tick);
