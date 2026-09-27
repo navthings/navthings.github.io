@@ -87,6 +87,13 @@ html.intro .hero [data-reveal].in {
   color: var(--ink-4);
 }
 
+/* portrait tablets have height to spare, so the headline sizes off the width instead */
+@media (min-width: 600px) and (max-aspect-ratio: 4/5) {
+  .hero-title {
+    font-size: min(10vw, 96px);
+  }
+}
+
 .chunk {
   white-space: nowrap;
 }
