@@ -724,6 +724,8 @@ svg {
 }
 
 .foot-mark button {
+  padding: 10px 0;
+  margin: -10px 0;
   color: #bdbdbd;
   font-size: 13px;
   transition: color 0.2s ease;
