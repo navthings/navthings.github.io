@@ -445,6 +445,7 @@ html.intro .hero [data-reveal].in {
 /* what i work on */
 
 .areas {
+  padding-top: clamp(40px, 7vh, 72px);
   padding-bottom: clamp(40px, 8vh, 96px);
 }
 
