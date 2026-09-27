@@ -123,7 +123,20 @@
             <div class="tries-row"><span class="cap">temp 0.7</span><div class="tries-dots"><i class="ok" style="--k: 0"></i><i class="ok" style="--k: 1"></i><i class="ok" style="--k: 2"></i><i class="ok" style="--k: 3"></i><i class="ok" style="--k: 4"></i><i class="ok" style="--k: 5"></i><i class="ok" style="--k: 6"></i><i class="ok" style="--k: 7"></i><i class="no" style="--k: 8"></i><i class="no" style="--k: 9"></i><i class="no" style="--k: 10"></i><i class="no" style="--k: 11"></i></div><span class="score">8 / 12</span></div>
             <div class="tries-row"><span class="cap">temp 0.4</span><div class="tries-dots"><i class="ok" style="--k: 0"></i><i class="ok" style="--k: 1"></i><i class="ok" style="--k: 2"></i><i class="ok" style="--k: 3"></i><i class="ok" style="--k: 4"></i><i class="ok" style="--k: 5"></i><i class="ok" style="--k: 6"></i><i class="ok" style="--k: 7"></i><i class="ok" style="--k: 8"></i><i class="ok" style="--k: 9"></i><i class="ok" style="--k: 10"></i><i class="ok" style="--k: 11"></i></div><span class="score">12 / 12</span></div>
           </div>
-          <p>so the playground runs lilchat at 0.4 by default.</p>
+          <p>going all the way to zero doesnt work either. greedy decoding just loops, so it needs some temperature. it ships at 0.4, with top-k 40 and a repeat penalty of 1.1, and the playground uses the same.</p>
+        </div>
+      </div>
+      <div class="cs-sec" data-reveal data-label="shipping it">
+        <h2 class="cs-h">shipping it</h2>
+        <div class="cs-text">
+          <p>its on ollama in three sizes. the 8 bit one is the default because its the same quality as the full 16 bit weights at a bit over half the size.</p>
+          <div class="fig" data-live>
+            <div class="hbars" style="margin-top: 0">
+              <div class="hbar-group"><span>f16 <span class="cap muted">unquantized</span></span><div class="hbar" style="--k: 0"><b style="--w: 92%; background: #c9c9c6"></b><em>594mb</em></div></div>
+              <div class="hbar-group"><span>q8_0 <span class="cap muted">the default, same quality as f16</span></span><div class="hbar" style="--k: 1"><b style="--w: 58.7%; background: var(--ink)"></b><em>379mb</em></div></div>
+              <div class="hbar-group"><span>q4_k_m <span class="cap muted">smallest, what the playground loads</span></span><div class="hbar" style="--k: 2"><b style="--w: 42.3%; background: #c9c9c6"></b><em>273mb</em></div></div>
+            </div>
+          </div>
         </div>
       </div>
       <div class="cs-sec" data-reveal data-label="next">
