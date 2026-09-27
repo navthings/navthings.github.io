@@ -127,7 +127,7 @@
   margin-bottom: 40px;
 }
 
-.cs-text code {
+.cs-text code:not(.cmd) {
   font-family: var(--sans);
   font-size: 0.82em;
   color: var(--ink);
@@ -136,7 +136,6 @@
   border-radius: 6px;
 }
 
-.cs-text .cmd,
 .cmd {
   --r: 18px;
   display: block;
@@ -146,7 +145,6 @@
   font-family: var(--sans);
   font-size: 13.5px;
   line-height: 1.6;
-  border-radius: 0;
   overflow-x: auto;
   white-space: pre;
 }
