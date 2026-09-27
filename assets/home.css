@@ -415,6 +415,11 @@ html.intro .hero [data-reveal].in {
   grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
 }
 
+/* the heading comes first for screen readers, the card still sits on the left */
+.reads-card {
+  order: -1;
+}
+
 .reads-card {
   --r: 36px;
   display: flex;
@@ -526,8 +531,8 @@ html.intro .hero [data-reveal].in {
     grid-template-columns: 1fr;
   }
 
-  .reads .scratch-copy {
-    order: -1;
+  .reads-card {
+    order: 0;
   }
 }
 

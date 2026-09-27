@@ -90,6 +90,14 @@
 
     <section class="scratch reads wrap wide" id="tokenizer" data-label="the tokenizer">
       <div class="scratch-grid reads-grid">
+        <div class="scratch-copy">
+          <h2 class="h-section" data-words>how a model reads.</h2>
+          <p class="soft" data-reveal>a model never sees the text itself. it gets cut into pieces first, and every piece is just a number. this is lilstory's tokenizer, 8,000 pieces it learned from about 2 million kids stories.</p>
+          <p class="soft" data-reveal>words it saw a lot are one piece, anything else gets chopped up. duck is one token, tpu is t, p, u. my all lowercase headline costs 3 more tokens than the capitalised one, because the stories it learned from use proper capitals.</p>
+          <div class="row" data-reveal>
+            <a class="btn line small" href="https://github.com/navthings/lilstory" target="_blank" rel="noopener"><span class="inner">the tokenizer</span></a>
+          </div>
+        </div>
         <div class="reads-card sq" data-tokenizer="assets/data/lilstory-tokenizer.bin" data-reveal="scale">
           <textarea class="tok-in" rows="2" maxlength="300" spellcheck="false" autocomplete="off" aria-label="text for the tokenizer">Once upon a time, a little duck trained a transformer on a tpu.</textarea>
           <div class="tok-out" aria-hidden="true"></div>
@@ -99,14 +107,6 @@
             <button class="btn small line" type="button" data-say="pretraining a 523m param model with sharded adamw"><span class="inner">ml words</span></button>
             <button class="btn small line" type="button" data-say="hi, i'm nav. i build language models and research how they learn."><span class="inner">my headline</span></button>
             <button class="btn small line" type="button" data-say="Hi, I'm Nav. I build language models and research how they learn."><span class="inner">with capitals</span></button>
-          </div>
-        </div>
-        <div class="scratch-copy">
-          <h2 class="h-section" data-words>how a model reads.</h2>
-          <p class="soft" data-reveal>a model never sees the text itself. it gets cut into pieces first, and every piece is just a number. this is lilstory's tokenizer, 8,000 pieces it learned from about 2 million kids stories.</p>
-          <p class="soft" data-reveal>words it saw a lot are one piece, anything else gets chopped up. duck is one token, tpu is t, p, u. my all lowercase headline costs 3 more tokens than the capitalised one, because the stories it learned from use proper capitals.</p>
-          <div class="row" data-reveal>
-            <a class="btn line small" href="https://github.com/navthings/lilstory" target="_blank" rel="noopener"><span class="inner">the tokenizer</span></a>
           </div>
         </div>
       </div>
