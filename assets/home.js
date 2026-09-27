@@ -295,7 +295,9 @@
         if (p > AT[i]) continue;
         const hold = AT[i - 1] + (AT[i] - AT[i - 1]) * 0.4;
         if (p <= hold) return { v: VALUES[i - 1], stage: i - 1 };
-        return { v: VALUES[i - 1] + (VALUES[i] - VALUES[i - 1]) * ease((p - hold) / (AT[i] - hold)), stage: i };
+        // the label flips halfway through the count, so the number and the words agree
+        const t = (p - hold) / (AT[i] - hold);
+        return { v: VALUES[i - 1] + (VALUES[i] - VALUES[i - 1]) * ease(t), stage: t < 0.5 ? i - 1 : i };
       }
       return { v: VALUES[3], stage: 3 };
     }
