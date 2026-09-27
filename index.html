@@ -87,6 +87,32 @@
       <p class="scrub">i like understanding a model all the way down. the tokenizer, the training run, why the loss does what it does, and getting it running somewhere people can actually use it.</p>
     </section>
 
+    <section class="scratch wrap wide" data-label="no libraries">
+      <div class="scratch-grid">
+        <div class="scratch-copy">
+          <h2 class="h-section" data-words>a neural net with no libraries.</h2>
+          <p class="soft" data-reveal>no numpy, no pytorch, no mlx. every weight is a number in a python list, and backprop is written out by hand as loops. 784 pixels in, 32 hidden neurons, 10 outputs, about 25k weights. it gets 90.5% of the mnist test set right.</p>
+          <p class="soft" data-reveal>draw a digit. its running the exact weights it learned.</p>
+          <div class="row" data-reveal>
+            <a class="btn line small" href="https://github.com/navthings/sllm" target="_blank" rel="noopener"><span class="inner">the code</span></a>
+          </div>
+        </div>
+        <div class="digits sq" data-digits="assets/data/sllm-mnist.bin" data-reveal="scale">
+          <div class="pad">
+            <canvas aria-label="draw a digit here"></canvas>
+            <p>draw a digit</p>
+          </div>
+          <div class="digits-side">
+            <div class="guess"><span>draw a digit</span><b>?</b></div>
+            <div class="seen"><canvas width="28" height="28" aria-hidden="true"></canvas><span class="cap">what it sees, 28 x 28</span></div>
+            <div class="hidden" aria-hidden="true"><div><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><span class="cap">32 hidden neurons</span></div>
+          </div>
+          <ol class="outs" aria-label="how strongly each output fires"><li style="--v: 0"><span>0</span><b></b></li><li style="--v: 0"><span>1</span><b></b></li><li style="--v: 0"><span>2</span><b></b></li><li style="--v: 0"><span>3</span><b></b></li><li style="--v: 0"><span>4</span><b></b></li><li style="--v: 0"><span>5</span><b></b></li><li style="--v: 0"><span>6</span><b></b></li><li style="--v: 0"><span>7</span><b></b></li><li style="--v: 0"><span>8</span><b></b></li><li style="--v: 0"><span>9</span><b></b></li></ol>
+          <button class="btn small line clear" type="button" data-clear><span class="inner">clear</span></button>
+        </div>
+      </div>
+    </section>
+
     <section class="areas wrap wide" data-label="what i do">
       <div class="section-head">
         <h2 class="h-section" data-words>what i work on.</h2>
@@ -336,5 +362,6 @@
   <script src="assets/site.js"></script>
   <script src="assets/charts.js"></script>
   <script src="assets/home.js"></script>
+  <script src="assets/digits.js"></script>
 </body>
 </html>
