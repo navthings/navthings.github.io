@@ -63,7 +63,7 @@
     seenCtx.clearRect(0, 0, 28, 28);
     hint.hidden = false;
     guess.textContent = "?";
-    guessNote.textContent = "draw a digit";
+    guessNote.textContent = "its guess";
     hiddenDots.forEach((d) => (d.style.opacity = ""));
     bars.forEach((li) => {
       li.style.setProperty("--v", 0);
