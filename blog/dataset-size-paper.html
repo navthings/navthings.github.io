@@ -71,8 +71,8 @@
         </table>
         <p data-reveal>lower is better, and val loss is the one that matters since its on stories the model never saw.</p>
         <p data-reveal>the 1% one had the best training loss but the worst val loss, it basically just memorised its 22k stories lol. the more data i gave it the smaller that gap got, and at 10% theyre pretty much the same.</p>
-        <figure data-reveal><div class="dark-fig sq"><img src="img/paper-1pct.png" alt="1% run: train loss keeps dropping while validation loss flattens out and creeps back up" loading="lazy" /></div><figcaption>1% of the data. train loss (blue) keeps going down, val loss (orange) gives up and creeps back up</figcaption></figure>
-        <figure data-reveal><div class="dark-fig sq"><img src="img/paper-10pct.png" alt="10% run: train and validation loss stay together the whole way" loading="lazy" /></div><figcaption>10% of the data. the two lines stay together the whole way</figcaption></figure>
+        <figure data-reveal><div class="dark-fig sq"><img width="900" height="492" src="img/paper-1pct.png" alt="1% run: train loss keeps dropping while validation loss flattens out and creeps back up" loading="lazy" /></div><figcaption>1% of the data. train loss (blue) keeps going down, val loss (orange) gives up and creeps back up</figcaption></figure>
+        <figure data-reveal><div class="dark-fig sq"><img width="900" height="518" src="img/paper-10pct.png" alt="10% run: train and validation loss stay together the whole way" loading="lazy" /></div><figcaption>10% of the data. the two lines stay together the whole way</figcaption></figure>
         <p data-reveal>15% was slightly worse than 10% which i didnt expect. i think its because every model only got 5000 steps, so the 15% one probably never even got through all its data. the difference is tiny too so it could just be noise.</p>
         <p data-reveal>its on zenodo if you wanna read the whole thing: <a href="https://doi.org/10.5281/zenodo.22340667" target="_blank" rel="noopener">the effect of corpus size on the performance of a llm</a></p>
       </div>

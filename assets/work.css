@@ -519,6 +519,7 @@ html:not(.js) .tries-dots i.no {
 }
 
 .dark-fig img {
+  height: auto;
   width: 100%;
   border-radius: 12px;
 }
