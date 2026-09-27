@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script>document.documentElement.classList.add("js")</script>
+
+  <title>sprout, a case study · navthings</title>
+
+  <meta name="description" content="sprout, a 523m param llama style base model on 12b tokens from four datasets: the data mix, sharded adamw, a wsd schedule, and the goals. training now." />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="navthings" />
+  <meta property="og:title" content="sprout, a case study" />
+  <meta property="og:description" content="sprout, a 523m param llama style base model on 12b tokens from four datasets: the data mix, sharded adamw, a wsd schedule, and the goals. training now." />
+  <meta property="og:url" content="https://navthings.github.io/work/sprout.html" />
+  <meta property="og:image" content="https://navthings.github.io/og.png?v=5" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="navthings, machine learning engineer and researcher" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="sprout, a case study" />
+  <meta name="twitter:description" content="sprout, a 523m param llama style base model on 12b tokens from four datasets: the data mix, sharded adamw, a wsd schedule, and the goals. training now." />
+  <meta name="twitter:image" content="https://navthings.github.io/og.png?v=5" />
+  <meta name="theme-color" content="#ffffff" />
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../apple-touch-icon.png" />
+  <link rel="alternate" type="application/rss+xml" title="navthings" href="../feed.xml" />
+
+  <link rel="preload" href="../assets/fonts/geist.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="../assets/site.css" />
+  <link rel="stylesheet" href="../assets/home.css" />
+  <link rel="stylesheet" href="../assets/work.css" />
+</head>
+
+<body>
+  <a class="skip" href="#main">skip to content</a>
+
+  <header class="nav" data-label="sprout" data-current="work">
+    <div class="island">
+      <span class="island-fill" aria-hidden="true"></span>
+      <a class="island-mark" href="../" aria-label="navthings, home"><img src="../favicon.svg" alt="" /></a>
+      <span class="island-now" aria-hidden="true"><span>sprout</span></span>
+      <nav class="island-links" aria-label="main">
+        <a class="home" href="../">navthings</a>
+        <a href="../#work">work</a>
+        <a href="../#writing">writing</a>
+        <a href="../playground/">playground</a>
+        <a href="mailto:navneet.dagdiya@gmail.com" data-email>email</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="sheet" id="main">
+    <header class="cs-head wrap wide">
+      <p class="cs-kicker cap" data-reveal><a href="../#work">work</a><span>/</span><span>pretraining · training now</span></p>
+      <h1 class="cs-title" style="view-transition-name: t-sprout">sprout</h1>
+      <p class="cs-lede" data-words style="--d: 0.15s">the next base model after lilbase. same recipe, about 1.8x the parameters and 2x the data, on a mix of four datasets instead of one. its training on a tpu v5e-8 right now.</p>
+      <dl class="cs-meta" data-stagger="0.06" style="--d: 0.3s">
+          <div data-reveal><dt>params</dt><dd>523m</dd></div>
+          <div data-reveal><dt>reading</dt><dd>12b tokens from 4 sources</dd></div>
+          <div data-reveal><dt>trained on</dt><dd>kaggle tpu v5e-8</dd></div>
+          <div data-reveal><dt>status</dt><dd>about a third done, sep 26</dd></div>
+      </dl>
+      <div class="row" data-reveal style="--d: 0.5s">
+        <a class="btn dark" href="https://github.com/navthings/sprout" target="_blank" rel="noopener"><span class="inner">follow along on github</span></a>
+        <a class="btn line" href="lilbase.html"><span class="inner">how lilbase was trained</span></a>
+      </div>
+    </header>
+
+    <section class="wrap wide">
+      <div class="cs-figure sq" data-live data-reveal="scale">
+        <p class="fig-title">lilbase and sprout, side by side</p>
+        <div class="legend"><span><i style="background: #c9c9c6"></i>lilbase</span><span><i style="background: var(--ink)"></i>sprout</span></div>
+        <div class="hbars">
+            <div class="hbar-group"><span>params</span>
+              <div class="hbar" style="--k: 0"><b style="--w: 52.2%; background: #c9c9c6"></b><em>297m</em></div>
+              <div class="hbar" style="--k: 1"><b style="--w: 92.0%; background: var(--ink)"></b><em>523m</em></div>
+            </div>
+            <div class="hbar-group"><span>tokens read</span>
+              <div class="hbar" style="--k: 2"><b style="--w: 46.8%; background: #c9c9c6"></b><em>6.1b</em></div>
+              <div class="hbar" style="--k: 3"><b style="--w: 92.0%; background: var(--ink)"></b><em>12b</em></div>
+            </div>
+            <div class="hbar-group"><span>layers</span>
+              <div class="hbar" style="--k: 4"><b style="--w: 78.9%; background: #c9c9c6"></b><em>24</em></div>
+              <div class="hbar" style="--k: 5"><b style="--w: 92.0%; background: var(--ink)"></b><em>28</em></div>
+            </div>
+            <div class="hbar-group"><span>width</span>
+              <div class="hbar" style="--k: 6"><b style="--w: 73.6%; background: #c9c9c6"></b><em>1024</em></div>
+              <div class="hbar" style="--k: 7"><b style="--w: 92.0%; background: var(--ink)"></b><em>1280</em></div>
+            </div>
+            <div class="hbar-group"><span>query heads</span>
+              <div class="hbar" style="--k: 8"><b style="--w: 73.6%; background: #c9c9c6"></b><em>16</em></div>
+              <div class="hbar" style="--k: 9"><b style="--w: 92.0%; background: var(--ink)"></b><em>20</em></div>
+            </div>
+        </div>
+        <details class="table-view">
+          <summary>see the numbers</summary>
+          <table>
+            <thead><tr><th></th><th class="num">lilbase</th><th class="num">sprout</th></tr></thead>
+            <tbody>
+            <tr><td>params</td><td class="num">297m</td><td class="num">523m</td></tr>
+            <tr><td>tokens</td><td class="num">6.1b</td><td class="num">12b</td></tr>
+            <tr><td>layers</td><td class="num">24</td><td class="num">28</td></tr>
+            <tr><td>width</td><td class="num">1024</td><td class="num">1280</td></tr>
+            <tr><td>query heads</td><td class="num">16</td><td class="num">20</td></tr>
+            <tr><td>kv heads</td><td class="num">4</td><td class="num">4</td></tr>
+            <tr><td>data</td><td class="num">fineweb-edu</td><td class="num">4 source mix</td></tr>
+            </tbody>
+          </table>
+        </details>
+      </div>
+    </section>
+
+    <section class="cs-body wrap wide">
+      <div class="cs-sec" data-reveal data-label="why">
+        <h2 class="cs-h">why</h2>
+        <div class="cs-text">
+          <p>lilchat showed that a 297m model can learn to hold a conversation and still not know much. finetuning teaches the format, not the facts.</p>
+          <p>the fix is a bigger base model that has read more. thats sprout.</p>
+        </div>
+      </div>
+      <div class="cs-sec" data-reveal data-label="the data">
+        <h2 class="cs-h">the data</h2>
+        <div class="cs-text">
+          <p>lilbase only read fineweb-edu. sprout reads <strong>12 billion tokens</strong> from four sources, mixed by share.</p>
+          <div class="fig mix" data-live>
+            <div class="mix-bar">
+              <b style="--w: 55%; --c: var(--ink); --k: 0"></b><b style="--w: 25%; --c: #5f5f5f; --k: 1"></b><b style="--w: 10%; --c: #a3a3a0; --k: 2"></b><b style="--w: 10%; --c: #d0d0cc; --k: 3"></b>
+            </div>
+            <dl class="mix-key">
+              <div><dt><i style="background: var(--ink)"></i>fineweb-edu <span>55%</span></dt><dd>web pages filtered for educational value, the sample-100BT cut</dd></div>
+              <div><dt><i style="background: #5f5f5f"></i>dclm-baseline <span>25%</span></dt><dd>filtered common crawl, broader general web text</dd></div>
+              <div><dt><i style="background: #a3a3a0"></i>cosmopedia-v2 <span>10%</span></dt><dd>synthetic textbooks and stories</dd></div>
+              <div><dt><i style="background: #d0d0cc"></i>project gutenberg <span>10%</span></dt><dd>public domain books, english only</dd></div>
+            </dl>
+          </div>
+        </div>
+      </div>
+      <div class="cs-sec" data-reveal data-label="the model">
+        <h2 class="cs-h">the model</h2>
+        <div class="cs-text">
+          <p>same recipe as lilbase: llama style, with grouped query attention, rope, rmsnorm and swiglu, and the llama tokenizer. just deeper and wider.</p>
+          <dl class="specs fig">
+            <div><dt>params</dt><dd>523m</dd></div>
+            <div><dt>layers</dt><dd>28</dd></div>
+            <div><dt>width</dt><dd>1280</dd></div>
+            <div><dt>query heads</dt><dd>20</dd></div>
+            <div><dt>kv heads</dt><dd>4</dd></div>
+            <div><dt>context</dt><dd>1024</dd></div>
+          </dl>
+        </div>
+      </div>
+      <div class="cs-sec" data-reveal data-label="training">
+        <h2 class="cs-h">training</h2>
+        <div class="cs-text">
+          <p>adamw keeps two extra numbers for every parameter, which adds up fast at 523m. so the optimizer state is <strong>sharded across the 8 chips</strong>: every chip keeps a full copy of the weights, but only its own eighth of the optimizer state.</p>
+          <div class="fig" data-live>
+            <div class="shards"><span class="sq" style="--k: 0"><i style="--s: 0"></i></span><span class="sq" style="--k: 1"><i style="--s: 1"></i></span><span class="sq" style="--k: 2"><i style="--s: 2"></i></span><span class="sq" style="--k: 3"><i style="--s: 3"></i></span><span class="sq" style="--k: 4"><i style="--s: 4"></i></span><span class="sq" style="--k: 5"><i style="--s: 5"></i></span><span class="sq" style="--k: 6"><i style="--s: 6"></i></span><span class="sq" style="--k: 7"><i style="--s: 7"></i></span></div>
+            <div class="chips8-note"><span>8 chips, each with the full weights</span><span>and 1/8 of the optimizer state</span></div>
+          </div>
+          <p>the learning rate follows a <strong>wsd schedule</strong>: warm up, hold it flat, then decay over the last 15% of training. the long flat middle means the run doesnt have to commit to an exact length up front.</p>
+          <div class="fig wsd" data-live>
+            <svg viewBox="0 0 600 150" role="img" aria-label="the shape of a warmup, stable, decay learning rate schedule">
+              <line class="wsd-axis" x1="0" y1="130" x2="600" y2="130" />
+              <path class="wsd-line" d="M0 130 L24 26 L510 26 L600 122" />
+              <line class="wsd-mark" x1="510" y1="16" x2="510" y2="130" />
+              <text x="12" y="146">warmup</text>
+              <text x="250" y="18">flat</text>
+              <text x="516" y="146">decay, last 15%</text>
+            </svg>
+            <p class="cap muted">the shape of it, not the actual numbers</p>
+          </div>
+        </div>
+      </div>
+      <div class="cs-sec" data-reveal data-label="goals">
+        <h2 class="cs-h">goals</h2>
+        <div class="cs-text">
+          <p><strong>one:</strong> beat gpt-2 xl, which is 1.5b params, or get close to it.</p>
+          <p><strong>two:</strong> finetune it into a competitive coding model at around 500m.</p>
+          <p>first though, it gets the same chat finetune as lilchat and goes in the <a href="../playground/">playground</a>.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="statement wrap">
+      <p class="scrub">lilchat taught me that finetuning fixes the format, not the knowledge. so the next step is more model and more data.</p>
+    </section>
+
+    <section class="cs-next wrap wide">
+      <a class="next-card sq" href="lilbase.html" data-reveal="scale">
+        <span class="label">next case study</span>
+        <span class="next-title" style="view-transition-name: t-lilbase">lilbase</span>
+        <p>297m params, pretrained in jax on a tpu. the recipe sprout scales up.</p>
+      </a>
+    </section>
+
+  </main>
+
+  <footer class="foot" data-label="say hi">
+    <div class="foot-top">
+      <div>
+        <p class="foot-say"><button class="say" type="button" data-email data-scrib="underline" data-scrib-on="hover"><span class="inner">say hi.</span></button> <span>maybe i'll reply.</span></p>
+        <p class="hint">that copies my email. 50-50 i respond.</p>
+      </div>
+      <nav class="foot-links" aria-label="elsewhere">
+        <a href="https://github.com/navthings" target="_blank" rel="noopener">github <span>- it still works</span></a>
+        <a href="https://huggingface.co/navthings" target="_blank" rel="noopener">hugging face <span>- the weights</span></a>
+        <a href="https://ollama.com/navthings" target="_blank" rel="noopener">ollama <span>- models i've pushed</span></a>
+        <a href="https://orcid.org/0009-0002-2764-866X" target="_blank" rel="noopener">orcid <span>- research id</span></a>
+        <a href="https://doi.org/10.5281/zenodo.22340667" target="_blank" rel="noopener">zenodo <span>- the paper</span></a>
+        <a href="../feed.xml">rss <span>- new posts</span></a>
+      </nav>
+    </div>
+    <div class="foot-mark">
+      <svg viewBox="66 64 384 378" aria-hidden="true" data-mark></svg>
+      <div class="meta">navthings, made in australia<br /><button type="button" data-top>back to top</button></div>
+    </div>
+  </footer>
+
+  <script src="../assets/vendor/lenis.min.js"></script>
+  <script src="../assets/site.js"></script>
+  <script src="../assets/home.js"></script>
+</body>
+</html>

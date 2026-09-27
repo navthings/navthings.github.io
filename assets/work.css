@@ -614,3 +614,151 @@ figcaption {
 html:not(.js) .ratio-ticks {
   clip-path: inset(0 0 0 0);
 }
+
+/* sprout: the data mix */
+
+.mix-bar {
+  display: flex;
+  gap: 2px;
+  height: 14px;
+}
+
+.mix-bar b {
+  display: block;
+  width: var(--w);
+  background: var(--c);
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  transition: transform 0.9s var(--ease);
+  transition-delay: calc(var(--k) * 140ms + 150ms);
+}
+
+.mix-bar b:first-child {
+  border-radius: 4px 0 0 4px;
+}
+
+.mix-bar b:last-child {
+  border-radius: 0 4px 4px 0;
+}
+
+.live .mix-bar b,
+html:not(.js) .mix-bar b {
+  transform: none;
+}
+
+.mix-key {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px 28px;
+  margin-top: 22px;
+}
+
+.mix-key dt {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  color: var(--ink);
+}
+
+.mix-key dt i {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+}
+
+.mix-key dt span {
+  margin-left: auto;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-2);
+}
+
+.mix-key dd {
+  margin-top: 4px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--ink-3);
+}
+
+@media (max-width: 560px) {
+  .mix-key {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* sprout: sharded optimizer state */
+
+.shards {
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.shards span {
+  --r: 14px;
+  position: relative;
+  aspect-ratio: 0.8;
+  border-radius: 14px;
+  background: var(--ink);
+  overflow: hidden;
+}
+
+.shards i {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 12.5%;
+  top: calc(var(--s) * 12.5%);
+  background: var(--accent);
+  transform: scaleX(0);
+  transition: transform 0.7s var(--ease);
+  transition-delay: calc(var(--s) * 90ms + 250ms);
+}
+
+.live .shards i,
+html:not(.js) .shards i {
+  transform: none;
+}
+
+/* sprout: the wsd schedule shape */
+
+.wsd svg {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.wsd-axis {
+  stroke: var(--line);
+  stroke-width: 1;
+}
+
+.wsd-mark {
+  stroke: var(--ink-4);
+  stroke-width: 1;
+}
+
+.wsd-line {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 2;
+  stroke-linejoin: round;
+  stroke-dasharray: 800;
+  stroke-dashoffset: 800;
+  transition: stroke-dashoffset 1.6s var(--ease) 0.2s;
+}
+
+.live .wsd-line,
+html:not(.js) .wsd-line {
+  stroke-dashoffset: 0;
+}
+
+.wsd text {
+  font-family: var(--sans);
+  font-size: 12px;
+  fill: var(--ink-3);
+}
+
+.wsd .cap {
+  margin-top: 6px;
+}
