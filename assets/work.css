@@ -759,6 +759,18 @@ html:not(.js) .wsd-line {
   fill: var(--ink-3);
 }
 
+.wsd line,
+.wsd path {
+  vector-effect: non-scaling-stroke;
+}
+
+/* the svg scales down on phones, so the labels scale up to stay readable */
+@media (max-width: 600px) {
+  .wsd text {
+    font-size: 22px;
+  }
+}
+
 .wsd .cap {
   margin-top: 6px;
 }
