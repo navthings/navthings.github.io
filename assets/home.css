@@ -336,6 +336,22 @@
   background: var(--surface);
   transform-origin: 50% 0;
   will-change: transform;
+  transition: background-color 0.4s ease;
+}
+
+.card:hover {
+  background: #efefec;
+}
+
+/* every other card puts its picture first so the stack doesn't read like a template */
+@media (min-width: 901px) {
+  .card:nth-child(even) {
+    grid-template-columns: minmax(0, 1.12fr) minmax(0, 1fr);
+  }
+
+  .card:nth-child(even) .card-vis {
+    order: -1;
+  }
 }
 
 .card::after {
@@ -355,14 +371,6 @@
   min-width: 0;
 }
 
-.card-top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  color: var(--ink-3);
-}
-
 .card-title {
   font-size: clamp(46px, 6.4vw, 92px);
   line-height: 0.92;
@@ -371,28 +379,50 @@
   width: fit-content;
 }
 
+/* the whole card is the link, the extra buttons sit above it */
+.stretch::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+}
+
+.card .row .btn {
+  position: relative;
+  z-index: 3;
+  background: var(--bg);
+}
+
+.card .row .btn:hover {
+  background: #fafafa;
+}
+
 .card-desc {
-  margin-top: 18px;
-  max-width: 28rem;
+  margin-top: 22px;
+  max-width: 27rem;
   font-size: 17px;
+  line-height: 1.55;
   color: var(--ink-2);
 }
 
-.facts {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px 36px;
-  margin: 28px 0 30px;
+.card-go {
+  display: inline-flex;
+  align-items: center;
+  height: 36px;
+  padding: 0 16px;
+  border-radius: 999px;
+  font-size: 14px;
+  color: var(--ink);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.14);
+  background: linear-gradient(var(--ink), var(--ink)) no-repeat 0 0 / 0% 100%;
+  transition: background-size 0.6s var(--ease), color 0.3s ease, box-shadow 0.3s ease;
 }
 
-.facts dt {
-  font-size: 13px;
-  color: var(--ink-3);
-}
-
-.facts dd {
-  font-size: 20px;
-  letter-spacing: -0.025em;
+.card:hover .card-go,
+.card:focus-within .card-go {
+  background-size: 100% 100%;
+  color: #fff;
+  box-shadow: inset 0 0 0 1px var(--ink);
 }
 
 .card-vis {
@@ -814,72 +844,6 @@
   margin-top: 10px;
 }
 
-/* smaller stuff */
-
-.more {
-  padding-top: clamp(96px, 16vh, 180px);
-}
-
-.tiles {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 14px;
-  margin-top: 28px;
-}
-
-.tile {
-  --r: 30px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: 48px;
-  min-height: 250px;
-  padding: 24px;
-  background: var(--surface);
-  transition: background-color 0.35s ease, transform 0.7s var(--ease);
-}
-
-.tile:hover {
-  background: var(--surface-2);
-  transform: translateY(-6px);
-}
-
-.tile h3 {
-  font-size: 30px;
-  line-height: 1;
-  letter-spacing: -0.045em;
-  font-weight: 450;
-  transition: transform 0.6s var(--ease);
-}
-
-.tile:hover h3 {
-  transform: translateX(4px);
-}
-
-.tile p {
-  margin-top: 10px;
-  font-size: 15px;
-  line-height: 1.5;
-  color: var(--ink-2);
-}
-
-@media (max-width: 1000px) {
-  .tiles {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (max-width: 520px) {
-  .tiles {
-    grid-template-columns: 1fr;
-  }
-
-  .tile {
-    min-height: 0;
-    gap: 28px;
-  }
-}
-
 /* writing */
 
 .writing {
@@ -950,9 +914,7 @@
   background: var(--surface);
 }
 
-.play-card .h-section {
-  margin-top: 18px;
-}
+
 
 .play-card .soft {
   margin-top: 20px;

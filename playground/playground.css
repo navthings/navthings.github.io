@@ -33,19 +33,13 @@
 
 .ff {
   --r: 20px;
-  display: flex;
-  align-items: baseline;
-  gap: 12px;
+  display: block;
   max-width: 40rem;
   margin-top: 24px;
   padding: 14px 18px;
   background: var(--surface);
   font-size: 14px;
   color: var(--ink-2);
-}
-
-.ff .live-dot {
-  transform: translateY(-1px);
 }
 
 /* model tiles */

@@ -91,26 +91,19 @@
 
     <section class="work wrap wide" id="work" data-label="work">
       <div class="section-head">
-        <p class="label" data-reveal>work</p>
         <h2 class="h-section" data-words>the models, and everything that went wrong making them.</h2>
       </div>
 
       <div class="stack">
         <article class="card sq" data-live style="--i: 0">
           <div class="card-text">
-            <div class="card-top"><span class="mono">sep 2026 · pretraining</span><span class="tag line">case study</span></div>
             <div>
-              <h3 class="card-title" style="view-transition-name: t-lilbase">lilbase</h3>
-              <p class="card-desc">a proper base model, trained from scratch on a free kaggle tpu. it beats gpt-2 small on two of three benchmarks.</p>
-              <dl class="facts">
-                <div><dt>params</dt><dd>297m</dd></div>
-                <div><dt>read</dt><dd>6.1b tokens</dd></div>
-                <div><dt>trained on</dt><dd>tpu v5e-8</dd></div>
-              </dl>
-              <div class="row">
-                <a class="btn dark small" href="work/lilbase.html"><span class="inner">read the case study</span></a>
-                <a class="btn small" href="playground/?model=lilbase"><span class="inner">try it</span></a>
-              </div>
+              <h3 class="card-title" style="view-transition-name: t-lilbase"><a class="stretch" href="work/lilbase.html">lilbase</a></h3>
+              <p class="card-desc">my first proper base model. rewrote everything in jax and trained it on a free kaggle tpu. it beats gpt-2 small on two of three benchmarks, which is not exactly a fair fight lol.</p>
+            </div>
+            <div class="row">
+              <span class="card-go"><span>read how it went</span></span>
+              <a class="btn small" href="playground/?model=lilbase"><span class="inner">try it</span></a>
             </div>
           </div>
           <div class="card-vis sq">
@@ -134,19 +127,13 @@
 
         <article class="card sq" data-live style="--i: 1">
           <div class="card-text">
-            <div class="card-top"><span class="mono">sep 2026 · finetuning</span><span class="tag line">case study</span></div>
             <div>
-              <h3 class="card-title" style="view-transition-name: t-lilchat">lilchat</h3>
+              <h3 class="card-title" style="view-transition-name: t-lilchat"><a class="stretch" href="work/lilchat.html">lilchat</a></h3>
               <p class="card-desc">lilbase taught to hold a conversation, overnight on my macbook air with mlx. very confident. knows nothing.</p>
-              <dl class="facts">
-                <div><dt>finetuned on</dt><dd>37m tokens</dd></div>
-                <div><dt>val loss</dt><dd>2.230 to 1.337</dd></div>
-                <div><dt>trained on</dt><dd>macbook air</dd></div>
-              </dl>
-              <div class="row">
-                <a class="btn dark small" href="work/lilchat.html"><span class="inner">read the case study</span></a>
-                <a class="btn small" href="playground/?model=lilchat"><span class="inner">talk to it</span></a>
-              </div>
+            </div>
+            <div class="row">
+              <span class="card-go"><span>read how it went</span></span>
+              <a class="btn small" href="playground/?model=lilchat"><span class="inner">talk to it</span></a>
             </div>
           </div>
           <div class="card-vis sq">
@@ -162,19 +149,13 @@
 
         <article class="card sq" data-live style="--i: 2">
           <div class="card-text">
-            <div class="card-top"><span class="mono">sep 2026 · research</span><span class="tag line">case study</span></div>
             <div>
-              <h3 class="card-title" style="view-transition-name: t-paper">the paper</h3>
+              <h3 class="card-title" style="view-transition-name: t-paper"><a class="stretch" href="work/corpus-size.html">the paper</a></h3>
               <p class="card-desc">same model, four amounts of data. with 1% of tinystories it just memorised everything. at 10% the gap between train and val loss was basically gone.</p>
-              <dl class="facts">
-                <div><dt>runs</dt><dd>4 × 5000 steps</dd></div>
-                <div><dt>best val loss</dt><dd>1.816</dd></div>
-                <div><dt>published on</dt><dd>zenodo</dd></div>
-              </dl>
-              <div class="row">
-                <a class="btn dark small" href="work/corpus-size.html"><span class="inner">read the case study</span></a>
-                <a class="btn small" href="https://doi.org/10.5281/zenodo.22340667" target="_blank" rel="noopener"><span class="inner">the paper</span></a>
-              </div>
+            </div>
+            <div class="row">
+              <span class="card-go"><span>read how it went</span></span>
+              <a class="btn small" href="https://doi.org/10.5281/zenodo.22340667" target="_blank" rel="noopener"><span class="inner">the paper</span></a>
             </div>
           </div>
           <div class="card-vis sq">
@@ -185,19 +166,13 @@
 
         <article class="card sq" data-live style="--i: 3">
           <div class="card-text">
-            <div class="card-top"><span class="mono">sep 2026 · web</span><span class="tag line">case study</span></div>
             <div>
-              <h3 class="card-title" style="view-transition-name: t-playground">playground</h3>
+              <h3 class="card-title" style="view-transition-name: t-playground"><a class="stretch" href="work/playground.html">playground</a></h3>
               <p class="card-desc">all my models, running in your browser tab. they download once and run on your own computer, so nothing you type goes anywhere.</p>
-              <dl class="facts">
-                <div><dt>models</dt><dd>4</dd></div>
-                <div><dt>smallest</dt><dd>17mb</dd></div>
-                <div><dt>runs on</dt><dd>llama.cpp, in wasm</dd></div>
-              </dl>
-              <div class="row">
-                <a class="btn dark small" href="work/playground.html"><span class="inner">read the case study</span></a>
-                <a class="btn small" href="playground/"><span class="inner">open it</span></a>
-              </div>
+            </div>
+            <div class="row">
+              <span class="card-go"><span>read how it works</span></span>
+              <a class="btn small" href="playground/"><span class="inner">open it</span></a>
             </div>
           </div>
           <div class="card-vis sq">
@@ -214,18 +189,12 @@
 
         <article class="card sq" data-live style="--i: 4" id="sprout">
           <div class="card-text">
-            <div class="card-top"><span class="mono">training now</span><span class="tag line">still training</span></div>
             <div>
-              <h3 class="card-title">sprout</h3>
-              <p class="card-desc">the fix for lilchat not knowing anything is a bigger base model. this is that. when it finishes it gets the same chat finetune.</p>
-              <dl class="facts">
-                <div><dt>params</dt><dd>523m</dd></div>
-                <div><dt>reading</dt><dd>12b tokens</dd></div>
-                <div><dt>trained on</dt><dd>kaggle tpu</dd></div>
-              </dl>
-              <div class="row">
-                <a class="btn dark small" href="https://github.com/navthings/sprout" target="_blank" rel="noopener"><span class="inner">follow along</span></a>
-              </div>
+              <h3 class="card-title"><a class="stretch" href="https://github.com/navthings/sprout" target="_blank" rel="noopener">sprout</a></h3>
+              <p class="card-desc">the fix for lilchat not knowing anything is a bigger base model. this is that. 523m params reading 12 billion tokens, and when it finishes it gets the same chat finetune.</p>
+            </div>
+            <div class="row">
+              <span class="card-go"><span>follow along on github</span></span>
             </div>
           </div>
           <div class="card-vis sq">
@@ -243,31 +212,9 @@
       </div>
     </section>
 
-    <section class="more wrap wide" data-label="earlier stuff">
-      <p class="label" data-reveal>earlier, and smaller</p>
-      <div class="tiles" data-stagger="0.08">
-        <a class="tile sq" href="blog/tale.html" data-reveal="scale">
-          <span class="mono muted">sep 12 · ~50m params</span>
-          <div><h3>tale</h3><p>bedtime stories for my little brother. lilstory, but bigger.</p></div>
-        </a>
-        <a class="tile sq" href="blog/lilstory.html" data-reveal="scale">
-          <span class="mono muted">sep 4 · 8.2m params</span>
-          <div><h3>lilstory</h3><p>my first real language model, with my own tokenizer. it writes little stories that kinda wander off.</p></div>
-        </a>
-        <a class="tile sq" href="blog/bigtransformer.html" data-reveal="scale">
-          <span class="mono muted">aug 31 · whole words</span>
-          <div><h3>bigtransformer</h3><p>reads a whole text file and keeps predicting words for as long as you want. probably.</p></div>
-        </a>
-        <a class="tile sq" href="blog/liltransformer.html" data-reveal="scale">
-          <span class="mono muted">aug 30 · 1 layer</span>
-          <div><h3>liltransformer</h3><p>the first ml thing i ever made. it only knows one sentence.</p></div>
-        </a>
-      </div>
-    </section>
 
     <section class="writing wrap wide" id="writing" data-label="writing">
       <div class="section-head">
-        <p class="label" data-reveal>writing</p>
         <h2 class="h-section" data-words>short posts about each model. mostly what broke.</h2>
       </div>
       <div class="posts follow" data-stagger="0.05">
@@ -287,7 +234,6 @@
     <section class="play wrap wide" id="play" data-label="playground">
       <div class="play-card sq" data-reveal="scale">
         <div>
-          <p class="label">playground</p>
           <h2 class="h-section">talk to my models, right here in your browser.</h2>
           <p class="soft">pick one and say something. it downloads once, then runs on your own computer. theyre small, so they make stuff up. a lot.</p>
         </div>
@@ -311,9 +257,8 @@
   <footer class="foot" data-label="say hi">
     <div class="foot-top">
       <div>
-        <p class="foot-say">say hi. <span>maybe i'll reply.</span></p>
-        <button class="btn" type="button" data-email><span class="inner">copy my email</span></button>
-        <p class="hint">50-50 i respond</p>
+        <p class="foot-say"><button class="say" type="button" data-email><span class="inner">say hi.</span></button> <span>maybe i'll reply.</span></p>
+        <p class="hint">that copies my email. 50-50 i respond.</p>
       </div>
       <nav class="foot-links" aria-label="elsewhere">
         <a href="https://github.com/navthings" target="_blank" rel="noopener">github <span>- it still works</span></a>

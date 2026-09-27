@@ -57,10 +57,10 @@
       <h1 class="cs-title" style="view-transition-name: t-lilchat">lilchat</h1>
       <p class="cs-lede" data-words style="--d: 0.15s">a base model just continues text. ask it a question and itll probably write 5 more questions instead of answering. so i taught lilbase to talk, overnight, on my macbook air.</p>
       <dl class="cs-meta" data-stagger="0.06" style="--d: 0.3s">
-          <div class="sq" data-reveal><dt>started from</dt><dd>lilbase, 297m</dd></div>
-          <div class="sq" data-reveal><dt>finetuned on</dt><dd>37m tokens of smol-smoltalk</dd></div>
-          <div class="sq" data-reveal><dt>trained on</dt><dd>macbook air, mlx</dd></div>
-          <div class="sq" data-reveal><dt>took</dt><dd>one night</dd></div>
+          <div data-reveal><dt>started from</dt><dd>lilbase, 297m</dd></div>
+          <div data-reveal><dt>finetuned on</dt><dd>37m tokens of smol-smoltalk</dd></div>
+          <div data-reveal><dt>trained on</dt><dd>macbook air, mlx</dd></div>
+          <div data-reveal><dt>took</dt><dd>one night</dd></div>
       </dl>
       <div class="row" data-reveal style="--d: 0.5s">
         <a class="btn dark" href="../playground/?model=lilchat"><span class="inner">talk to it</span></a>
@@ -151,9 +151,8 @@
   <footer class="foot" data-label="say hi">
     <div class="foot-top">
       <div>
-        <p class="foot-say">say hi. <span>maybe i'll reply.</span></p>
-        <button class="btn" type="button" data-email><span class="inner">copy my email</span></button>
-        <p class="hint">50-50 i respond</p>
+        <p class="foot-say"><button class="say" type="button" data-email><span class="inner">say hi.</span></button> <span>maybe i'll reply.</span></p>
+        <p class="hint">that copies my email. 50-50 i respond.</p>
       </div>
       <nav class="foot-links" aria-label="elsewhere">
         <a href="https://github.com/navthings" target="_blank" rel="noopener">github <span>- it still works</span></a>

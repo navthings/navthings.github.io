@@ -445,36 +445,6 @@ svg {
   box-shadow: inset 0 0 0 1px var(--line);
 }
 
-.live-dot {
-  position: relative;
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--accent);
-  flex-shrink: 0;
-}
-
-.live-dot::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  background: var(--accent);
-  animation: ping 2.2s var(--ease) infinite;
-}
-
-@keyframes ping {
-  0% {
-    transform: scale(1);
-    opacity: 0.55;
-  }
-  70%,
-  100% {
-    transform: scale(3.2);
-    opacity: 0;
-  }
-}
-
 /* squircles get a real clip-path from site.js, this is the fallback */
 
 .sq {
@@ -604,22 +574,28 @@ svg {
   font-weight: 450;
 }
 
-.foot-say span {
+.foot-say > span {
   color: #5c5c5c;
 }
 
-.foot .btn {
-  margin-top: 28px;
-  background: #fff;
-  color: var(--ink);
+.foot-say .say {
+  font: inherit;
+  letter-spacing: inherit;
+  color: #fff;
+  cursor: pointer;
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0% 2px;
+  background-position: 0 92%;
+  background-repeat: no-repeat;
+  transition: background-size 0.5s var(--ease), color 0.3s ease;
 }
 
-.foot .btn:hover {
-  background: #e6e6e6;
+.foot-say .say:hover {
+  background-size: 100% 2px;
 }
 
 .foot .hint {
-  margin-top: 12px;
+  margin-top: 16px;
   font-size: 14px;
   color: #5c5c5c;
 }
