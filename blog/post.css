@@ -222,6 +222,38 @@
   margin-top: 56px;
 }
 
+/* on wide screens the headings move into a rail beside the text, same as the case studies */
+@media (min-width: 1100px) {
+  .post {
+    --rail: 200px;
+    --gap: clamp(32px, 5vw, 64px);
+    display: grid;
+    grid-template-columns: minmax(0, var(--rail)) minmax(0, 40rem);
+    column-gap: var(--gap);
+    max-width: none;
+  }
+
+  .post > * {
+    grid-column: 2;
+  }
+
+  .post > h2 {
+    grid-column: 1;
+    padding-top: 6px;
+    font-size: 17px;
+  }
+
+  .post > h2,
+  .post > h2 + * {
+    margin-top: 56px;
+  }
+
+  .post ~ .post-callout,
+  .post ~ .post-foot {
+    margin-left: calc(200px + clamp(32px, 5vw, 64px));
+  }
+}
+
 @media (max-width: 560px) {
   .post-foot {
     grid-template-columns: 1fr;
