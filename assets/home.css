@@ -75,11 +75,11 @@ html.intro .hero [data-reveal].in {
 }
 
 .hero-title {
-  font-size: clamp(46px, min(7.4vw, 13.5vh), 118px);
-  line-height: 0.97;
+  font-size: clamp(42px, min(6.6vw, 11.5vh), 106px);
+  line-height: 0.98;
   letter-spacing: -0.055em;
   font-weight: 450;
-  max-width: 14ch;
+  max-width: 16.5ch;
 }
 
 .hero-title .soft {
@@ -247,6 +247,69 @@ html.intro .hero [data-reveal].in {
   letter-spacing: -0.045em;
   font-weight: 450;
   max-width: 21ch;
+}
+
+/* what i work on */
+
+.areas {
+  padding-bottom: clamp(40px, 8vh, 96px);
+}
+
+.area-list {
+  margin-top: 40px;
+}
+
+.area-row {
+  display: grid;
+  grid-template-columns: minmax(0, 260px) minmax(0, 1fr) auto;
+  gap: 32px;
+  align-items: baseline;
+  padding: 26px 0;
+  border-top: 1px solid var(--line);
+}
+
+.area-row:last-child {
+  border-bottom: 1px solid var(--line);
+}
+
+.area-name {
+  font-size: clamp(24px, 2.6vw, 34px);
+  line-height: 1.1;
+  letter-spacing: -0.04em;
+  transition: transform 0.6s var(--ease);
+}
+
+.area-row:hover .area-name {
+  transform: translateX(10px);
+}
+
+.area-text {
+  max-width: 36rem;
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--ink-2);
+}
+
+.area-link {
+  color: var(--ink-3);
+  white-space: nowrap;
+  transition: color 0.25s ease;
+}
+
+.area-row:hover .area-link {
+  color: var(--ink);
+}
+
+@media (max-width: 760px) {
+  .area-row {
+    grid-template-columns: 1fr;
+    gap: 6px;
+    padding: 20px 0;
+  }
+
+  .area-link {
+    display: none;
+  }
 }
 
 /* one dot per million params */

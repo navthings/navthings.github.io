@@ -141,20 +141,19 @@
     const note = document.getElementById("temp-note");
     if (!window.site.finePointer) note.textContent = ". tap the number.";
 
-    const ALT = {
-      hi: ["hey", "hello", "oi", "g'day"],
-      train: ["build", "teach", "grow", "bake", "raise"],
-      small: ["tiny", "little", "smol", "pocket", "large"],
-      language: ["story", "chat", "word", "llama"],
-      models: ["llamas", "robots", "parrots", "guys"],
-    };
-    const slots = toks
-      .filter((el) => ALT[el.textContent])
-      .map((el) => ({ els: [el], orig: [el.textContent], alts: ALT[el.textContent].map((a) => [a]) }));
-    const from = toks.find((el) => el.textContent === "from");
-    const scratch = toks.find((el) => el.textContent === "scratch");
-    if (from && scratch) {
-      slots.push({ els: [from, scratch], orig: ["from", "scratch"], alts: [["by", "hand"], ["from", "zero"], ["on", "a mac"], ["in", "melbourne"]] });
+    // runs of words in the headline and what a hotter model might say instead
+    const GROUPS = [
+      [["hi"], [["hey"], ["hello"], ["oi"], ["g'day"]]],
+      [["build"], [["train"], ["make"], ["bake"], ["grow"]]],
+      [["language"], [["story"], ["chat"], ["word"], ["llama"]]],
+      [["models"], [["llamas"], ["parrots"], ["robots"], ["guys"]]],
+      [["research"], [["study"], ["poke at"], ["argue about"], ["worry about"]]],
+      [["how", "they", "learn"], [["why", "they", "work"], ["what", "they", "know"], ["where", "they", "break"], ["why", "they", "lie"]]],
+    ];
+    const slots = [];
+    for (const [words, alts] of GROUPS) {
+      const start = toks.findIndex((el, i) => words.every((w, k) => toks[i + k] && toks[i + k].textContent === w));
+      if (start >= 0) slots.push({ els: toks.slice(start, start + words.length), orig: words, alts });
     }
     const stop = toks[toks.length - 1];
     if (stop && stop.textContent === ".") slots.push({ els: [stop], orig: ["."], alts: [["!"], ["?"], ["!!"]], hot: true });

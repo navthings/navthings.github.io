@@ -5,21 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script>document.documentElement.classList.add("js")</script>
 
-  <title>navthings</title>
+  <title>navthings · nav, machine learning engineer and researcher</title>
 
-  <meta name="description" content="i'm nav. i train small language models from scratch, on a macbook air and free tpus." />
+  <meta name="description" content="nav, machine learning engineer and researcher. i build language models and research how they learn: pretraining, finetuning, scaling experiments and inference." />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="navthings" />
   <meta property="og:title" content="navthings" />
-  <meta property="og:description" content="i'm nav. i train small language models from scratch, on a macbook air and free tpus." />
+  <meta property="og:description" content="nav, machine learning engineer and researcher. i build language models and research how they learn: pretraining, finetuning, scaling experiments and inference." />
   <meta property="og:url" content="https://navthings.github.io/" />
   <meta property="og:image" content="https://navthings.github.io/og.png?v=4" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
-  <meta property="og:image:alt" content="navthings, training small language models from scratch" />
+  <meta property="og:image:alt" content="navthings, machine learning engineer and researcher" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="navthings" />
-  <meta name="twitter:description" content="i'm nav. i train small language models from scratch, on a macbook air and free tpus." />
+  <meta name="twitter:description" content="nav, machine learning engineer and researcher. i build language models and research how they learn: pretraining, finetuning, scaling experiments and inference." />
   <meta name="twitter:image" content="https://navthings.github.io/og.png?v=4" />
   <meta name="theme-color" content="#ffffff" />
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
@@ -53,9 +53,9 @@
   <main class="sheet" id="main">
     <section class="hero wrap">
       <div class="hero-inner">
-        <h1 class="hero-title" data-tokens>hi, i'm nav. i train <span data-scrib="circle" data-scrib-on="manual">small</span> language models <span class="soft">from scratch.</span></h1>
+        <h1 class="hero-title" data-tokens>hi, i'm nav. i build language models <span class="soft">and research how they <span data-scrib="circle" data-scrib-on="manual">learn</span>.</span></h1>
         <p class="hero-sub" data-reveal style="--d: 1.15s">
-          software engineer and designer in australia. i do it all on my <span class="mac"><svg viewBox="3 1.9 17.2 20.2" aria-hidden="true"><path d="M18.71 19.5C17.88 20.74 17 21.95 15.66 21.97C14.32 22 13.89 21.18 12.37 21.18C10.84 21.18 10.37 21.95 9.09997 22C7.78997 22.05 6.79997 20.68 5.95997 19.47C4.24997 17 2.93997 12.45 4.69997 9.39C5.56997 7.87 7.12997 6.91 8.81997 6.88C10.1 6.86 11.32 7.75 12.11 7.75C12.89 7.75 14.37 6.68 15.92 6.84C16.57 6.87 18.39 7.1 19.56 8.82C19.47 8.88 17.39 10.1 17.41 12.63C17.44 15.65 20.06 16.66 20.09 16.67C20.06 16.74 19.67 18.11 18.71 19.5ZM13 3.5C13.73 2.67 14.94 2.04 15.94 2C16.07 3.17 15.6 4.35 14.9 5.19C14.21 6.04 13.07 6.7 11.95 6.61C11.8 5.46 12.36 4.26 13 3.5Z" /></svg>mac</span> and free tpus. right now that's <a href="#sprout">sprout</a>, 523m params and about a third of the way through.
+          machine learning engineer and researcher in australia. i work on the whole loop: data, pretraining, finetuning, evaluation and inference. right now that's <a href="#sprout">sprout</a>, a 523m param base model about a third of the way through training.
         </p>
         <div class="row" data-reveal style="--d: 1.3s">
           <a class="btn dark" href="#work"><span class="inner">see the work</span></a>
@@ -68,7 +68,40 @@
     </section>
 
     <section class="statement wrap">
-      <p class="scrub">every model on here was trained on my macbook air or a free kaggle tpu. no cluster, no lab, just a lot of overnight runs.</p>
+      <p class="scrub">i like understanding a model all the way down. the tokenizer, the training run, why the loss does what it does, and getting it running somewhere people can actually use it.</p>
+    </section>
+
+    <section class="areas wrap wide" data-label="what i do">
+      <div class="section-head">
+        <h2 class="h-section" data-words>what i work on.</h2>
+      </div>
+      <div class="area-list follow" data-stagger="0.06">
+        <a class="area-row" href="work/lilbase.html" data-reveal>
+          <span class="area-name">pretraining</span>
+          <span class="area-text">llama style base models from 8m to 523m params. lilbase read 6.1b tokens in jax across 8 tpu chips, checkpointing around 8.4 hour sessions.</span>
+          <span class="area-link cap">lilbase</span>
+        </a>
+        <a class="area-row" href="work/lilchat.html" data-reveal>
+          <span class="area-name">finetuning</span>
+          <span class="area-text">chat finetuning in mlx with the loss only on the assistant turns. lilchat went from 2.230 to 1.337 val loss in one night.</span>
+          <span class="area-link cap">lilchat</span>
+        </a>
+        <a class="area-row" href="work/corpus-size.html" data-reveal>
+          <span class="area-name">research</span>
+          <span class="area-text">controlled experiments on how much data a model actually needs. the corpus size paper is published on zenodo.</span>
+          <span class="area-link cap">the paper</span>
+        </a>
+        <a class="area-row" href="work/lilbase.html" data-reveal>
+          <span class="area-name">evaluation</span>
+          <span class="area-text">hellaswag, arc-easy and lambada against gpt-2 small, and held out loss on everything i train.</span>
+          <span class="area-link cap">lilbase</span>
+        </a>
+        <a class="area-row" href="work/playground.html" data-reveal>
+          <span class="area-name">inference</span>
+          <span class="area-text">4 and 8 bit gguf exports that run in ollama, llama.cpp and straight in the browser through webassembly.</span>
+          <span class="area-link cap">playground</span>
+        </a>
+      </div>
     </section>
 
     <section class="scale" aria-label="how big the models got" data-label="the models">
@@ -81,10 +114,10 @@
             <i class="bar"></i>
           </div>
           <div class="stages">
-            <p class="stage"><span class="cap">sep 4 · lilstory</span>my first real language model. 8.2m params, tinystories, my own tokenizer, trained on the mac.</p>
-            <p class="stage"><span class="cap">sep 12 · tale</span>around 50m params. bedtime stories for my little brother, still on the mac.</p>
-            <p class="stage"><span class="cap">sep 23 · lilbase</span>297m params, 6.1 billion tokens. too big for the laptop so it moved to a free tpu.</p>
-            <p class="stage"><span class="cap">now · sprout</span>523m params and 12 billion tokens. about a third of the way through training.</p>
+            <p class="stage"><span class="cap">sep 4 · lilstory</span>the first real one. 8.2m params on tinystories, with a bpe tokenizer i trained myself.</p>
+            <p class="stage"><span class="cap">sep 12 · tale</span>around 50m params, with a proper warmup and decay schedule and a gguf export.</p>
+            <p class="stage"><span class="cap">sep 23 · lilbase</span>297m params, 6.1 billion tokens of fineweb-edu, pretrained in jax on a tpu v5e-8.</p>
+            <p class="stage"><span class="cap">now · sprout</span>523m params, 12 billion tokens from four sources. about a third of the way through training.</p>
           </div>
           <p class="scale-end">8.2m to 523m in under a month.</p>
         </div>
@@ -102,7 +135,7 @@
           <div class="card-text">
             <div>
               <h3 class="card-title" style="view-transition-name: t-lilbase"><a class="stretch" href="work/lilbase.html">lilbase</a></h3>
-              <p class="card-desc">my first proper base model. rewrote everything in jax and trained it on a free kaggle tpu. it beats gpt-2 small on two of three benchmarks, which is not exactly a fair fight lol.</p>
+              <p class="card-desc">a 297m param llama style base model, pretrained from scratch in jax on a tpu v5e-8. it beats gpt-2 small on hellaswag and arc-easy, and loses on lambada.</p>
               <p class="card-wrong"><span>what went wrong</span>kaggle sometimes hands you a tpu with 1 working chip out of 8. the script now refuses to start without all of them.</p>
             </div>
             <div class="row">
@@ -133,7 +166,7 @@
           <div class="card-text">
             <div>
               <h3 class="card-title" style="view-transition-name: t-lilchat"><a class="stretch" href="work/lilchat.html">lilchat</a></h3>
-              <p class="card-desc">lilbase taught to hold a conversation, overnight on my macbook air with mlx. very confident. knows nothing.</p>
+              <p class="card-desc">supervised finetuning of lilbase on smol-smoltalk in mlx, with the loss only on the assistant turns. val loss went from 2.230 to 1.337. very confident, knows nothing.</p>
               <p class="card-wrong"><span>what went wrong</span>it told me the capital of australia is melbourne. then perth.</p>
             </div>
             <div class="row">
@@ -156,7 +189,7 @@
           <div class="card-text">
             <div>
               <h3 class="card-title" style="view-transition-name: t-paper"><a class="stretch" href="work/corpus-size.html">the paper</a></h3>
-              <p class="card-desc">same model, four amounts of data. with 1% of tinystories it just memorised everything. at 10% the gap between train and val loss was basically gone.</p>
+              <p class="card-desc">a controlled study of how corpus size affects generalisation. same model, same settings, four data sizes. at 1% it memorised, by 10% the train and val gap was gone.</p>
               <p class="card-wrong"><span>what went wrong</span>15% did slightly worse than 10%. it probably never got through all its data in 5000 steps.</p>
             </div>
             <div class="row">
@@ -174,7 +207,7 @@
           <div class="card-text">
             <div>
               <h3 class="card-title" style="view-transition-name: t-playground"><a class="stretch" href="work/playground.html">playground</a></h3>
-              <p class="card-desc">all my models, running in your browser tab. they download once and run on your own computer, so nothing you type goes anywhere.</p>
+              <p class="card-desc">client side inference for all my models. quantized gguf files running on llama.cpp compiled to webassembly, so nothing you type leaves your machine.</p>
               <p class="card-wrong"><span>what went wrong</span>safari says it can run the fast engine, then cant. multithreading broke firefox, so i undid it.</p>
             </div>
             <div class="row">
@@ -198,7 +231,7 @@
           <div class="card-text">
             <div>
               <h3 class="card-title"><a class="stretch" href="https://github.com/navthings/sprout" target="_blank" rel="noopener">sprout</a></h3>
-              <p class="card-desc">the fix for lilchat not knowing anything is a bigger base model. this is that. 523m params reading 12 billion tokens from fineweb-edu, dclm, cosmopedia and project gutenberg.</p>
+              <p class="card-desc">the next base model. 523m params reading 12 billion tokens from fineweb-edu, dclm, cosmopedia and project gutenberg, back on the tpu. its the fix for lilchat not knowing much.</p>
               <p class="card-wrong"><span>what's next</span>when it finishes it gets the same chat finetune as lilchat, and goes in the playground.</p>
             </div>
             <div class="row">
