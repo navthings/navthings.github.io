@@ -143,7 +143,7 @@
             <div class="chips8"><span class="sq" style="--k: 0"></span><span class="sq" style="--k: 1"></span><span class="sq" style="--k: 2"></span><span class="sq" style="--k: 3"></span><span class="sq" style="--k: 4"></span><span class="sq" style="--k: 5"></span><span class="sq" style="--k: 6"></span><span class="sq" style="--k: 7"></span></div>
             <div class="chips8-note"><span>one step, 8 chips</span><span>65,536 tokens each</span></div>
           </div>
-          <p>the catch is a kaggle session only lasts about <strong>8.4 hours</strong>. so the script checkpoints every 500 steps, stops before its time runs out, and the next session picks up from there.</p>
+          <p>a kaggle session only lasts about <strong>8.4 hours</strong>, so the script checkpoints every 500 steps, stops before its time runs out, and the next session picks up from there.</p>
           <p>every 250 steps it logs grad norm, learning rate, tokens per second, eta, host ram, peak tpu memory, and a number called <code>q</code>. if <code>q</code> sits near zero, tokenization is the bottleneck and the tpu is waiting on the cpu.</p>
         </div>
       </div>
@@ -167,14 +167,11 @@
       </div>
     </section>
 
-    <section class="statement wrap">
-      <p class="scrub">six billion tokens, eight chips, and a training run that has to save and pick itself back up every 8.4 hours.</p>
-    </section>
     <section class="cs-next wrap wide">
       <a class="next-card sq" href="lilchat.html" data-reveal="scale">
         <span class="label">next case study</span>
         <span class="next-title" style="view-transition-name: t-lilchat">lilchat</span>
-        <p>a base model just continues text. this is lilbase, taught to hold a conversation.</p>
+        <p>lilbase, finetuned into a chat model in one night on a macbook air.</p>
       </a>
     </section>
 

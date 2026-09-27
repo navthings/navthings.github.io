@@ -179,11 +179,11 @@
     }
 
     function caption(t) {
-      if (t < 0.05) return ", so it always picks the most likely word.";
+      if (t < 0.05) return ", so it always picks the likeliest word.";
       if (t < 0.5) return ", about what lilchat runs at.";
-      if (t < 0.85) return ", so its getting creative.";
-      if (t < 1.2) return ", confidently wrong, like lilchat.";
-      return ", so its just making stuff up.";
+      if (t < 0.85) return ", so it starts picking less likely words.";
+      if (t < 1.2) return ", so a lot of words are up for grabs.";
+      return ", so its mostly guessing.";
     }
 
     // one sample per setting, so the headline holds still once you let go
