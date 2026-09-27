@@ -26,14 +26,14 @@
       padding-bottom: 80px;
     }
 
-    .lost svg {
+    .lost #mark {
       width: clamp(96px, 14vw, 160px);
       height: auto;
       overflow: visible;
     }
 
-    .lost svg path,
-    .lost svg circle {
+    .lost #mark path,
+    .lost #mark circle {
       fill: var(--ink);
       fill-opacity: 0;
       stroke: var(--ink);
@@ -42,8 +42,8 @@
       transition: fill-opacity 0.8s ease 1.6s;
     }
 
-    .lost svg.drawn path,
-    .lost svg.drawn circle {
+    .lost #mark.drawn path,
+    .lost #mark.drawn circle {
       fill-opacity: 1;
     }
 
