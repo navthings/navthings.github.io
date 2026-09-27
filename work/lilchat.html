@@ -3,7 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <script>document.documentElement.classList.add("js")</script>
+  <script>
+    document.documentElement.classList.add("js");
+    // the only moment to know if a page transition brought us here is before the first paint
+    addEventListener("pagereveal", (e) => document.documentElement.classList.add(e.viewTransition ? "vt-in" : "revealed"), { once: true });
+  </script>
 
   <title>lilchat, a case study · navthings</title>
 
@@ -55,7 +59,7 @@
   <main class="sheet" id="main">
     <header class="cs-head wrap wide">
       <p class="cs-kicker cap" data-reveal><a href="./">work</a><span>/</span><span>finetuning · sep 2026</span></p>
-      <h1 class="cs-title" style="view-transition-name: t-lilchat">lilchat</h1>
+      <h1 class="cs-title" style="view-transition-name: t-lilchat" data-letters>lilchat</h1>
       <p class="cs-lede" data-words style="--d: 0.15s">a base model just continues text. ask it a question and itll probably write 5 more questions instead of answering. lilchat is lilbase after supervised finetuning on conversations, done in mlx in one night.</p>
       <dl class="cs-meta" data-stagger="0.06" style="--d: 0.3s">
           <div data-reveal><dt>started from</dt><dd>lilbase, 297m</dd></div>

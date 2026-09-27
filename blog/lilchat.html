@@ -3,7 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <script>document.documentElement.classList.add("js")</script>
+  <script>
+    document.documentElement.classList.add("js");
+    // the only moment to know if a page transition brought us here is before the first paint
+    addEventListener("pagereveal", (e) => document.documentElement.classList.add(e.viewTransition ? "vt-in" : "revealed"), { once: true });
+  </script>
 
   <title>teaching lilbase to talk · navthings</title>
 
@@ -72,7 +76,7 @@
     <article class="post-wrap wrap">
       <header class="post-head">
         <p class="crumbs cap" data-reveal><a href="./">writing</a><span>/</span><time datetime="2026-09-26">2026-09-26</time></p>
-        <h1 class="post-title" style="view-transition-name: p-lilchat">teaching lilbase to talk</h1>
+        <h1 class="post-title" style="view-transition-name: p-lilchat" data-letters>teaching lilbase to talk</h1>
       </header>
 
       <div class="post">

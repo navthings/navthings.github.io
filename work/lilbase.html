@@ -3,7 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <script>document.documentElement.classList.add("js")</script>
+  <script>
+    document.documentElement.classList.add("js");
+    // the only moment to know if a page transition brought us here is before the first paint
+    addEventListener("pagereveal", (e) => document.documentElement.classList.add(e.viewTransition ? "vt-in" : "revealed"), { once: true });
+  </script>
 
   <title>lilbase, a case study · navthings</title>
 
@@ -55,7 +59,7 @@
   <main class="sheet" id="main">
     <header class="cs-head wrap wide">
       <p class="cs-kicker cap" data-reveal><a href="./">work</a><span>/</span><span>pretraining · sep 2026</span></p>
-      <h1 class="cs-title" style="view-transition-name: t-lilbase">lilbase</h1>
+      <h1 class="cs-title" style="view-transition-name: t-lilbase" data-letters>lilbase</h1>
       <p class="cs-lede" data-words style="--d: 0.15s">a 297m param llama style base model, pretrained from scratch in jax on a tpu v5e-8. it read 6.1 billion tokens and beats gpt-2 small on two of three benchmarks.</p>
       <dl class="cs-meta" data-stagger="0.06" style="--d: 0.3s">
           <div data-reveal><dt>params</dt><dd>297m</dd></div>

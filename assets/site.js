@@ -163,6 +163,53 @@ function reveals(root = document) {
   for (const el of $$("[data-reveal], [data-words]", root)) revealObserver.observe(el);
 }
 
+// big titles rise letter by letter on a fresh load, and stay put when a page transition already carried them in
+function letters() {
+  const els = $$("[data-letters]");
+  if (!els.length || reduce) return;
+  for (const el of els) {
+    const text = el.textContent.trim();
+    const read = document.createElement("span");
+    read.className = "sr";
+    read.textContent = text;
+    const shown = document.createElement("span");
+    shown.setAttribute("aria-hidden", "true");
+    const count = text.replace(/\s/g, "").length;
+    const step = Math.min(34, 720 / count);
+    let i = 0;
+    for (const part of text.split(/(\s+)/)) {
+      if (!part) continue;
+      if (/^\s+$/.test(part)) {
+        shown.appendChild(document.createTextNode(" "));
+        continue;
+      }
+      const w = document.createElement("span");
+      w.className = "lw";
+      for (const ch of part) {
+        const l = document.createElement("span");
+        l.className = "l";
+        l.style.transitionDelay = Math.round(80 + i++ * step) + "ms";
+        l.textContent = ch;
+        w.appendChild(l);
+      }
+      shown.appendChild(w);
+    }
+    el.textContent = "";
+    el.append(read, shown);
+  }
+  // on a transition the reveal can come after this script, so wait for it before deciding
+  const root = document.documentElement;
+  const go = () => {
+    if (root.classList.contains("vt-in")) return;
+    els.forEach((el) => el.classList.add("rise"));
+    // make the browser settle the hidden state first, or there is nothing to transition from
+    getComputedStyle(els[0].querySelector(".l")).transform;
+    els.forEach((el) => el.classList.add("in"));
+  };
+  if (!("onpagereveal" in window) || root.matches(".revealed, .vt-in")) go();
+  else addEventListener("pagereveal", go, { once: true });
+}
+
 // big statements that fill in word by word as you scroll through them
 function scrubs() {
   for (const el of $$(".scrub")) {
@@ -613,6 +660,7 @@ function scribbles(root = document) {
 window.site = { scribbles, onScroll, requestTick, squircles, reveals, splitWords, scrollToTarget, clamp, reduce, finePointer, $$ };
 
 squircles();
+letters();
 reveals();
 scrubs();
 magnetic();

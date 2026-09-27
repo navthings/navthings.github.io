@@ -119,6 +119,56 @@ svg {
   transform: none;
 }
 
+.sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* each word is a little window the letters rise into */
+[data-letters] .lw {
+  display: inline-block;
+  padding: 0 0.05em 0.14em;
+  margin: 0 -0.05em -0.14em;
+  overflow: hidden;
+  vertical-align: top;
+}
+
+[data-letters] .l {
+  display: inline-block;
+}
+
+/* hidden until the script splits it, and never for more than a moment if the script doesnt run */
+.js [data-letters]:not(.rise) {
+  visibility: hidden;
+  animation: letters-late 0s linear 1.2s forwards;
+}
+
+.vt-in [data-letters] {
+  visibility: visible;
+  animation: none;
+}
+
+@keyframes letters-late {
+  to {
+    visibility: visible;
+  }
+}
+
+[data-letters].rise .l {
+  transform: translateY(1.1em);
+}
+
+[data-letters].rise.in .l {
+  transform: none;
+  transition-property: transform;
+  transition-duration: 1s;
+  transition-timing-function: var(--ease);
+}
+
 /* breadcrumbs on inner pages */
 
 .cs-kicker {
@@ -800,6 +850,11 @@ svg {
 
   .scrub .w {
     opacity: 1;
+  }
+
+  .js [data-letters] {
+    visibility: visible;
+    animation: none;
   }
 }
 
