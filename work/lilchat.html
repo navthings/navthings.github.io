@@ -53,7 +53,7 @@
 
   <main class="sheet" id="main">
     <header class="cs-head wrap wide">
-      <p class="cs-kicker mono" data-reveal><a href="../#work">work</a><span>/</span><span>finetuning · sep 2026</span></p>
+      <p class="cs-kicker cap" data-reveal><a href="../#work">work</a><span>/</span><span>finetuning · sep 2026</span></p>
       <h1 class="cs-title" style="view-transition-name: t-lilchat">lilchat</h1>
       <p class="cs-lede" data-words style="--d: 0.15s">a base model just continues text. ask it a question and itll probably write 5 more questions instead of answering. so i taught lilbase to talk, overnight, on my macbook air.</p>
       <dl class="cs-meta" data-stagger="0.06" style="--d: 0.3s">
@@ -71,8 +71,8 @@
       <div class="cs-figure sq" data-live data-reveal="scale">
         <p class="fig-title">loss on conversations it hadnt seen, lower is better</p>
         <div class="pair">
-          <div class="sq"><span class="mono muted">plain lilbase</span><span class="big was">2.230</span><div class="track"><b style="--w: 89.2%; background: #c9c9c6"></b></div></div>
-          <div class="sq"><span class="mono muted">lilchat</span><span class="big">1.337</span><div class="track"><b style="--w: 53.5%; background: var(--ink)"></b></div></div>
+          <div class="sq"><span class="cap muted">plain lilbase</span><span class="big was">2.230</span><div class="track"><b style="--w: 89.2%; background: #c9c9c6"></b></div></div>
+          <div class="sq"><span class="cap muted">lilchat</span><span class="big">1.337</span><div class="track"><b style="--w: 53.5%; background: var(--ink)"></b></div></div>
         </div>
       </div>
     </section>
@@ -120,8 +120,8 @@
         <div class="cs-text">
           <p>turning the temperature down helps a bit. out of 12 tries saying "hi", heres how often it gave a normal reply.</p>
           <div class="fig tries" data-live>
-            <div class="tries-row"><span class="mono">temp 0.7</span><div class="tries-dots"><i class="ok" style="--k: 0"></i><i class="ok" style="--k: 1"></i><i class="ok" style="--k: 2"></i><i class="ok" style="--k: 3"></i><i class="ok" style="--k: 4"></i><i class="ok" style="--k: 5"></i><i class="ok" style="--k: 6"></i><i class="ok" style="--k: 7"></i><i class="no" style="--k: 8"></i><i class="no" style="--k: 9"></i><i class="no" style="--k: 10"></i><i class="no" style="--k: 11"></i></div><span class="score">8 / 12</span></div>
-            <div class="tries-row"><span class="mono">temp 0.4</span><div class="tries-dots"><i class="ok" style="--k: 0"></i><i class="ok" style="--k: 1"></i><i class="ok" style="--k: 2"></i><i class="ok" style="--k: 3"></i><i class="ok" style="--k: 4"></i><i class="ok" style="--k: 5"></i><i class="ok" style="--k: 6"></i><i class="ok" style="--k: 7"></i><i class="ok" style="--k: 8"></i><i class="ok" style="--k: 9"></i><i class="ok" style="--k: 10"></i><i class="ok" style="--k: 11"></i></div><span class="score">12 / 12</span></div>
+            <div class="tries-row"><span class="cap">temp 0.7</span><div class="tries-dots"><i class="ok" style="--k: 0"></i><i class="ok" style="--k: 1"></i><i class="ok" style="--k: 2"></i><i class="ok" style="--k: 3"></i><i class="ok" style="--k: 4"></i><i class="ok" style="--k: 5"></i><i class="ok" style="--k: 6"></i><i class="ok" style="--k: 7"></i><i class="no" style="--k: 8"></i><i class="no" style="--k: 9"></i><i class="no" style="--k: 10"></i><i class="no" style="--k: 11"></i></div><span class="score">8 / 12</span></div>
+            <div class="tries-row"><span class="cap">temp 0.4</span><div class="tries-dots"><i class="ok" style="--k: 0"></i><i class="ok" style="--k: 1"></i><i class="ok" style="--k: 2"></i><i class="ok" style="--k: 3"></i><i class="ok" style="--k: 4"></i><i class="ok" style="--k: 5"></i><i class="ok" style="--k: 6"></i><i class="ok" style="--k: 7"></i><i class="ok" style="--k: 8"></i><i class="ok" style="--k: 9"></i><i class="ok" style="--k: 10"></i><i class="ok" style="--k: 11"></i></div><span class="score">12 / 12</span></div>
           </div>
           <p>so the playground runs lilchat at 0.4 by default.</p>
         </div>

@@ -131,7 +131,11 @@ const revealObserver = new IntersectionObserver(
       // once it has arrived, hand transitions back to the element's own hover styles
       if (el.hasAttribute("data-reveal")) {
         const delay = parseFloat(getComputedStyle(el).getPropertyValue("--d")) || 0;
-        setTimeout(() => el.removeAttribute("data-reveal"), delay * 1000 + 1200);
+        const settle = () =>
+          document.documentElement.classList.contains("intro")
+            ? setTimeout(settle, 400)
+            : setTimeout(() => el.removeAttribute("data-reveal"), delay * 1000 + 1200);
+        settle();
       }
     }
   },
@@ -506,7 +510,7 @@ function scribbles(root = document) {
       svg.classList.remove("measuring");
     };
     new ResizeObserver(draw).observe(el);
-    if (el.dataset.scribOn === "hover") continue;
+    if (el.dataset.scribOn === "hover" || el.dataset.scribOn === "manual") continue;
     if (reduce) el.classList.add("drawn");
     else drawn.observe(el);
   }

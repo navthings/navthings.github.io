@@ -5,13 +5,6 @@
   font-display: swap;
 }
 
-@font-face {
-  font-family: "Geist Mono";
-  src: url("fonts/geist-mono.woff2") format("woff2");
-  font-weight: 100 900;
-  font-display: swap;
-}
-
 :root {
   --bg: #ffffff;
   --ink: #0f0f0f;
@@ -26,7 +19,6 @@
   --ease: cubic-bezier(0.2, 0.7, 0.1, 1);
   --ease-in: cubic-bezier(0.5, 0, 0.75, 0);
   --sans: "Geist", "Helvetica Neue", Helvetica, sans-serif;
-  --mono: "Geist Mono", ui-monospace, "SF Mono", monospace;
   color-scheme: light;
 }
 
@@ -119,10 +111,10 @@ svg {
   transform: none;
 }
 
-.mono {
-  font-family: var(--mono);
-  font-size: 12.5px;
-  letter-spacing: -0.01em;
+.cap {
+  font-size: 13px;
+  letter-spacing: 0;
+  font-variant-numeric: tabular-nums;
 }
 
 .muted {
@@ -184,7 +176,7 @@ svg {
 
 .island.ready {
   transition: width 0.65s cubic-bezier(0.32, 0.72, 0, 1), background-color 0.45s ease, box-shadow 0.45s ease,
-    transform 0.5s var(--ease);
+    transform 0.5s var(--ease), opacity 0.4s ease 0.3s;
 }
 
 .island:active:not(.open) {

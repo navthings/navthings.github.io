@@ -83,14 +83,14 @@
   padding: 16px 20px;
   background: var(--ink);
   color: #eaeaea;
-  font-family: var(--mono);
+  font-family: var(--sans);
   font-size: 13.5px;
   line-height: 1.6;
   overflow-x: auto;
 }
 
 .post p code {
-  font-family: var(--mono);
+  font-family: var(--sans);
   font-size: 0.82em;
   color: var(--ink);
   background: var(--surface);

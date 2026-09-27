@@ -2,7 +2,7 @@
   const { onScroll, clamp, reduce, $$, requestTick } = window.site;
 
   // the headline streams in a token at a time, the way the models write
-  function tokens() {
+  function tokens(ready) {
     const el = document.querySelector("[data-tokens]");
     if (!el) return;
     const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
@@ -35,6 +35,8 @@
 
     if (reduce) {
       toks.forEach((t) => t.classList.add("on"));
+      const mark = el.querySelector("[data-scrib]");
+      if (mark) mark.classList.add("drawn");
       return toks;
     }
 
@@ -48,21 +50,95 @@
       t.classList.add("on");
       t.after(caret);
       if (i < toks.length) setTimeout(next, 38 + t.textContent.length * 11 + (i % 3) * 14);
-      else setTimeout(() => caret.classList.add("gone"), 1800);
+      else {
+        setTimeout(() => caret.classList.add("gone"), 1800);
+        const mark = el.querySelector("[data-scrib]");
+        if (mark) setTimeout(() => mark.classList.add("drawn"), 350);
+      }
     }
 
     const fontsReady = document.fonts ? document.fonts.ready : Promise.resolve();
-    Promise.race([fontsReady, new Promise((r) => setTimeout(r, 700))]).then(() => setTimeout(next, 250));
+    Promise.all([Promise.race([fontsReady, new Promise((r) => setTimeout(r, 700))]), ready]).then(() => setTimeout(next, 250));
     return toks;
   }
 
-  // drag the temperature and the headline starts sampling less likely words, the way a model does
+  // first time someone lands here from outside, the logo draws itself and flies into the nav
+  function intro() {
+    let seen = false;
+    try {
+      seen = sessionStorage.getItem("intro") === "1";
+      sessionStorage.setItem("intro", "1");
+    } catch (err) {
+      seen = true;
+    }
+    const target = document.querySelector(".island-mark img");
+    const fromHere = document.referrer && document.referrer.startsWith(location.origin);
+    if (seen || reduce || fromHere || !target || window.scrollY > 0 || location.hash) return Promise.resolve();
+
+    const root = document.documentElement;
+    const veil = document.createElement("div");
+    veil.className = "veil";
+    veil.innerHTML = '<svg viewBox="66 64 384 378" aria-hidden="true"></svg>';
+    const svg = veil.firstChild;
+    document.body.appendChild(veil);
+    root.classList.add("intro");
+    const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+
+    return new Promise((resolve) => {
+      let done = false;
+      function finish() {
+        if (done) return;
+        done = true;
+        veil.classList.add("gone");
+        root.classList.remove("intro");
+        setTimeout(() => veil.remove(), 600);
+        resolve();
+      }
+      for (const ev of ["wheel", "keydown", "pointerdown", "touchstart"]) addEventListener(ev, finish, { once: true, passive: true });
+      setTimeout(finish, 4000);
+
+      (async () => {
+        try {
+          const text = await (await fetch(target.src)).text();
+          const glyph = new DOMParser().parseFromString(text, "image/svg+xml").querySelector("g");
+          svg.innerHTML = glyph.innerHTML;
+        } catch (err) {
+          console.error("intro mark didnt load", err);
+          return finish();
+        }
+        for (const shape of svg.querySelectorAll("path, circle")) {
+          const len = shape.getTotalLength();
+          shape.style.strokeDasharray = len;
+          shape.animate([{ strokeDashoffset: len }, { strokeDashoffset: 0 }], {
+            duration: 1100,
+            easing: "cubic-bezier(0.6, 0, 0.3, 1)",
+            fill: "both",
+          });
+        }
+        veil.classList.add("draw");
+        await wait(1300);
+        if (done) return;
+
+        // land exactly on the glyph inside the nav icon
+        const from = svg.getBoundingClientRect();
+        const to = target.getBoundingClientRect();
+        const tx = to.left + (66 / 512) * to.width;
+        const ty = to.top + (64 / 512) * to.height;
+        const scale = ((384 / 512) * to.width) / from.width;
+        svg.style.transform = `translate(${tx - from.left}px, ${ty - from.top}px) scale(${scale})`;
+        veil.classList.add("fly");
+        await wait(760);
+        finish();
+      })();
+    });
+  }
+
+  // drag the number in the sentence under the hero and the headline samples less likely words, like a model does
   function temperature(toks) {
-    const input = document.getElementById("temp");
-    if (!input || !toks) return;
-    const out = document.getElementById("temp-out");
+    const knob = document.getElementById("temp");
+    if (!knob || !toks) return;
+    const value = knob.querySelector(".knob-v");
     const note = document.getElementById("temp-note");
-    const hint = note.textContent;
 
     const ALT = {
       hi: ["hey", "hello", "oi", "g'day"],
@@ -100,47 +176,74 @@
       });
     }
 
-    function sample(t) {
-      for (const slot of slots) {
-        const chance = slot.hot ? clamp((t - 1.1) / 0.4) * 0.6 : clamp((t - 0.3) / 0.9) * 0.85;
-        set(slot, Math.random() < chance ? pick(slot.alts, t) : slot.orig);
-      }
-    }
-
     function caption(t) {
-      if (t < 0.05) return "always picks the most likely word";
-      if (t < 0.5) return "about what lilchat runs at";
-      if (t < 0.85) return "starting to get creative";
-      if (t < 1.2) return "confidently wrong, like lilchat";
-      return "its just making stuff up now";
+      if (t < 0.05) return ", so it always picks the most likely word.";
+      if (t < 0.5) return ", about what lilchat runs at.";
+      if (t < 0.85) return ", so its getting creative.";
+      if (t < 1.2) return ", confidently wrong, like lilchat.";
+      return ", so its just making stuff up.";
     }
 
+    let t = 0;
     let timer = 0;
     function loop() {
-      const t = parseFloat(input.value);
       clearTimeout(timer);
+      timer = 0;
       if (t <= 0.3) {
         slots.forEach((slot) => set(slot, slot.orig));
         return;
       }
-      sample(t);
+      for (const slot of slots) {
+        const chance = slot.hot ? clamp((t - 1.1) / 0.4) * 0.6 : clamp((t - 0.3) / 0.9) * 0.85;
+        set(slot, Math.random() < chance ? pick(slot.alts, t) : slot.orig);
+      }
       timer = setTimeout(loop, 1250 - t * 520);
     }
 
-    input.addEventListener("input", () => {
-      const t = parseFloat(input.value);
-      out.textContent = t.toFixed(1);
+    function setTemp(v) {
+      const next = Math.round(clamp(v, 0, 1.5) * 20) / 20;
+      if (next === t && value.textContent === t.toFixed(1)) return;
+      t = next;
+      value.textContent = t.toFixed(1);
+      knob.setAttribute("aria-valuenow", t.toFixed(2));
+      knob.classList.toggle("hot", t > 1.1);
       note.textContent = caption(t);
-      input.style.setProperty("--fill", ((t / 1.5) * 100).toFixed(1) + "%");
-      input.classList.toggle("hot", t > 1.1);
       if (!timer || t <= 0.3) loop();
+    }
+
+    // drag sideways to change it, a plain tap nudges it up
+    knob.addEventListener("pointerdown", (e) => {
+      if (e.button > 0) return;
+      e.preventDefault();
+      knob.setPointerCapture(e.pointerId);
+      knob.classList.add("held");
+      const x0 = e.clientX;
+      const t0 = t;
+      let moved = false;
+      const move = (ev) => {
+        if (Math.abs(ev.clientX - x0) > 3) moved = true;
+        if (moved) setTemp(t0 + (ev.clientX - x0) / 110);
+      };
+      const up = () => {
+        knob.classList.remove("held");
+        knob.removeEventListener("pointermove", move);
+        if (!moved) setTemp(t >= 1.5 ? 0 : t + 0.3);
+      };
+      knob.addEventListener("pointermove", move);
+      knob.addEventListener("pointerup", up, { once: true });
+      knob.addEventListener("pointercancel", up, { once: true });
     });
-    input.addEventListener("change", loop);
-    input.addEventListener("dblclick", () => {
-      input.value = 0;
-      input.dispatchEvent(new Event("input"));
+    knob.addEventListener("keydown", (e) => {
+      const step = { ArrowRight: 0.1, ArrowUp: 0.1, ArrowLeft: -0.1, ArrowDown: -0.1 }[e.key];
+      if (step) setTemp(t + step);
+      else if (e.key === "Home") setTemp(0);
+      else if (e.key === "End") setTemp(1.5);
+      else return;
+      e.preventDefault();
     });
-    note.dataset.hint = hint;
+
+    // the wiggly underline shows up once the headline has finished typing
+    setTimeout(() => knob.classList.add("drawn"), reduce ? 0 : 2600);
   }
 
   // hero drifts and fades as you leave it
@@ -303,147 +406,6 @@
     card.addEventListener("live", play, { once: true });
   }
 
-  // quotes you can grab and throw, with a bit of weight to them
-  function board() {
-    const el = document.querySelector("[data-board]");
-    if (!el) return;
-    const bodies = $$(".quote", el).map((c, k) => {
-      c.style.setProperty("--k", k);
-      const home = { x: +c.dataset.x, y: +c.dataset.y, r: +c.dataset.r };
-      return { c, home, x: 0, y: 0, r: home.r, vx: 0, vy: 0, vr: 0, w: 0, h: 0, held: false };
-    });
-    let W = 0;
-    let H = 0;
-    let z = 10;
-    let raf = 0;
-
-    const place = (b) => {
-      b.c.style.translate = `${b.x.toFixed(1)}px ${b.y.toFixed(1)}px`;
-      b.c.style.rotate = `${b.r.toFixed(2)}deg`;
-    };
-    const goHome = (b) => {
-      b.x = b.home.x * Math.max(0, W - b.w);
-      b.y = b.home.y * Math.max(0, H - b.h);
-      b.r = b.home.r;
-      b.vx = b.vy = b.vr = 0;
-      place(b);
-    };
-
-    function measure(first) {
-      W = el.clientWidth;
-      H = el.clientHeight;
-      for (const b of bodies) {
-        b.w = b.c.offsetWidth;
-        b.h = b.c.offsetHeight;
-        if (first) goHome(b);
-        b.x = clamp(b.x, 0, Math.max(0, W - b.w));
-        b.y = clamp(b.y, 0, Math.max(0, H - b.h));
-        place(b);
-      }
-    }
-
-    function step() {
-      raf = 0;
-      let moving = false;
-      for (const b of bodies) {
-        if (b.held) {
-          moving = true;
-          continue;
-        }
-        if (Math.abs(b.vx) + Math.abs(b.vy) + Math.abs(b.vr) < 0.04) continue;
-        moving = true;
-        b.x += b.vx;
-        b.y += b.vy;
-        b.r = clamp(b.r + b.vr, -20, 20);
-        b.vx *= 0.94;
-        b.vy *= 0.94;
-        b.vr *= 0.9;
-        const maxX = Math.max(0, W - b.w);
-        const maxY = Math.max(0, H - b.h);
-        if (b.x < 0 || b.x > maxX) {
-          b.x = clamp(b.x, 0, maxX);
-          b.vx *= -0.5;
-          b.vr += b.vy * 0.05;
-        }
-        if (b.y < 0 || b.y > maxY) {
-          b.y = clamp(b.y, 0, maxY);
-          b.vy *= -0.5;
-          b.vr -= b.vx * 0.05;
-        }
-        place(b);
-      }
-      if (moving) raf = requestAnimationFrame(step);
-    }
-    const kick = () => {
-      if (!raf) raf = requestAnimationFrame(step);
-    };
-
-    for (const b of bodies) {
-      b.c.addEventListener("pointerdown", (e) => {
-        if (e.button > 0) return;
-        e.preventDefault();
-        b.c.setPointerCapture(e.pointerId);
-        b.held = true;
-        b.vx = b.vy = b.vr = 0;
-        b.c.classList.add("held");
-        b.c.style.zIndex = ++z;
-        const ox = e.clientX - b.x;
-        const oy = e.clientY - b.y;
-        let lx = e.clientX;
-        let ly = e.clientY;
-        let lt = performance.now();
-
-        const move = (ev) => {
-          const now = performance.now();
-          const dt = Math.max(8, now - lt);
-          b.vx = b.vx * 0.5 + ((ev.clientX - lx) / dt) * 8;
-          b.vy = b.vy * 0.5 + ((ev.clientY - ly) / dt) * 8;
-          lx = ev.clientX;
-          ly = ev.clientY;
-          lt = now;
-          b.x = clamp(ev.clientX - ox, -b.w * 0.3, W - b.w * 0.7);
-          b.y = clamp(ev.clientY - oy, -b.h * 0.3, H - b.h * 0.7);
-          b.r = clamp(b.r + (ev.movementX || 0) * 0.08, -24, 24);
-          place(b);
-        };
-        const up = () => {
-          b.held = false;
-          b.c.classList.remove("held");
-          b.c.removeEventListener("pointermove", move);
-          if (reduce || performance.now() - lt > 90) b.vx = b.vy = 0;
-          b.vr = b.vx * 0.12;
-          kick();
-        };
-        b.c.addEventListener("pointermove", move);
-        b.c.addEventListener("pointerup", up, { once: true });
-        b.c.addEventListener("pointercancel", up, { once: true });
-        kick();
-      });
-    }
-
-    el.querySelector("[data-tidy]").addEventListener("click", () => {
-      el.classList.add("tidying");
-      bodies.forEach((b) => {
-        b.c.style.zIndex = "";
-        goHome(b);
-      });
-      setTimeout(() => el.classList.remove("tidying"), 950);
-    });
-
-    const seen = new IntersectionObserver(
-      (entries) => {
-        if (!entries[0].isIntersecting) return;
-        el.classList.add("in");
-        seen.disconnect();
-      },
-      { threshold: 0.3 }
-    );
-    seen.observe(el);
-    measure(true);
-    new ResizeObserver(() => measure(false)).observe(el);
-    if (document.fonts) document.fonts.ready.then(() => measure(false));
-  }
-
   // hovering a post shows its first line in a little card that trails the cursor
   function peek() {
     const rows = $$("[data-peek]");
@@ -451,7 +413,7 @@
     const card = document.createElement("div");
     card.className = "peek";
     card.setAttribute("aria-hidden", "true");
-    card.innerHTML = '<span class="mono"></span><p></p>';
+    card.innerHTML = '<span class="cap"></span><p></p>';
     document.body.appendChild(card);
     const label = card.querySelector("span");
     const text = card.querySelector("p");
@@ -478,7 +440,7 @@
           y = ty = e.clientY + 30;
         }
         on = true;
-        label.textContent = row.querySelector(".mono").textContent + " · " + row.querySelector(".kind").textContent;
+        label.textContent = row.querySelector(".cap").textContent + " · " + row.querySelector(".kind").textContent;
         text.textContent = row.dataset.peek;
         card.classList.add("on");
         if (!raf) raf = requestAnimationFrame(frame);
@@ -517,12 +479,11 @@
     });
   }
 
-  temperature(tokens());
+  temperature(tokens(intro()));
   heroOut();
   scale();
   stack();
   chat();
-  board();
   peek();
   ask();
   requestTick();

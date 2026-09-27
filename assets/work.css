@@ -145,7 +145,7 @@
 }
 
 .cs-text code {
-  font-family: var(--mono);
+  font-family: var(--sans);
   font-size: 0.82em;
   color: var(--ink);
   background: var(--surface);
@@ -160,7 +160,7 @@
   padding: 16px 20px;
   background: var(--ink);
   color: #eaeaea;
-  font-family: var(--mono);
+  font-family: var(--sans);
   font-size: 13.5px;
   line-height: 1.6;
   border-radius: 0;
@@ -382,7 +382,7 @@ tr.hi td {
   --r: 24px;
   padding: 24px;
   background: var(--surface);
-  font-family: var(--mono);
+  font-family: var(--sans);
   font-size: 14px;
   line-height: 2.2;
   color: var(--ink);
@@ -469,7 +469,7 @@ tr.hi td {
   font-size: 14px;
 }
 
-.tries-row .mono {
+.tries-row .cap {
   color: var(--ink-3);
 }
 

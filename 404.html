@@ -38,12 +38,11 @@
       stroke: var(--ink);
       stroke-width: 3;
       stroke-linejoin: round;
-      transition: stroke-dashoffset 2.2s var(--ease), fill-opacity 0.8s ease 1.6s;
+      transition: fill-opacity 0.8s ease 1.6s;
     }
 
     .lost svg.drawn path,
     .lost svg.drawn circle {
-      stroke-dashoffset: 0 !important;
       fill-opacity: 1;
     }
 
@@ -110,9 +109,9 @@
       for (const s of mark.querySelectorAll("path, circle")) {
         const len = s.getTotalLength();
         s.style.strokeDasharray = len;
-        s.style.strokeDashoffset = len;
+        s.animate([{ strokeDashoffset: len }, { strokeDashoffset: 0 }], { duration: 2200, easing: "cubic-bezier(0.2, 0.7, 0.1, 1)", fill: "both" });
       }
-      requestAnimationFrame(() => requestAnimationFrame(() => mark.classList.add("drawn")));
+      mark.classList.add("drawn");
     })();
   </script>
 </body>

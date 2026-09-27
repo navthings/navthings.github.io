@@ -53,7 +53,7 @@
   <main class="sheet" id="main">
     <section class="hero wrap">
       <div class="hero-inner">
-        <h1 class="hero-title" data-tokens>hi, i'm nav. i train <span data-scrib="circle" data-scrib-delay="1.7">small</span> language models <span class="soft">from scratch.</span></h1>
+        <h1 class="hero-title" data-tokens>hi, i'm nav. i train <span data-scrib="circle" data-scrib-on="manual">small</span> language models <span class="soft">from scratch.</span></h1>
         <p class="hero-sub" data-reveal style="--d: 1.15s">
           software engineer and designer in australia. i do it all on my <span class="mac"><svg viewBox="3 1.9 17.2 20.2" aria-hidden="true"><path d="M18.71 19.5C17.88 20.74 17 21.95 15.66 21.97C14.32 22 13.89 21.18 12.37 21.18C10.84 21.18 10.37 21.95 9.09997 22C7.78997 22.05 6.79997 20.68 5.95997 19.47C4.24997 17 2.93997 12.45 4.69997 9.39C5.56997 7.87 7.12997 6.91 8.81997 6.88C10.1 6.86 11.32 7.75 12.11 7.75C12.89 7.75 14.37 6.68 15.92 6.84C16.57 6.87 18.39 7.1 19.56 8.82C19.47 8.88 17.39 10.1 17.41 12.63C17.44 15.65 20.06 16.66 20.09 16.67C20.06 16.74 19.67 18.11 18.71 19.5ZM13 3.5C13.73 2.67 14.94 2.04 15.94 2C16.07 3.17 15.6 4.35 14.9 5.19C14.21 6.04 13.07 6.7 11.95 6.61C11.8 5.46 12.36 4.26 13 3.5Z" /></svg>mac</span> and free tpus. right now that's <a href="#sprout">sprout</a>, 523m params and about a third of the way through.
         </p>
@@ -61,11 +61,9 @@
           <a class="btn dark" href="#work"><span class="inner">see the work</span></a>
           <a class="btn" href="playground/"><span class="inner">talk to my models</span></a>
         </div>
-        <div class="temp" data-reveal style="--d: 1.5s">
-          <label for="temp" class="mono">temp <output id="temp-out" for="temp">0.0</output></label>
-          <input id="temp" type="range" min="0" max="1.5" step="0.05" value="0" aria-describedby="temp-note" />
-          <span class="mono" id="temp-note">drag it, this is what temperature does to a model</span>
-        </div>
+        <p class="temp" data-reveal style="--d: 1.5s">
+          this headline is at temperature <span class="knob" id="temp" role="slider" tabindex="0" aria-label="temperature" aria-valuemin="0" aria-valuemax="1.5" aria-valuenow="0" data-scrib="underline" data-scrib-on="manual"><span class="knob-v">0.0</span></span><span id="temp-note">. drag the number.</span>
+        </p>
       </div>
     </section>
 
@@ -83,10 +81,10 @@
             <i class="bar"></i>
           </div>
           <div class="stages">
-            <p class="stage"><span class="mono">sep 4 · lilstory</span>my first real language model. 8.2m params, tinystories, my own tokenizer, trained on the mac.</p>
-            <p class="stage"><span class="mono">sep 12 · tale</span>around 50m params. bedtime stories for my little brother, still on the mac.</p>
-            <p class="stage"><span class="mono">sep 23 · lilbase</span>297m params, 6.1 billion tokens. too big for the laptop so it moved to a free tpu.</p>
-            <p class="stage"><span class="mono">now · sprout</span>523m params and 12 billion tokens. about a third of the way through training.</p>
+            <p class="stage"><span class="cap">sep 4 · lilstory</span>my first real language model. 8.2m params, tinystories, my own tokenizer, trained on the mac.</p>
+            <p class="stage"><span class="cap">sep 12 · tale</span>around 50m params. bedtime stories for my little brother, still on the mac.</p>
+            <p class="stage"><span class="cap">sep 23 · lilbase</span>297m params, 6.1 billion tokens. too big for the laptop so it moved to a free tpu.</p>
+            <p class="stage"><span class="cap">now · sprout</span>523m params and 12 billion tokens. about a third of the way through training.</p>
           </div>
           <p class="scale-end">8.2m to 523m in under a month.</p>
         </div>
@@ -147,7 +145,7 @@
               <div class="bubble bot">Hello! How can I help you today?</div>
               <div class="bubble you">whats the capital of australia?</div>
               <div class="bubble bot">The capital of Australia is Melbourne.</div>
-              <span class="chat-note mono">(it's canberra)</span>
+              <span class="chat-note cap">(it's canberra)</span>
             </div>
           </div>
         </article>
@@ -204,7 +202,7 @@
           </div>
           <div class="card-vis sq">
             <div class="train">
-              <div class="train-top"><span>tokens read</span><span class="mono">as of sep 26</span></div>
+              <div class="train-top"><span>tokens read</span><span class="cap">as of sep 26</span></div>
               <div class="train-num">about a third</div>
               <div class="train-track"><b></b></div>
               <div class="train-ticks"><span>0</span><span>4b</span><span>8b</span><span>12b</span></div>
@@ -218,52 +216,18 @@
     </section>
 
 
-    <section class="said wrap wide" data-label="things they said">
-      <div class="section-head">
-        <h2 class="h-section" data-words>things my models have actually said.</h2>
-        <p class="soft said-sub" data-reveal>real outputs, from the posts. grab one and throw it.</p>
-      </div>
-      <div class="board" data-board aria-label="quotes from my models">
-        <figure class="quote" data-x="0.03" data-y="0.07" data-r="-4">
-          <blockquote>Hello! How can I help you today?</blockquote>
-          <figcaption class="mono">lilchat, when you say hi. then it actually stops</figcaption>
-        </figure>
-        <figure class="quote" data-x="0.4" data-y="0.3" data-r="3">
-          <blockquote>the capital of australia is melbourne</blockquote>
-          <figcaption class="mono">lilchat, first try</figcaption>
-        </figure>
-        <figure class="quote small" data-x="0.66" data-y="0.84" data-r="-7">
-          <blockquote>perth</blockquote>
-          <figcaption class="mono">lilchat, second try</figcaption>
-        </figure>
-        <figure class="quote" data-x="0.7" data-y="0.06" data-r="5">
-          <blockquote>17 + 25 = 48</blockquote>
-          <figcaption class="mono">lilchat, doing maths</figcaption>
-        </figure>
-        <figure class="quote" data-x="0.93" data-y="0.46" data-r="-3">
-          <blockquote>so, the answer is 17</blockquote>
-          <figcaption class="mono">lilchat, right after</figcaption>
-        </figure>
-        <figure class="quote wide" data-x="0.05" data-y="0.9" data-r="2">
-          <blockquote>a reminder that we are all brothers<br /><span>a reminder that we are all brothers</span><br /><span>a reminder that we are all brothers</span></blockquote>
-          <figcaption class="mono">lilchat, asked for a haiku about a cat that hates mondays</figcaption>
-        </figure>
-        <button class="btn line small tidy" type="button" data-tidy><span class="inner">tidy up</span></button>
-      </div>
-    </section>
-
     <section class="writing wrap wide" id="writing" data-label="writing">
       <div class="section-head">
         <h2 class="h-section" data-words>short posts about each model. mostly what <span data-scrib="circle">broke</span>.</h2>
       </div>
       <div class="posts follow" data-stagger="0.05">
-        <a class="post-row" href="blog/lilchat.html" data-peek="a base model just continues text. if you ask it a question itll probably write 5 more questions instead of answering." data-reveal><span class="mono">2026-09-26</span><span class="t" style="view-transition-name: p-lilchat">teaching lilbase to talk</span><span class="mono kind">finetuning</span></a>
-        <a class="post-row" href="blog/lilbase.html" data-peek="everything before this was trained on my laptop, but i wanted to make a proper base model, like one thats actually read a decent chunk of the internet." data-reveal><span class="mono">2026-09-23</span><span class="t" style="view-transition-name: p-lilbase">lilbase, 297m params on a free tpu</span><span class="mono kind">pretraining</span></a>
-        <a class="post-row" href="blog/tale.html" data-peek="my little brother kept asking me for bedtime stories so i made a model that tells them." data-reveal><span class="mono">2026-09-12</span><span class="t" style="view-transition-name: p-tale">tale, bedtime stories for my little brother</span><span class="mono kind">model</span></a>
-        <a class="post-row" href="blog/dataset-size-paper.html" data-peek="i wanted to see how much the amount of data actually matters if you keep everything else the same." data-reveal><span class="mono">2026-09-05</span><span class="t" style="view-transition-name: p-dataset-size-paper">i wrote a paper on how much data matters</span><span class="mono kind">research</span></a>
-        <a class="post-row" href="blog/lilstory.html" data-peek="ok this one is an actual language model. 8.2m params, llama style, trained from scratch on tinystories." data-reveal><span class="mono">2026-09-04</span><span class="t" style="view-transition-name: p-lilstory">lilstory, my first real language model</span><span class="mono kind">model</span></a>
-        <a class="post-row" href="blog/bigtransformer.html" data-peek="made this the day after liltransformer. instead of one sentence it reads a whole text file." data-reveal><span class="mono">2026-08-31</span><span class="t" style="view-transition-name: p-bigtransformer">bigtransformer, now it reads a whole file</span><span class="mono kind">basics</span></a>
-        <a class="post-row" href="blog/liltransformer.html" data-peek="first ml thing i ever made lol. you give it a sentence, pick a word from it, and it tries to guess the next word." data-reveal><span class="mono">2026-08-30</span><span class="t" style="view-transition-name: p-liltransformer">my first transformer (it only knows one sentence)</span><span class="mono kind">basics</span></a>
+        <a class="post-row" href="blog/lilchat.html" data-peek="a base model just continues text. if you ask it a question itll probably write 5 more questions instead of answering." data-reveal><span class="cap">2026-09-26</span><span class="t" style="view-transition-name: p-lilchat">teaching lilbase to talk</span><span class="cap kind">finetuning</span></a>
+        <a class="post-row" href="blog/lilbase.html" data-peek="everything before this was trained on my laptop, but i wanted to make a proper base model, like one thats actually read a decent chunk of the internet." data-reveal><span class="cap">2026-09-23</span><span class="t" style="view-transition-name: p-lilbase">lilbase, 297m params on a free tpu</span><span class="cap kind">pretraining</span></a>
+        <a class="post-row" href="blog/tale.html" data-peek="my little brother kept asking me for bedtime stories so i made a model that tells them." data-reveal><span class="cap">2026-09-12</span><span class="t" style="view-transition-name: p-tale">tale, bedtime stories for my little brother</span><span class="cap kind">model</span></a>
+        <a class="post-row" href="blog/dataset-size-paper.html" data-peek="i wanted to see how much the amount of data actually matters if you keep everything else the same." data-reveal><span class="cap">2026-09-05</span><span class="t" style="view-transition-name: p-dataset-size-paper">i wrote a paper on how much data matters</span><span class="cap kind">research</span></a>
+        <a class="post-row" href="blog/lilstory.html" data-peek="ok this one is an actual language model. 8.2m params, llama style, trained from scratch on tinystories." data-reveal><span class="cap">2026-09-04</span><span class="t" style="view-transition-name: p-lilstory">lilstory, my first real language model</span><span class="cap kind">model</span></a>
+        <a class="post-row" href="blog/bigtransformer.html" data-peek="made this the day after liltransformer. instead of one sentence it reads a whole text file." data-reveal><span class="cap">2026-08-31</span><span class="t" style="view-transition-name: p-bigtransformer">bigtransformer, now it reads a whole file</span><span class="cap kind">basics</span></a>
+        <a class="post-row" href="blog/liltransformer.html" data-peek="first ml thing i ever made lol. you give it a sentence, pick a word from it, and it tries to guess the next word." data-reveal><span class="cap">2026-08-30</span><span class="t" style="view-transition-name: p-liltransformer">my first transformer (it only knows one sentence)</span><span class="cap kind">basics</span></a>
       </div>
       <div class="row" data-reveal>
         <a class="btn line small" href="feed.xml"><span class="inner">rss</span></a>
@@ -278,7 +242,7 @@
         </div>
         <form class="ask" action="playground/" method="get" data-ask>
           <fieldset class="chips">
-            <legend class="mono" style="margin-bottom: 10px">model</legend>
+            <legend class="cap" style="margin-bottom: 10px">model</legend>
             <label><input type="radio" name="model" value="lilchat" checked data-placeholder="say something" /><span>lilchat <small>274mb</small></span></label>
             <label><input type="radio" name="model" value="lilbase" data-placeholder="The water cycle begins when" /><span>lilbase <small>274mb</small></span></label>
             <label><input type="radio" name="model" value="tale" data-placeholder="Once upon a time" /><span>tale <small>52mb</small></span></label>
