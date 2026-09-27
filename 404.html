@@ -3,108 +3,112 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script>document.documentElement.classList.add("js")</script>
 
   <title>not found · navthings</title>
 
-  <meta name="theme-color" content="#111111" />
+  <meta name="theme-color" content="#ffffff" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Geist:wght@300&display=swap"
-    rel="stylesheet"
-  />
+  <link rel="preload" href="/assets/fonts/geist.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="/assets/site.css" />
 
   <style>
-    *,
-    *::before,
-    *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
+    .lost {
+      min-height: 100svh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding-top: 120px;
+      padding-bottom: 80px;
     }
 
-    body {
-      background-color: #111111;
-      color: #888888;
-      font-family: "Geist", "Helvetica Neue", sans-serif;
-      font-weight: 300;
-      font-size: 16px;
-      line-height: 25px;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
+    .lost svg {
+      width: clamp(96px, 14vw, 160px);
+      height: auto;
+      overflow: visible;
     }
 
-    .container {
-      padding: 80px 40px 60px 116px;
-      max-width: calc(116px + 32rem + 40px);
+    .lost svg path,
+    .lost svg circle {
+      fill: var(--ink);
+      fill-opacity: 0;
+      stroke: var(--ink);
+      stroke-width: 3;
+      stroke-linejoin: round;
+      transition: stroke-dashoffset 2.2s var(--ease), fill-opacity 0.8s ease 1.6s;
     }
 
-    @media (max-width: 600px) {
-      .container {
-        padding: 60px 32px 48px 32px;
-      }
+    .lost svg.drawn path,
+    .lost svg.drawn circle {
+      stroke-dashoffset: 0 !important;
+      fill-opacity: 1;
     }
 
-    a {
-      color: #ffffff;
-      text-decoration: none;
-      transition: opacity 0.2s ease;
+    .lost h1 {
+      margin-top: 40px;
+      font-size: clamp(88px, 18vw, 240px);
+      line-height: 0.85;
+      letter-spacing: -0.07em;
+      font-weight: 450;
     }
 
-    a:hover {
-      opacity: 0.5;
+    .lost p {
+      margin-top: 28px;
+      max-width: 30rem;
+      font-size: clamp(18px, 1.6vw, 21px);
+      line-height: 1.5;
+      color: var(--ink-2);
     }
 
-    section {
-      margin-top: 25px;
-    }
-
-    .code {
-      color: #ffffff;
-    }
-
-    .fade-in {
-      opacity: 0;
-      transform: translateY(5px);
-      animation: fadeUp 0.55s ease forwards;
-    }
-
-    @keyframes fadeUp {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      .fade-in {
-        animation: none;
-        opacity: 1;
-        transform: none;
-      }
+    .lost .row {
+      margin-top: 32px;
     }
   </style>
 </head>
 
-<body>
-  <div class="container">
-    <a class="fade-in" href="/" style="animation-delay: 0.05s">navthings</a>
+<body data-native-scroll>
+  <header class="nav">
+    <a class="brand" href="/" aria-label="navthings, home"><img src="/favicon.svg" alt="" /><span>navthings</span></a>
+    <nav class="links" aria-label="main">
+      <span class="blob"></span>
+      <a href="/#work">work</a>
+      <a href="/#writing">writing</a>
+      <a href="/playground/">playground</a>
+    </nav>
+  </header>
 
-    <section>
-      <p class="code fade-in" style="animation-delay: 0.12s">404</p>
-      <p class="fade-in" style="animation-delay: 0.2s">
-        this page doesnt exist. i asked lilchat where it went and it said melbourne, so thats no help.
-      </p>
-    </section>
+  <main class="lost wrap">
+    <svg viewBox="66 64 384 378" aria-hidden="true" id="mark"></svg>
+    <h1 data-words>404</h1>
+    <p data-reveal style="--d: 0.2s">this page doesnt exist. i asked lilchat where it went and it said melbourne, so thats no help.</p>
+    <div class="row" data-reveal style="--d: 0.3s">
+      <a class="btn dark" href="/"><span class="inner">take me home</span></a>
+      <a class="btn" href="/playground/"><span class="inner">talk to my models</span></a>
+    </div>
+  </main>
 
-    <section class="fade-in" style="animation-delay: 0.3s">
-      <p><a href="/">home</a> - the actual site</p>
-      <p><a href="/playground/">playground</a> - talk to my models</p>
-    </section>
-  </div>
+  <script src="/assets/site.js"></script>
+  <script>
+    // the hand drawn mark draws itself, same as in the footer
+    (async function () {
+      const mark = document.getElementById("mark");
+      try {
+        const svg = await (await fetch("/favicon.svg")).text();
+        mark.innerHTML = new DOMParser().parseFromString(svg, "image/svg+xml").querySelector("g").innerHTML;
+      } catch (err) {
+        console.error("couldnt load the mark", err);
+        return;
+      }
+      for (const s of mark.querySelectorAll("path, circle")) {
+        const len = s.getTotalLength();
+        s.style.strokeDasharray = len;
+        s.style.strokeDashoffset = len;
+      }
+      requestAnimationFrame(() => requestAnimationFrame(() => mark.classList.add("drawn")));
+    })();
+  </script>
 </body>
 </html>
