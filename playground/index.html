@@ -77,7 +77,7 @@
         <div id="models" class="models"></div>
       </section>
 
-      <section id="chat" class="chat-panel sq" hidden>
+      <section id="chat" class="chat-panel sq" data-reveal style="--d: 0.45s" hidden>
         <div class="chat-top">
           <p id="chat-label" class="chat-name"></p>
           <span class="stats cap" id="stats"></span>
@@ -257,12 +257,8 @@
       current = m;
       history = [];
       setTemp(m.temp);
+      ui.clear.parentElement.hidden = false;
 
-      ui.chat.hidden = false;
-      ui.chat.classList.remove("fade-in");
-      void ui.chat.offsetWidth;
-      ui.chat.classList.add("fade-in");
-      if (window.site) window.site.squircles(ui.chat);
       ui.label.textContent = m.id;
       ui.log.innerHTML = "";
       ui.stats.textContent = "";
@@ -492,6 +488,14 @@
     const preset = MODELS.find((m) => m.id === params.get("model"));
     let pending = preset ? (params.get("q") || "").trim().slice(0, 500) : "";
     renderModels();
+
+    // the panel shows up empty so its obvious what picking a model gets you
+    ui.chat.hidden = false;
+    if (window.site) window.site.squircles(ui.chat);
+    setReady(false);
+    ui.clear.parentElement.hidden = true;
+    ui.label.textContent = "no model yet";
+    ui.box.placeholder = "pick a model up there first";
     if (preset) pick(preset);
   </script>
 </body>
