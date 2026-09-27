@@ -103,6 +103,7 @@
             <div>
               <h3 class="card-title" style="view-transition-name: t-lilbase"><a class="stretch" href="work/lilbase.html">lilbase</a></h3>
               <p class="card-desc">my first proper base model. rewrote everything in jax and trained it on a free kaggle tpu. it beats gpt-2 small on two of three benchmarks, which is not exactly a fair fight lol.</p>
+              <p class="card-wrong"><span>what went wrong</span>kaggle sometimes hands you a tpu with 1 working chip out of 8. the script now refuses to start without all of them.</p>
             </div>
             <div class="row">
               <span class="card-go"><span>read how it went</span></span>
@@ -133,6 +134,7 @@
             <div>
               <h3 class="card-title" style="view-transition-name: t-lilchat"><a class="stretch" href="work/lilchat.html">lilchat</a></h3>
               <p class="card-desc">lilbase taught to hold a conversation, overnight on my macbook air with mlx. very confident. knows nothing.</p>
+              <p class="card-wrong"><span>what went wrong</span>it told me the capital of australia is melbourne. then perth.</p>
             </div>
             <div class="row">
               <span class="card-go"><span>read how it went</span></span>
@@ -155,6 +157,7 @@
             <div>
               <h3 class="card-title" style="view-transition-name: t-paper"><a class="stretch" href="work/corpus-size.html">the paper</a></h3>
               <p class="card-desc">same model, four amounts of data. with 1% of tinystories it just memorised everything. at 10% the gap between train and val loss was basically gone.</p>
+              <p class="card-wrong"><span>what went wrong</span>15% did slightly worse than 10%. it probably never got through all its data in 5000 steps.</p>
             </div>
             <div class="row">
               <span class="card-go"><span>read how it went</span></span>
@@ -172,6 +175,7 @@
             <div>
               <h3 class="card-title" style="view-transition-name: t-playground"><a class="stretch" href="work/playground.html">playground</a></h3>
               <p class="card-desc">all my models, running in your browser tab. they download once and run on your own computer, so nothing you type goes anywhere.</p>
+              <p class="card-wrong"><span>what went wrong</span>safari says it can run the fast engine, then cant. multithreading broke firefox, so i undid it.</p>
             </div>
             <div class="row">
               <span class="card-go"><span>read how it works</span></span>
@@ -180,10 +184,10 @@
           </div>
           <div class="card-vis sq">
             <div class="mini">
-              <div class="mini-row"><span>lilchat</span><span class="track"><b style="--k: 0; --t: 2.2s"></b></span><span class="size">274mb</span></div>
-              <div class="mini-row"><span>lilbase</span><span class="track"><b style="--k: 1; --t: 2.2s"></b></span><span class="size">274mb</span></div>
-              <div class="mini-row"><span>tale</span><span class="track"><b style="--k: 2; --t: 0.9s"></b></span><span class="size">52mb</span></div>
-              <div class="mini-row"><span>lilstory</span><span class="track"><b style="--k: 3; --t: 0.5s"></b></span><span class="size">17mb</span></div>
+              <div class="mini-row"><span>lilchat</span><span class="track"><b style="--k: 0; --t: 2.2s; --w: 100%"></b></span><span class="size">274mb</span></div>
+              <div class="mini-row"><span>lilbase</span><span class="track"><b style="--k: 1; --t: 2.2s; --w: 100%"></b></span><span class="size">274mb</span></div>
+              <div class="mini-row"><span>tale</span><span class="track"><b style="--k: 2; --t: 0.9s; --w: 19%"></b></span><span class="size">52mb</span></div>
+              <div class="mini-row"><span>lilstory</span><span class="track"><b style="--k: 3; --t: 0.5s; --w: 6.2%"></b></span><span class="size">17mb</span></div>
             </div>
             <div class="mini-input"><span>Once upon a time</span><span class="btn dark">go</span></div>
             <p class="mini-note">nothing leaves your computer.</p>
@@ -194,7 +198,8 @@
           <div class="card-text">
             <div>
               <h3 class="card-title"><a class="stretch" href="https://github.com/navthings/sprout" target="_blank" rel="noopener">sprout</a></h3>
-              <p class="card-desc">the fix for lilchat not knowing anything is a bigger base model. this is that. 523m params reading 12 billion tokens, and when it finishes it gets the same chat finetune.</p>
+              <p class="card-desc">the fix for lilchat not knowing anything is a bigger base model. this is that. 523m params reading 12 billion tokens from fineweb-edu, dclm, cosmopedia and project gutenberg.</p>
+              <p class="card-wrong"><span>what's next</span>when it finishes it gets the same chat finetune as lilchat, and goes in the playground.</p>
             </div>
             <div class="row">
               <span class="card-go"><span>follow along on github</span></span>
@@ -204,8 +209,8 @@
             <div class="train">
               <div class="train-top"><span>tokens read</span><span class="cap">as of sep 26</span></div>
               <div class="train-num">about a third</div>
-              <div class="train-track"><b></b></div>
-              <div class="train-ticks"><span>0</span><span>4b</span><span>8b</span><span>12b</span></div>
+              <div class="train-track"><b></b><i style="left: 50.8%"></i></div>
+              <div class="train-ticks"><span>0</span><span class="mark" style="left: 50.8%">lilbase read 6.1b in total</span><span>12b</span></div>
               <div class="row">
                 <span class="tag">fineweb-edu</span><span class="tag">dclm</span><span class="tag">cosmopedia</span><span class="tag">project gutenberg</span>
               </div>
@@ -229,9 +234,7 @@
         <a class="post-row" href="blog/bigtransformer.html" data-peek="made this the day after liltransformer. instead of one sentence it reads a whole text file." data-reveal><span class="cap">2026-08-31</span><span class="t" style="view-transition-name: p-bigtransformer">bigtransformer, now it reads a whole file</span><span class="cap kind">basics</span></a>
         <a class="post-row" href="blog/liltransformer.html" data-peek="first ml thing i ever made lol. you give it a sentence, pick a word from it, and it tries to guess the next word." data-reveal><span class="cap">2026-08-30</span><span class="t" style="view-transition-name: p-liltransformer">my first transformer (it only knows one sentence)</span><span class="cap kind">basics</span></a>
       </div>
-      <div class="row" data-reveal>
-        <a class="btn line small" href="feed.xml"><span class="inner">rss</span></a>
-      </div>
+      <p class="rss cap" data-reveal>theres an <a href="feed.xml">rss feed</a> too, if you still use those.</p>
     </section>
 
     <section class="play wrap wide" id="play" data-label="playground">
