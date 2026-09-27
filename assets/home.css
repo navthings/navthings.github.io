@@ -941,6 +941,124 @@
   margin-top: 10px;
 }
 
+/* things my models said */
+
+.said {
+  padding-top: clamp(96px, 16vh, 180px);
+}
+
+.said-sub {
+  font-size: 17px;
+}
+
+.board {
+  position: relative;
+  height: clamp(520px, 62vh, 640px);
+  margin-top: 40px;
+  border-radius: 40px;
+  background: var(--surface);
+  overflow: hidden;
+  touch-action: pan-y;
+}
+
+.quote {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: min(320px, 72%);
+  padding: 18px 20px 16px;
+  border-radius: 22px;
+  background: var(--bg);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.04), 0 12px 28px -16px rgba(0, 0, 0, 0.25);
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: none;
+  opacity: 0;
+  transform: translateY(-30px) scale(0.94);
+  transition: opacity 0.5s ease, transform 0.7s var(--ease), box-shadow 0.3s ease;
+  transition-delay: calc(var(--k) * 90ms);
+  will-change: translate, rotate;
+}
+
+.board.in .quote {
+  opacity: 1;
+  transform: none;
+}
+
+.quote.held {
+  cursor: grabbing;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.04), 0 26px 50px -18px rgba(0, 0, 0, 0.35);
+  transform: scale(1.03);
+  transition-delay: 0s;
+}
+
+.quote blockquote {
+  font-size: 22px;
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+.quote.small {
+  width: auto;
+}
+
+.quote.small blockquote {
+  font-size: 34px;
+  letter-spacing: -0.04em;
+}
+
+.quote.wide {
+  width: min(380px, 84%);
+}
+
+.quote.wide blockquote {
+  font-size: 17px;
+}
+
+.quote.wide blockquote span:nth-of-type(1) {
+  opacity: 0.55;
+}
+
+.quote.wide blockquote span:nth-of-type(2) {
+  opacity: 0.25;
+}
+
+.quote figcaption {
+  margin-top: 12px;
+  color: var(--ink-3);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.board.tidying .quote {
+  transition: opacity 0.5s ease, transform 0.7s var(--ease), translate 0.9s var(--ease), rotate 0.9s var(--ease);
+  transition-delay: 0s;
+}
+
+.tidy {
+  position: absolute;
+  right: 18px;
+  bottom: 18px;
+  z-index: 50;
+  background: var(--bg) !important;
+}
+
+@media (max-width: 640px) {
+  .board {
+    border-radius: 28px;
+  }
+
+  .quote blockquote {
+    font-size: 17px;
+  }
+
+  .quote.small blockquote {
+    font-size: 26px;
+  }
+}
+
 /* writing */
 
 .writing {

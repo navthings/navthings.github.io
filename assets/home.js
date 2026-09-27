@@ -303,6 +303,147 @@
     card.addEventListener("live", play, { once: true });
   }
 
+  // quotes you can grab and throw, with a bit of weight to them
+  function board() {
+    const el = document.querySelector("[data-board]");
+    if (!el) return;
+    const bodies = $$(".quote", el).map((c, k) => {
+      c.style.setProperty("--k", k);
+      const home = { x: +c.dataset.x, y: +c.dataset.y, r: +c.dataset.r };
+      return { c, home, x: 0, y: 0, r: home.r, vx: 0, vy: 0, vr: 0, w: 0, h: 0, held: false };
+    });
+    let W = 0;
+    let H = 0;
+    let z = 10;
+    let raf = 0;
+
+    const place = (b) => {
+      b.c.style.translate = `${b.x.toFixed(1)}px ${b.y.toFixed(1)}px`;
+      b.c.style.rotate = `${b.r.toFixed(2)}deg`;
+    };
+    const goHome = (b) => {
+      b.x = b.home.x * Math.max(0, W - b.w);
+      b.y = b.home.y * Math.max(0, H - b.h);
+      b.r = b.home.r;
+      b.vx = b.vy = b.vr = 0;
+      place(b);
+    };
+
+    function measure(first) {
+      W = el.clientWidth;
+      H = el.clientHeight;
+      for (const b of bodies) {
+        b.w = b.c.offsetWidth;
+        b.h = b.c.offsetHeight;
+        if (first) goHome(b);
+        b.x = clamp(b.x, 0, Math.max(0, W - b.w));
+        b.y = clamp(b.y, 0, Math.max(0, H - b.h));
+        place(b);
+      }
+    }
+
+    function step() {
+      raf = 0;
+      let moving = false;
+      for (const b of bodies) {
+        if (b.held) {
+          moving = true;
+          continue;
+        }
+        if (Math.abs(b.vx) + Math.abs(b.vy) + Math.abs(b.vr) < 0.04) continue;
+        moving = true;
+        b.x += b.vx;
+        b.y += b.vy;
+        b.r = clamp(b.r + b.vr, -20, 20);
+        b.vx *= 0.94;
+        b.vy *= 0.94;
+        b.vr *= 0.9;
+        const maxX = Math.max(0, W - b.w);
+        const maxY = Math.max(0, H - b.h);
+        if (b.x < 0 || b.x > maxX) {
+          b.x = clamp(b.x, 0, maxX);
+          b.vx *= -0.5;
+          b.vr += b.vy * 0.05;
+        }
+        if (b.y < 0 || b.y > maxY) {
+          b.y = clamp(b.y, 0, maxY);
+          b.vy *= -0.5;
+          b.vr -= b.vx * 0.05;
+        }
+        place(b);
+      }
+      if (moving) raf = requestAnimationFrame(step);
+    }
+    const kick = () => {
+      if (!raf) raf = requestAnimationFrame(step);
+    };
+
+    for (const b of bodies) {
+      b.c.addEventListener("pointerdown", (e) => {
+        if (e.button > 0) return;
+        e.preventDefault();
+        b.c.setPointerCapture(e.pointerId);
+        b.held = true;
+        b.vx = b.vy = b.vr = 0;
+        b.c.classList.add("held");
+        b.c.style.zIndex = ++z;
+        const ox = e.clientX - b.x;
+        const oy = e.clientY - b.y;
+        let lx = e.clientX;
+        let ly = e.clientY;
+        let lt = performance.now();
+
+        const move = (ev) => {
+          const now = performance.now();
+          const dt = Math.max(8, now - lt);
+          b.vx = b.vx * 0.5 + ((ev.clientX - lx) / dt) * 8;
+          b.vy = b.vy * 0.5 + ((ev.clientY - ly) / dt) * 8;
+          lx = ev.clientX;
+          ly = ev.clientY;
+          lt = now;
+          b.x = clamp(ev.clientX - ox, -b.w * 0.3, W - b.w * 0.7);
+          b.y = clamp(ev.clientY - oy, -b.h * 0.3, H - b.h * 0.7);
+          b.r = clamp(b.r + (ev.movementX || 0) * 0.08, -24, 24);
+          place(b);
+        };
+        const up = () => {
+          b.held = false;
+          b.c.classList.remove("held");
+          b.c.removeEventListener("pointermove", move);
+          if (reduce || performance.now() - lt > 90) b.vx = b.vy = 0;
+          b.vr = b.vx * 0.12;
+          kick();
+        };
+        b.c.addEventListener("pointermove", move);
+        b.c.addEventListener("pointerup", up, { once: true });
+        b.c.addEventListener("pointercancel", up, { once: true });
+        kick();
+      });
+    }
+
+    el.querySelector("[data-tidy]").addEventListener("click", () => {
+      el.classList.add("tidying");
+      bodies.forEach((b) => {
+        b.c.style.zIndex = "";
+        goHome(b);
+      });
+      setTimeout(() => el.classList.remove("tidying"), 950);
+    });
+
+    const seen = new IntersectionObserver(
+      (entries) => {
+        if (!entries[0].isIntersecting) return;
+        el.classList.add("in");
+        seen.disconnect();
+      },
+      { threshold: 0.3 }
+    );
+    seen.observe(el);
+    measure(true);
+    new ResizeObserver(() => measure(false)).observe(el);
+    if (document.fonts) document.fonts.ready.then(() => measure(false));
+  }
+
   // the playground form swaps its placeholder to whatever the chosen model is good at
   function ask() {
     const form = document.querySelector("[data-ask]");
@@ -326,6 +467,7 @@
   scale();
   stack();
   chat();
+  board();
   ask();
   requestTick();
 })();
