@@ -37,7 +37,7 @@ if (!reduce && window.Lenis && !document.body.hasAttribute("data-native-scroll")
 window.addEventListener("resize", requestTick);
 
 function scrollToTarget(target) {
-  if (lenis) lenis.scrollTo(target, { offset: -24, duration: 1.4 });
+  if (lenis) lenis.scrollTo(target, { offset: typeof target === "number" ? 0 : -88, duration: 1.4 });
   else if (typeof target === "number") window.scrollTo({ top: target, behavior: reduce ? "auto" : "smooth" });
   else target.scrollIntoView({ behavior: reduce ? "auto" : "smooth" });
 }

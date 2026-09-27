@@ -90,6 +90,11 @@ svg {
   display: none !important;
 }
 
+/* anchor jumps land below the floating nav */
+[id] {
+  scroll-margin-top: 88px;
+}
+
 :focus-visible {
   outline: 2px solid var(--ink);
   outline-offset: 3px;
