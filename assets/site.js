@@ -204,7 +204,17 @@ function letters() {
     els.forEach((el) => el.classList.add("rise"));
     // make the browser settle the hidden state first, or there is nothing to transition from
     getComputedStyle(els[0].querySelector(".l")).transform;
-    els.forEach((el) => el.classList.add("in"));
+    const show = () => els.forEach((el) => el.classList.add("in"));
+    // the first visit logo intro may be about to cover the page, so rise once it has gone
+    setTimeout(() => {
+      if (!root.classList.contains("intro")) return show();
+      const watch = new MutationObserver(() => {
+        if (root.classList.contains("intro")) return;
+        watch.disconnect();
+        show();
+      });
+      watch.observe(root, { attributes: true, attributeFilter: ["class"] });
+    });
   };
   if (!("onpagereveal" in window) || root.matches(".revealed, .vt-in")) go();
   else addEventListener("pagereveal", go, { once: true });

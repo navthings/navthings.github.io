@@ -52,10 +52,18 @@ html.intro:not(.intro-fly) .island {
   opacity: 0;
 }
 
-html.intro .hero [data-reveal].in {
+html.intro .hero [data-reveal].in,
+html.intro .cs-head [data-reveal].in,
+html.intro .post-head [data-reveal].in {
   opacity: 0;
   transform: translateY(24px);
   filter: blur(6px);
+}
+
+html.intro .cs-head [data-words].in .w {
+  opacity: 0;
+  transform: translateY(0.45em);
+  filter: blur(8px);
 }
 
 /* hero */
