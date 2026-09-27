@@ -154,6 +154,7 @@
       <div class="cs-sec" data-reveal data-label="how it did">
         <h2 class="cs-h">how it did</h2>
         <div class="cs-text">
+          <p>every model goes through the same script, zero shot: the first 2000 hellaswag validation examples, 2000 lambada examples and the full arc-easy test set. multiple choice is scored by log likelihood, normalised by the length of each answer, and every sequence starts with an end of text token, the same way training did. <a href="https://github.com/navthings/lilbase/blob/main/eval/compare.py" target="_blank" rel="noopener">the script</a> is in the repo.</p>
           <p>it beats gpt-2 small on hellaswag and arc-easy and loses on lambada. to be fair gpt-2 is from 2019, trained on different data, and lilbase is more than twice its size, so its not exactly a fair fight lol.</p>
           <p>lambada perplexity came out at <strong>57.37</strong>. the learning rate was 4e-4, a bit above the 3e-4 gpt-3 350m used at a similar batch size, so slightly optimistic.</p>
           <p>its a base model, so it just continues whatever you give it instead of answering. it gets grammar right and makes up most facts.</p>
