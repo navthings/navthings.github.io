@@ -370,6 +370,8 @@
             if (!t0) t0 = performance.now();
             count++;
             reply += piece;
+            const live = (performance.now() - t0) / 1000;
+            if (count % 4 === 0 && live > 0.5) ui.stats.textContent = Math.round(count / live) + " tok/s";
             out.textContent = m.mode === "chat" ? reply.trimStart() : reply;
           },
         });
@@ -393,7 +395,10 @@
       }
 
       const secs = t0 ? (performance.now() - t0) / 1000 : 0;
-      ui.stats.textContent = failed ? "something broke" : count && secs > 0.2 ? Math.round(count / secs) + " tok/s" : "";
+      const rate = count && secs > 0.2 ? Math.round(count / secs) : 0;
+      // safari only gets the slower compat build of the engine, so say so when it crawls
+      const slow = rate && rate < 5 && WEBKIT ? ", safari runs these slowly, chrome is way faster" : "";
+      ui.stats.textContent = failed ? "something broke" : rate ? rate + " tok/s" + slow : "";
       busy = false;
       aborter = null;
       ui.stop.hidden = true;

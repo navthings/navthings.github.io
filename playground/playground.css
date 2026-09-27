@@ -186,6 +186,7 @@
 .stats {
   color: var(--ink-3);
   font-variant-numeric: tabular-nums;
+  text-align: right;
 }
 
 .log {
