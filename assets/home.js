@@ -253,8 +253,10 @@
     onScroll.push((y, vh) => {
       if (y > vh * 1.3) return;
       const p = clamp(y / (vh * 0.6));
-      inner.style.transform = `translate3d(0, ${(y * 0.22).toFixed(1)}px, 0) scale(${(1 - p * 0.04).toFixed(4)})`;
-      inner.style.opacity = (1 - p).toFixed(3);
+      return () => {
+        inner.style.transform = `translate3d(0, ${(y * 0.22).toFixed(1)}px, 0) scale(${(1 - p * 0.04).toFixed(4)})`;
+        inner.style.opacity = (1 - p).toFixed(3);
+      };
     });
   }
 
@@ -304,6 +306,10 @@
       const r = sec.getBoundingClientRect();
       if (r.bottom < -vh || r.top > vh * 1.5) return;
       const p = clamp(-r.top / (r.height - vh));
+      return () => paint(p);
+    });
+
+    function paint(p) {
       const { v, stage } = at(p);
       const filled = Math.floor(v + 0.001);
 
@@ -331,35 +337,45 @@
         lastStage = stage;
       }
       end.classList.toggle("on", p > 0.9);
-    });
+    }
   }
 
   // project cards stack up, the one underneath sinks back a little
   function stack() {
     const cards = $$(".card");
     if (cards.length < 2 || reduce) return;
-    let tops = [];
+    let stickyTops = [];
     let sticky = [];
     function measure() {
-      tops = cards.map((c) => parseFloat(getComputedStyle(c).top) || 0);
+      stickyTops = cards.map((c) => parseFloat(getComputedStyle(c).top) || 0);
       sticky = cards.map((c) => getComputedStyle(c).position === "sticky");
     }
     measure();
     window.addEventListener("resize", measure);
 
+    // a plain overlay per card, so darkening one doesn't restyle everything inside it
+    const shades = cards.map((card) => {
+      const shade = document.createElement("span");
+      shade.className = "card-shade";
+      shade.setAttribute("aria-hidden", "true");
+      card.appendChild(shade);
+      return shade;
+    });
+
     onScroll.push((y, vh) => {
-      for (let i = 0; i < cards.length - 1; i++) {
-        const card = cards[i];
-        if (!sticky[i]) {
-          card.style.transform = "";
-          card.style.removeProperty("--dim");
-          continue;
+      const tops = cards.map((c) => c.getBoundingClientRect().top);
+      return () => {
+        for (let i = 0; i < cards.length - 1; i++) {
+          if (!sticky[i]) {
+            cards[i].style.transform = "";
+            shades[i].style.opacity = "0";
+            continue;
+          }
+          const p = clamp((vh - tops[i + 1]) / (vh - stickyTops[i + 1]));
+          cards[i].style.transform = p > 0 ? `scale(${(1 - p * 0.05).toFixed(4)})` : "";
+          shades[i].style.opacity = (p * 0.05).toFixed(3);
         }
-        const r = cards[i + 1].getBoundingClientRect();
-        const p = clamp((vh - r.top) / (vh - tops[i + 1]));
-        card.style.transform = p > 0 ? `scale(${(1 - p * 0.05).toFixed(4)})` : "";
-        card.style.setProperty("--dim", (p * 0.05).toFixed(3));
-      }
+      };
     });
   }
 

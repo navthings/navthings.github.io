@@ -192,7 +192,7 @@ svg {
   height: 2px;
   background: rgba(255, 255, 255, 0.4);
   transform-origin: 0 50%;
-  transform: scaleX(var(--p, 0));
+  transform: scaleX(0);
   pointer-events: none;
 }
 
@@ -446,6 +446,16 @@ svg {
 
 .sq[data-sq-done] {
   border-radius: 0;
+}
+
+/* where the browser can draw squircles itself, let it, its much cheaper than a clip path */
+@supports (corner-shape: squircle) {
+  .sq,
+  .card,
+  .card-vis {
+    corner-shape: squircle;
+    border-radius: calc(var(--r, 28px) * 1.6);
+  }
 }
 
 /* section heads */

@@ -492,6 +492,7 @@ html:not(.js) .stage {
 
 .card {
   --r: 40px;
+  border-radius: var(--r);
   position: sticky;
   top: calc(84px + var(--i) * 14px);
   display: grid;
@@ -520,12 +521,12 @@ html:not(.js) .stage {
   }
 }
 
-.card::after {
-  content: "";
+.card-shade {
   position: absolute;
   inset: 0;
+  z-index: 4;
   background: #000;
-  opacity: var(--dim, 0);
+  opacity: 0;
   pointer-events: none;
 }
 
@@ -627,6 +628,7 @@ html:not(.js) .stage {
 
 .card-vis {
   --r: 28px;
+  border-radius: var(--r);
   position: relative;
   display: flex;
   flex-direction: column;

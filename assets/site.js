@@ -8,11 +8,17 @@ const onScroll = [];
 let lenis = null;
 let ticking = false;
 
+// handlers measure first and can hand back a function that writes, so reads and writes never interleave
 function tick() {
   ticking = false;
   const y = window.scrollY;
   const vh = window.innerHeight;
-  for (const fn of onScroll) fn(y, vh);
+  const writes = [];
+  for (const fn of onScroll) {
+    const write = fn(y, vh);
+    if (typeof write === "function") writes.push(write);
+  }
+  for (const write of writes) write();
 }
 
 function requestTick() {
@@ -85,7 +91,10 @@ const squircleObserver = new ResizeObserver((entries) => {
   }
 });
 
+const nativeSquircles = window.CSS && CSS.supports("corner-shape", "squircle");
+
 function squircles(root = document) {
+  if (nativeSquircles) return;
   for (const el of $$(".sq", root)) squircleObserver.observe(el);
 }
 
@@ -167,9 +176,10 @@ function scrubs() {
       const lit = p * (count + 2);
       if (Math.abs(lit - last) < 0.01) return;
       last = lit;
-      words.forEach((w, i) => {
-        w.style.opacity = (0.14 + 0.86 * clamp(lit - i)).toFixed(3);
-      });
+      return () =>
+        words.forEach((w, i) => {
+          w.style.opacity = (0.14 + 0.86 * clamp(lit - i)).toFixed(3);
+        });
     });
   }
 }
@@ -280,13 +290,16 @@ function nav() {
     // the footer is sticky and always sits behind the sheet, so go by how much the sheet has uncovered
     const uncovered = sheet ? vh - sheet.getBoundingClientRect().bottom : 0;
     if (foot && foot.dataset.label && uncovered > vh * 0.45) text = foot.dataset.label;
-    setLabel(text);
-
     const max = document.documentElement.scrollHeight - vh;
-    fill.style.setProperty("--p", max > 0 ? clamp(y / max).toFixed(4) : 0);
-    el.classList.toggle("light", !!foot && uncovered > vh - 40);
-    if (open && Math.abs(y - lastY) > 60 && !el.matches(":hover")) setOpen(false);
-    if (!open) lastY = y;
+    const hovered = el.matches(":hover");
+
+    return () => {
+      setLabel(text);
+      fill.style.transform = `scaleX(${max > 0 ? clamp(y / max).toFixed(4) : 0})`;
+      el.classList.toggle("light", !!foot && uncovered > vh - 40);
+      if (open && Math.abs(y - lastY) > 60 && !hovered) setOpen(false);
+      if (!open) lastY = y;
+    };
   });
 
   for (const a of $$("a[href^='#']")) {
@@ -354,10 +367,12 @@ async function footer() {
     if (uncovered <= 0) return;
     const p = clamp(uncovered / foot.offsetHeight);
     const draw = clamp((p - 0.2) / 0.6);
-    shapes.forEach((s, i) => {
-      s.style.strokeDashoffset = (lengths[i] * (1 - draw)).toFixed(1);
-    });
-    mark.style.setProperty("--fill", clamp((draw - 0.7) / 0.3).toFixed(3));
+    return () => {
+      shapes.forEach((s, i) => {
+        s.style.strokeDashoffset = (lengths[i] * (1 - draw)).toFixed(1);
+      });
+      mark.style.setProperty("--fill", clamp((draw - 0.7) / 0.3).toFixed(3));
+    };
   });
   requestTick();
 }
@@ -385,7 +400,7 @@ function followers() {
     ghost.className = "ghost sq";
     ghost.style.setProperty("--r", "16px");
     list.prepend(ghost);
-    squircleObserver.observe(ghost);
+    squircles(list);
     for (const row of $$(":scope > a, :scope > .row-item", list)) {
       row.addEventListener("pointerenter", () => {
         ghost.style.height = row.offsetHeight + "px";
