@@ -63,10 +63,12 @@
         <p data-reveal>its 297m params, llama style, 24 layers, 1024 wide, 16 query heads and 4 kv heads. it read 6.1 billion tokens of <a href="https://huggingface.co/datasets/HuggingFaceFW/fineweb-edu" target="_blank" rel="noopener">fineweb-edu</a>, which is about the right amount for its size (the chinchilla thing, around 20 tokens per param). each step is 524,288 tokens split over the 8 chips, and each kaggle session gets about 8.4 hours before it has to save and stop.</p>
         <figure data-reveal><div class="dark-fig sq"><img src="https://raw.githubusercontent.com/navthings/lilbase/main/assets/vs_gpt2_dark2.png" alt="lilbase vs gpt-2 on three benchmarks" loading="lazy" /></div><figcaption>lilbase vs gpt-2 small</figcaption></figure>
         <table data-reveal>
-        <tr><th>benchmark</th><th class="num">lilbase</th><th class="num">gpt-2 124m</th></tr>
+        <thead><tr><th>benchmark</th><th class="num">lilbase</th><th class="num">gpt-2 124m</th></tr></thead>
+        <tbody>
         <tr><td>hellaswag</td><td class="num">41.0%</td><td class="num">31.1%</td></tr>
         <tr><td>arc-easy</td><td class="num">50.5%</td><td class="num">39.5%</td></tr>
         <tr><td>lambada</td><td class="num">28.7%</td><td class="num">32.6%</td></tr>
+        </tbody>
         </table>
         <p data-reveal>it beats gpt-2 small on hellaswag and arc-easy and loses on lambada. to be fair gpt-2 is from 2019, trained on different data, and lilbase is more than twice its size, so its not exactly a fair fight lol</p>
         <p data-reveal>stuff that went wrong: kaggle sometimes gives you a broken tpu with only 1 chip working instead of 8, so now the script just refuses to run unless it sees all 8. also doubling the batch size ran out of memory by like 400mb.</p>

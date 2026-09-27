@@ -61,11 +61,13 @@
       <div class="post">
         <p data-reveal>i wanted to see how much the amount of data actually matters if you keep everything else the same. so i trained lilstory 4 times on 1%, 5%, 10% and 15% of tinystories. same model, same settings, 5000 steps each.</p>
         <table data-reveal>
-        <tr><th>data</th><th class="num">stories</th><th class="num">train loss</th><th class="num">val loss</th></tr>
+        <thead><tr><th>data</th><th class="num">stories</th><th class="num">train loss</th><th class="num">val loss</th></tr></thead>
+        <tbody>
         <tr><td>1%</td><td class="num">22k</td><td class="num">1.329</td><td class="num">2.402</td></tr>
         <tr><td>5%</td><td class="num">110k</td><td class="num">1.701</td><td class="num">1.932</td></tr>
         <tr class="me"><td>10%</td><td class="num">220k</td><td class="num">1.826</td><td class="num">1.816</td></tr>
         <tr><td>15%</td><td class="num">330k</td><td class="num">1.737</td><td class="num">1.837</td></tr>
+        </tbody>
         </table>
         <p data-reveal>lower is better, and val loss is the one that matters since its on stories the model never saw.</p>
         <p data-reveal>the 1% one had the best training loss but the worst val loss, it basically just memorised its 22k stories lol. the more data i gave it the smaller that gap got, and at 10% theyre pretty much the same.</p>
