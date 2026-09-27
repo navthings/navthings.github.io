@@ -1,0 +1,562 @@
+/* case study pages */
+
+.cs-head {
+  padding-top: clamp(130px, 20vh, 200px);
+}
+
+.cs-kicker {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  color: var(--ink-3);
+}
+
+.cs-kicker a {
+  color: var(--ink-2);
+  transition: color 0.2s ease;
+}
+
+.cs-kicker a:hover {
+  color: var(--ink);
+}
+
+.cs-title {
+  margin-top: 28px;
+  width: fit-content;
+  font-size: clamp(68px, 13vw, 196px);
+  line-height: 0.88;
+  letter-spacing: -0.065em;
+  font-weight: 450;
+}
+
+.cs-lede {
+  margin-top: 44px;
+  max-width: 34ch;
+  font-size: clamp(22px, 2.5vw, 34px);
+  line-height: 1.2;
+  letter-spacing: -0.03em;
+}
+
+.cs-meta {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 64px;
+}
+
+.cs-meta > div {
+  --r: 24px;
+  padding: 20px 22px 22px;
+  background: var(--surface);
+}
+
+.cs-meta dt {
+  font-size: 13px;
+  color: var(--ink-3);
+}
+
+.cs-meta dd {
+  margin-top: 4px;
+  font-size: 19px;
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+}
+
+.cs-head .row {
+  margin-top: 28px;
+}
+
+@media (max-width: 860px) {
+  .cs-meta {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.cs-figure {
+  --r: 44px;
+  margin-top: clamp(56px, 10vh, 112px);
+  padding: clamp(24px, 5vw, 64px);
+  background: var(--surface);
+}
+
+.cs-figure .fig-title {
+  font-size: 15px;
+  color: var(--ink-2);
+  margin-bottom: 20px;
+}
+
+/* the body: sticky little headings on the left, writing on the right */
+
+.cs-body {
+  margin-top: clamp(64px, 12vh, 140px);
+}
+
+.cs-sec {
+  display: grid;
+  grid-template-columns: minmax(0, 220px) minmax(0, 1fr);
+  gap: clamp(20px, 5vw, 64px);
+  padding: clamp(48px, 8vh, 88px) 0;
+  border-top: 1px solid var(--line);
+}
+
+.cs-h {
+  position: sticky;
+  top: 100px;
+  align-self: start;
+  font-size: 15px;
+  font-weight: 400;
+  color: var(--ink-3);
+}
+
+.cs-text {
+  max-width: 40rem;
+  font-size: clamp(17px, 1.4vw, 19px);
+  line-height: 1.65;
+  color: var(--ink-2);
+}
+
+.cs-text > * + * {
+  margin-top: 1.15em;
+}
+
+.cs-text strong {
+  color: var(--ink);
+  font-weight: 450;
+}
+
+.cs-text a:not(.btn) {
+  color: var(--ink);
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 100% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size 0.4s var(--ease);
+}
+
+.cs-text a:not(.btn):hover {
+  background-size: 0% 1px;
+  background-position: 100% 100%;
+}
+
+.cs-text .fig {
+  margin-top: 40px;
+  margin-bottom: 40px;
+}
+
+.cs-text code {
+  font-family: var(--mono);
+  font-size: 0.82em;
+  color: var(--ink);
+  background: var(--surface);
+  padding: 2px 7px;
+  border-radius: 6px;
+}
+
+.cs-text .cmd,
+.cmd {
+  --r: 18px;
+  display: block;
+  padding: 16px 20px;
+  background: var(--ink);
+  color: #eaeaea;
+  font-family: var(--mono);
+  font-size: 13.5px;
+  line-height: 1.6;
+  border-radius: 0;
+  overflow-x: auto;
+  white-space: pre;
+}
+
+@media (max-width: 760px) {
+  .cs-sec {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .cs-h {
+    position: static;
+  }
+}
+
+.specs {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 32px;
+  font-size: 15px;
+}
+
+.specs div {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.specs dt {
+  color: var(--ink-3);
+}
+
+.specs dd {
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+@media (max-width: 520px) {
+  .specs {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* one training step, split over the 8 chips */
+
+.chips8 {
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.chips8 span {
+  --r: 14px;
+  position: relative;
+  aspect-ratio: 1;
+  background: var(--surface);
+  overflow: hidden;
+}
+
+.chips8 span::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--ink);
+  transform: scaleY(0);
+  transform-origin: 50% 100%;
+  transition: transform 0.9s var(--ease);
+  transition-delay: calc(var(--k) * 70ms + 200ms);
+}
+
+.live .chips8 span::after {
+  transform: none;
+}
+
+.chips8-note {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 12px;
+  font-size: 13px;
+  color: var(--ink-3);
+}
+
+/* numbers you can open up as a table */
+
+.table-view {
+  margin-top: 28px;
+  font-size: 14px;
+}
+
+.table-view summary {
+  display: inline-flex;
+  align-items: center;
+  height: 32px;
+  padding: 0 14px;
+  border-radius: 999px;
+  box-shadow: inset 0 0 0 1px var(--line);
+  color: var(--ink-2);
+  cursor: pointer;
+  list-style: none;
+  transition: box-shadow 0.2s ease, color 0.2s ease;
+}
+
+.table-view summary::-webkit-details-marker {
+  display: none;
+}
+
+.table-view summary:hover {
+  color: var(--ink);
+  box-shadow: inset 0 0 0 1px var(--ink-3);
+}
+
+.table-view[open] summary {
+  margin-bottom: 12px;
+}
+
+.table-view table,
+.cs-text table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  font-variant-numeric: tabular-nums;
+}
+
+.table-view th,
+.table-view td,
+.cs-text th,
+.cs-text td {
+  padding: 9px 12px 9px 0;
+  text-align: left;
+  border-bottom: 1px solid var(--line);
+  font-weight: 400;
+}
+
+.table-view th,
+.cs-text th {
+  color: var(--ink-3);
+}
+
+.cs-text td {
+  color: var(--ink);
+}
+
+.num {
+  text-align: right !important;
+}
+
+tr.hi td {
+  font-weight: 500;
+}
+
+/* before and after numbers */
+
+.pair {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.pair > div {
+  --r: 28px;
+  padding: clamp(20px, 3vw, 32px);
+  background: var(--bg);
+}
+
+.pair .big {
+  display: block;
+  margin-top: 10px;
+  font-size: clamp(48px, 8vw, 112px);
+  line-height: 0.9;
+  letter-spacing: -0.06em;
+}
+
+.pair .was {
+  color: var(--ink-3);
+}
+
+.pair .track {
+  margin-top: 24px;
+  height: 6px;
+  border-radius: 6px;
+  background: var(--surface);
+  overflow: hidden;
+}
+
+.pair .track b {
+  display: block;
+  height: 100%;
+  width: 0;
+  border-radius: 6px;
+  transition: width 1.4s var(--ease) 0.3s;
+}
+
+.live .pair .track b {
+  width: var(--w);
+}
+
+.pair p {
+  margin-top: 10px;
+  font-size: 14px;
+  color: var(--ink-2);
+}
+
+@media (max-width: 560px) {
+  .pair {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* the chat format, taken apart */
+
+.fmt {
+  --r: 24px;
+  padding: 24px;
+  background: var(--surface);
+  font-family: var(--mono);
+  font-size: 14px;
+  line-height: 2.2;
+  color: var(--ink);
+}
+
+.fmt span {
+  padding: 3px 6px;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+
+.fmt .ctl {
+  background: var(--surface-2);
+  color: var(--ink-2);
+}
+
+.fmt .you {
+  background: var(--ink);
+  color: #fff;
+}
+
+.fmt .bot {
+  white-space: normal;
+  box-shadow: inset 0 -2px 0 var(--ink);
+  border-radius: 0;
+  padding: 3px 0;
+}
+
+.fmt-key {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 20px;
+  margin-top: 14px;
+  font-size: 13px;
+  color: var(--ink-3);
+}
+
+/* a bar that shows how much of something got used */
+
+.meter {
+  display: grid;
+  gap: 10px;
+  font-size: 14px;
+}
+
+.meter-track {
+  height: 12px;
+  border-radius: 999px;
+  background: var(--surface);
+  overflow: hidden;
+}
+
+.meter-track b {
+  display: block;
+  height: 100%;
+  width: 0;
+  border-radius: 999px;
+  background: var(--ink);
+  transition: width 1.4s var(--ease) 0.2s;
+}
+
+.live .meter-track b {
+  width: var(--w);
+}
+
+.meter-key {
+  display: flex;
+  justify-content: space-between;
+  color: var(--ink-3);
+}
+
+/* out of 12 tries, how many said something normal */
+
+.tries {
+  display: grid;
+  gap: 18px;
+}
+
+.tries-row {
+  display: grid;
+  grid-template-columns: 90px minmax(0, 1fr) 64px;
+  align-items: center;
+  gap: 16px;
+  font-size: 14px;
+}
+
+.tries-row .mono {
+  color: var(--ink-3);
+}
+
+.tries-dots {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 6px;
+  max-width: 360px;
+}
+
+.tries-dots i {
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--surface-2);
+  transform: scale(0.5);
+  transition: transform 0.5s var(--ease), background-color 0.3s ease;
+  transition-delay: calc(var(--k) * 60ms + 200ms);
+}
+
+.live .tries-dots i.ok {
+  background: var(--ink);
+  transform: none;
+}
+
+.live .tries-dots i.no {
+  background: var(--ink-3);
+  transform: scale(0.72);
+}
+
+.tries-row .score {
+  text-align: right;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+/* images from the paper are dark, so they sit in a dark frame */
+
+.dark-fig {
+  --r: 28px;
+  padding: 16px;
+  background: #111;
+}
+
+.dark-fig img {
+  width: 100%;
+  border-radius: 12px;
+}
+
+figcaption {
+  margin-top: 10px;
+  font-size: 14px;
+  color: var(--ink-3);
+}
+
+/* next one */
+
+.cs-next {
+  margin-top: clamp(64px, 12vh, 140px);
+}
+
+.next-card {
+  --r: 44px;
+  display: grid;
+  gap: 18px;
+  padding: clamp(28px, 5vw, 64px);
+  background: var(--surface);
+  transition: background-color 0.4s ease;
+}
+
+.next-card:hover {
+  background: var(--surface-2);
+}
+
+.next-title {
+  width: fit-content;
+  font-size: clamp(56px, 10vw, 150px);
+  line-height: 0.9;
+  letter-spacing: -0.06em;
+  font-weight: 450;
+  transition: transform 0.8s var(--ease);
+}
+
+.next-card:hover .next-title {
+  transform: translateX(12px);
+}
+
+.next-card p {
+  max-width: 34rem;
+  color: var(--ink-2);
+}

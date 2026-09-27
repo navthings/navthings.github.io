@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script>document.documentElement.classList.add("js")</script>
+
+  <title>playground, a case study · navthings</title>
+
+  <meta name="description" content="running my language models in the browser with wllama, with no server." />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="navthings" />
+  <meta property="og:title" content="playground, a case study" />
+  <meta property="og:description" content="running my language models in the browser with wllama, with no server." />
+  <meta property="og:url" content="https://navthings.github.io/work/playground.html" />
+  <meta property="og:image" content="https://navthings.github.io/og.png?v=3" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="navthings, training small language models from scratch" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="playground, a case study" />
+  <meta name="twitter:description" content="running my language models in the browser with wllama, with no server." />
+  <meta name="twitter:image" content="https://navthings.github.io/og.png?v=3" />
+  <meta name="theme-color" content="#ffffff" />
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../apple-touch-icon.png" />
+  <link rel="alternate" type="application/rss+xml" title="navthings" href="../feed.xml" />
+
+  <link rel="preload" href="../assets/fonts/geist.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="../assets/site.css" />
+  <link rel="stylesheet" href="../assets/home.css" />
+  <link rel="stylesheet" href="../assets/work.css" />
+</head>
+
+<body>
+  <a class="skip" href="#main">skip to content</a>
+
+  <header class="nav">
+    <a class="brand" href="../" aria-label="navthings, home"><img src="../favicon.svg" alt="" /><span>navthings</span></a>
+    <nav class="links" aria-label="main">
+      <span class="blob"></span>
+      <a href="../#work">work</a>
+      <a href="../#writing">writing</a>
+      <a href="../playground/">playground</a>
+      <a class="pill" href="mailto:navneet.dagdiya@gmail.com" data-email>email</a>
+    </nav>
+    <span class="progress"></span>
+  </header>
+
+  <main class="sheet" id="main">
+    <header class="cs-head wrap wide">
+      <p class="cs-kicker mono" data-reveal><a href="../#work">work</a><span>/</span><span>web · sep 2026</span></p>
+      <h1 class="cs-title" style="view-transition-name: t-playground">playground</h1>
+      <p class="cs-lede" data-words style="--d: 0.15s">i wanted people to be able to try my models without installing anything. so theres a page where they run right in your browser tab, on your own computer.</p>
+      <dl class="cs-meta" data-stagger="0.06" style="--d: 0.3s">
+          <div class="sq" data-reveal><dt>engine</dt><dd>wllama, llama.cpp in wasm</dd></div>
+          <div class="sq" data-reveal><dt>models</dt><dd>4, from 17mb to 274mb</dd></div>
+          <div class="sq" data-reveal><dt>hosted on</dt><dd>github pages and hugging face</dd></div>
+          <div class="sq" data-reveal><dt>server</dt><dd>none</dd></div>
+      </dl>
+      <div class="row" data-reveal style="--d: 0.5s">
+        <a class="btn dark" href="../playground/"><span class="inner">open the playground</span></a>
+        <a class="btn line" href="https://github.com/ngxson/wllama" target="_blank" rel="noopener"><span class="inner">wllama</span></a>
+      </div>
+    </header>
+    <section class="wrap wide">
+      <div class="cs-figure sq" data-live data-reveal="scale">
+        <p class="fig-title">what your browser downloads, once</p>
+          <div class="hbars" style="margin-top: 0">
+            <div class="hbar-group"><span>lilchat <span class="mono muted">q4_k_m</span></span><div class="hbar" style="--k: 0"><b style="--w: 91.3%; background: var(--ink)"></b><em>274mb</em></div></div>
+            <div class="hbar-group"><span>lilbase <span class="mono muted">q4_k_m</span></span><div class="hbar" style="--k: 1"><b style="--w: 91.3%; background: var(--ink)"></b><em>274mb</em></div></div>
+            <div class="hbar-group"><span>tale <span class="mono muted">q8_0</span></span><div class="hbar" style="--k: 2"><b style="--w: 17.3%; background: var(--ink)"></b><em>52mb</em></div></div>
+            <div class="hbar-group"><span>lilstory</span><div class="hbar" style="--k: 3"><b style="--w: 5.7%; background: var(--ink)"></b><em>17mb</em></div></div>
+          </div>
+      </div>
+    </section>
+
+    <section class="cs-body wrap wide">
+      <div class="cs-sec" data-reveal>
+        <h2 class="cs-h">how it works</h2>
+        <div class="cs-text">
+          <p>it runs on <a href="https://github.com/ngxson/wllama" target="_blank" rel="noopener">wllama</a>, which is llama.cpp compiled to webassembly. you pick a model, the page pulls the gguf file straight from <a href="https://huggingface.co/navthings" target="_blank" rel="noopener">hugging face</a>, and then everything happens on your machine.</p>
+          <p>this site is just static files on github pages. <strong>theres no server doing any of it</strong>, so nothing you type gets sent anywhere.</p>
+        </div>
+      </div>
+      <div class="cs-sec" data-reveal>
+        <h2 class="cs-h">making it fit</h2>
+        <div class="cs-text">
+          <p>the two big ones are quantized to 4 bit (<code>q4_k_m</code>), which gets them down to 274mb. tale is 8 bit at 52mb and lilstory is only 17mb.</p>
+          <p>the context is small too. <strong>1024 tokens</strong> for lilchat and lilbase, 384 for tale, 256 for lilstory. when a chat gets too long, the page drops the oldest turns so theres always room left for a reply.</p>
+        </div>
+      </div>
+      <div class="cs-sec" data-reveal>
+        <h2 class="cs-h">talking to lilchat</h2>
+        <div class="cs-text">
+          <p>lilchat only understands the format it was trained on, so the page rebuilds the whole conversation in that format every time you send something, and stops as soon as the model writes <code>[INST]</code> or <code>&lt;/s&gt;</code>.</p>
+          <div class="fig">
+            <div class="fmt sq"><span class="ctl">[INST]</span> <span class="you">hi</span> <span class="ctl">[/INST]</span> <span class="bot">Hello! How can I help you today?</span><span class="ctl">&lt;/s&gt;</span><span class="ctl">[INST]</span> <span class="you">whats 17 + 25?</span> <span class="ctl">[/INST]</span></div>
+            <div class="fmt-key"><span>the model writes whatever comes next</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="cs-sec" data-reveal>
+        <h2 class="cs-h">what broke</h2>
+        <div class="cs-text">
+          <p><strong>safari.</strong> it says it supports the faster memory64 build of wllama, then cant actually run it. so on safari the page quietly points the engine at the compat build instead.</p>
+          <p><strong>firefox.</strong> it runs the models on one cpu core, so theyre slow. i tried turning on multithreading with a service worker that adds the headers github pages cant send. it broke the page, so i undid it, and now the page removes that worker from anyone who got it. firefox users get a heads up instead.</p>
+          <p>the engine also loads lazily, so if it cant download for some reason the page still shows up and tells you, instead of just being blank.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="statement wrap">
+      <p class="scrub">no server, no api key, no account. just a static page and your own computer doing the work.</p>
+    </section>
+    <section class="cs-next wrap wide">
+      <a class="next-card sq" href="lilbase.html" data-reveal="scale">
+        <span class="label">next case study</span>
+        <span class="next-title" style="view-transition-name: t-lilbase">lilbase</span>
+        <p>297m params on a free tpu. where the models on the playground come from.</p>
+      </a>
+    </section>
+
+  </main>
+
+  <footer class="foot">
+    <div class="foot-top">
+      <div>
+        <p class="foot-say">say hi. <span>maybe i'll reply.</span></p>
+        <button class="btn" type="button" data-email><span class="inner">copy my email</span></button>
+        <p class="hint">50-50 i respond</p>
+      </div>
+      <nav class="foot-links" aria-label="elsewhere">
+        <a href="https://github.com/navthings" target="_blank" rel="noopener">github <span>- it still works</span></a>
+        <a href="https://huggingface.co/navthings" target="_blank" rel="noopener">hugging face <span>- the weights</span></a>
+        <a href="https://ollama.com/navthings" target="_blank" rel="noopener">ollama <span>- models i've pushed</span></a>
+        <a href="https://orcid.org/0009-0002-2764-866X" target="_blank" rel="noopener">orcid <span>- research id</span></a>
+        <a href="https://doi.org/10.5281/zenodo.22340667" target="_blank" rel="noopener">zenodo <span>- the paper</span></a>
+        <a href="../feed.xml">rss <span>- new posts</span></a>
+      </nav>
+    </div>
+    <div class="foot-mark">
+      <svg viewBox="66 64 384 378" aria-hidden="true" data-mark></svg>
+      <div class="meta">navthings, made in australia<br /><button type="button" data-top>back to top</button></div>
+    </div>
+  </footer>
+
+  <script src="../assets/vendor/lenis.min.js"></script>
+  <script src="../assets/site.js"></script>
+  <script src="../assets/home.js"></script>
+</body>
+</html>

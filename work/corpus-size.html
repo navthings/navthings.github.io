@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script>document.documentElement.classList.add("js")</script>
+
+  <title>the paper, a case study · navthings</title>
+
+  <meta name="description" content="same model, four amounts of data. what happened when i trained lilstory on 1, 5, 10 and 15 percent of tinystories." />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="navthings" />
+  <meta property="og:title" content="the paper, a case study" />
+  <meta property="og:description" content="same model, four amounts of data. what happened when i trained lilstory on 1, 5, 10 and 15 percent of tinystories." />
+  <meta property="og:url" content="https://navthings.github.io/work/corpus-size.html" />
+  <meta property="og:image" content="https://navthings.github.io/og.png?v=3" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="navthings, training small language models from scratch" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="the paper, a case study" />
+  <meta name="twitter:description" content="same model, four amounts of data. what happened when i trained lilstory on 1, 5, 10 and 15 percent of tinystories." />
+  <meta name="twitter:image" content="https://navthings.github.io/og.png?v=3" />
+  <meta name="theme-color" content="#ffffff" />
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../apple-touch-icon.png" />
+  <link rel="alternate" type="application/rss+xml" title="navthings" href="../feed.xml" />
+
+  <link rel="preload" href="../assets/fonts/geist.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="../assets/site.css" />
+  <link rel="stylesheet" href="../assets/home.css" />
+  <link rel="stylesheet" href="../assets/work.css" />
+</head>
+
+<body>
+  <a class="skip" href="#main">skip to content</a>
+
+  <header class="nav">
+    <a class="brand" href="../" aria-label="navthings, home"><img src="../favicon.svg" alt="" /><span>navthings</span></a>
+    <nav class="links" aria-label="main">
+      <span class="blob"></span>
+      <a href="../#work">work</a>
+      <a href="../#writing">writing</a>
+      <a href="../playground/">playground</a>
+      <a class="pill" href="mailto:navneet.dagdiya@gmail.com" data-email>email</a>
+    </nav>
+    <span class="progress"></span>
+  </header>
+
+  <main class="sheet" id="main">
+    <header class="cs-head wrap wide">
+      <p class="cs-kicker mono" data-reveal><a href="../#work">work</a><span>/</span><span>research · sep 2026</span></p>
+      <h1 class="cs-title" style="view-transition-name: t-paper">the paper</h1>
+      <p class="cs-lede" data-words style="--d: 0.15s">i wanted to see how much the amount of data actually matters if you keep everything else the same. so i trained the same model four times on more and more of tinystories, and wrote it up.</p>
+      <dl class="cs-meta" data-stagger="0.06" style="--d: 0.3s">
+          <div class="sq" data-reveal><dt>model</dt><dd>lilstory, 8.2m</dd></div>
+          <div class="sq" data-reveal><dt>runs</dt><dd>4, 5000 steps each</dd></div>
+          <div class="sq" data-reveal><dt>data</dt><dd>22k to 330k stories</dd></div>
+          <div class="sq" data-reveal><dt>published on</dt><dd>zenodo</dd></div>
+      </dl>
+      <div class="row" data-reveal style="--d: 0.5s">
+        <a class="btn dark" href="https://doi.org/10.5281/zenodo.22340667" target="_blank" rel="noopener"><span class="inner">read the paper</span></a>
+        <a class="btn line" href="../blog/dataset-size-paper.html"><span class="inner">the original post</span></a>
+      </div>
+    </header>
+    <section class="wrap wide">
+      <div class="cs-figure sq" data-reveal="scale">
+        <p class="fig-title">train and val loss at the end of each run, lower is better</p>
+        <div class="legend"><span><i style="background: var(--ink)"></i>val loss, on stories it never saw</span><span><i style="background: #c9c9c6"></i>train loss</span></div>
+        <div class="chart" data-chart="paper" data-height="320" style="margin-top: 24px"></div>
+        <details class="table-view">
+          <summary>see the numbers</summary>
+          <table>
+            <tr><th>data</th><th class="num">stories</th><th class="num">train loss</th><th class="num">val loss</th></tr>
+            <tr><td>1%</td><td class="num">22k</td><td class="num">1.329</td><td class="num">2.402</td></tr>
+            <tr><td>5%</td><td class="num">110k</td><td class="num">1.701</td><td class="num">1.932</td></tr>
+            <tr class="hi"><td>10%</td><td class="num">220k</td><td class="num">1.826</td><td class="num">1.816</td></tr>
+            <tr><td>15%</td><td class="num">330k</td><td class="num">1.737</td><td class="num">1.837</td></tr>
+          </table>
+        </details>
+      </div>
+    </section>
+
+    <section class="cs-body wrap wide">
+      <div class="cs-sec" data-reveal>
+        <h2 class="cs-h">the setup</h2>
+        <div class="cs-text">
+          <p>one model, <a href="../blog/lilstory.html">lilstory</a>, trained four times on <strong>1%, 5%, 10% and 15%</strong> of <a href="https://huggingface.co/datasets/roneneldan/TinyStories" target="_blank" rel="noopener">tinystories</a>. same size, same settings, 5000 steps each. the only thing that changes is how much it gets to read.</p>
+          <p>lower loss is better, and val loss is the one that matters, since its measured on stories the model never saw.</p>
+        </div>
+      </div>
+      <div class="cs-sec" data-reveal>
+        <h2 class="cs-h">what happened</h2>
+        <div class="cs-text">
+          <p>the 1% one had the best training loss and the worst val loss. it basically just <strong>memorised its 22k stories</strong> lol. the more data i gave it the smaller that gap got, and at 10% theyre pretty much the same.</p>
+          <div class="fig" data-live>
+            <p class="fig-title" style="font-size: 15px; color: var(--ink-2); margin-bottom: 16px">the gap, val loss minus train loss</p>
+            <div class="hbars" style="margin-top: 0">
+              <div class="hbar" style="--k: 0"><span class="mono" style="width: 40px; flex-shrink: 0">1%</span><b style="--w: 80%; background: var(--ink)"></b><em>1.073</em></div>
+              <div class="hbar" style="--k: 1"><span class="mono" style="width: 40px; flex-shrink: 0">5%</span><b style="--w: 17.2%; background: var(--ink)"></b><em>0.231</em></div>
+              <div class="hbar" style="--k: 2"><span class="mono" style="width: 40px; flex-shrink: 0">10%</span><b style="--w: 0.8%; background: var(--ink)"></b><em>-0.010, basically none</em></div>
+              <div class="hbar" style="--k: 3"><span class="mono" style="width: 40px; flex-shrink: 0">15%</span><b style="--w: 7.5%; background: var(--ink)"></b><em>0.100</em></div>
+            </div>
+          </div>
+          <figure class="fig" data-reveal>
+            <div class="dark-fig sq"><img src="../blog/img/paper-1pct.png" alt="1% run: train loss keeps dropping while validation loss flattens out and creeps back up" loading="lazy" /></div>
+            <figcaption>1% of the data. train loss (blue) keeps going down, val loss (orange) gives up and creeps back up</figcaption>
+          </figure>
+          <figure class="fig" data-reveal>
+            <div class="dark-fig sq"><img src="../blog/img/paper-10pct.png" alt="10% run: train and validation loss stay together the whole way" loading="lazy" /></div>
+            <figcaption>10% of the data. the two lines stay together the whole way</figcaption>
+          </figure>
+        </div>
+      </div>
+      <div class="cs-sec" data-reveal>
+        <h2 class="cs-h">the weird one</h2>
+        <div class="cs-text">
+          <p>15% was slightly worse than 10%, which i didnt expect. i think its because every model only got 5000 steps, so the 15% one probably never even got through all its data.</p>
+          <p>the difference is tiny too, <strong>0.021</strong>, so it could just be noise.</p>
+        </div>
+      </div>
+      <div class="cs-sec" data-reveal>
+        <h2 class="cs-h">read it</h2>
+        <div class="cs-text">
+          <p>its on zenodo if you wanna read the whole thing: <a href="https://doi.org/10.5281/zenodo.22340667" target="_blank" rel="noopener">the effect of corpus size on the performance of a llm</a>.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="statement wrap">
+      <p class="scrub">with 22k stories it just memorised them. with 220k it actually had to learn something.</p>
+    </section>
+    <section class="cs-next wrap wide">
+      <a class="next-card sq" href="playground.html" data-reveal="scale">
+        <span class="label">next case study</span>
+        <span class="next-title" style="view-transition-name: t-playground">playground</span>
+        <p>all my models, running in your browser tab. no install, no server.</p>
+      </a>
+    </section>
+
+  </main>
+
+  <footer class="foot">
+    <div class="foot-top">
+      <div>
+        <p class="foot-say">say hi. <span>maybe i'll reply.</span></p>
+        <button class="btn" type="button" data-email><span class="inner">copy my email</span></button>
+        <p class="hint">50-50 i respond</p>
+      </div>
+      <nav class="foot-links" aria-label="elsewhere">
+        <a href="https://github.com/navthings" target="_blank" rel="noopener">github <span>- it still works</span></a>
+        <a href="https://huggingface.co/navthings" target="_blank" rel="noopener">hugging face <span>- the weights</span></a>
+        <a href="https://ollama.com/navthings" target="_blank" rel="noopener">ollama <span>- models i've pushed</span></a>
+        <a href="https://orcid.org/0009-0002-2764-866X" target="_blank" rel="noopener">orcid <span>- research id</span></a>
+        <a href="https://doi.org/10.5281/zenodo.22340667" target="_blank" rel="noopener">zenodo <span>- the paper</span></a>
+        <a href="../feed.xml">rss <span>- new posts</span></a>
+      </nav>
+    </div>
+    <div class="foot-mark">
+      <svg viewBox="66 64 384 378" aria-hidden="true" data-mark></svg>
+      <div class="meta">navthings, made in australia<br /><button type="button" data-top>back to top</button></div>
+    </div>
+  </footer>
+
+  <script src="../assets/vendor/lenis.min.js"></script>
+  <script src="../assets/site.js"></script>
+  <script src="../assets/charts.js"></script>
+  <script src="../assets/home.js"></script>
+</body>
+</html>
