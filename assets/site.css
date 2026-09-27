@@ -119,6 +119,25 @@ svg {
   transform: none;
 }
 
+/* breadcrumbs on inner pages */
+
+.cs-kicker {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  color: var(--ink-3);
+}
+
+.cs-kicker a {
+  color: var(--ink-2);
+  transition: color 0.2s ease;
+}
+
+.cs-kicker a:hover {
+  color: var(--ink);
+}
+
 .cap {
   font-size: 13px;
   letter-spacing: 0;

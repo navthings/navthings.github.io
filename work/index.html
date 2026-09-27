@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script>document.documentElement.classList.add("js")</script>
+
+  <title>work · navthings</title>
+
+  <meta name="description" content="case studies: pretraining lilbase and sprout, finetuning lilchat, a paper on corpus size, and in-browser inference." />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="navthings" />
+  <meta property="og:title" content="work" />
+  <meta property="og:description" content="case studies: pretraining lilbase and sprout, finetuning lilchat, a paper on corpus size, and in-browser inference." />
+  <meta property="og:url" content="https://navthings.github.io/work/" />
+  <meta property="og:image" content="https://navthings.github.io/og.png?v=5" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="navthings, training small language models from scratch" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="work" />
+  <meta name="twitter:description" content="case studies: pretraining lilbase and sprout, finetuning lilchat, a paper on corpus size, and in-browser inference." />
+  <meta name="twitter:image" content="https://navthings.github.io/og.png?v=5" />
+  <meta name="theme-color" content="#ffffff" />
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../apple-touch-icon.png" />
+  <link rel="alternate" type="application/rss+xml" title="navthings" href="../feed.xml" />
+
+  <link rel="preload" href="../assets/fonts/geist.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="../assets/site.css" />
+  <link rel="stylesheet" href="../assets/home.css" />
+  <style>.list-page{padding-top:clamp(130px,20vh,190px)}.list-title{margin-top:24px;font-size:clamp(40px,6vw,80px);line-height:.95;letter-spacing:-.055em;font-weight:450;max-width:18ch}</style>
+</head>
+
+<body>
+  <a class="skip" href="#main">skip to content</a>
+
+  <header class="nav" data-label="False">
+    <div class="island">
+      <span class="island-fill" aria-hidden="true"></span>
+      <a class="island-mark" href="../" aria-label="navthings, home"><img src="../favicon.svg" alt="" /></a>
+      <span class="island-now" aria-hidden="true"><span>work</span></span>
+      <nav class="island-links" aria-label="main">
+        <a class="home" href="../">navthings</a>
+        <a href="../#work">work</a>
+        <a href="../#writing">writing</a>
+        <a href="../playground/">playground</a>
+        <a href="mailto:navneet.dagdiya@gmail.com" data-email>email</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="sheet" id="main">
+    <section class="list-page wrap wide" data-label="work">
+      <p class="cs-kicker cap" data-reveal><a href="../">navthings</a><span>/</span><span>work</span></p>
+      <h1 class="list-title" data-words>the models, and everything that went wrong making them.</h1>
+      <div class="area-list follow" data-stagger="0.06" style="margin-top: 48px">
+        <a class="area-row" href="sprout.html" data-reveal>
+          <span class="area-name" style="view-transition-name: t-sprout">sprout</span>
+          <span class="area-text">the next base model. 523m params on 12b tokens from four sources, with sharded adamw and a wsd schedule.</span>
+          <span class="area-link cap">training now</span>
+        </a>
+        <a class="area-row" href="lilbase.html" data-reveal>
+          <span class="area-name" style="view-transition-name: t-lilbase">lilbase</span>
+          <span class="area-text">a 297m param base model, pretrained from scratch in jax on a tpu v5e-8. beats gpt-2 small on two of three benchmarks.</span>
+          <span class="area-link cap">pretraining</span>
+        </a>
+        <a class="area-row" href="lilchat.html" data-reveal>
+          <span class="area-name" style="view-transition-name: t-lilchat">lilchat</span>
+          <span class="area-text">supervised finetuning of lilbase in mlx, loss only on the assistant turns. val loss 2.230 to 1.337.</span>
+          <span class="area-link cap">finetuning</span>
+        </a>
+        <a class="area-row" href="corpus-size.html" data-reveal>
+          <span class="area-name" style="view-transition-name: t-paper">the paper</span>
+          <span class="area-text">how corpus size affects generalisation. same model and settings, four data sizes, published on zenodo.</span>
+          <span class="area-link cap">research</span>
+        </a>
+        <a class="area-row" href="playground.html" data-reveal>
+          <span class="area-name" style="view-transition-name: t-playground">playground</span>
+          <span class="area-text">client side inference for all my models, quantized gguf on llama.cpp compiled to webassembly.</span>
+          <span class="area-link cap">inference</span>
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="foot" data-label="say hi">
+    <div class="foot-top">
+      <div>
+        <p class="foot-say"><button class="say" type="button" data-email><span class="inner">say hi.</span></button> <span>maybe i'll reply.</span></p>
+        <p class="hint">that copies my email. 50-50 i respond.</p>
+      </div>
+      <nav class="foot-links" aria-label="elsewhere">
+        <a href="https://github.com/navthings" target="_blank" rel="noopener">github <span>- it still works</span></a>
+        <a href="https://huggingface.co/navthings" target="_blank" rel="noopener">hugging face <span>- the weights</span></a>
+        <a href="https://ollama.com/navthings" target="_blank" rel="noopener">ollama <span>- models i've pushed</span></a>
+        <a href="https://orcid.org/0009-0002-2764-866X" target="_blank" rel="noopener">orcid <span>- research id</span></a>
+        <a href="https://doi.org/10.5281/zenodo.22340667" target="_blank" rel="noopener">zenodo <span>- the paper</span></a>
+        <a href="../feed.xml">rss <span>- new posts</span></a>
+      </nav>
+    </div>
+    <div class="foot-mark">
+      <svg viewBox="66 64 384 378" aria-hidden="true" data-mark></svg>
+      <div class="meta">navthings, made in australia<br /><button type="button" data-top>back to top</button></div>
+    </div>
+  </footer>
+
+  <script src="../assets/vendor/lenis.min.js"></script>
+  <script src="../assets/site.js"></script>
+  <script src="../assets/home.js"></script>
+</body>
+</html>
