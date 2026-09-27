@@ -520,6 +520,36 @@ svg {
   transition: opacity 0.25s linear;
 }
 
+/* hand drawn marks */
+
+[data-scrib] {
+  position: relative;
+  display: inline-block;
+}
+
+.scrib-svg {
+  position: absolute;
+  z-index: 0;
+  max-width: none;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.scrib-svg path {
+  fill: none;
+  stroke: var(--scrib, var(--accent));
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dashoffset: var(--len);
+  transition: stroke-dashoffset 0.9s cubic-bezier(0.55, 0.1, 0.3, 1);
+  transition-delay: calc(var(--k) * 0.45s);
+}
+
+.drawn > .scrib-svg path,
+[data-scrib-on="hover"]:hover > .scrib-svg path {
+  stroke-dashoffset: 0;
+}
+
 /* hover dot that follows rows in a list */
 
 .follow {
@@ -583,15 +613,6 @@ svg {
   letter-spacing: inherit;
   color: #fff;
   cursor: pointer;
-  background-image: linear-gradient(currentColor, currentColor);
-  background-size: 0% 2px;
-  background-position: 0 92%;
-  background-repeat: no-repeat;
-  transition: background-size 0.5s var(--ease), color 0.3s ease;
-}
-
-.foot-say .say:hover {
-  background-size: 100% 2px;
 }
 
 .foot .hint {

@@ -392,7 +392,123 @@ function followers() {
   }
 }
 
-window.site = { onScroll, requestTick, squircles, reveals, splitWords, scrollToTarget, clamp, reduce, finePointer, $$ };
+// hand drawn marks: circles and underlines with a bit of wobble, seeded so they look the same every visit
+function seeded(seed) {
+  let t = seed >>> 0;
+  return () => {
+    t += 0x6d2b79f5;
+    let r = Math.imul(t ^ (t >>> 15), 1 | t);
+    r ^= r + Math.imul(r ^ (r >>> 7), 61 | r);
+    return ((r ^ (r >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+function smoothPath(pts) {
+  const f = (n) => n.toFixed(1);
+  let d = `M${f(pts[0][0])} ${f(pts[0][1])}`;
+  for (let i = 0; i < pts.length - 1; i++) {
+    const p0 = pts[i - 1] || pts[i];
+    const p1 = pts[i];
+    const p2 = pts[i + 1];
+    const p3 = pts[i + 2] || p2;
+    d += ` C${f(p1[0] + (p2[0] - p0[0]) / 6)} ${f(p1[1] + (p2[1] - p0[1]) / 6)} ${f(p2[0] - (p3[0] - p1[0]) / 6)} ${f(p2[1] - (p3[1] - p1[1]) / 6)} ${f(p2[0])} ${f(p2[1])}`;
+  }
+  return d;
+}
+
+function scribblePaths(kind, w, h, rnd, fs) {
+  const paths = [];
+  if (kind === "circle") {
+    const cx = w / 2;
+    const cy = h / 2;
+    const rx = w / 2 + fs * 0.16 + rnd() * fs * 0.05;
+    const ry = h / 2 + fs * 0.08 + rnd() * fs * 0.04;
+    const start = -Math.PI * 0.8 + rnd() * 0.5;
+    const turns = 1.1 + rnd() * 0.12;
+    const tilt = (rnd() - 0.5) * 0.08;
+    const ph = [rnd() * 6.3, rnd() * 6.3];
+    const pts = [];
+    for (let i = 0; i <= 56; i++) {
+      const t = i / 56;
+      const a = start + t * turns * Math.PI * 2;
+      const wob = 1 + 0.035 * Math.sin(a * 2 + ph[0]) + 0.02 * Math.sin(a * 3 + ph[1]);
+      const spiral = 1 + (t - 0.5) * 0.09;
+      const x = rx * wob * spiral * Math.cos(a);
+      const y = ry * wob * spiral * Math.sin(a);
+      pts.push([cx + x * Math.cos(tilt) - y * Math.sin(tilt), cy + x * Math.sin(tilt) + y * Math.cos(tilt)]);
+    }
+    paths.push(smoothPath(pts));
+  } else {
+    // underline, sometimes with a second quicker pass back
+    const passes = kind === "double" ? 2 : 1;
+    for (let k = 0; k < passes; k++) {
+      const y0 = h + fs * (0.06 + k * 0.1) + rnd() * 2;
+      const x0 = -fs * 0.06 + (k ? w * 0.12 : 0);
+      const x1 = w + fs * 0.08 - (k ? w * 0.05 : 0);
+      const pts = [];
+      const ph = rnd() * 6.3;
+      for (let i = 0; i <= 14; i++) {
+        const t = i / 14;
+        const x = k ? x1 + (x0 - x1) * t : x0 + (x1 - x0) * t;
+        const bow = Math.sin(t * Math.PI) * fs * 0.03;
+        const lift = (k ? 1 - t : t) * t * -fs * 0.05;
+        pts.push([x, y0 + bow + lift + Math.sin(t * 7 + ph) * fs * 0.012]);
+      }
+      paths.push(smoothPath(pts));
+    }
+  }
+  return paths;
+}
+
+function scribbles(root = document) {
+  const drawn = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        const el = entry.target;
+        const delay = parseFloat(el.dataset.scribDelay || "0.15");
+        setTimeout(() => el.classList.add("drawn"), delay * 1000);
+        drawn.unobserve(el);
+      }
+    },
+    { threshold: 1, rootMargin: "0px 0px -12% 0px" }
+  );
+
+  for (const el of $$("[data-scrib]", root)) {
+    const kind = el.dataset.scrib;
+    let seed = 0;
+    for (const ch of el.textContent) seed = (seed * 31 + ch.charCodeAt(0)) | 0;
+    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svg.setAttribute("aria-hidden", "true");
+    svg.classList.add("scrib-svg");
+    el.appendChild(svg);
+
+    const draw = () => {
+      const w = el.offsetWidth;
+      const h = el.offsetHeight;
+      if (!w) return;
+      const fs = parseFloat(getComputedStyle(el).fontSize);
+      const pad = fs * 0.5;
+      svg.setAttribute("viewBox", `${-pad} ${-pad} ${w + pad * 2} ${h + pad * 2}`);
+      svg.style.cssText = `left:${-pad}px;top:${-pad}px;width:${w + pad * 2}px;height:${h + pad * 2}px`;
+      const sw = Math.min(4, Math.max(1.7, fs * 0.034));
+      svg.innerHTML = scribblePaths(kind, w, h, seeded(seed), fs)
+        .map((d, i) => `<path d="${d}" stroke-width="${sw.toFixed(2)}" style="--k:${i}"/>`)
+        .join("");
+      for (const path of svg.querySelectorAll("path")) {
+        const len = Math.ceil(path.getTotalLength());
+        path.style.strokeDasharray = len;
+        path.style.setProperty("--len", len);
+      }
+    };
+    new ResizeObserver(draw).observe(el);
+    if (el.dataset.scribOn === "hover") continue;
+    if (reduce) el.classList.add("drawn");
+    else drawn.observe(el);
+  }
+}
+
+window.site = { scribbles, onScroll, requestTick, squircles, reveals, splitWords, scrollToTarget, clamp, reduce, finePointer, $$ };
 
 squircles();
 reveals();
@@ -403,4 +519,5 @@ email();
 footer();
 followers();
 lives();
+scribbles();
 requestAnimationFrame(tick);
