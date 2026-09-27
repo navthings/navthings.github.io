@@ -48,7 +48,7 @@
   pointer-events: none;
 }
 
-html.intro .island {
+html.intro:not(.intro-fly) .island {
   opacity: 0;
 }
 

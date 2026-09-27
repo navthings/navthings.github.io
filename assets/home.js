@@ -127,8 +127,10 @@
         const scale = ((384 / 512) * to.width) / from.width;
         svg.style.transform = `translate(${tx - from.left}px, ${ty - from.top}px) scale(${scale})`;
         veil.classList.add("fly");
+        root.classList.add("intro-fly");
         await wait(760);
         finish();
+        root.classList.remove("intro-fly");
       })();
     });
   }
