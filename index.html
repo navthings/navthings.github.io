@@ -94,7 +94,7 @@
       <div class="area-list follow" data-stagger="0.06">
         <a class="area-row" href="work/lilbase.html" data-reveal>
           <span class="area-name">pretraining</span>
-          <span class="area-text">llama style base models from 8m to 523m params. lilbase read 6.1b tokens in jax across 8 tpu chips, checkpointing around 8.4 hour sessions.</span>
+          <span class="area-text">llama style models with gqa, rope, rmsnorm and swiglu, from 8m to 523m params. lilbase read 6.1b tokens data parallel across 8 tpu chips, checkpointing through 8.4 hour sessions.</span>
           <span class="area-link cap">lilbase</span>
         </a>
         <a class="area-row" href="work/lilchat.html" data-reveal>
@@ -247,8 +247,8 @@
           <div class="card-text">
             <div>
               <h3 class="card-title" style="view-transition-name: t-sprout"><a class="stretch" href="work/sprout.html">sprout</a></h3>
-              <p class="card-desc">the next base model. 523m params reading 12 billion tokens from fineweb-edu, dclm, cosmopedia and project gutenberg, back on the tpu. its the fix for lilchat not knowing much.</p>
-              <p class="card-wrong"><span>what's next</span>when it finishes it gets the same chat finetune as lilchat, and goes in the playground.</p>
+              <p class="card-desc">the next base model. 523m params reading 12 billion tokens from a four source mix, with the optimizer state sharded across 8 tpu chips. its the fix for lilchat not knowing much.</p>
+              <p class="card-wrong"><span>the goal</span>beat gpt-2 xl, which is 1.5b params, or get close. then finetune it into a competitive coding model.</p>
             </div>
             <div class="row">
               <span class="card-go"><span>read about it</span></span>
@@ -261,8 +261,9 @@
               <div class="train-num">about a third</div>
               <div class="train-track"><b></b><i style="left: 50.8%"></i></div>
               <div class="train-ticks"><span>0</span><span class="mark" style="left: 50.8%">lilbase read 6.1b in total</span><span>12b</span></div>
-              <div class="row">
-                <span class="tag">fineweb-edu</span><span class="tag">dclm</span><span class="tag">cosmopedia</span><span class="tag">project gutenberg</span>
+              <div class="mixmini">
+                <div class="mixmini-bar"><b style="--w: 55%; --c: var(--ink)"></b><b style="--w: 25%; --c: #5f5f5f"></b><b style="--w: 10%; --c: #a3a3a0"></b><b style="--w: 10%; --c: #d0d0cc"></b></div>
+                <div class="mixmini-key"><span><i style="background: var(--ink)"></i>fineweb-edu 55%</span><span><i style="background: #5f5f5f"></i>dclm 25%</span><span><i style="background: #a3a3a0"></i>cosmopedia 10%</span><span><i style="background: #d0d0cc"></i>gutenberg 10%</span></div>
               </div>
             </div>
           </div>
