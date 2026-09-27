@@ -816,3 +816,37 @@ svg {
     opacity: 1;
   }
 }
+
+@media print {
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+
+  .nav,
+  .skip,
+  .foot,
+  .ghost {
+    display: none !important;
+  }
+
+  .sheet {
+    border-radius: 0;
+    box-shadow: none;
+    padding-bottom: 0;
+  }
+
+  .scrub .w {
+    opacity: 1 !important;
+  }
+
+  figure,
+  table,
+  pre,
+  .cs-figure,
+  .card {
+    break-inside: avoid;
+  }
+}

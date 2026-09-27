@@ -1578,3 +1578,16 @@ html:not(.js) .dots {
 html:not(.js) .digits {
   display: none;
 }
+
+@media print {
+  .scale {
+    height: auto;
+  }
+
+  .scale-pin,
+  .card {
+    position: relative;
+    top: auto;
+    height: auto;
+  }
+}

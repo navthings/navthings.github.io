@@ -393,6 +393,15 @@ function lives() {
   for (const el of $$("[data-live]")) io.observe(el);
 }
 
+// printing skips the scroll, so everything that would have animated in shows up as it ends
+function printable() {
+  window.addEventListener("beforeprint", () => {
+    for (const el of $$("[data-reveal], [data-words], [data-chart]")) el.classList.add("in");
+    for (const el of $$("[data-live]")) el.classList.add("live");
+    for (const el of $$("[data-scrib]:not([data-scrib-on])")) el.classList.add("drawn");
+  });
+}
+
 // rows in a list get a soft background that glides from one to the next
 function followers() {
   for (const list of $$(".follow")) {
@@ -543,5 +552,6 @@ email();
 footer();
 followers();
 lives();
+printable();
 scribbles();
 requestAnimationFrame(tick);
