@@ -560,3 +560,52 @@ figcaption {
   max-width: 34rem;
   color: var(--ink-2);
 }
+
+/* tokens read per parameter, one tick each */
+
+.ratio {
+  display: grid;
+  gap: 14px;
+}
+
+.ratio-row {
+  display: grid;
+  grid-template-columns: 84px minmax(0, 1fr) 44px;
+  align-items: center;
+  gap: 16px;
+  font-size: 14px;
+}
+
+.ratio-row b {
+  font-weight: 400;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+}
+
+.ratio-row.muted span,
+.ratio-row.muted b {
+  color: var(--ink-3);
+}
+
+.ratio-ticks {
+  --tick: var(--ink);
+  height: 18px;
+  width: calc(var(--n) / 24 * 100%);
+  background: repeating-linear-gradient(90deg, var(--tick) 0 2px, transparent 2px calc(100% / var(--n)));
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 1.4s var(--ease) 0.2s;
+}
+
+.ratio-ticks.hot {
+  --tick: var(--accent);
+}
+
+.ratio-ticks.faint {
+  --tick: #c9c9c6;
+}
+
+.live .ratio-ticks,
+html:not(.js) .ratio-ticks {
+  clip-path: inset(0 0 0 0);
+}
