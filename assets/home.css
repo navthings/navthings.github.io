@@ -578,15 +578,14 @@ html.intro .hero [data-reveal].in {
 }
 
 .stages {
-  position: relative;
+  display: grid;
   margin-top: 28px;
-  min-height: 84px;
   max-width: 26rem;
 }
 
+/* all four share one cell, so the box is as tall as the longest one */
 .stage {
-  position: absolute;
-  inset: 0 0 auto 0;
+  grid-area: 1 / 1;
   color: var(--ink-2);
   opacity: 0;
   transform: translateY(10px);
@@ -657,10 +656,6 @@ html:not(.js) .stage {
     justify-self: start;
     max-width: 460px;
   }
-
-  .stages {
-    min-height: 72px;
-  }
 }
 
 /* short screens: clear the pill up top and shrink the grid so the whole thing fits */
@@ -687,8 +682,8 @@ html:not(.js) .stage {
   }
 
   .dots {
-    max-width: min(460px, 44vh);
-    max-width: min(460px, 44svh);
+    max-width: min(460px, 40vh);
+    max-width: min(460px, 40svh);
   }
 }
 
@@ -712,7 +707,6 @@ html:not(.js) .stage {
 
   .stages {
     margin-top: 18px;
-    min-height: 80px;
   }
 
   .scale-end {
@@ -1567,8 +1561,11 @@ html:not(.js) .scale-pin {
   padding-bottom: 80px;
 }
 
+html:not(.js) .stages {
+  display: block;
+}
+
 html:not(.js) .stage {
-  position: relative;
   margin-bottom: 14px;
 }
 
