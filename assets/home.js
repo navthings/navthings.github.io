@@ -444,6 +444,61 @@
     if (document.fonts) document.fonts.ready.then(() => measure(false));
   }
 
+  // hovering a post shows its first line in a little card that trails the cursor
+  function peek() {
+    const rows = $$("[data-peek]");
+    if (!rows.length || !window.site.finePointer) return;
+    const card = document.createElement("div");
+    card.className = "peek";
+    card.setAttribute("aria-hidden", "true");
+    card.innerHTML = '<span class="mono"></span><p></p>';
+    document.body.appendChild(card);
+    const label = card.querySelector("span");
+    const text = card.querySelector("p");
+    let x = 0;
+    let y = 0;
+    let tx = 0;
+    let ty = 0;
+    let raf = 0;
+    let on = false;
+
+    function frame() {
+      const dx = tx - x;
+      x += dx * 0.18;
+      y += (ty - y) * 0.18;
+      const tilt = clamp(dx * 0.08, -6, 6);
+      card.style.transform = `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0) rotate(${tilt.toFixed(2)}deg)`;
+      raf = on || Math.abs(dx) > 0.5 ? requestAnimationFrame(frame) : 0;
+    }
+
+    for (const row of rows) {
+      row.addEventListener("pointerenter", (e) => {
+        if (!on) {
+          x = tx = e.clientX + 32;
+          y = ty = e.clientY + 30;
+        }
+        on = true;
+        label.textContent = row.querySelector(".mono").textContent + " · " + row.querySelector(".kind").textContent;
+        text.textContent = row.dataset.peek;
+        card.classList.add("on");
+        if (!raf) raf = requestAnimationFrame(frame);
+      });
+      row.addEventListener("pointermove", (e) => {
+        tx = e.clientX + 32;
+        ty = e.clientY + 30;
+      });
+      row.addEventListener("pointerleave", () => {
+        on = false;
+        card.classList.remove("on");
+      });
+    }
+    window.addEventListener("scroll", () => {
+      if (!on) return;
+      on = false;
+      card.classList.remove("on");
+    }, { passive: true });
+  }
+
   // the playground form swaps its placeholder to whatever the chosen model is good at
   function ask() {
     const form = document.querySelector("[data-ask]");
@@ -468,6 +523,7 @@
   stack();
   chat();
   board();
+  peek();
   ask();
   requestTick();
 })();
