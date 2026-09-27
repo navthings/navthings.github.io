@@ -23,6 +23,8 @@
   function lineChart(el, cfg) {
     const H = parseFloat(el.dataset.height) || 240;
     let lastW = 0;
+    let hideTip = () => {};
+    document.addEventListener("pointerdown", (e) => !el.contains(e.target) && hideTip());
 
     function draw() {
       const W = Math.round(el.clientWidth);
@@ -84,7 +86,7 @@
       const tip = el.querySelector(".tip");
       const cross = el.querySelector(".cross");
       const hit = el.querySelector(".hit");
-      hit.addEventListener("pointermove", (e) => {
+      const show = (e) => {
         const box = el.getBoundingClientRect();
         const px = e.clientX - box.left;
         let best = 0;
@@ -101,11 +103,16 @@
         tip.style.left = Math.min(Math.max(x(best), 90), W - 90) + "px";
         tip.style.top = Math.min(...cfg.series.map((sr) => y(sr.values[best]))) + "px";
         tip.classList.add("on");
-      });
-      hit.addEventListener("pointerleave", () => {
+      };
+      const hide = () => {
         tip.classList.remove("on");
         cross.setAttribute("opacity", "0");
-      });
+      };
+      // a tap has no hover, so on touch the tooltip stays until you tap somewhere else
+      hit.addEventListener("pointermove", show);
+      hit.addEventListener("pointerdown", show);
+      hit.addEventListener("pointerleave", (e) => e.pointerType !== "touch" && hide());
+      hideTip = hide;
     }
 
     draw();
