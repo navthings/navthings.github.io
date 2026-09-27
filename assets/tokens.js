@@ -135,7 +135,7 @@
   // spaces and newlines are part of tokens, so they get drawn instead of vanishing
   function label(id) {
     const text = tok.text(id);
-    if (text.includes("�")) return Array.from(tok.bytesOf(id), (b) => "<" + b.toString(16) + ">").join("");
+    if (text.includes("\uFFFD")) return Array.from(tok.bytesOf(id), (b) => "<" + b.toString(16) + ">").join("");
     return text.replace(/ /g, "·").replace(/\n/g, "↵").replace(/\t/g, "⇥");
   }
 
