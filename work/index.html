@@ -34,8 +34,7 @@
 
   <link rel="preload" href="../assets/fonts/geist.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="stylesheet" href="../assets/site.css" />
-  <link rel="stylesheet" href="../assets/home.css" />
-  <style>.list-page{padding-top:clamp(130px,20vh,190px)}.list-title{margin-top:24px;font-size:clamp(40px,6vw,80px);line-height:.95;letter-spacing:-.055em;font-weight:450;max-width:18ch}</style>
+  <link rel="stylesheet" href="../assets/timeline.css" />
 </head>
 
 <body>
@@ -60,33 +59,91 @@
     <section class="list-page wrap wide" data-label="work">
       <p class="cs-kicker cap" data-reveal><a href="../">navthings</a><span>/</span><span>work</span></p>
       <h1 class="list-title" data-words>the models so far.</h1>
-      <div class="area-list follow" data-stagger="0.06" style="margin-top: 48px">
-        <a class="area-row" href="sprout.html" data-reveal>
-          <span class="area-name" style="view-transition-name: t-sprout">sprout</span>
-          <span class="area-text">the next base model. 523m params on 12b tokens from four sources, with sharded adamw and a wsd schedule.</span>
-          <span class="area-link cap">training now</span>
-        </a>
-        <a class="area-row" href="lilbase.html" data-reveal>
-          <span class="area-name" style="view-transition-name: t-lilbase">lilbase</span>
-          <span class="area-text">a 297m param base model, pretrained from scratch in jax on a tpu v5e-8. beats gpt-2 small on two of three benchmarks.</span>
-          <span class="area-link cap">pretraining</span>
-        </a>
-        <a class="area-row" href="lilchat.html" data-reveal>
-          <span class="area-name" style="view-transition-name: t-lilchat">lilchat</span>
-          <span class="area-text">supervised finetuning of lilbase in mlx, loss only on the assistant turns. val loss 2.230 to 1.337.</span>
-          <span class="area-link cap">finetuning</span>
-        </a>
-        <a class="area-row" href="corpus-size.html" data-reveal>
-          <span class="area-name" style="view-transition-name: t-paper">the paper</span>
-          <span class="area-text">how corpus size affects generalisation. same model and settings, four data sizes, published on zenodo.</span>
-          <span class="area-link cap">research</span>
-        </a>
-        <a class="area-row" href="playground.html" data-reveal>
-          <span class="area-name" style="view-transition-name: t-playground">playground</span>
-          <span class="area-text">client side inference for all my models, quantized gguf on llama.cpp compiled to webassembly.</span>
-          <span class="area-link cap">inference</span>
-        </a>
-      </div>
+      <p class="tl-lede" data-reveal style="--d: 0.2s">in the order i made them, starting with a transformer that only knew one sentence. the dots grow with the number of parameters.</p>
+      <ol class="tl" role="list">
+        <li class="tl-line" aria-hidden="true"><span class="tl-fill"></span></li>
+        <li class="tl-item" data-reveal>
+          <time class="tl-date cap" datetime="2026-08-30">aug 30</time>
+          <span class="tl-node tiny" aria-hidden="true"></span>
+          <div class="tl-body">
+            <h2 class="tl-name">my first transformer</h2>
+            <p class="tl-text">first ml thing i made. it trains on one sentence and guesses the next word in it, so really its memorising, but it has all the actual transformer parts: embeddings, attention, the loss and adam.</p>
+            <p class="tl-facts cap"><span>8 numbers per word</span><span>1 layer, 2 heads</span><span>pytorch</span></p>
+            <p class="tl-links cap"><a href="../blog/liltransformer.html">post</a></p>
+          </div>
+        </li>
+        <li class="tl-item" data-reveal>
+          <time class="tl-date cap" datetime="2026-08-31">aug 31</time>
+          <span class="tl-node tiny" aria-hidden="true"></span>
+          <div class="tl-body">
+            <h2 class="tl-name">bigtransformer</h2>
+            <p class="tl-text">the same model a bit bigger, reading a whole text file instead of one sentence. it works on whole words, so cat and cats are unrelated to it and it cant say anything that isnt in the file. thats why i needed a tokenizer next.</p>
+            <p class="tl-facts cap"><span>16 numbers per word</span><span>no tokenizer</span></p>
+            <p class="tl-links cap"><a href="../blog/bigtransformer.html">post</a></p>
+          </div>
+        </li>
+        <li class="tl-item" data-reveal>
+          <time class="tl-date cap" datetime="2026-09-04">sep 4</time>
+          <span class="tl-node" style="--s: 16px" aria-hidden="true"></span>
+          <div class="tl-body">
+            <h2 class="tl-name">lilstory</h2>
+            <p class="tl-text">my first real language model. llama style, trained on tinystories on my macbooks gpu, with a bpe tokenizer i trained myself. it writes little stories that mostly make sense and then kinda wander off.</p>
+            <p class="tl-facts cap"><span>8.2m params</span><span>4 layers</span><span>8000 token vocab</span></p>
+            <p class="tl-links cap"><a href="../blog/lilstory.html">post</a><a href="../playground/#tokenizer">its tokenizer</a><a href="../playground/?model=lilstory">try it</a></p>
+          </div>
+        </li>
+        <li class="tl-item" data-reveal>
+          <time class="tl-date cap" datetime="2026-09-05">sep 5</time>
+          <span class="tl-node" style="--s: 16px" aria-hidden="true"></span>
+          <div class="tl-body">
+            <h2 class="tl-name"><a href="corpus-size.html" style="view-transition-name: t-paper">the paper</a></h2>
+            <p class="tl-text">i trained lilstory four times on more and more of tinystories to see how much the data matters. at 1% it memorised its stories, by 10% train and val loss were basically the same.</p>
+            <p class="tl-facts cap"><span>4 runs</span><span>5000 steps each</span><span>on zenodo</span></p>
+            <p class="tl-links cap"><a href="corpus-size.html">case study</a><a href="../blog/dataset-size-paper.html">post</a><a href="https://doi.org/10.5281/zenodo.22340667" target="_blank" rel="noopener">the paper</a></p>
+          </div>
+        </li>
+        <li class="tl-item" data-reveal>
+          <time class="tl-date cap" datetime="2026-09-12">sep 12</time>
+          <span class="tl-node" style="--s: 29px" aria-hidden="true"></span>
+          <div class="tl-body">
+            <h2 class="tl-name">tale</h2>
+            <p class="tl-text">lilstory but bigger, because my little brother kept asking me for bedtime stories. it got a proper warmup and decay schedule and exports to gguf, so it runs in ollama.</p>
+            <p class="tl-facts cap"><span>around 50m params</span><span>13 layers</span><span>gguf</span></p>
+            <p class="tl-links cap"><a href="../blog/tale.html">post</a><a href="../playground/?model=tale">try it</a></p>
+          </div>
+        </li>
+        <li class="tl-item" data-reveal>
+          <time class="tl-date cap" datetime="2026-09-23">sep 23</time>
+          <span class="tl-node" style="--s: 53px" aria-hidden="true"></span>
+          <div class="tl-body">
+            <h2 class="tl-name"><a href="lilbase.html" style="view-transition-name: t-lilbase">lilbase</a></h2>
+            <p class="tl-text">a proper base model. i rewrote the training in jax and moved it to a kaggle tpu v5e-8. it beats gpt-2 small on hellaswag and arc-easy and loses on lambada.</p>
+            <p class="tl-facts cap"><span>297m params</span><span>6.1b tokens</span><span>tpu v5e-8</span></p>
+            <p class="tl-links cap"><a href="lilbase.html">case study</a><a href="../blog/lilbase.html">post</a><a href="../playground/?model=lilbase">try it</a></p>
+          </div>
+        </li>
+        <li class="tl-item" data-reveal>
+          <time class="tl-date cap" datetime="2026-09-26">sep 26</time>
+          <span class="tl-node ring" style="--s: 53px" aria-hidden="true"></span>
+          <div class="tl-body">
+            <h2 class="tl-name"><a href="lilchat.html" style="view-transition-name: t-lilchat">lilchat</a></h2>
+            <p class="tl-text">lilbase finetuned into a chat model overnight on my macbook air, in mlx. it answers and stops now, it just doesnt know much.</p>
+            <p class="tl-facts cap"><span>val loss 2.230 to 1.337</span><span>37m tokens</span><span>one night</span></p>
+            <p class="tl-links cap"><a href="lilchat.html">case study</a><a href="../blog/lilchat.html">post</a><a href="../playground/?model=lilchat">talk to it</a></p>
+          </div>
+        </li>
+        <li class="tl-item" data-reveal>
+          <time class="tl-date cap" datetime="2026-09-27">now</time>
+          <span class="tl-node now" style="--s: 64px" aria-hidden="true"></span>
+          <div class="tl-body">
+            <h2 class="tl-name"><a href="sprout.html" style="view-transition-name: t-sprout">sprout</a></h2>
+            <p class="tl-text">the next base model. 523m params reading 12 billion tokens from four sources, back on the kaggle tpu. about a third of the way through training.</p>
+            <p class="tl-facts cap"><span>523m params</span><span>12b tokens</span><span>training now</span></p>
+            <p class="tl-links cap"><a href="sprout.html">case study</a><a href="https://github.com/navthings/sprout" target="_blank" rel="noopener">github</a></p>
+          </div>
+        </li>
+      </ol>
+      <p class="tl-after" data-reveal>they all run in the <a href="../playground/">playground</a>, and theres a <a href="playground.html">case study</a> on how that works.</p>
     </section>
 
   </main>
@@ -114,6 +171,6 @@
 
   <script src="../assets/vendor/lenis.min.js"></script>
   <script src="../assets/site.js"></script>
-  <script src="../assets/home.js"></script>
+  <script src="../assets/timeline.js"></script>
 </body>
 </html>
