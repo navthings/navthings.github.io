@@ -186,31 +186,24 @@
       return ", so its just making stuff up.";
     }
 
+    // one sample per setting, so the headline holds still once you let go
     let t = 0;
-    let timer = 0;
-    function loop() {
-      clearTimeout(timer);
-      timer = 0;
-      if (t <= 0.3) {
-        slots.forEach((slot) => set(slot, slot.orig));
-        return;
-      }
+    function sample() {
       for (const slot of slots) {
-        const chance = slot.hot ? clamp((t - 1.1) / 0.4) * 0.6 : clamp((t - 0.3) / 0.9) * 0.85;
+        const chance = t <= 0.3 ? 0 : slot.hot ? clamp((t - 1.1) / 0.4) * 0.6 : clamp((t - 0.3) / 0.9) * 0.85;
         set(slot, Math.random() < chance ? pick(slot.alts, t) : slot.orig);
       }
-      timer = setTimeout(loop, 1250 - t * 520);
     }
 
     function setTemp(v) {
-      const next = Math.round(clamp(v, 0, 1.5) * 20) / 20;
+      const next = Math.round(clamp(v, 0, 1.5) * 10) / 10;
       if (next === t && value.textContent === t.toFixed(1)) return;
       t = next;
       value.textContent = t.toFixed(1);
-      knob.setAttribute("aria-valuenow", t.toFixed(2));
+      knob.setAttribute("aria-valuenow", t.toFixed(1));
       knob.classList.toggle("hot", t > 1.1);
       note.textContent = caption(t);
-      if (!timer || t <= 0.3) loop();
+      sample();
     }
 
     // drag sideways to change it, a plain tap nudges it up
