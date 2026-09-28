@@ -251,7 +251,7 @@ svg {
 
 .island.ready {
   transition: width 0.65s cubic-bezier(0.32, 0.72, 0, 1), background-color 0.45s ease, transform 0.5s var(--ease),
-    opacity 0.45s ease;
+    opacity 0.45s ease, translate 0.7s cubic-bezier(0.2, 0.9, 0.3, 1.15);
 }
 
 .island:active:not(.open) {

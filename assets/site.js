@@ -241,6 +241,48 @@ function scrubs() {
   }
 }
 
+// the nav pill leans towards the cursor when it comes near, and springs back when it leaves or lands on it
+function lean() {
+  const el = document.querySelector(".nav .island");
+  if (!el || !finePointer || reduce) return;
+  const R = 150;
+  let tx = 0;
+  let ty = 0;
+  let x = -1e4;
+  let y = -1e4;
+  let raf = 0;
+  function frame() {
+    raf = 0;
+    // measure where it sits at rest, so leaning never changes what counts as near
+    const r = el.getBoundingClientRect();
+    const cx = r.left + r.width / 2 - tx;
+    const cy = r.top + r.height / 2 - ty;
+    const dx = x - cx;
+    const dy = y - cy;
+    const d = Math.hypot(Math.max(Math.abs(dx) - r.width / 2, 0), Math.max(Math.abs(dy) - r.height / 2, 0));
+    const f = d > 0 && d < R ? (1 - d / R) ** 1.5 : 0;
+    const nx = clamp(dx * 0.12 * f, -14, 14);
+    const ny = clamp(dy * 0.12 * f, -8, 10);
+    if (Math.abs(nx - tx) < 0.1 && Math.abs(ny - ty) < 0.1) return;
+    tx = nx;
+    ty = ny;
+    el.style.translate = tx || ty ? `${tx.toFixed(1)}px ${ty.toFixed(1)}px` : "";
+  }
+  addEventListener(
+    "pointermove",
+    (e) => {
+      x = e.clientX;
+      y = e.clientY;
+      if (!raf) raf = requestAnimationFrame(frame);
+    },
+    { passive: true }
+  );
+  document.documentElement.addEventListener("pointerleave", () => {
+    x = y = -1e4;
+    if (!raf) raf = requestAnimationFrame(frame);
+  });
+}
+
 // buttons lean towards the cursor a little
 function magnetic() {
   if (!finePointer || reduce) return;
@@ -948,6 +990,7 @@ reveals();
 scrubs();
 magnetic();
 nav();
+lean();
 email();
 footer();
 followers();
