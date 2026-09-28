@@ -66,12 +66,14 @@ html.intro .hero [data-reveal].in,
 html.intro .cs-head [data-reveal].in,
 html.intro .post-head [data-reveal].in {
   opacity: 0;
-  transform: translateY(12px);
+  transform: translateY(24px);
+  filter: blur(6px);
 }
 
 html.intro .cs-head [data-words].in .w {
   opacity: 0;
-  transform: translateY(0.3em);
+  transform: translateY(0.45em);
+  filter: blur(8px);
 }
 
 /* hero */
@@ -116,11 +118,13 @@ html.intro .cs-head [data-words].in .w {
 
 .js .tok {
   opacity: 0;
-  transition: opacity 0.3s ease;
+  filter: blur(8px);
+  transition: opacity 0.35s ease, filter 0.5s var(--ease);
 }
 
 .js .tok.on {
   opacity: 1;
+  filter: none;
 }
 
 .hero-sub {
@@ -212,7 +216,7 @@ html.intro .cs-head [data-words].in .w {
   padding-bottom: clamp(80px, 20vh, 220px);
 }
 
-.statement p {
+.statement .scrub {
   font-size: clamp(30px, 4.6vw, 64px);
   line-height: 1.06;
   letter-spacing: -0.045em;
@@ -277,212 +281,6 @@ html.intro .cs-head [data-words].in .w {
 
   .area-link {
     display: none;
-  }
-}
-
-/* one dot per million params */
-
-.scale {
-  position: relative;
-  height: 480vh;
-}
-
-.scale-pin {
-  position: sticky;
-  top: 0;
-  height: 100vh;
-  height: 100svh;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
-  align-items: center;
-  gap: clamp(32px, 6vw, 96px);
-  max-width: calc(var(--wide) + var(--gutter) * 2);
-}
-
-.scale-num {
-  display: flex;
-  align-items: baseline;
-  margin-top: 16px;
-  font-size: clamp(88px, 15vw, 220px);
-  line-height: 0.85;
-  letter-spacing: -0.065em;
-  font-weight: 450;
-}
-
-.scale-num .unit {
-  font-size: 0.4em;
-  letter-spacing: -0.04em;
-  margin-left: 0.06em;
-  color: var(--ink-4);
-}
-
-.steps {
-  position: relative;
-  display: flex;
-  gap: 22px;
-  margin-top: 36px;
-  font-size: 15px;
-  color: var(--ink-3);
-}
-
-.steps span {
-  transition: color 0.4s ease;
-}
-
-.steps span.on {
-  color: var(--ink);
-}
-
-.steps .bar {
-  position: absolute;
-  left: 0;
-  bottom: -8px;
-  height: 1.5px;
-  width: 0;
-  background: var(--ink);
-  transition: transform 0.6s var(--ease), width 0.6s var(--ease), background-color 0.4s ease;
-}
-
-.stages {
-  display: grid;
-  margin-top: 28px;
-  max-width: 26rem;
-}
-
-/* all four share one cell, so the box is as tall as the longest one */
-.stage {
-  grid-area: 1 / 1;
-  color: var(--ink-2);
-  opacity: 0;
-  transform: translateY(10px);
-  transition: opacity 0.5s ease, transform 0.7s var(--ease);
-}
-
-.stage.on,
-html:not(.js) .stage {
-  opacity: 1;
-  transform: none;
-}
-
-.stage .cap {
-  display: block;
-  color: var(--ink-3);
-  margin-bottom: 4px;
-}
-
-.dots {
-  position: relative;
-  display: grid;
-  grid-template-columns: repeat(24, minmax(0, 1fr));
-  gap: clamp(3px, 0.55vw, 8px);
-  width: 100%;
-  max-width: 540px;
-  justify-self: end;
-}
-
-.dot {
-  aspect-ratio: 1;
-  border-radius: 50%;
-  background: var(--surface-2);
-  transform: scale(0.42);
-  transition: transform 0.55s var(--ease), background-color 0.35s ease, translate 0.9s var(--ease);
-}
-
-.dot.on {
-  background: var(--ink);
-  transform: scale(1);
-}
-
-.dot.hot {
-  background: var(--accent);
-  transform: scale(1);
-}
-
-.scale-end {
-  margin-top: 28px;
-  font-size: 15px;
-  color: var(--ink-3);
-  opacity: 0;
-  transition: opacity 0.6s ease;
-}
-
-.scale-end.on {
-  opacity: 1;
-}
-
-@media (max-width: 860px) {
-  .scale-pin {
-    grid-template-columns: 1fr;
-    align-content: center;
-    gap: 36px;
-  }
-
-  .dots {
-    justify-self: start;
-    max-width: 460px;
-  }
-}
-
-/* short screens: clear the pill up top and shrink the grid so the whole thing fits */
-@media (max-width: 860px) and (max-height: 720px) {
-  .scale-pin {
-    padding-top: 56px;
-    gap: 24px;
-  }
-
-  .scale-num {
-    font-size: 72px;
-  }
-
-  .steps {
-    margin-top: 20px;
-  }
-
-  .stages {
-    margin-top: 20px;
-  }
-
-  .scale-end {
-    margin-top: 16px;
-  }
-
-  .dots {
-    max-width: min(460px, 40vh);
-    max-width: min(460px, 40svh);
-  }
-}
-
-/* landscape phones and short windows: side by side again, with the grid sized off the height */
-@media (max-height: 640px) and (min-aspect-ratio: 5/4) {
-  .scale-pin {
-    grid-template-columns: minmax(0, 1fr) auto;
-    align-content: normal;
-    gap: 32px;
-  }
-
-  .scale-num {
-    margin-top: 8px;
-    font-size: clamp(64px, 16vh, 120px);
-  }
-
-  .steps {
-    margin-top: 16px;
-    font-size: 14px;
-  }
-
-  .stages {
-    margin-top: 18px;
-  }
-
-  .scale-end {
-    margin-top: 12px;
-  }
-
-  .dots {
-    width: min(74vh, 40vw);
-    width: min(74svh, 40vw);
-    max-width: none;
-    justify-self: end;
   }
 }
 
@@ -1356,39 +1154,7 @@ html:not(.js) .train-track b {
   }
 }
 
-/* without javascript the size section is just the final numbers */
-
-html:not(.js) .scale {
-  height: auto;
-}
-
-html:not(.js) .scale-pin {
-  position: relative;
-  height: auto;
-  padding-top: 80px;
-  padding-bottom: 80px;
-}
-
-html:not(.js) .stages {
-  display: block;
-}
-
-html:not(.js) .stage {
-  margin-bottom: 14px;
-}
-
-html:not(.js) .steps .bar,
-html:not(.js) .dots {
-  display: none;
-}
-
-
 @media print {
-  .scale {
-    height: auto;
-  }
-
-  .scale-pin,
   .card {
     position: relative;
     top: auto;

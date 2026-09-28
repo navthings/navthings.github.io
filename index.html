@@ -89,7 +89,7 @@
     </section>
 
     <section class="statement wrap">
-      <p data-reveal>i like knowing how every part of a model works, from the tokenizer to why the loss does what it does, and then getting it running somewhere people can actually try it.</p>
+      <p class="scrub">i like knowing how every part of a model works, from the tokenizer to why the loss does what it does, and then getting it running somewhere people can actually try it.</p>
     </section>
 
     <section class="areas wrap wide" data-label="what i do">
@@ -122,27 +122,6 @@
           <span class="area-text">every model gets a 4 and 8 bit gguf, so they run in ollama and right here in the browser.</span>
           <span class="area-link cap">playground</span>
         </a>
-      </div>
-    </section>
-
-    <section class="scale" aria-label="how big the models got" data-label="the models">
-      <div class="scale-pin wrap">
-        <div>
-          <p class="label">one dot is a million parameters</p>
-          <div class="scale-num" aria-live="off"><span id="scale-n">523</span><span class="unit">m</span></div>
-          <div class="steps" aria-hidden="true">
-            <span>lilstory</span><span>tale</span><span>lilbase</span><span>sprout</span>
-            <i class="bar"></i>
-          </div>
-          <div class="stages">
-            <p class="stage"><span class="cap">sep 4 · lilstory</span>the first real one. 8.2m params on tinystories, with a bpe tokenizer i trained myself.</p>
-            <p class="stage"><span class="cap">sep 12 · tale</span>around 50m params, with a proper warmup and decay schedule and a gguf export.</p>
-            <p class="stage"><span class="cap">sep 23 · lilbase</span>297m params, 6.1 billion tokens of fineweb-edu, pretrained in jax on a tpu v5e-8.</p>
-            <p class="stage"><span class="cap">sep 27 · sprout</span>523m params, 12 billion tokens from four sources. finished training on sep 27.</p>
-          </div>
-          <p class="scale-end">8.2m on sep 4, 523m now.</p>
-        </div>
-        <div class="dots" id="dots" aria-hidden="true"></div>
       </div>
     </section>
 
