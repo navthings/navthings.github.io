@@ -224,8 +224,11 @@ html.intro .cs-head [data-words].in .w {
   max-width: 21ch;
 }
 
-/* the page turns its lights off while you read the statement, every colour eases across together */
+/* the page dims while the statement is in the middle of the screen. how dark follows the scroll, so it never snaps.
+   the text swaps over quickly around halfway, so it never fades into the background */
 
+@property --dark { syntax: "<number>"; inherits: true; initial-value: 0; }
+@property --dark-ink { syntax: "<number>"; inherits: true; initial-value: 0; }
 @property --bg { syntax: "<color>"; inherits: true; initial-value: #ffffff; }
 @property --ink { syntax: "<color>"; inherits: true; initial-value: #0f0f0f; }
 @property --ink-2 { syntax: "<color>"; inherits: true; initial-value: #5f5f5f; }
@@ -235,20 +238,16 @@ html.intro .cs-head [data-words].in .w {
 @property --surface { syntax: "<color>"; inherits: true; initial-value: #f4f4f2; }
 @property --surface-2 { syntax: "<color>"; inherits: true; initial-value: #eaeae7; }
 
-html {
-  transition: --bg 0.9s ease, --ink 0.9s ease, --ink-2 0.9s ease, --ink-3 0.9s ease, --ink-4 0.9s ease, --line 0.9s ease, --surface 0.9s ease, --surface-2 0.9s ease;
-}
-
 @media screen {
-  html.lights-off {
-    --bg: #0f0f0f;
-    --ink: #f2f2ef;
-    --ink-2: #a3a3a0;
-    --ink-3: #8b8b88;
-    --ink-4: #6d6d6a;
-    --line: #262625;
-    --surface: #1a1a19;
-    --surface-2: #262625;
+  html:root {
+    --bg: color-mix(in oklab, #ffffff, #141414 calc(var(--dark) * 100%));
+    --ink: color-mix(in oklab, #0f0f0f, #e6e6e3 calc(var(--dark-ink) * 100%));
+    --ink-2: color-mix(in oklab, #5f5f5f, #9d9d9a calc(var(--dark-ink) * 100%));
+    --ink-3: color-mix(in oklab, #767676, #858582 calc(var(--dark-ink) * 100%));
+    --ink-4: color-mix(in oklab, #929292, #6a6a67 calc(var(--dark-ink) * 100%));
+    --line: color-mix(in oklab, #ebebea, #2a2a29 calc(var(--dark) * 100%));
+    --surface: color-mix(in oklab, #f4f4f2, #1d1d1c calc(var(--dark) * 100%));
+    --surface-2: color-mix(in oklab, #eaeae7, #2a2a29 calc(var(--dark) * 100%));
   }
 }
 
