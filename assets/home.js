@@ -40,20 +40,111 @@
       return toks;
     }
 
-    let i = 0;
-    function next() {
-      const t = toks[i++];
-      t.classList.add("on");
-      if (i < toks.length) setTimeout(next, 38 + t.textContent.length * 11 + (i % 3) * 14);
-      else {
-        const mark = el.querySelector("[data-scrib]");
-        if (mark) setTimeout(() => mark.classList.add("drawn"), 350);
+    const hero = el.closest(".hero");
+    if (hero) hero.classList.add("training");
+    const drawMark = () => {
+      const mark = el.querySelector("[data-scrib]");
+      if (mark) setTimeout(() => mark.classList.add("drawn"), 350);
+    };
+    const fontsReady = document.fonts ? document.fonts.ready : Promise.resolve();
+    Promise.all([Promise.race([fontsReady, new Promise((r) => setTimeout(r, 700))]), ready]).then(() => setTimeout(() => learn(el, toks, drawMark), 250));
+    return toks;
+  }
+
+  // the headline starts out as noise and trains itself into words, the way a model's output does, with a little log under it.
+  // common letters settle first and the rest flicker between guesses until they lock in
+  function learn(el, toks, done) {
+    const hero = el.closest(".hero");
+    const FREQ = "eeeeeeeeeeeettttttttaaaaaaaoooooooiiiiiinnnnnnsssssshhhhhrrrrrddddlllluuucmmwwffggyyppbbvk";
+    const ALL = "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz0123456789.,'";
+    const ORDER = "etaoinshrdlucmwfgypbvkjxqz";
+    const COMMON = new Set(["i", "'m", "and", "how", "they", "hi"]);
+    const noise = (pool) => pool[(Math.random() * pool.length) | 0];
+    const DUR = 2600;
+
+    // every character gets a box exactly as wide as the real letter, so the noise never rewraps the lines
+    const orig = toks.map((t) => t.textContent);
+    const chars = [];
+    const range = document.createRange();
+    toks.forEach((t, k) => {
+      const text = orig[k];
+      const widths = [];
+      for (let i = 0; i < text.length; i++) {
+        range.setStart(t.firstChild, i);
+        range.setEnd(t.firstChild, i + 1);
+        widths.push(range.getBoundingClientRect().width);
       }
+      const common = COMMON.has(text);
+      t.textContent = "";
+      for (let i = 0; i < text.length; i++) {
+        const c = text[i];
+        const s = document.createElement("span");
+        s.className = "ch";
+        s.style.width = widths[i] + "px";
+        s.textContent = noise(ALL);
+        const r = ORDER.indexOf(c.toLowerCase());
+        const lock = r < 0 ? 0.2 + 0.15 * Math.random() : 0.42 + 0.3 * (r / 25) + 0.22 * Math.random() - (common ? 0.12 : 0);
+        chars.push({ s, c, lock, next: 0, done: false });
+        t.appendChild(s);
+      }
+      t.classList.add("on");
+    });
+
+    const log = document.createElement("p");
+    log.className = "train-log cap";
+    log.setAttribute("aria-hidden", "true");
+    el.after(log);
+    el.setAttribute("aria-busy", "true");
+
+    const fmt = (n) => n.toLocaleString("en-US");
+    let finished = false;
+    function finish() {
+      if (finished) return;
+      finished = true;
+      toks.forEach((t, k) => (t.textContent = orig[k]));
+      el.removeAttribute("aria-busy");
+      log.textContent = "trained · step 22,888 · loss 2.39";
+      setTimeout(() => {
+        // the log steps aside and the rest of the hero comes in where it was
+        log.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 300, fill: "forwards" }).finished.then(() => {
+          log.remove();
+          if (hero) {
+            $$(".hero-sub, .row, .temp", hero).forEach((r, i) => r.style.setProperty("--late", (i * 0.1).toFixed(1) + "s"));
+            hero.classList.replace("training", "trained");
+          }
+          done();
+        });
+      }, 450);
     }
 
-    const fontsReady = document.fonts ? document.fonts.ready : Promise.resolve();
-    Promise.all([Promise.race([fontsReady, new Promise((r) => setTimeout(r, 700))]), ready]).then(() => setTimeout(next, 250));
-    return toks;
+    const start = performance.now();
+    function frame(now) {
+      const t = clamp((now - start) / DUR);
+      for (const ch of chars) {
+        if (ch.done) continue;
+        if (t >= ch.lock) {
+          ch.s.textContent = ch.c;
+          ch.s.classList.add("ok");
+          ch.done = true;
+          continue;
+        }
+        if (now < ch.next) continue;
+        ch.next = now + 55 + Math.random() * 60;
+        ch.s.textContent = t > 0.62 && Math.random() < 0.5 ? ch.c : noise(t < 0.3 ? ALL : FREQ);
+      }
+      // sprout's real first and last numbers, ln(32000) at step 0 and 2.39 at the end. the path between is drawn, not logged
+      const step = Math.round(22888 * Math.pow(t, 1.8));
+      const loss = 2.39 + 7.98 * Math.pow(1 - t, 3);
+      log.textContent = `training · step ${fmt(step)} · loss ${loss.toFixed(2)}`;
+      if (t < 1) requestAnimationFrame(frame);
+      else setTimeout(finish, 150);
+    }
+    requestAnimationFrame(frame);
+    // if anything stalls, never leave the hero hidden
+    setTimeout(() => {
+      finish();
+      if (hero) hero.classList.replace("training", "trained");
+    }, DUR + 5000);
   }
 
   // first time someone lands here from outside, the logo draws itself and flies into the nav

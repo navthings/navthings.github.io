@@ -127,6 +127,45 @@ html.intro .cs-head [data-words].in .w {
   filter: none;
 }
 
+/* while the headline trains itself, only it and its log are on screen */
+.hero-inner {
+  position: relative;
+}
+
+.hero.training :is(.hero-sub, .row, .temp) {
+  opacity: 0;
+  transform: translateY(24px);
+  filter: blur(6px);
+}
+
+.hero.trained :is(.hero-sub, .row, .temp) {
+  transition: opacity 0.9s var(--ease), transform 1.1s var(--ease), filter 0.9s var(--ease);
+  transition-delay: var(--late, 0s);
+}
+
+.ch {
+  display: inline-block;
+  white-space: pre;
+  opacity: 0.4;
+  filter: blur(2.5px);
+  transition: opacity 0.35s ease, filter 0.45s var(--ease);
+}
+
+.ch.ok {
+  opacity: 1;
+  filter: none;
+}
+
+.train-log {
+  position: absolute;
+  left: 0;
+  margin-top: 36px;
+  font-size: 14px;
+  color: var(--ink-3);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
 .hero-sub {
   margin-top: 36px;
   max-width: 33rem;
