@@ -76,7 +76,7 @@
       <div class="hero-inner">
         <h1 class="hero-title" data-tokens>hi, i'm nav. i build language models <span class="soft">and research how they <span data-scrib="circle" data-scrib-on="manual">learn</span>.</span></h1>
         <p class="hero-sub" data-reveal style="--d: 1.15s">
-          machine learning engineer and researcher in australia. i train my own language models and test what they actually learned. right now thats <a href="#sprout">sprout</a>, a 523m param base model about a third of the way through training.
+          machine learning engineer and researcher in australia. i train my own language models and test what they actually learned. the newest is <a href="#sprout">sprout</a>, a 523m param base model that just finished reading 12 billion tokens.
         </p>
         <div class="row" data-reveal style="--d: 1.3s">
           <a class="btn dark" href="#work"><span class="inner">see the work</span></a>
@@ -138,7 +138,7 @@
             <p class="stage"><span class="cap">sep 4 · lilstory</span>the first real one. 8.2m params on tinystories, with a bpe tokenizer i trained myself.</p>
             <p class="stage"><span class="cap">sep 12 · tale</span>around 50m params, with a proper warmup and decay schedule and a gguf export.</p>
             <p class="stage"><span class="cap">sep 23 · lilbase</span>297m params, 6.1 billion tokens of fineweb-edu, pretrained in jax on a tpu v5e-8.</p>
-            <p class="stage"><span class="cap">now · sprout</span>523m params, 12 billion tokens from four sources. about a third of the way through training.</p>
+            <p class="stage"><span class="cap">sep 27 · sprout</span>523m params, 12 billion tokens from four sources. finished training on sep 27.</p>
           </div>
           <p class="scale-end">8.2m on sep 4, 523m now.</p>
         </div>
@@ -252,7 +252,7 @@
           <div class="card-text">
             <div>
               <h3 class="card-title" style="view-transition-name: t-sprout"><a class="stretch" href="work/sprout.html">sprout</a></h3>
-              <p class="card-desc">the next base model. 523m params reading 12 billion tokens from a four source mix, with the optimizer state sharded across 8 tpu chips. its the fix for lilchat not knowing much.</p>
+              <p class="card-desc">the next base model. 523m params trained on 12 billion tokens from a four source mix, with the optimizer state sharded across 8 tpu chips. it finished on sep 27, loss 2.39 on held-out text.</p>
               <p class="card-wrong"><span>the goal</span>beat gpt-2 xl, which is 1.5b params, or get close. then finetune it into a competitive coding model.</p>
             </div>
             <div class="row">
@@ -262,13 +262,13 @@
           </div>
           <div class="card-vis">
             <div class="train">
-              <div class="train-top"><span>tokens read</span><span class="cap">as of sep 26</span></div>
-              <div class="train-num">about a third</div>
+              <div class="train-top"><span>tokens read</span><span class="cap">finished sep 27</span></div>
+              <div class="train-num">all 12 billion</div>
               <div class="train-track"><b></b><i style="left: 50.8%"></i></div>
               <div class="train-ticks"><span>0</span><span class="mark" style="left: 50.8%">lilbase read 6.1b in total</span><span>12b</span></div>
               <div class="mixmini">
-                <div class="mixmini-bar"><b style="--w: 55%; --c: var(--ink)"></b><b style="--w: 25%; --c: #5f5f5f"></b><b style="--w: 10%; --c: #a3a3a0"></b><b style="--w: 10%; --c: #d0d0cc"></b></div>
-                <div class="mixmini-key"><span><i style="background: var(--ink)"></i>fineweb-edu 55%</span><span><i style="background: #5f5f5f"></i>dclm 25%</span><span><i style="background: #a3a3a0"></i>cosmopedia 10%</span><span><i style="background: #d0d0cc"></i>gutenberg 10%</span></div>
+                <div class="mixmini-bar"><b style="--w: 55%; --c: var(--ink)"></b><b style="--w: 27.2%; --c: #5f5f5f"></b><b style="--w: 8.7%; --c: #a3a3a0"></b><b style="--w: 9.1%; --c: #d0d0cc"></b></div>
+                <div class="mixmini-key"><span><i style="background: var(--ink)"></i>fineweb-edu 55%</span><span><i style="background: #5f5f5f"></i>dclm 27%</span><span><i style="background: #a3a3a0"></i>cosmopedia 9%</span><span><i style="background: #d0d0cc"></i>gutenberg 9%</span></div>
               </div>
             </div>
           </div>

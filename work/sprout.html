@@ -11,20 +11,20 @@
 
   <title>sprout, a case study · navthings</title>
 
-  <meta name="description" content="sprout, a 523m param llama style base model on 12b tokens from four datasets: the data mix, sharded adamw, a wsd schedule, and the goals. training now." />
+  <meta name="description" content="sprout, a 523m param llama style base model trained on 12b tokens from four datasets: the data mix, sharded adamw, a wsd schedule, and how it did." />
   <meta property="og:type" content="article" />
   <meta property="og:site_name" content="navthings" />
   <meta property="og:title" content="sprout, a case study" />
-  <meta property="og:description" content="sprout, a 523m param llama style base model on 12b tokens from four datasets: the data mix, sharded adamw, a wsd schedule, and the goals. training now." />
+  <meta property="og:description" content="sprout, a 523m param llama style base model trained on 12b tokens from four datasets: the data mix, sharded adamw, a wsd schedule, and how it did." />
   <meta property="og:url" content="https://navthings.github.io/work/sprout.html" />
-  <meta property="og:image" content="https://navthings.github.io/assets/og/sprout.png?v=1" />
+  <meta property="og:image" content="https://navthings.github.io/assets/og/sprout.png?v=2" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
-  <meta property="og:image:alt" content="sprout, a 523m param base model in training" />
+  <meta property="og:image:alt" content="sprout, a 523m param base model" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="sprout, a case study" />
-  <meta name="twitter:description" content="sprout, a 523m param llama style base model on 12b tokens from four datasets: the data mix, sharded adamw, a wsd schedule, and the goals. training now." />
-  <meta name="twitter:image" content="https://navthings.github.io/assets/og/sprout.png?v=1" />
+  <meta name="twitter:description" content="sprout, a 523m param llama style base model trained on 12b tokens from four datasets: the data mix, sharded adamw, a wsd schedule, and how it did." />
+  <meta name="twitter:image" content="https://navthings.github.io/assets/og/sprout.png?v=2" />
   <link rel="canonical" href="https://navthings.github.io/work/sprout.html" />
   <meta name="theme-color" content="#ffffff" />
   <link rel="icon" type="image/svg+xml" href="../favicon.svg" />
@@ -58,17 +58,17 @@
 
   <main class="sheet" id="main">
     <header class="cs-head wrap wide">
-      <p class="cs-kicker cap" data-reveal><a href="./">work</a><span>/</span><span>pretraining · training now</span></p>
+      <p class="cs-kicker cap" data-reveal><a href="./">work</a><span>/</span><span>pretraining · sep 2026</span></p>
       <h1 class="cs-title" style="view-transition-name: t-sprout" data-letters>sprout</h1>
-      <p class="cs-lede" data-words style="--d: 0.15s">the next base model after lilbase. same recipe, about 1.8x the parameters and 2x the data, on a mix of four datasets instead of one. its training on a tpu v5e-8 right now.</p>
+      <p class="cs-lede" data-words style="--d: 0.15s">the next base model after lilbase. same recipe, about 1.8x the parameters and 2x the data, on a mix of four datasets instead of one. it finished training on a tpu v5e-8 on sep 27.</p>
       <dl class="cs-meta" data-stagger="0.06" style="--d: 0.3s">
           <div data-reveal><dt>params</dt><dd>523m</dd></div>
-          <div data-reveal><dt>reading</dt><dd>12b tokens from 4 sources</dd></div>
+          <div data-reveal><dt>read</dt><dd>12b tokens from 4 sources</dd></div>
           <div data-reveal><dt>trained on</dt><dd>kaggle tpu v5e-8</dd></div>
-          <div data-reveal><dt>status</dt><dd>about a third done, sep 26</dd></div>
+          <div data-reveal><dt>held-out loss</dt><dd>2.39 on fineweb</dd></div>
       </dl>
       <div class="row" data-reveal style="--d: 0.5s">
-        <a class="btn dark" href="https://github.com/navthings/sprout" target="_blank" rel="noopener"><span class="inner">follow along on github</span></a>
+        <a class="btn dark" href="https://github.com/navthings/sprout" target="_blank" rel="noopener"><span class="inner">the code</span></a>
         <a class="btn line" href="lilbase.html"><span class="inner">how lilbase was trained</span></a>
       </div>
     </header>
@@ -180,6 +180,30 @@
             <p class="cap muted">each as a share of its own peak, 3e-4 for sprout and 4e-4 for lilbase, over the length of each run</p>
           </div>
           <p>each session gets about 8.4 hours before kaggle ends it at 9. the next one finds the newest checkpoint on its own and carries on with the data position, optimizer state, schedule and loss history exactly where they were.</p>
+        </div>
+      </div>
+      <div class="cs-sec" data-reveal data-label="how it did">
+        <h2 class="cs-h">how it did</h2>
+        <div class="cs-text">
+          <p>it finished on sep 27, after <strong>22,888 steps</strong> and all 12 billion tokens. by the end it was doing about 130,000 tokens a second, a bit over 4 seconds a step across the 8 chips.</p>
+          <p>on text it never trained on, the loss came out at <strong>2.39 on fineweb</strong> (perplexity 10.9) and 2.72 on wikitext (perplexity 15.2). the mix it actually read landed a little off the plan: fineweb-edu 55%, dclm 27.2%, cosmopedia 8.7% and gutenberg 9.1%.</p>
+          <dl class="specs fig">
+            <div><dt>steps</dt><dd>22,888</dd></div>
+            <div><dt>tokens</dt><dd>12.0b</dd></div>
+            <div><dt>fineweb loss</dt><dd>2.387</dd></div>
+            <div><dt>fineweb perplexity</dt><dd>10.9</dd></div>
+            <div><dt>wikitext loss</dt><dd>2.723</dd></div>
+            <div><dt>wikitext perplexity</dt><dd>15.2</dd></div>
+            <div><dt>tokens a second</dt><dd>130,034</dd></div>
+            <div><dt>final learning rate</dt><dd>3e-5</dd></div>
+          </dl>
+          <p>these are three things it wrote at the very end. the grammar holds up, and it still makes stuff up with total confidence. einstein did get the nobel in 1921, but he wasnt the most decorated scientist in the world in 1905.</p>
+          <div class="fig samples">
+            <p>The water cycle begins when rainwater washes over the land and picks up bits of chemicals that are dissolved in water, such as salt, and other chemicals that are released into the atmosphere. Rainwater that falls to the earth's surface is mostly water, but some can also contain dissolved chemicals, called organic chemicals, that can remain in the soil and be transported to the surface</p>
+            <p>In 1905, Albert Einstein was the most decorated scientist in the world. An internationally-known physicist of international renown, he was awarded the Nobel Prize in Physics in 1921. Einstein’s research on general relativity, the theory of special and general relativity, as well as quantum mechanics, has had a tremendous impact on our understanding of the universe.</p>
+            <p>She opened the letter and read: “Don’t forget to read the letter. When you send a letter, it takes several days to get through the mail. If you send your letter in the mail, you have to wait a day or two. You must be careful and take every precaution. This article will show you how to send a letter fast, and how to make sure you get the letter in</p>
+          </div>
+          <p>next it goes through the same benchmark script as lilbase, so the two can be compared properly.</p>
         </div>
       </div>
       <div class="cs-sec" data-reveal data-label="goals">

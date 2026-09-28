@@ -777,3 +777,25 @@ html:not(.js) .wsd-line {
 .wsd .cap {
   margin-top: 6px;
 }
+
+/* things a model wrote, set like quotes so they read as its words, not mine */
+.samples {
+  display: grid;
+  gap: 12px;
+}
+
+.samples p {
+  margin: 0;
+  padding: 16px 18px;
+  border-left: 2px solid var(--ink);
+  background: var(--surface);
+  border-radius: 0 14px 14px 0;
+  font-size: 15.5px;
+  line-height: 1.6;
+  color: var(--ink);
+}
+
+.samples p::after {
+  content: "…";
+  color: var(--ink-3);
+}

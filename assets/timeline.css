@@ -100,35 +100,9 @@
   box-shadow: inset 0 0 0 2px var(--ink), 0 0 0 6px var(--bg);
 }
 
-/* still training: filled as far as it has got */
-.tl-node.now {
-  background: conic-gradient(var(--accent) 0 33%, var(--surface-2) 33% 100%);
-  box-shadow: 0 0 0 6px var(--bg);
-}
-
-.tl-node.now::after {
-  content: "";
-  display: block;
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
+/* the newest one */
+.tl-node.latest {
   background: var(--accent);
-  opacity: 0;
-}
-
-.tl-node.now.lit::after {
-  animation: tl-pulse 2.4s ease-out 0.8s infinite;
-}
-
-@keyframes tl-pulse {
-  from {
-    opacity: 0.35;
-    transform: scale(1);
-  }
-  to {
-    opacity: 0;
-    transform: scale(1.7);
-  }
 }
 
 .tl-name {

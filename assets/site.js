@@ -269,9 +269,6 @@ function nav() {
   if (!el) return;
   const now = el.querySelector(".island-now");
   const links = el.querySelector(".island-links");
-  const fill = el.querySelector(".island-fill");
-  // how far down the page you are, as a ring that draws itself around the logo
-  fill.innerHTML = '<svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="18.5" pathLength="100"/></svg>';
   const foot = document.querySelector(".foot");
   const sheet = document.querySelector(".sheet");
   const fallback = bar.dataset.label || "navthings";
@@ -362,12 +359,10 @@ function nav() {
     // the footer is sticky and always sits behind the sheet, so go by how much the sheet has uncovered
     const uncovered = sheet ? vh - sheet.getBoundingClientRect().bottom : 0;
     if (foot && foot.dataset.label && uncovered > vh * 0.45) text = foot.dataset.label;
-    const max = document.documentElement.scrollHeight - vh;
     const hovered = el.matches(":hover");
 
     return () => {
       setLabel(text);
-      fill.style.setProperty("--p", (max > 0 ? clamp(y / max) : 0).toFixed(4));
       el.classList.toggle("light", !!foot && uncovered > vh - 40);
       if (open && Math.abs(y - lastY) > 60 && !hovered) setOpen(false);
       if (!open) lastY = y;
@@ -543,7 +538,7 @@ const JUMP = [
   ["lilbase", "/work/lilbase.html", "case study", "pretraining jax tpu base model gpt-2 hellaswag lambada"],
   ["lilchat", "/work/lilchat.html", "case study", "finetuning mlx chat sft melbourne"],
   ["the paper", "/work/corpus-size.html", "case study", "research corpus size data tinystories zenodo"],
-  ["sprout", "/work/sprout.html", "case study", "training now 523m wsd sharded adamw"],
+  ["sprout", "/work/sprout.html", "case study", "finished 523m wsd sharded adamw results samples"],
   ["how the playground works", "/work/playground.html", "case study", "wllama webassembly webgpu safari firefox inference"],
   ["talk to lilchat", "/playground/?model=lilchat", "model", "chat try"],
   ["lilbase, continues whatever you start", "/playground/?model=lilbase", "model", "try"],

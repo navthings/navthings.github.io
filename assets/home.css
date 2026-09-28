@@ -1071,7 +1071,7 @@ html:not(.js) .mini-row .track b {
 
 .live .train-track b,
 html:not(.js) .train-track b {
-  width: 33%;
+  width: 100%;
 }
 
 .train-ticks {
