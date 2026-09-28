@@ -310,25 +310,18 @@ function squash(el, sx = 1.04, sy = 0.9) {
 function squashes() {
   squash(document.querySelector(".nav .island"));
   for (const el of $$(".btn, .say")) squash(el, 1.03, 0.9);
-}
-
-// the pill bumps once when you hit the bottom of the page, like reaching the end of a list
-function bottomBump() {
-  const el = document.querySelector(".nav .island");
-  if (!el || reduce || !el.animate) return;
-  let armed = false;
-  onScroll.push((y, vh) => {
-    const max = document.documentElement.scrollHeight - vh;
-    if (max < vh * 0.5) return;
-    if (y < max - 80) armed = true;
-    if (!armed || y < max - 2) return;
-    armed = false;
-    return () =>
-      el.animate([{ scale: "1 1" }, { scale: "1.06 0.86", offset: 0.25 }, { scale: "0.97 1.05", offset: 0.6 }, { scale: "1 1" }], {
-        duration: 560,
-        easing: "ease-out",
-      });
-  });
+  // links that squash hold the page change for a moment so the spring back plays out instead of getting cut off
+  if (reduce) return;
+  for (const a of $$(".nav .island a[href], a.btn[href]")) {
+    a.addEventListener("click", (e) => {
+      if (e.defaultPrevented || e.button > 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || a.target === "_blank") return;
+      const url = new URL(a.href, location.href);
+      if (!/^https?:$/.test(url.protocol)) return;
+      if (url.origin === location.origin && url.pathname === location.pathname && url.search === location.search && url.hash) return;
+      e.preventDefault();
+      setTimeout(() => (location.href = url.href), 240);
+    });
+  }
 }
 
 // selected text gets a highlighter stroke instead of the flat block. the real selection is still there, just see-through
@@ -1163,7 +1156,6 @@ magnetic();
 nav();
 lean();
 squashes();
-bottomBump();
 highlighter();
 email();
 footer();
