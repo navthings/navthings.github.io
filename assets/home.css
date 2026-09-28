@@ -410,6 +410,7 @@ html:not(.js) .stage {
 }
 
 .dots {
+  position: relative;
   display: grid;
   grid-template-columns: repeat(24, minmax(0, 1fr));
   gap: clamp(3px, 0.55vw, 8px);
@@ -423,7 +424,7 @@ html:not(.js) .stage {
   border-radius: 50%;
   background: var(--surface-2);
   transform: scale(0.42);
-  transition: transform 0.55s var(--ease), background-color 0.35s ease;
+  transition: transform 0.55s var(--ease), background-color 0.35s ease, translate 0.7s cubic-bezier(0.2, 0.9, 0.3, 1.25), scale 0.5s var(--ease);
 }
 
 .dot.on {

@@ -256,6 +256,53 @@
   }
 
   // one dot per million params, filled in as you scroll from lilstory to sprout
+  // the dots lean away from the cursor and swell a little as it passes, then settle back
+  function magnet(grid, dots) {
+    if (!window.site.finePointer || reduce) return;
+    const R = 120;
+    let centers = null;
+    let moved = new Set();
+    let raf = 0;
+    let px = 0;
+    let py = 0;
+    const measure = () => (centers = dots.map((d) => [d.offsetLeft + d.offsetWidth / 2, d.offsetTop + d.offsetHeight / 2]));
+    window.addEventListener("resize", () => (centers = null));
+
+    function frame() {
+      raf = 0;
+      if (!centers) measure();
+      const next = new Set();
+      for (let i = 0; i < dots.length; i++) {
+        const dx = centers[i][0] - px;
+        const dy = centers[i][1] - py;
+        const d = Math.hypot(dx, dy);
+        if (d >= R) continue;
+        const f = (1 - d / R) ** 2;
+        const push = f * 28;
+        const ux = d ? dx / d : 0;
+        const uy = d ? dy / d : 0;
+        dots[i].style.translate = `${(ux * push).toFixed(1)}px ${(uy * push).toFixed(1)}px`;
+        dots[i].style.scale = (1 + f * 0.6).toFixed(3);
+        next.add(i);
+      }
+      for (const i of moved) if (!next.has(i)) dots[i].style.translate = dots[i].style.scale = "";
+      moved = next;
+    }
+
+    grid.addEventListener("pointermove", (e) => {
+      const r = grid.getBoundingClientRect();
+      px = e.clientX - r.left;
+      py = e.clientY - r.top;
+      if (!raf) raf = requestAnimationFrame(frame);
+    });
+    grid.addEventListener("pointerleave", () => {
+      cancelAnimationFrame(raf);
+      raf = 0;
+      for (const i of moved) dots[i].style.translate = dots[i].style.scale = "";
+      moved = new Set();
+    });
+  }
+
   function scale() {
     const sec = document.querySelector(".scale");
     if (!sec) return;
@@ -279,6 +326,7 @@
       dots.push(d);
     }
     grid.appendChild(frag);
+    magnet(grid, dots);
 
     const ease = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
 
