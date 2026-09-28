@@ -241,32 +241,37 @@ function scrubs() {
   }
 }
 
-// the nav pill leans towards the cursor when it comes near, and springs back when it leaves or lands on it
+// things that lean towards the cursor when it comes near, and spring back when it leaves or lands on them
+const leaners = [];
+function leanOn(el, R, pull, mx, my) {
+  if (el) leaners.push({ el, R, pull, mx, my, tx: 0, ty: 0 });
+}
 function lean() {
-  const el = document.querySelector(".nav .island");
-  if (!el || !finePointer || reduce) return;
-  const R = 150;
-  let tx = 0;
-  let ty = 0;
+  if (!finePointer || reduce) return;
+  leanOn(document.querySelector(".nav .island"), 150, 0.12, 14, 9);
+  for (const el of $$(".card-go")) leanOn(el, 120, 0.2, 12, 8);
+  if (!leaners.length) return;
   let x = -1e4;
   let y = -1e4;
   let raf = 0;
   function frame() {
     raf = 0;
-    // measure where it sits at rest, so leaning never changes what counts as near
-    const r = el.getBoundingClientRect();
-    const cx = r.left + r.width / 2 - tx;
-    const cy = r.top + r.height / 2 - ty;
-    const dx = x - cx;
-    const dy = y - cy;
-    const d = Math.hypot(Math.max(Math.abs(dx) - r.width / 2, 0), Math.max(Math.abs(dy) - r.height / 2, 0));
-    const f = d > 0 && d < R ? (1 - d / R) ** 1.5 : 0;
-    const nx = clamp(dx * 0.12 * f, -14, 14);
-    const ny = clamp(dy * 0.12 * f, -8, 10);
-    if (Math.abs(nx - tx) < 0.1 && Math.abs(ny - ty) < 0.1) return;
-    tx = nx;
-    ty = ny;
-    el.style.translate = tx || ty ? `${tx.toFixed(1)}px ${ty.toFixed(1)}px` : "";
+    // read every rect first, then write, so one move costs one layout
+    const rects = leaners.map((L) => L.el.getBoundingClientRect());
+    leaners.forEach((L, i) => {
+      const r = rects[i];
+      // where it sits at rest, so leaning never changes what counts as near
+      const dx = x - (r.left + r.width / 2 - L.tx);
+      const dy = y - (r.top + r.height / 2 - L.ty);
+      const d = Math.hypot(Math.max(Math.abs(dx) - r.width / 2, 0), Math.max(Math.abs(dy) - r.height / 2, 0));
+      const f = d > 0 && d < L.R ? (1 - d / L.R) ** 1.5 : 0;
+      const nx = clamp(dx * L.pull * f, -L.mx, L.mx);
+      const ny = clamp(dy * L.pull * f, -L.my, L.my);
+      if (Math.abs(nx - L.tx) < 0.1 && Math.abs(ny - L.ty) < 0.1) return;
+      L.tx = nx;
+      L.ty = ny;
+      L.el.style.translate = nx || ny ? `${nx.toFixed(1)}px ${ny.toFixed(1)}px` : "";
+    });
   }
   addEventListener(
     "pointermove",
@@ -280,6 +285,119 @@ function lean() {
   document.documentElement.addEventListener("pointerleave", () => {
     x = y = -1e4;
     if (!raf) raf = requestAnimationFrame(frame);
+  });
+}
+
+// a quick rubbery squash while something is pressed, springing back when it is let go
+function squash(el, sx = 1.04, sy = 0.9) {
+  if (!el || reduce || !el.animate) return;
+  let held = null;
+  el.addEventListener("pointerdown", (e) => {
+    if (e.button > 0) return;
+    held = el.animate([{ scale: "1 1" }, { scale: `${sx} ${sy}` }], { duration: 110, easing: "ease-out", fill: "forwards" });
+  });
+  const release = () => {
+    if (!held) return;
+    held.cancel();
+    held = null;
+    el.animate([{ scale: `${sx} ${sy}` }, { scale: `${2 - sx * 1.02} ${1 + (1 - sy) * 0.35}`, offset: 0.45 }, { scale: "1 1" }], { duration: 460, easing: "ease-out" });
+  };
+  el.addEventListener("pointerup", release);
+  el.addEventListener("pointerleave", release);
+  el.addEventListener("pointercancel", release);
+}
+
+function squashes() {
+  squash(document.querySelector(".nav .island"));
+  for (const el of $$(".btn, .say")) squash(el, 1.03, 0.9);
+}
+
+// the pill bumps once when you hit the bottom of the page, like reaching the end of a list
+function bottomBump() {
+  const el = document.querySelector(".nav .island");
+  if (!el || reduce || !el.animate) return;
+  let armed = false;
+  onScroll.push((y, vh) => {
+    const max = document.documentElement.scrollHeight - vh;
+    if (max < vh * 0.5) return;
+    if (y < max - 80) armed = true;
+    if (!armed || y < max - 2) return;
+    armed = false;
+    return () =>
+      el.animate([{ scale: "1 1" }, { scale: "1.06 0.86", offset: 0.25 }, { scale: "0.97 1.05", offset: 0.6 }, { scale: "1 1" }], {
+        duration: 560,
+        easing: "ease-out",
+      });
+  });
+}
+
+// selected text gets a highlighter stroke instead of the flat block. the real selection is still there, just see-through
+function highlighter() {
+  if (!window.getSelection) return;
+  const NS = "http://www.w3.org/2000/svg";
+  const svg = document.createElementNS(NS, "svg");
+  svg.setAttribute("class", "hl");
+  svg.setAttribute("aria-hidden", "true");
+  document.body.appendChild(svg);
+  document.documentElement.classList.add("hl-on");
+
+  // a marker stroke a little past each end of the line, slightly slanted, with a soft wobble along its edges
+  function stroke(x, y, w, h) {
+    const seed = Math.round(x) * 7.1 + Math.round(y) * 13.7;
+    const rnd = (k) => {
+      const v = Math.sin(seed + k * 12.9898) * 43758.5453;
+      return v - Math.floor(v);
+    };
+    const t = y + h * 0.16;
+    const b = y + h * 0.94;
+    const x0 = x - 3 - rnd(1) * 2;
+    const x1 = x + w + 2 + rnd(2) * 3;
+    const mid = (x0 + x1) / 2;
+    const tilt = (rnd(3) - 0.5) * 3;
+    const wob = (k) => (rnd(k) - 0.5) * 2.4;
+    const p = document.createElementNS(NS, "path");
+    p.setAttribute(
+      "d",
+      `M${x0.toFixed(1)} ${(t + tilt).toFixed(1)} Q${mid.toFixed(1)} ${(t - 1 + wob(4)).toFixed(1)} ${x1.toFixed(1)} ${(t - tilt + wob(5)).toFixed(1)} ` +
+        `L${(x1 + 1.5).toFixed(1)} ${(b - tilt).toFixed(1)} Q${mid.toFixed(1)} ${(b + 1 + wob(6)).toFixed(1)} ${(x0 + 1).toFixed(1)} ${(b + tilt + wob(7)).toFixed(1)} Z`
+    );
+    return p;
+  }
+
+  let raf = 0;
+  function draw() {
+    raf = 0;
+    const sel = getSelection();
+    const a = document.activeElement;
+    const node = sel.anchorNode && (sel.anchorNode.nodeType === 1 ? sel.anchorNode : sel.anchorNode.parentElement);
+    // form fields and the jump menu keep the normal selection
+    if (!sel.rangeCount || sel.isCollapsed || (a && a.matches("input, textarea")) || (node && node.closest(".jump"))) {
+      if (svg.firstChild) svg.replaceChildren();
+      return;
+    }
+    const lines = [];
+    for (let i = 0; i < sel.rangeCount; i++) {
+      for (const r of sel.getRangeAt(i).getClientRects()) {
+        if (r.width < 2 || r.height < 4) continue;
+        const line = lines.find((l) => Math.abs(l.top + l.bottom - r.top - r.bottom) < Math.min(l.bottom - l.top, r.height));
+        if (line) {
+          line.left = Math.min(line.left, r.left);
+          line.right = Math.max(line.right, r.right);
+          line.top = Math.min(line.top, r.top);
+          line.bottom = Math.max(line.bottom, r.bottom);
+        } else lines.push({ left: r.left, right: r.right, top: r.top, bottom: r.bottom });
+      }
+    }
+    svg.replaceChildren(...lines.map((l) => stroke(l.left + scrollX, l.top + scrollY, l.right - l.left, l.bottom - l.top)));
+  }
+  const redraw = () => {
+    if (!raf) raf = requestAnimationFrame(draw);
+  };
+  document.addEventListener("selectionchange", redraw);
+  addEventListener("resize", redraw);
+  // sticky and pinned things move against the page while scrolling
+  onScroll.push(() => {
+    if (svg.firstChild) redraw();
   });
 }
 
@@ -794,6 +912,20 @@ function jump() {
     else window.location.href = url.href;
   }
 
+  // the panel grows out of the nav pill and shrinks back into it: it starts moved up to the pill and cut down to its shape
+  const pill = document.querySelector(".nav .island");
+  const EASE = "cubic-bezier(0.32, 0.72, 0, 1)";
+  function fromPill() {
+    if (!pill || reduce || !box.animate) return null;
+    const p = pill.getBoundingClientRect();
+    const d = box.getBoundingClientRect();
+    const side = Math.max(0, (d.width - p.width) / 2);
+    return [
+      { transform: `translateY(${(p.top - d.top).toFixed(1)}px)`, clipPath: `inset(0 ${side.toFixed(1)}px ${Math.max(0, d.height - p.height).toFixed(1)}px round ${(p.height / 2).toFixed(1)}px)` },
+      { transform: "none", clipPath: "inset(0 0 0 round 22px)" },
+    ];
+  }
+
   function open() {
     if (box.open) return close();
     input.value = "";
@@ -802,10 +934,46 @@ function jump() {
     render(true);
     box.showModal();
     input.focus();
+    const frames = fromPill();
+    if (frames) {
+      box.animate(frames, { duration: 560, easing: "cubic-bezier(0.55, 0, 0.1, 1)" });
+      for (const c of box.children) c.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 300, delay: 140, easing: "ease-out", fill: "backwards" });
+    }
   }
 
+  let closing = false;
   function close() {
-    if (box.open) box.close();
+    if (!box.open || closing) return;
+    const frames = fromPill();
+    if (!frames) return box.close();
+    closing = true;
+    for (const c of box.children) c.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 120, fill: "forwards" });
+    const shrink = box.animate(frames.slice().reverse(), { duration: 320, easing: EASE, fill: "forwards" });
+    shrink.finished.then(() => {
+      box.close();
+      box.getAnimations({ subtree: true }).forEach((an) => an.cancel());
+      closing = false;
+    });
+  }
+  // esc goes through the same shrink
+  box.addEventListener("cancel", (e) => {
+    e.preventDefault();
+    close();
+  });
+
+  // the keycap in the pill goes down like a real key, then the panel comes out of the pill
+  function press() {
+    const key = document.querySelector(".island-kbd");
+    if (!key || reduce || !key.animate || box.open) return 0;
+    key.animate(
+      [
+        { translate: "0 0", scale: "1", color: "#9a9a9a", borderColor: "#3a3a3a" },
+        { translate: "0 2px", scale: "0.9", color: "#ffffff", borderColor: "#8a8a8a", offset: 0.35 },
+        { translate: "0 0", scale: "1", color: "#9a9a9a", borderColor: "#3a3a3a" },
+      ],
+      { duration: 360, easing: "ease-out" }
+    );
+    return 130;
   }
 
   input.addEventListener("input", () => {
@@ -826,7 +994,10 @@ function jump() {
   window.addEventListener("keydown", (e) => {
     if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
       e.preventDefault();
-      open();
+      if (e.repeat) return;
+      const wait = press();
+      if (wait) setTimeout(open, wait);
+      else open();
     }
   });
   return open;
@@ -991,6 +1162,9 @@ scrubs();
 magnetic();
 nav();
 lean();
+squashes();
+bottomBump();
+highlighter();
 email();
 footer();
 followers();

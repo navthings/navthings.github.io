@@ -63,9 +63,39 @@ body {
   overflow-x: clip;
 }
 
-::selection {
+html:not(.hl-on) ::selection {
   background: var(--ink);
   color: var(--bg);
+}
+
+/* the highlighter draws its own marks, so the real selection goes see-through. form fields and the jump menu keep a normal one */
+html.hl-on ::selection {
+  background: transparent;
+}
+
+html.hl-on :is(input, textarea)::selection {
+  background: #d9d9d6;
+}
+
+html.hl-on .jump ::selection {
+  background: rgba(255, 255, 255, 0.28);
+}
+
+.hl {
+  position: absolute;
+  z-index: 40;
+  left: 0;
+  top: 0;
+  width: 1px;
+  height: 1px;
+  overflow: visible;
+  pointer-events: none;
+  mix-blend-mode: multiply;
+}
+
+.hl path {
+  fill: var(--accent);
+  fill-opacity: 0.3;
 }
 
 a {
@@ -505,19 +535,11 @@ svg {
 .jump[open] {
   display: flex;
   flex-direction: column;
-  animation: jump-in 0.32s var(--ease) both;
 }
 
 .jump::backdrop {
   background: rgba(255, 255, 255, 0.55);
   animation: jump-dim 0.25s ease both;
-}
-
-@keyframes jump-in {
-  from {
-    opacity: 0;
-    transform: translateY(-10px) scale(0.98);
-  }
 }
 
 @keyframes jump-dim {
@@ -982,12 +1004,13 @@ svg {
   navigation: auto;
 }
 
+/* the pill has its own name, so it stays put while the page slides up underneath it */
 ::view-transition-old(root) {
-  animation: page-out 0.32s var(--ease-in) both;
+  animation: page-out 0.34s var(--ease-in) both;
 }
 
 ::view-transition-new(root) {
-  animation: page-in 0.6s var(--ease) both;
+  animation: page-in 0.7s var(--ease) both;
 }
 
 ::view-transition-group(*) {
@@ -998,14 +1021,14 @@ svg {
 @keyframes page-out {
   to {
     opacity: 0;
-    transform: translateY(-12px);
+    transform: translateY(-36px);
   }
 }
 
 @keyframes page-in {
   from {
     opacity: 0;
-    transform: translateY(24px);
+    transform: translateY(56px);
   }
 }
 
