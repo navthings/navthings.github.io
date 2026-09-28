@@ -555,7 +555,7 @@ function nav() {
     size();
   }
 
-  function setLabel(text) {
+  function setLabel(text, quiet) {
     if (text === label) return;
     const first = label === null;
     if (first) now.textContent = "";
@@ -571,7 +571,7 @@ function nav() {
     }
     if (!first && !reduce) span.classList.add("in");
     now.appendChild(span);
-    if (!first && !reduce && !open && !el.matches(":hover")) {
+    if (!first && !quiet && !reduce && !open && !el.matches(":hover")) {
       setMini(true);
       clearTimeout(tuckTimer);
       tuckTimer = setTimeout(() => setMini(false), 520);
@@ -606,6 +606,48 @@ function nav() {
   document.addEventListener("keydown", (e) => e.key === "Escape" && setOpen(false));
 
   setLabel(fallback);
+  let section = fallback;
+  let preview = null;
+
+  // hovering a link shows where it goes in the pill, and moving off brings the section name back
+  if (finePointer) {
+    let clear = 0;
+    document.addEventListener("pointerover", (e) => {
+      const a = e.target.closest && e.target.closest("a[href]");
+      if (!a || el.contains(a) || a.closest(".jump")) return;
+      const name = linkName(a);
+      if (!name) return;
+      clearTimeout(clear);
+      preview = "→ " + name;
+      setLabel(preview, true);
+    });
+    document.addEventListener("pointerout", (e) => {
+      const a = e.target.closest && e.target.closest("a[href]");
+      if (!a || !preview || (e.relatedTarget && a.contains(e.relatedTarget))) return;
+      clearTimeout(clear);
+      clear = setTimeout(() => {
+        preview = null;
+        setLabel(section, true);
+      }, 140);
+    });
+  }
+
+  pillSay = (text) => {
+    preview = null;
+    setLabel(text, true);
+  };
+
+  // right before the page is captured for the transition, the pill already says the next page's name, at its final width
+  addEventListener("pageswap", (e) => {
+    if (!e.viewTransition || !e.activation || !e.activation.entry) return;
+    const name = pageName(new URL(e.activation.entry.url));
+    if (!name) return;
+    el.classList.remove("ready");
+    now.replaceChildren(Object.assign(document.createElement("span"), { textContent: name }));
+    label = name;
+    size();
+  });
+
   new ResizeObserver(size).observe(links);
   requestAnimationFrame(() => el.classList.add("ready"));
   if (document.fonts) document.fonts.ready.then(size);
@@ -623,7 +665,9 @@ function nav() {
     const hovered = el.matches(":hover");
 
     return () => {
-      setLabel(text);
+      const moved = text !== section;
+      section = text;
+      if (!preview) setLabel(text, !moved);
       el.classList.toggle("light", !!foot && uncovered > vh - 40);
       if (open && Math.abs(y - lastY) > 60 && !hovered) setOpen(false);
       if (!open) lastY = y;
@@ -892,6 +936,55 @@ const JUMP = [
   ["back to top", "top", "action", "scroll up"],
 ].map(([title, href, kind, words]) => ({ title, href, kind, hay: (title + " " + kind + " " + words).toLowerCase() }));
 
+// what each page's own pill says when it loads, so the pill can say it before you get there
+const PAGES = {
+  "/": "navthings",
+  "/work/": "work",
+  "/blog/": "writing",
+  "/playground/": "playground",
+  "/work/lilbase.html": "lilbase",
+  "/work/lilchat.html": "lilchat",
+  "/work/corpus-size.html": "the paper",
+  "/work/sprout.html": "sprout",
+  "/work/playground.html": "playground",
+};
+const SITES = { "github.com": "github", "huggingface.co": "hugging face", "ollama.com": "ollama", "doi.org": "zenodo", "zenodo.org": "zenodo", "orcid.org": "orcid" };
+
+function pageName(url) {
+  if (url.origin !== location.origin) return null;
+  const path = url.pathname.replace(/index\.html$/, "");
+  return PAGES[path] || (path.startsWith("/blog/") ? "writing" : null);
+}
+
+// a short name for wherever a link goes: the jump menu's names for pages, a plain name for other sites, the section for in-page links
+function linkName(a) {
+  if (a.hasAttribute("data-email")) return "copy my email";
+  const url = new URL(a.href, location.href);
+  if (url.protocol === "mailto:") return "email";
+  if (!/^https?:$/.test(url.protocol)) return null;
+  if (url.origin !== location.origin) {
+    const host = url.hostname.replace(/^www\./, "");
+    return SITES[host] || host;
+  }
+  if (url.hash && url.pathname === location.pathname) {
+    const t = document.getElementById(url.hash.slice(1));
+    const labelled = t && (t.dataset.label ? t : t.closest("[data-label]"));
+    const head = t && t.querySelector("h1, h2, h3");
+    return (head && head.textContent.trim().toLowerCase()) || (labelled && labelled.dataset.label) || url.hash.slice(1);
+  }
+  if (url.hash && url.pathname === "/") return url.hash.slice(1);
+  const hit = JUMP.find((j) => j.href === url.pathname + url.search + url.hash) || JUMP.find((j) => j.href === url.pathname);
+  if (!hit) return pageName(url);
+  const name = hit.title.split(",")[0];
+  if (name.length <= 26) return name;
+  let cut = "";
+  for (const w of name.split(" ")) if ((cut + " " + w).trim().length <= 22) cut = (cut + " " + w).trim();
+  return cut + "…";
+}
+
+// the jump menu hands its pick to the pill through this
+let pillSay = () => {};
+
 // the first time someone visits, point at the shortcut once, then never again
 function jumpHint(open) {
   if (!finePointer) return;
@@ -1006,7 +1099,12 @@ function jump() {
     const target = url.hash && document.getElementById(url.hash.slice(1));
     if (here && target) scrollToTarget(target);
     else if (here && !url.hash) scrollToTarget(0);
-    else window.location.href = url.href;
+    else if (reduce) window.location.href = url.href;
+    else {
+      // the menu shrinks into the pill, the pill names where you are going, then the page changes
+      setTimeout(() => pillSay(pageName(url) || item.title.split(",")[0]), 160);
+      setTimeout(() => (window.location.href = url.href), 360);
+    }
   }
 
   // the panel grows out of the nav pill and shrinks back into it: it starts moved up to the pill and cut down to its shape
