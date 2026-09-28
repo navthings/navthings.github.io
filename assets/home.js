@@ -259,7 +259,7 @@
   // the dots lean away from the cursor and swell a little as it passes, then settle back
   function magnet(grid, dots) {
     if (!window.site.finePointer || reduce) return;
-    const R = 120;
+    const R = 90;
     let centers = null;
     let moved = new Set();
     let raf = 0;
@@ -278,14 +278,13 @@
         const d = Math.hypot(dx, dy);
         if (d >= R) continue;
         const f = (1 - d / R) ** 2;
-        const push = f * 28;
+        const push = f * 8;
         const ux = d ? dx / d : 0;
         const uy = d ? dy / d : 0;
         dots[i].style.translate = `${(ux * push).toFixed(1)}px ${(uy * push).toFixed(1)}px`;
-        dots[i].style.scale = (1 + f * 0.6).toFixed(3);
         next.add(i);
       }
-      for (const i of moved) if (!next.has(i)) dots[i].style.translate = dots[i].style.scale = "";
+      for (const i of moved) if (!next.has(i)) dots[i].style.translate = "";
       moved = next;
     }
 
@@ -298,7 +297,7 @@
     grid.addEventListener("pointerleave", () => {
       cancelAnimationFrame(raf);
       raf = 0;
-      for (const i of moved) dots[i].style.translate = dots[i].style.scale = "";
+      for (const i of moved) dots[i].style.translate = "";
       moved = new Set();
     });
   }
