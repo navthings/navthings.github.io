@@ -409,6 +409,24 @@ function droplets() {
   };
 }
 
+// the first time someone is here on a phone, the pill wiggles side to side once and a note says it can be swiped
+function swipeHint() {
+  const el = document.querySelector(".nav .island");
+  if (!el || finePointer || reduce || !el.animate) return;
+  try {
+    if (localStorage.getItem("swipe-hint")) return;
+    localStorage.setItem("swipe-hint", "1");
+  } catch (err) {
+    return;
+  }
+  const show = () => {
+    el.animate([{ translate: "0 0" }, { translate: "-14px 0" }, { translate: "12px 0" }, { translate: "-6px 0" }, { translate: "0 0" }], { duration: 1100, easing: "ease-in-out" });
+    setTimeout(() => drop("swipe the pill ← →"), 350);
+  };
+  const wait = () => (document.documentElement.classList.contains("intro") ? setTimeout(wait, 400) : setTimeout(show, 1800));
+  setTimeout(wait, 600);
+}
+
 // selected text gets a highlighter stroke instead of the flat block. the real selection is still there, just see-through
 function highlighter() {
   if (!window.getSelection) return;
@@ -530,6 +548,11 @@ function nav() {
   kbd.setAttribute("aria-hidden", "true");
   kbd.textContent = k.textContent;
   if (finePointer) el.appendChild(kbd);
+  // on touch screens a small bar like a phone's home indicator says the pill can be swiped
+  const grip = document.createElement("span");
+  grip.className = "island-grip";
+  grip.setAttribute("aria-hidden", "true");
+  if (!finePointer) el.appendChild(grip);
   const anchors = $$("a, button", links);
   anchors.forEach((a, i) => a.style.setProperty("--i", i));
   const labelled = $$("[data-label]").filter((n) => n !== bar && n !== foot);
@@ -540,7 +563,7 @@ function nav() {
 
   function size() {
     const text = now.querySelector("span:not(.out)");
-    const closed = 50 + (text ? text.offsetWidth : 0) + (kbd.isConnected ? 18 + kbd.offsetWidth + 12 : 20);
+    const closed = 50 + (text ? text.offsetWidth : 0) + (kbd.isConnected ? 18 + kbd.offsetWidth + 12 : grip.isConnected ? 14 + 18 + 14 : 20);
     const opened = 44 + links.offsetWidth + 8;
     el.style.setProperty("--w", Math.round(open ? opened : mini ? 46 : closed) + "px");
   }
@@ -609,12 +632,14 @@ function nav() {
   let section = fallback;
   let preview = null;
 
-  // hovering a link shows where it goes in the pill, and moving off brings the section name back
+  // hovering a link shows where it goes in the pill, and moving off brings the section name back.
+  // links sliding under a cursor that is sitting still while the page scrolls dont count
+  let scrolledAt = 0;
   if (finePointer) {
     let clear = 0;
     document.addEventListener("pointerover", (e) => {
       const a = e.target.closest && e.target.closest("a[href]");
-      if (!a || el.contains(a) || a.closest(".jump")) return;
+      if (!a || el.contains(a) || a.closest(".jump") || performance.now() - scrolledAt < 250) return;
       const name = linkName(a);
       if (!name) return;
       clearTimeout(clear);
@@ -637,6 +662,88 @@ function nav() {
     setLabel(text, true);
   };
 
+  // on phones the pill swipes like the home bar: sideways to the page before or after this one, down for the menu
+  const ORDER = [
+    ["/", "/work/", "/blog/", "/playground/"],
+    ["/work/corpus-size.html", "/work/lilbase.html", "/work/lilchat.html", "/work/sprout.html", "/work/playground.html"],
+    ["/blog/liltransformer.html", "/blog/bigtransformer.html", "/blog/lilstory.html", "/blog/dataset-size-paper.html", "/blog/tale.html", "/blog/lilbase.html", "/blog/lilchat.html"],
+  ];
+  function neighbour(step) {
+    const path = location.pathname.replace(/index\.html$/, "");
+    for (const list of ORDER) {
+      const i = list.indexOf(path);
+      if (i >= 0) return list[i + step] || null;
+    }
+    return null;
+  }
+  // main pages and case studies go by their short pill names, posts by their own titles
+  const nameOf = (path) => {
+    const url = new URL(path, location.href);
+    const short = !/^\/blog\/.+/.test(url.pathname) && pageName(url);
+    return short || linkName(Object.assign(document.createElement("a"), { href: path }));
+  };
+
+  if (!finePointer) {
+    let start = null;
+    let dir = 0;
+    let swiped = false;
+    el.addEventListener("pointerdown", (e) => {
+      if (e.pointerType !== "touch" || open) return;
+      start = { x: e.clientX, y: e.clientY };
+      dir = 0;
+      swiped = false;
+      el.setPointerCapture(e.pointerId);
+      el.classList.add("dragging");
+    });
+    el.addEventListener("pointermove", (e) => {
+      if (!start) return;
+      const dx = e.clientX - start.x;
+      const dy = e.clientY - start.y;
+      if (Math.hypot(dx, dy) > 10) swiped = true;
+      // it follows the finger less the further it goes, like pulling on something elastic
+      const rx = Math.sign(dx) * Math.min(56, Math.abs(dx) * 0.45);
+      const ry = Math.min(36, Math.max(0, dy) * 0.4);
+      el.style.translate = `${rx.toFixed(1)}px ${ry.toFixed(1)}px`;
+      const sideways = Math.abs(dx) > Math.abs(dy);
+      let next = 0;
+      if (sideways && Math.abs(dx) > 50 && neighbour(dx < 0 ? 1 : -1)) next = dx < 0 ? 1 : -1;
+      else if (!sideways && dy > 40) next = 2;
+      if (next === dir) return;
+      dir = next;
+      preview = dir === 2 ? "search ↓" : dir === 1 ? nameOf(neighbour(1)) + " →" : dir === -1 ? "← " + nameOf(neighbour(-1)) : null;
+      setLabel(preview || section, true);
+    });
+    const end = () => {
+      if (!start) return;
+      start = null;
+      el.classList.remove("dragging");
+      el.style.translate = "";
+      const d = dir;
+      dir = 0;
+      if (d === 1 || d === -1) {
+        const target = neighbour(d);
+        setTimeout(() => (location.href = target), 120);
+        return;
+      }
+      preview = null;
+      setLabel(section, true);
+      if (d === 2) openJump();
+    };
+    el.addEventListener("pointerup", end);
+    el.addEventListener("pointercancel", end);
+    // a swipe is not a tap, so it doesnt also open the pill
+    el.addEventListener(
+      "click",
+      (e) => {
+        if (!swiped) return;
+        swiped = false;
+        e.preventDefault();
+        e.stopImmediatePropagation();
+      },
+      true
+    );
+  }
+
   // right before the page is captured for the transition, the pill already says the next page's name, at its final width
   addEventListener("pageswap", (e) => {
     if (!e.viewTransition || !e.activation || !e.activation.entry) return;
@@ -653,6 +760,7 @@ function nav() {
   if (document.fonts) document.fonts.ready.then(size);
 
   let lastY = window.scrollY;
+  let lastSeen = window.scrollY;
   onScroll.push((y, vh) => {
     let text = fallback;
     for (const n of labelled) {
@@ -664,9 +772,15 @@ function nav() {
     if (foot && foot.dataset.label && uncovered > vh * 0.45) text = foot.dataset.label;
     const hovered = el.matches(":hover");
 
+    const scrolling = y !== lastSeen;
+    lastSeen = y;
     return () => {
       const moved = text !== section;
       section = text;
+      if (scrolling) {
+        scrolledAt = performance.now();
+        preview = null;
+      }
       if (!preview) setLabel(text, !moved);
       el.classList.toggle("light", !!foot && uncovered > vh - 40);
       if (open && Math.abs(y - lastY) > 60 && !hovered) setOpen(false);
@@ -1357,6 +1471,7 @@ scrubs();
 magnetic();
 nav();
 droplets();
+swipeHint();
 lean();
 squashes();
 highlighter();

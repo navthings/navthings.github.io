@@ -415,7 +415,41 @@ svg {
 
 /* over the dark footer it flips to white */
 
-/* tucked down to just the logo while scrolling down fast */
+/* the grip that says the pill can be swiped, on touch screens */
+.island-grip {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  width: 18px;
+  height: 4px;
+  margin-top: -2px;
+  border-radius: 2px;
+  background: #5c5c5c;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.island.open .island-grip {
+  opacity: 0;
+}
+
+.island.light .island-grip {
+  background: #c9c9c6;
+}
+
+@media (pointer: coarse) {
+  .nav .island {
+    touch-action: none;
+  }
+}
+
+/* while a finger drags the pill it follows directly, then springs back on release */
+.island.ready.dragging {
+  transition: width 0.65s cubic-bezier(0.32, 0.72, 0, 1), background-color 0.45s ease, transform 0.5s var(--ease), opacity 0.45s ease;
+}
+
+/* tucked down to just the logo while crossing into a new section */
+.island.mini .island-grip,
 .island.mini .island-now,
 .island.mini .island-kbd {
   opacity: 0;
