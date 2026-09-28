@@ -286,6 +286,12 @@ function nav() {
     openJump();
   });
   links.appendChild(k);
+  // on a keyboard, the closed pill shows the shortcut so people know it exists
+  const kbd = document.createElement("kbd");
+  kbd.className = "island-kbd";
+  kbd.setAttribute("aria-hidden", "true");
+  kbd.textContent = k.textContent;
+  if (finePointer) el.appendChild(kbd);
   const anchors = $$("a, button", links);
   anchors.forEach((a, i) => a.style.setProperty("--i", i));
   const labelled = $$("[data-label]").filter((n) => n !== bar && n !== foot);
@@ -295,7 +301,7 @@ function nav() {
 
   function size() {
     const text = now.querySelector("span:not(.out)");
-    const closed = 50 + (text ? text.offsetWidth : 0) + 20;
+    const closed = 50 + (text ? text.offsetWidth : 0) + (kbd.isConnected ? 18 + kbd.offsetWidth + 12 : 20);
     const opened = 44 + links.offsetWidth + 8;
     el.style.setProperty("--w", Math.round(open ? opened : closed) + "px");
   }
@@ -562,6 +568,37 @@ const JUMP = [
   ["copy my email", "copy", "action", "say hi contact mail"],
   ["back to top", "top", "action", "scroll up"],
 ].map(([title, href, kind, words]) => ({ title, href, kind, hay: (title + " " + kind + " " + words).toLowerCase() }));
+
+// the first time someone visits, point at the shortcut once, then never again
+function jumpHint(open) {
+  if (!finePointer) return;
+  try {
+    if (localStorage.getItem("jump-hint")) return;
+    localStorage.setItem("jump-hint", "1");
+  } catch (err) {
+    return;
+  }
+  const mac = /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent);
+  const tip = document.createElement("button");
+  tip.type = "button";
+  tip.className = "jump-hint";
+  tip.innerHTML = "press <kbd>" + (mac ? "⌘K" : "ctrl K") + "</kbd> to jump anywhere";
+  tip.addEventListener("click", () => {
+    tip.remove();
+    open();
+  });
+  const show = () => {
+    document.body.appendChild(tip);
+    requestAnimationFrame(() => requestAnimationFrame(() => tip.classList.add("on")));
+    setTimeout(() => {
+      tip.classList.remove("on");
+      setTimeout(() => tip.remove(), 600);
+    }, 5200);
+  };
+  // wait for the first visit logo intro if there is one
+  const wait = () => (document.documentElement.classList.contains("intro") ? setTimeout(wait, 400) : setTimeout(show, 1600));
+  setTimeout(wait, 600);
+}
 
 function jump() {
   const box = document.createElement("dialog");
@@ -839,6 +876,7 @@ window.site = { scribbles, onScroll, requestTick, squircles, reveals, splitWords
 
 squircles();
 const openJump = jump();
+jumpHint(openJump);
 letters();
 reveals();
 scrubs();

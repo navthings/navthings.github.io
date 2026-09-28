@@ -427,6 +427,63 @@ svg {
   block-size: 100%;
 }
 
+/* the shortcut, shown in the closed pill and in the one-time hint */
+.island-kbd,
+.jump-hint kbd {
+  display: inline-block;
+  padding: 2px 6px;
+  border-radius: 6px;
+  border: 1px solid #3a3a3a;
+  font: inherit;
+  font-size: 11.5px;
+  line-height: 1.3;
+  color: #9a9a9a;
+}
+
+.island-kbd {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.island.open .island-kbd {
+  opacity: 0;
+}
+
+.island.light .island-kbd {
+  border-color: #d6d6d3;
+  color: #6b6b6b;
+}
+
+.jump-hint {
+  position: fixed;
+  z-index: 49;
+  top: 70px;
+  left: 50%;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: #d6d6d6;
+  font: inherit;
+  font-size: 13px;
+  opacity: 0;
+  transform: translate(-50%, -8px);
+  transition: opacity 0.4s ease, transform 0.5s var(--ease);
+}
+
+.jump-hint.on {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+.jump-hint kbd {
+  margin: 0 3px;
+  color: #fff;
+}
+
 /* the jump menu, same black as the nav pill */
 
 .jump {
