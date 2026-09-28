@@ -1227,8 +1227,7 @@ html:not(.js) .train-track b {
   width: 290px;
   padding: 14px 16px 16px;
   border-radius: 18px;
-  background: var(--bg);
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05), 0 18px 40px -18px rgba(0, 0, 0, 0.3);
+  background: var(--ink);
   pointer-events: none;
   opacity: 0;
   scale: 0.92;
@@ -1243,7 +1242,7 @@ html:not(.js) .train-track b {
 
 .peek span {
   display: block;
-  color: var(--ink-3);
+  color: #9a9a9a;
   font-size: 11.5px;
 }
 
@@ -1251,7 +1250,7 @@ html:not(.js) .train-track b {
   margin-top: 6px;
   font-size: 15px;
   line-height: 1.5;
-  color: var(--ink-2);
+  color: #e6e6e6;
 }
 
 /* playground call out */
@@ -1361,12 +1360,11 @@ html:not(.js) .train-track b {
   padding: 6px 6px 6px 22px;
   border-radius: 999px;
   background: var(--bg);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04), 0 10px 30px -12px rgba(0, 0, 0, 0.12);
   transition: box-shadow 0.3s ease;
 }
 
 .field:focus-within {
-  box-shadow: 0 0 0 1px var(--ink-3), 0 10px 30px -12px rgba(0, 0, 0, 0.18);
+  box-shadow: inset 0 0 0 1px var(--ink-3);
 }
 
 .field input {
