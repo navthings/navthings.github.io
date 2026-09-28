@@ -388,6 +388,19 @@ function nav() {
 }
 
 // copy the email instead of opening a mail app, same as before
+// the old word lifts out and the new one rises into its place
+async function roll(el, text) {
+  if (reduce || !el.animate) {
+    el.textContent = text;
+    return;
+  }
+  const out = el.animate([{ transform: "none", opacity: 1 }, { transform: "translateY(-0.4em)", opacity: 0 }], { duration: 140, easing: "ease-in", fill: "forwards" });
+  await out.finished;
+  el.textContent = text;
+  out.cancel();
+  el.animate([{ transform: "translateY(0.4em)", opacity: 0 }, { transform: "none", opacity: 1 }], { duration: 260, easing: "cubic-bezier(0.2, 0.7, 0.1, 1)" });
+}
+
 function email() {
   for (const el of $$("[data-email]")) {
     const label = el.querySelector(".inner") || el;
@@ -400,8 +413,8 @@ function email() {
       }
       navigator.clipboard.writeText("navneet.dagdiya@gmail.com").then(
         () => {
-          label.textContent = "copied.";
-          setTimeout(() => (label.textContent = original), 1800);
+          roll(label, "copied.");
+          setTimeout(() => roll(label, original), 1800);
         },
         () => {
           window.location.href = "mailto:navneet.dagdiya@gmail.com";
