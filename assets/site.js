@@ -351,24 +351,43 @@ function droplets() {
   bar.appendChild(note);
   let timer = 0;
 
+  // where the pill really is: its layout box plus the lean, ignoring any squash still playing
+  function box() {
+    const t = getComputedStyle(pill).translate;
+    const [tx, ty] = t && t !== "none" ? t.split(" ").map((v) => parseFloat(v) || 0) : [0, 0];
+    return { left: pill.offsetLeft + tx, top: pill.offsetTop + (ty || 0), width: pill.offsetWidth, height: pill.offsetHeight };
+  }
+  // the hidden base sits well inside the pill's round ends, and follows it every frame while a drop is out
+  let follow = 0;
+  function place() {
+    const b = box();
+    base.style.cssText = `left:${b.left + 14}px; top:${b.top + 3}px; width:${Math.max(0, b.width - 28)}px; height:${b.height - 6}px`;
+    const cx = b.left + b.width / 2 + "px";
+    blob.style.left = cx;
+    blob.style.top = b.top + b.height + "px";
+    note.style.left = cx;
+    note.style.top = b.top + b.height + 10 + "px";
+    follow = goo.classList.contains("on") ? requestAnimationFrame(place) : 0;
+  }
+
   drop = (text) => {
     clearTimeout(timer);
+    // the one-time shortcut hint sits right where the note lands
+    const hint = document.querySelector(".jump-hint");
+    if (hint) hint.remove();
+    cancelAnimationFrame(follow);
     for (const an of [...blob.getAnimations(), ...note.getAnimations()]) an.cancel();
-    const nb = bar.getBoundingClientRect();
-    const p = pill.getBoundingClientRect();
     const cs = getComputedStyle(pill);
-    const bottom = p.bottom - nb.top;
+    const b = box();
+    const bottom = b.top + b.height;
     note.textContent = text;
-    note.style.cssText = `left:${p.left + p.width / 2 - nb.left}px; top:${bottom + 10}px; color:${cs.color}`;
+    note.style.cssText = `left:${b.left + b.width / 2}px; top:${bottom + 10}px; color:${cs.color}`;
     if (reduce || !blob.animate) {
       note.style.background = cs.backgroundColor;
       note.animate([{ opacity: 0 }, { opacity: 1, offset: 0.1 }, { opacity: 1, offset: 0.9 }, { opacity: 0 }], { duration: 1800 });
       return;
     }
     goo.style.color = cs.backgroundColor;
-    base.style.cssText = `left:${p.left - nb.left + 3}px; top:${p.top - nb.top + 3}px; width:${p.width - 6}px; height:${p.height - 6}px`;
-    blob.style.left = p.left + p.width / 2 - nb.left + "px";
-    blob.style.top = bottom + "px";
     const W = note.offsetWidth;
     const frames = [
       { width: "14px", height: "14px", transform: "translate(-50%, -18px)" },
@@ -378,6 +397,7 @@ function droplets() {
       { width: `${W}px`, height: "30px", transform: "translate(-50%, 10px)" },
     ];
     goo.classList.add("on");
+    place();
     blob.animate(frames, { duration: 680, easing: "cubic-bezier(0.3, 0.7, 0.2, 1)", fill: "forwards" });
     note.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 180, delay: 500, fill: "forwards" });
     timer = setTimeout(() => {
