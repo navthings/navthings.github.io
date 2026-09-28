@@ -65,7 +65,7 @@ body {
 
 ::selection {
   background: var(--ink);
-  color: #fff;
+  color: var(--bg);
 }
 
 a {
@@ -109,7 +109,7 @@ svg {
   z-index: 100;
   padding: 8px 14px;
   border-radius: 999px;
-  background: var(--ink);
+  background: #0f0f0f;
   color: #fff;
   font-size: 14px;
   transform: translateY(-200%);
@@ -385,19 +385,28 @@ svg {
 
 /* over the dark footer it flips to white */
 
-.island.light {
+.island.light,
+html.lights-off .island {
   background: #fff;
-  color: var(--ink);
+  color: #0f0f0f;
 }
 
-.island.light .island-links a {
+.island.light .island-links a,
+.island.light .island-links button,
+html.lights-off .island-links a,
+html.lights-off .island-links button {
   color: #6b6b6b;
 }
 
 .island.light .island-links a.home,
 .island.light .island-links a:hover,
-.island.light .island-links a.on {
-  color: var(--ink);
+.island.light .island-links a.on,
+.island.light .island-links button:hover,
+html.lights-off .island-links a.home,
+html.lights-off .island-links a:hover,
+html.lights-off .island-links a.on,
+html.lights-off .island-links button:hover {
+  color: #0f0f0f;
 }
 
 @media (max-width: 640px) {
@@ -453,7 +462,8 @@ svg {
   opacity: 0;
 }
 
-.island.light .island-kbd {
+.island.light .island-kbd,
+html.lights-off .island-kbd {
   border-color: #d6d6d3;
   color: #6b6b6b;
 }
@@ -465,7 +475,7 @@ svg {
   left: 50%;
   padding: 8px 14px;
   border-radius: 999px;
-  background: var(--ink);
+  background: #0f0f0f;
   color: #d6d6d6;
   font: inherit;
   font-size: 13px;
@@ -495,7 +505,7 @@ svg {
   padding: 8px;
   border: 0;
   border-radius: var(--r);
-  background: var(--ink);
+  background: #0f0f0f;
   color: #fff;
   overflow: hidden;
 }
@@ -632,7 +642,7 @@ svg {
 
 .btn.dark {
   background: var(--ink);
-  color: #fff;
+  color: var(--bg);
 }
 
 .btn.dark:hover {

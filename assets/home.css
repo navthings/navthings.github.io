@@ -224,6 +224,34 @@ html.intro .cs-head [data-words].in .w {
   max-width: 21ch;
 }
 
+/* the page turns its lights off while you read the statement, every colour eases across together */
+
+@property --bg { syntax: "<color>"; inherits: true; initial-value: #ffffff; }
+@property --ink { syntax: "<color>"; inherits: true; initial-value: #0f0f0f; }
+@property --ink-2 { syntax: "<color>"; inherits: true; initial-value: #5f5f5f; }
+@property --ink-3 { syntax: "<color>"; inherits: true; initial-value: #767676; }
+@property --ink-4 { syntax: "<color>"; inherits: true; initial-value: #929292; }
+@property --line { syntax: "<color>"; inherits: true; initial-value: #ebebea; }
+@property --surface { syntax: "<color>"; inherits: true; initial-value: #f4f4f2; }
+@property --surface-2 { syntax: "<color>"; inherits: true; initial-value: #eaeae7; }
+
+html {
+  transition: --bg 0.9s ease, --ink 0.9s ease, --ink-2 0.9s ease, --ink-3 0.9s ease, --ink-4 0.9s ease, --line 0.9s ease, --surface 0.9s ease, --surface-2 0.9s ease;
+}
+
+@media screen {
+  html.lights-off {
+    --bg: #0f0f0f;
+    --ink: #f2f2ef;
+    --ink-2: #a3a3a0;
+    --ink-3: #8b8b88;
+    --ink-4: #6d6d6a;
+    --line: #262625;
+    --surface: #1a1a19;
+    --surface-2: #262625;
+  }
+}
+
 /* what i work on */
 
 .areas {
@@ -686,7 +714,7 @@ html:not(.js) .chat-note {
   top: 0;
   padding: 8px 12px;
   border-radius: 12px;
-  background: var(--ink);
+  background: #0f0f0f;
   color: #fff;
   font-size: 13px;
   line-height: 1.45;
@@ -987,7 +1015,7 @@ html:not(.js) .train-track b {
   width: 290px;
   padding: 14px 16px 16px;
   border-radius: 18px;
-  background: var(--ink);
+  background: #0f0f0f;
   pointer-events: none;
   opacity: 0;
   scale: 0.92;

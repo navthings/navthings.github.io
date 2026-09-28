@@ -249,6 +249,25 @@
     });
   }
 
+  // the lights go off while the statement is in the middle of the screen, and back on once you move past it
+  function lights() {
+    const el = document.querySelector(".statement .scrub");
+    if (!el) return;
+    const root = document.documentElement;
+    const meta = document.querySelector('meta[name="theme-color"]');
+    let dark = false;
+    onScroll.push((y, vh) => {
+      const r = el.getBoundingClientRect();
+      const next = r.top < vh * 0.7 && r.bottom > vh * 0.3;
+      if (next === dark) return;
+      dark = next;
+      return () => {
+        root.classList.toggle("lights-off", dark);
+        if (meta) meta.content = dark ? "#0f0f0f" : "#ffffff";
+      };
+    });
+  }
+
   // project cards stack up, the one underneath sinks back a little
   function stack() {
     const cards = $$(".card");
@@ -406,6 +425,7 @@
 
   temperature(tokens(intro()));
   heroOut();
+  lights();
   stack();
   chat();
   peek();
