@@ -5,7 +5,6 @@
   const line = tl.querySelector(".tl-line");
   const fill = tl.querySelector(".tl-fill");
   const nodes = $$(".tl-node", tl);
-  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   // where each dot sits down the list, from layout offsets so the reveal slide doesnt skew it. the line runs from the first dot to the last
   let centers = [];
@@ -35,12 +34,7 @@
     last = reach;
     return () => {
       fill.style.transform = `scaleY(${clamp((reach - start) / span).toFixed(4)})`;
-      nodes.forEach((n, i) => {
-        const on = reach >= centers[i] - 2;
-        // the first time the ink gets to a dot it sends out one ring, and never again
-        if (on && !reduce) n.classList.add("ping");
-        n.classList.toggle("lit", on);
-      });
+      nodes.forEach((n, i) => n.classList.toggle("lit", reach >= centers[i] - 2));
     };
   });
   requestTick();
