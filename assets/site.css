@@ -258,16 +258,86 @@ svg {
   transform: scale(0.97);
 }
 
+/* a little loss curve under the label, drawn as far as you've scrolled */
 .island-fill {
+  --p: 0;
+  --y: 0.06;
   position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 2px;
-  background: rgba(255, 255, 255, 0.4);
-  transform-origin: 0 50%;
-  transform: scaleX(0);
+  left: 50px;
+  right: 18px;
+  bottom: 7px;
+  height: 9px;
   pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.island.open .island-fill {
+  opacity: 0;
+}
+
+.island-fill svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.island-fill path {
+  fill: none;
+  stroke-width: 1.2;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+  transition: stroke 0.45s ease;
+}
+
+.loss-all path {
+  stroke: rgba(255, 255, 255, 0.16);
+}
+
+.loss-seen {
+  clip-path: inset(-3px calc((1 - var(--p)) * 100%) -3px -3px);
+}
+
+.loss-seen path {
+  stroke: rgba(255, 255, 255, 0.78);
+}
+
+.loss-dot {
+  position: absolute;
+  left: calc(var(--p) * 100%);
+  top: calc(var(--y) * 100%);
+  width: 5px;
+  height: 5px;
+  margin: -2.5px 0 0 -2.5px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+/* a soft halo while the page is moving, gone when it stops */
+.loss-dot::after {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  background: var(--accent);
+  opacity: 0;
+  transform: scale(0.5);
+  transition: opacity 0.4s ease, transform 0.4s var(--ease);
+}
+
+.moving .loss-dot::after {
+  opacity: 0.3;
+  transform: none;
+}
+
+.island.light .loss-all path {
+  stroke: rgba(0, 0, 0, 0.12);
+}
+
+.island.light .loss-seen path {
+  stroke: rgba(15, 15, 15, 0.7);
 }
 
 .island-mark {
@@ -294,7 +364,7 @@ svg {
 .island-now {
   position: absolute;
   left: 50px;
-  top: 0;
+  top: -4px;
   height: 100%;
   font-size: 14px;
   letter-spacing: -0.01em;
@@ -387,10 +457,6 @@ svg {
 .island.light {
   background: #fff;
   color: var(--ink);
-}
-
-.island.light .island-fill {
-  background: rgba(0, 0, 0, 0.3);
 }
 
 .island.light .island-links a {

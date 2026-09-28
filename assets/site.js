@@ -270,6 +270,10 @@ function nav() {
   const now = el.querySelector(".island-now");
   const links = el.querySelector(".island-links");
   const fill = el.querySelector(".island-fill");
+  // the scroll bar is a loss curve: faint for the whole run, bright for the part you've scrolled through
+  const run = lossRun(location.pathname);
+  const svg = (cls) => `<svg class="${cls}" viewBox="0 0 100 10" preserveAspectRatio="none"><path d="${run.d}"/></svg>`;
+  fill.innerHTML = svg("loss-all") + svg("loss-seen") + '<i class="loss-dot"></i>';
   const foot = document.querySelector(".foot");
   const sheet = document.querySelector(".sheet");
   const fallback = bar.dataset.label || "navthings";
@@ -338,6 +342,7 @@ function nav() {
   if (document.fonts) document.fonts.ready.then(size);
 
   let lastY = window.scrollY;
+  let still = 0;
   onScroll.push((y, vh) => {
     let text = fallback;
     for (const n of labelled) {
@@ -352,7 +357,14 @@ function nav() {
 
     return () => {
       setLabel(text);
-      fill.style.transform = `scaleX(${max > 0 ? clamp(y / max).toFixed(4) : 0})`;
+      const p = max > 0 ? clamp(y / max) : 0;
+      fill.style.setProperty("--p", p.toFixed(4));
+      fill.style.setProperty("--y", run.at(p).toFixed(4));
+      if (y !== lastY) {
+        fill.classList.add("moving");
+        clearTimeout(still);
+        still = setTimeout(() => fill.classList.remove("moving"), 260);
+      }
       el.classList.toggle("light", !!foot && uncovered > vh - 40);
       if (open && Math.abs(y - lastY) > 60 && !hovered) setOpen(false);
       if (!open) lastY = y;
@@ -548,6 +560,34 @@ function followers() {
 }
 
 // hand drawn marks: circles and underlines with a bit of wobble, seeded so they look the same every visit
+// a training run for the nav pill, one per page: warmup, a fast drop, a long noisy tail, and a small bump where each session picked back up
+function lossRun(name) {
+  let seed = 7;
+  for (const c of name) seed = (seed * 31 + c.charCodeAt(0)) | 0;
+  const rnd = seeded(seed);
+  const steps = 160;
+  const resumes = [0.3 + rnd() * 0.1, 0.62 + rnd() * 0.1];
+  const loss = [];
+  let wobble = 0;
+  for (let i = 0; i <= steps; i++) {
+    const x = i / steps;
+    let l = 1 / Math.pow(1 + 7 * Math.max(0, x - 0.025), 0.75);
+    for (const r of resumes) if (x >= r && x < r + 0.08) l *= 1 + 0.16 * Math.exp(-(x - r) / 0.014);
+    wobble = wobble * 0.5 + (rnd() - 0.5) * 0.5;
+    loss.push(l + wobble * 0.11 * (0.25 + l));
+  }
+  const hi = Math.max(...loss);
+  const lo = Math.min(...loss);
+  const ys = loss.map((l) => 0.06 + (1 - (l - lo) / (hi - lo)) * 0.88);
+  const d = ys.map((y, i) => (i ? "L" : "M") + ((i / steps) * 100).toFixed(2) + " " + (y * 10).toFixed(2)).join("");
+  const at = (p) => {
+    const f = clamp(p) * steps;
+    const i = Math.min(steps - 1, Math.floor(f));
+    return ys[i] + (ys[i + 1] - ys[i]) * (f - i);
+  };
+  return { d, at };
+}
+
 function seeded(seed) {
   let t = seed >>> 0;
   return () => {
