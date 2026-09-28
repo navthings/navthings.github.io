@@ -56,7 +56,7 @@
     return toks;
   }
 
-  // first time someone lands here from outside, the logo draws itself and flies into the nav
+  // when someone lands here from outside, or reloads, the logo draws itself and flies into the nav
   function intro() {
     let seen = false;
     try {
@@ -67,7 +67,10 @@
     }
     const target = document.querySelector(".island-mark img");
     const fromHere = document.referrer && document.referrer.startsWith(location.origin);
-    if (seen || reduce || fromHere || !target || window.scrollY > 0 || location.hash) return Promise.resolve();
+    const nav = performance.getEntriesByType ? performance.getEntriesByType("navigation")[0] : null;
+    const reload = !!nav && nav.type === "reload";
+    if (reduce || !target || window.scrollY > 0 || location.hash) return Promise.resolve();
+    if (!reload && (seen || fromHere)) return Promise.resolve();
 
     const root = document.documentElement;
     const veil = document.createElement("div");
