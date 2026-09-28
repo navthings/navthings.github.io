@@ -270,15 +270,26 @@ function nav() {
   const now = el.querySelector(".island-now");
   const links = el.querySelector(".island-links");
   const fill = el.querySelector(".island-fill");
-  // the scroll bar is a loss curve: faint for the whole run, bright for the part you've scrolled through
-  const run = lossRun(location.pathname);
-  const svg = (cls) => `<svg class="${cls}" viewBox="0 0 100 10" preserveAspectRatio="none"><path d="${run.d}"/></svg>`;
-  fill.innerHTML = svg("loss-all") + svg("loss-seen") + '<i class="loss-dot"></i>';
+  // how far down the page you are, as a ring that draws itself around the logo
+  fill.innerHTML = '<svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="18.5" pathLength="100"/></svg>';
   const foot = document.querySelector(".foot");
   const sheet = document.querySelector(".sheet");
   const fallback = bar.dataset.label || "navthings";
   const current = bar.dataset.current || "";
-  const anchors = $$("a", links);
+  // the menu gets a way into the jump menu too, labelled for the keyboard people actually have
+  const mac = /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent);
+  const k = document.createElement("button");
+  k.type = "button";
+  k.className = "island-k";
+  k.textContent = finePointer ? (mac ? "⌘K" : "ctrl K") : "find";
+  k.setAttribute("aria-label", "jump to a page");
+  k.addEventListener("click", (e) => {
+    e.stopPropagation();
+    setOpen(false);
+    openJump();
+  });
+  links.appendChild(k);
+  const anchors = $$("a, button", links);
   anchors.forEach((a, i) => a.style.setProperty("--i", i));
   const labelled = $$("[data-label]").filter((n) => n !== bar && n !== foot);
   let label = null;
@@ -342,7 +353,6 @@ function nav() {
   if (document.fonts) document.fonts.ready.then(size);
 
   let lastY = window.scrollY;
-  let still = 0;
   onScroll.push((y, vh) => {
     let text = fallback;
     for (const n of labelled) {
@@ -357,14 +367,7 @@ function nav() {
 
     return () => {
       setLabel(text);
-      const p = max > 0 ? clamp(y / max) : 0;
-      fill.style.setProperty("--p", p.toFixed(4));
-      fill.style.setProperty("--y", run.at(p).toFixed(4));
-      if (y !== lastY) {
-        fill.classList.add("moving");
-        clearTimeout(still);
-        still = setTimeout(() => fill.classList.remove("moving"), 260);
-      }
+      fill.style.setProperty("--p", (max > 0 ? clamp(y / max) : 0).toFixed(4));
       el.classList.toggle("light", !!foot && uncovered > vh - 40);
       if (open && Math.abs(y - lastY) > 60 && !hovered) setOpen(false);
       if (!open) lastY = y;
@@ -531,6 +534,164 @@ function counters() {
   window.addEventListener("beforeprint", () => els.forEach((el) => (el.textContent = info.get(el).text)));
 }
 
+// cmd+k: jump to any page, post, model or link from anywhere
+const JUMP = [
+  ["navthings", "/", "home", "start hi about"],
+  ["the models so far", "/work/", "timeline", "work models history every model"],
+  ["what i've written", "/blog/", "writing", "posts blog"],
+  ["talk to my models", "/playground/", "playground", "chat try run browser"],
+  ["lilbase", "/work/lilbase.html", "case study", "pretraining jax tpu base model gpt-2 hellaswag lambada"],
+  ["lilchat", "/work/lilchat.html", "case study", "finetuning mlx chat sft melbourne"],
+  ["the paper", "/work/corpus-size.html", "case study", "research corpus size data tinystories zenodo"],
+  ["sprout", "/work/sprout.html", "case study", "training now 523m wsd sharded adamw"],
+  ["how the playground works", "/work/playground.html", "case study", "wllama webassembly webgpu safari firefox inference"],
+  ["talk to lilchat", "/playground/?model=lilchat", "model", "chat try"],
+  ["lilbase, continues whatever you start", "/playground/?model=lilbase", "model", "try"],
+  ["tale, bedtime stories", "/playground/?model=tale", "model", "try stories"],
+  ["lilstory, tinier bedtime stories", "/playground/?model=lilstory", "model", "try stories"],
+  ["lilstory's tokenizer", "/playground/#tokenizer", "playground", "tokens bpe pieces"],
+  ["a digit net with no libraries", "/playground/#digits", "playground", "mnist draw neural net sllm"],
+  ["teaching lilbase to talk", "/blog/lilchat.html", "post", "sep 26 lilchat finetuning"],
+  ["lilbase, 297m params on a free tpu", "/blog/lilbase.html", "post", "sep 23 pretraining"],
+  ["tale, bedtime stories for my little brother", "/blog/tale.html", "post", "sep 12"],
+  ["i wrote a paper on how much data matters", "/blog/dataset-size-paper.html", "post", "sep 5 research"],
+  ["lilstory, my first real language model", "/blog/lilstory.html", "post", "sep 4"],
+  ["bigtransformer, now it reads a whole file", "/blog/bigtransformer.html", "post", "aug 31"],
+  ["my first transformer", "/blog/liltransformer.html", "post", "aug 30 liltransformer one sentence"],
+  ["github", "https://github.com/navthings", "link", "code repos"],
+  ["hugging face", "https://huggingface.co/navthings", "link", "weights models"],
+  ["ollama", "https://ollama.com/navthings", "link", "models run"],
+  ["zenodo, the paper", "https://doi.org/10.5281/zenodo.22340667", "link", "research doi"],
+  ["orcid", "https://orcid.org/0009-0002-2764-866X", "link", "research id"],
+  ["rss feed", "/feed.xml", "link", "posts subscribe"],
+  ["copy my email", "copy", "action", "say hi contact mail"],
+  ["back to top", "top", "action", "scroll up"],
+].map(([title, href, kind, words]) => ({ title, href, kind, hay: (title + " " + kind + " " + words).toLowerCase() }));
+
+function jump() {
+  const box = document.createElement("dialog");
+  box.className = "jump sq";
+  box.setAttribute("aria-label", "jump to");
+  box.innerHTML =
+    '<input class="jump-in" type="text" placeholder="where to?" aria-label="where to" role="combobox" aria-expanded="true" aria-controls="jump-list" autocomplete="off" spellcheck="false" />' +
+    '<ul class="jump-list" id="jump-list" role="listbox"></ul>' +
+    '<p class="jump-foot cap">↑ ↓ to move, enter to go, esc to close</p>';
+  document.body.appendChild(box);
+  squircles(box.parentElement);
+  const input = box.querySelector("input");
+  const list = box.querySelector("ul");
+  const foot = box.querySelector(".jump-foot");
+  let shown = [];
+  let active = 0;
+
+  // every word has to show up somewhere, and a hit at the start of the title counts most
+  function search(q) {
+    const words = q.toLowerCase().split(/\s+/).filter(Boolean);
+    if (!words.length) return JUMP.slice(0, 9);
+    const hits = [];
+    JUMP.forEach((item, i) => {
+      let score = 0;
+      for (const w of words) {
+        const t = item.title.toLowerCase();
+        if (t.startsWith(w)) score += 4;
+        else if (t.includes(" " + w)) score += 3;
+        else if (item.hay.includes(w)) score += 1;
+        else return;
+      }
+      hits.push({ item, score, i });
+    });
+    return hits.sort((a, b) => b.score - a.score || a.i - b.i).slice(0, 9).map((h) => h.item);
+  }
+
+  function render(fresh) {
+    shown = search(input.value);
+    active = Math.min(active, Math.max(0, shown.length - 1));
+    list.classList.toggle("fresh", !!fresh);
+    list.innerHTML = shown.length ? "" : '<li class="jump-none">nothing called that. try a model name, or "post"</li>';
+    shown.forEach((item, i) => {
+      const li = document.createElement("li");
+      li.id = "jump-o-" + i;
+      li.setAttribute("role", "option");
+      li.style.setProperty("--i", i);
+      li.innerHTML = '<span class="jt"></span><span class="jk cap"></span>';
+      li.firstChild.textContent = item.title;
+      li.lastChild.textContent = item.kind;
+      li.addEventListener("pointermove", () => select(i));
+      li.addEventListener("click", () => go(item));
+      list.appendChild(li);
+    });
+    select(active);
+  }
+
+  function select(i) {
+    active = i;
+    $$("li[role=option]", list).forEach((li, k) => li.setAttribute("aria-selected", k === i));
+    const li = list.children[i];
+    if (li && li.id) {
+      input.setAttribute("aria-activedescendant", li.id);
+      li.scrollIntoView({ block: "nearest" });
+    }
+  }
+
+  function go(item) {
+    if (item.href === "copy") {
+      const email = "navneet.dagdiya@gmail.com";
+      if (!navigator.clipboard) return (window.location.href = "mailto:" + email);
+      navigator.clipboard.writeText(email).then(() => {
+        foot.textContent = "copied " + email;
+        setTimeout(close, 900);
+      });
+      return;
+    }
+    close();
+    if (item.href === "top") return scrollToTarget(0);
+    if (/^https?:/.test(item.href)) return window.open(item.href, "_blank", "noopener");
+    const url = new URL(item.href, location.origin);
+    const here = url.pathname === location.pathname && !url.search;
+    const target = url.hash && document.getElementById(url.hash.slice(1));
+    if (here && target) scrollToTarget(target);
+    else if (here && !url.hash) scrollToTarget(0);
+    else window.location.href = url.href;
+  }
+
+  function open() {
+    if (box.open) return close();
+    input.value = "";
+    active = 0;
+    foot.textContent = "↑ ↓ to move, enter to go, esc to close";
+    render(true);
+    box.showModal();
+    input.focus();
+  }
+
+  function close() {
+    if (box.open) box.close();
+  }
+
+  input.addEventListener("input", () => {
+    active = 0;
+    render(false);
+  });
+  input.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+      e.preventDefault();
+      if (shown.length) select((active + (e.key === "ArrowDown" ? 1 : shown.length - 1)) % shown.length);
+    } else if (e.key === "Enter" && shown[active]) {
+      e.preventDefault();
+      go(shown[active]);
+    }
+  });
+  // a click on the dim area outside the panel closes it
+  box.addEventListener("click", (e) => e.target === box && close());
+  window.addEventListener("keydown", (e) => {
+    if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+      e.preventDefault();
+      open();
+    }
+  });
+  return open;
+}
+
 // printing skips the scroll, so everything that would have animated in shows up as it ends
 function printable() {
   window.addEventListener("beforeprint", () => {
@@ -560,34 +721,6 @@ function followers() {
 }
 
 // hand drawn marks: circles and underlines with a bit of wobble, seeded so they look the same every visit
-// a training run for the nav pill, one per page: warmup, a fast drop, a long noisy tail, and a small bump where each session picked back up
-function lossRun(name) {
-  let seed = 7;
-  for (const c of name) seed = (seed * 31 + c.charCodeAt(0)) | 0;
-  const rnd = seeded(seed);
-  const steps = 160;
-  const resumes = [0.3 + rnd() * 0.1, 0.62 + rnd() * 0.1];
-  const loss = [];
-  let wobble = 0;
-  for (let i = 0; i <= steps; i++) {
-    const x = i / steps;
-    let l = 1 / Math.pow(1 + 7 * Math.max(0, x - 0.025), 0.75);
-    for (const r of resumes) if (x >= r && x < r + 0.08) l *= 1 + 0.16 * Math.exp(-(x - r) / 0.014);
-    wobble = wobble * 0.5 + (rnd() - 0.5) * 0.5;
-    loss.push(l + wobble * 0.11 * (0.25 + l));
-  }
-  const hi = Math.max(...loss);
-  const lo = Math.min(...loss);
-  const ys = loss.map((l) => 0.06 + (1 - (l - lo) / (hi - lo)) * 0.88);
-  const d = ys.map((y, i) => (i ? "L" : "M") + ((i / steps) * 100).toFixed(2) + " " + (y * 10).toFixed(2)).join("");
-  const at = (p) => {
-    const f = clamp(p) * steps;
-    const i = Math.min(steps - 1, Math.floor(f));
-    return ys[i] + (ys[i + 1] - ys[i]) * (f - i);
-  };
-  return { d, at };
-}
-
 function seeded(seed) {
   let t = seed >>> 0;
   return () => {
@@ -710,6 +843,7 @@ function scribbles(root = document) {
 window.site = { scribbles, onScroll, requestTick, squircles, reveals, splitWords, scrollToTarget, clamp, reduce, finePointer, $$ };
 
 squircles();
+const openJump = jump();
 letters();
 reveals();
 scrubs();

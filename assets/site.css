@@ -258,86 +258,37 @@ svg {
   transform: scale(0.97);
 }
 
-/* a little loss curve under the label, drawn as far as you've scrolled */
+/* a ring around the logo that closes as you get to the bottom of the page */
 .island-fill {
   --p: 0;
-  --y: 0.06;
   position: absolute;
-  left: 50px;
-  right: 18px;
-  bottom: 7px;
-  height: 9px;
+  left: 3px;
+  top: 3px;
+  width: 40px;
+  height: 40px;
   pointer-events: none;
-  transition: opacity 0.3s ease;
-}
-
-.island.open .island-fill {
-  opacity: 0;
 }
 
 .island-fill svg {
-  position: absolute;
-  inset: 0;
+  display: block;
   width: 100%;
   height: 100%;
-  overflow: visible;
+  transform: rotate(-90deg);
 }
 
-.island-fill path {
+.island-fill circle {
   fill: none;
-  stroke-width: 1.2;
-  stroke-linejoin: round;
+  stroke: rgba(255, 255, 255, 0.85);
+  stroke-width: 1.4;
   stroke-linecap: round;
-  vector-effect: non-scaling-stroke;
+  stroke-dasharray: 100;
+  stroke-dashoffset: calc(100 - var(--p) * 100);
+  opacity: clamp(0, calc(var(--p) * 60), 1);
   transition: stroke 0.45s ease;
 }
 
-.loss-all path {
-  stroke: rgba(255, 255, 255, 0.16);
-}
-
-.loss-seen {
-  clip-path: inset(-3px calc((1 - var(--p)) * 100%) -3px -3px);
-}
-
-.loss-seen path {
-  stroke: rgba(255, 255, 255, 0.78);
-}
-
-.loss-dot {
-  position: absolute;
-  left: calc(var(--p) * 100%);
-  top: calc(var(--y) * 100%);
-  width: 5px;
-  height: 5px;
-  margin: -2.5px 0 0 -2.5px;
-  border-radius: 50%;
-  background: var(--accent);
-}
-
-/* a soft halo while the page is moving, gone when it stops */
-.loss-dot::after {
-  content: "";
-  position: absolute;
-  inset: -3px;
-  border-radius: 50%;
-  background: var(--accent);
-  opacity: 0;
-  transform: scale(0.5);
-  transition: opacity 0.4s ease, transform 0.4s var(--ease);
-}
-
-.moving .loss-dot::after {
-  opacity: 0.3;
-  transform: none;
-}
-
-.island.light .loss-all path {
-  stroke: rgba(0, 0, 0, 0.12);
-}
-
-.island.light .loss-seen path {
-  stroke: rgba(15, 15, 15, 0.7);
+.island.light .island-fill circle {
+  stroke: var(--ink);
 }
 
 .island-mark {
@@ -364,7 +315,7 @@ svg {
 .island-now {
   position: absolute;
   left: 50px;
-  top: -4px;
+  top: 0;
   height: 100%;
   font-size: 14px;
   letter-spacing: -0.01em;
@@ -418,7 +369,8 @@ svg {
   white-space: nowrap;
 }
 
-.island-links a {
+.island-links a,
+.island-links button {
   padding: 6px 11px;
   color: #8c8c8c;
   opacity: 0;
@@ -434,8 +386,15 @@ svg {
 }
 
 .island-links a:hover,
-.island-links a.on {
+.island-links a.on,
+.island-links button:hover {
   color: #fff;
+}
+
+.island-links button {
+  color: #8c8c8c;
+  font: inherit;
+  font-variant-numeric: tabular-nums;
 }
 
 .island.open .island-now {
@@ -444,7 +403,8 @@ svg {
   transform: translateX(10px);
 }
 
-.island.open .island-links a {
+.island.open .island-links a,
+.island.open .island-links button {
   opacity: 1;
   filter: none;
   transform: none;
@@ -494,6 +454,126 @@ svg {
 ::view-transition-new(island) {
   inline-size: auto;
   block-size: 100%;
+}
+
+/* the jump menu, same black as the nav pill */
+
+.jump {
+  --r: 22px;
+  width: min(560px, calc(100vw - 32px));
+  max-height: min(560px, calc(100vh - 120px));
+  margin: max(72px, 12vh) auto auto;
+  padding: 8px;
+  border: 0;
+  border-radius: var(--r);
+  background: var(--ink);
+  color: #fff;
+  overflow: hidden;
+}
+
+.jump[open] {
+  display: flex;
+  flex-direction: column;
+  animation: jump-in 0.32s var(--ease) both;
+}
+
+.jump::backdrop {
+  background: rgba(255, 255, 255, 0.55);
+  animation: jump-dim 0.25s ease both;
+}
+
+@keyframes jump-in {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.98);
+  }
+}
+
+@keyframes jump-dim {
+  from {
+    opacity: 0;
+  }
+}
+
+.jump-in {
+  width: 100%;
+  padding: 14px 16px;
+  border: 0;
+  border-radius: 15px;
+  background: #1d1d1d;
+  color: #fff;
+  font: inherit;
+  font-size: 17px;
+  letter-spacing: -0.01em;
+  outline: none;
+}
+
+.jump-in::placeholder {
+  color: #7a7a7a;
+}
+
+.jump-list {
+  flex: 1;
+  margin: 6px 0 0;
+  padding: 0;
+  list-style: none;
+  overflow-y: auto;
+}
+
+.jump-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  padding: 11px 14px;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.jump-list.fresh li {
+  animation: jump-row 0.35s var(--ease) both;
+  animation-delay: calc(0.05s + var(--i) * 0.025s);
+}
+
+@keyframes jump-row {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+.jump-list li[aria-selected="true"] {
+  background: #262626;
+}
+
+.jt {
+  font-size: 16px;
+  letter-spacing: -0.01em;
+}
+
+.jk {
+  flex-shrink: 0;
+  color: #8c8c8c;
+}
+
+.jump-list li[aria-selected="true"] .jk {
+  color: #bdbdbd;
+}
+
+.jump-list .jump-none {
+  color: #8c8c8c;
+  cursor: default;
+}
+
+.jump-foot {
+  padding: 10px 14px 6px;
+  color: #7a7a7a;
+}
+
+@media (hover: none) {
+  .jump-foot {
+    display: none;
+  }
 }
 
 /* buttons */
