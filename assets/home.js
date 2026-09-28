@@ -40,18 +40,12 @@
       return toks;
     }
 
-    const caret = document.createElement("span");
-    caret.className = "caret";
-    caret.setAttribute("aria-hidden", "true");
-
     let i = 0;
     function next() {
       const t = toks[i++];
       t.classList.add("on");
-      t.after(caret);
       if (i < toks.length) setTimeout(next, 38 + t.textContent.length * 11 + (i % 3) * 14);
       else {
-        setTimeout(() => caret.classList.add("gone"), 1800);
         const mark = el.querySelector("[data-scrib]");
         if (mark) setTimeout(() => mark.classList.add("drawn"), 350);
       }

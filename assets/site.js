@@ -220,48 +220,6 @@ function letters() {
   else addEventListener("pagereveal", go, { once: true });
 }
 
-// big statements that fill in word by word as you scroll through them
-function scrubs() {
-  for (const el of $$(".scrub")) {
-    const count = splitWords(el);
-    const words = $$(".w", el);
-    let last = -1;
-    onScroll.push((y, vh) => {
-      const rect = el.getBoundingClientRect();
-      if (rect.bottom < -vh || rect.top > vh * 2) return;
-      const p = clamp((vh * 0.82 - rect.top) / (rect.height + vh * 0.3));
-      const lit = p * (count + 2);
-      if (Math.abs(lit - last) < 0.01) return;
-      last = lit;
-      return () =>
-        words.forEach((w, i) => {
-          w.style.opacity = (0.14 + 0.86 * clamp(lit - i)).toFixed(3);
-        });
-    });
-  }
-}
-
-// buttons lean towards the cursor a little
-function magnetic() {
-  if (!finePointer || reduce) return;
-  for (const el of $$(".btn, [data-magnetic]")) {
-    const pull = parseFloat(el.dataset.magnetic) || 0.22;
-    el.addEventListener("pointermove", (e) => {
-      const r = el.getBoundingClientRect();
-      const x = e.clientX - (r.left + r.width / 2);
-      const y = e.clientY - (r.top + r.height / 2);
-      el.style.transform = `translate(${x * pull}px, ${y * pull * 1.3}px)`;
-      const inner = el.querySelector(".inner");
-      if (inner) inner.style.transform = `translate(${x * pull * 0.5}px, ${y * pull * 0.6}px)`;
-    });
-    el.addEventListener("pointerleave", () => {
-      el.style.transform = "";
-      const inner = el.querySelector(".inner");
-      if (inner) inner.style.transform = "";
-    });
-  }
-}
-
 // the nav is one pill: it shows which part of the page you're in and opens into the menu
 function nav() {
   const bar = document.querySelector(".nav");
@@ -571,22 +529,17 @@ function generate() {
       return { p, words };
     });
     box.classList.add("gen");
-    const caret = document.createElement("span");
-    caret.className = "gen-caret";
-    caret.setAttribute("aria-hidden", "true");
 
     const run = async () => {
       const rnd = seeded(paras.length * 97);
       for (const { p, words } of paras) {
         for (const w of words) {
           w.classList.add("on");
-          w.after(caret);
           await new Promise((r) => setTimeout(r, 16 + rnd() * 34));
         }
         p.classList.add("done");
         await new Promise((r) => setTimeout(r, 380));
       }
-      caret.remove();
     };
     const io = new IntersectionObserver(
       (entries) => {
@@ -602,7 +555,6 @@ function generate() {
         words.forEach((w) => w.classList.add("on"));
         p.classList.add("done");
       });
-      caret.remove();
     });
   }
 }
@@ -951,8 +903,6 @@ const openJump = jump();
 jumpHint(openJump);
 letters();
 reveals();
-scrubs();
-magnetic();
 nav();
 email();
 footer();
