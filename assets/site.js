@@ -525,7 +525,9 @@ function nav() {
     el.style.setProperty("--w", Math.round(open ? opened : mini ? 46 : closed) + "px");
   }
 
-  // scrolling down fast tucks the pill down to just the logo, and any scroll back up brings it out again
+  // crossing into a new section tucks the pill down to just the logo, swaps the label while it is small,
+  // then grows it back out with the new name. inside a section it stays full
+  let tuckTimer = 0;
   function setMini(v) {
     if (v === mini) return;
     mini = v;
@@ -549,6 +551,11 @@ function nav() {
     }
     if (!first && !reduce) span.classList.add("in");
     now.appendChild(span);
+    if (!first && !reduce && !open && !el.matches(":hover")) {
+      setMini(true);
+      clearTimeout(tuckTimer);
+      tuckTimer = setTimeout(() => setMini(false), 520);
+    }
     for (const a of anchors) a.classList.toggle("on", a.textContent === text || a.textContent === current);
     size();
   }
@@ -584,19 +591,7 @@ function nav() {
   if (document.fonts) document.fonts.ready.then(size);
 
   let lastY = window.scrollY;
-  let prevY = window.scrollY;
-  let down = 0;
-  let up = 0;
   onScroll.push((y, vh) => {
-    const dy = y - prevY;
-    prevY = y;
-    if (dy > 0) {
-      down += dy;
-      up = 0;
-    } else if (dy < 0) {
-      up -= dy;
-      down = 0;
-    }
     let text = fallback;
     for (const n of labelled) {
       if (n.getBoundingClientRect().top < vh * 0.4) text = n.dataset.label;
@@ -607,11 +602,9 @@ function nav() {
     if (foot && foot.dataset.label && uncovered > vh * 0.45) text = foot.dataset.label;
     const hovered = el.matches(":hover");
 
-    const tuck = mini ? !(up > 24 || y < 160) : dy > 9 && down > 140 && y > 300;
     return () => {
       setLabel(text);
       el.classList.toggle("light", !!foot && uncovered > vh - 40);
-      if (!reduce) setMini(tuck && !open && !hovered);
       if (open && Math.abs(y - lastY) > 60 && !hovered) setOpen(false);
       if (!open) lastY = y;
     };
