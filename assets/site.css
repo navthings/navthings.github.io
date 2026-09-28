@@ -385,27 +385,20 @@ svg {
 
 /* over the dark footer it flips to white */
 
-.island.light,
-html.lights-off .island {
+.island.light {
   background: #fff;
   color: #0f0f0f;
 }
 
 .island.light .island-links a,
-.island.light .island-links button,
-html.lights-off .island-links a,
-html.lights-off .island-links button {
+.island.light .island-links button {
   color: #6b6b6b;
 }
 
 .island.light .island-links a.home,
 .island.light .island-links a:hover,
 .island.light .island-links a.on,
-.island.light .island-links button:hover,
-html.lights-off .island-links a.home,
-html.lights-off .island-links a:hover,
-html.lights-off .island-links a.on,
-html.lights-off .island-links button:hover {
+.island.light .island-links button:hover {
   color: #0f0f0f;
 }
 
@@ -462,8 +455,7 @@ html.lights-off .island-links button:hover {
   opacity: 0;
 }
 
-.island.light .island-kbd,
-html.lights-off .island-kbd {
+.island.light .island-kbd {
   border-color: #d6d6d3;
   color: #6b6b6b;
 }

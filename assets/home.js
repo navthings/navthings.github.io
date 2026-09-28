@@ -249,36 +249,6 @@
     });
   }
 
-  // the page dims as the statement reaches the middle of the screen and brightens again as it leaves, following the scroll
-  function lights() {
-    const el = document.querySelector(".statement .scrub");
-    if (!el) return;
-    const root = document.documentElement;
-    const meta = document.querySelector('meta[name="theme-color"]');
-    const smooth = (a, b, x) => {
-      const t = clamp((x - a) / (b - a));
-      return t * t * (3 - 2 * t);
-    };
-    let last = -1;
-    let dark = false;
-    onScroll.push((y, vh) => {
-      const r = el.getBoundingClientRect();
-      const off = Math.abs(r.top + r.height / 2 - vh / 2) / vh;
-      const t = 1 - smooth(0.04, 0.46, off);
-      if (t === last || (Math.abs(t - last) < 0.004 && t > 0 && t < 1)) return;
-      last = t;
-      return () => {
-        root.style.setProperty("--dark", t.toFixed(3));
-        root.style.setProperty("--dark-ink", smooth(0.44, 0.56, t).toFixed(3));
-        if (t > 0.5 !== dark) {
-          dark = t > 0.5;
-          root.classList.toggle("lights-off", dark);
-          if (meta) meta.content = dark ? "#141414" : "#ffffff";
-        }
-      };
-    });
-  }
-
   // project cards stack up, the one underneath sinks back a little
   function stack() {
     const cards = $$(".card");
@@ -436,7 +406,6 @@
 
   temperature(tokens(intro()));
   heroOut();
-  lights();
   stack();
   chat();
   peek();
