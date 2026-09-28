@@ -113,17 +113,7 @@ html.intro .cs-head [data-words].in .w {
 }
 
 .chunk {
-  display: inline-block;
   white-space: nowrap;
-}
-
-/* the words make the entrance, so the tokens inside them just switch on */
-.drift .tok {
-  transition: none;
-}
-
-.js .hero {
-  overflow-x: clip;
 }
 
 .js .tok {

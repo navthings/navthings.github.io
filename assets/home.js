@@ -1,7 +1,7 @@
 (function () {
   const { onScroll, clamp, reduce, $$, requestTick } = window.site;
 
-  // the headline is split into tokens for the temperature knob, and drifts in word by word
+  // the headline streams in a token at a time, the way the models write
   function tokens(ready) {
     const el = document.querySelector("[data-tokens]");
     if (!el) return;
@@ -40,36 +40,19 @@
       return toks;
     }
 
-    // each word starts where it would be if the headline were close to the camera: bigger, pushed out from the middle and out of focus.
-    // then one after another they drift back and settle into place
-    function drift() {
-      const S = 1.45;
-      const STAGGER = 95;
-      const box = el.getBoundingClientRect();
-      const cx = box.left + box.width / 2;
-      const cy = box.top + box.height / 2;
-      const words = $$(".chunk", el);
-      el.classList.add("drift");
-      words.forEach((w, i) => {
-        const r = w.getBoundingClientRect();
-        const dx = (r.left + r.width / 2 - cx) * (S - 1);
-        const dy = (r.top + r.height / 2 - cy) * (S - 1);
-        const delay = i * STAGGER;
-        w.animate([{ transform: `translate(${dx.toFixed(1)}px, ${dy.toFixed(1)}px) scale(${S})`, filter: "blur(16px)" }, { transform: "none", filter: "blur(0px)" }], {
-          duration: 1500,
-          delay,
-          easing: "cubic-bezier(0.16, 1, 0.3, 1)",
-          fill: "backwards",
-        });
-        w.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 700, delay, easing: "ease-out", fill: "backwards" });
-      });
-      toks.forEach((t) => t.classList.add("on"));
-      const mark = el.querySelector("[data-scrib]");
-      if (mark) setTimeout(() => mark.classList.add("drawn"), (words.length - 1) * STAGGER + 1100);
+    let i = 0;
+    function next() {
+      const t = toks[i++];
+      t.classList.add("on");
+      if (i < toks.length) setTimeout(next, 38 + t.textContent.length * 11 + (i % 3) * 14);
+      else {
+        const mark = el.querySelector("[data-scrib]");
+        if (mark) setTimeout(() => mark.classList.add("drawn"), 350);
+      }
     }
 
     const fontsReady = document.fonts ? document.fonts.ready : Promise.resolve();
-    Promise.all([Promise.race([fontsReady, new Promise((r) => setTimeout(r, 700))]), ready]).then(() => setTimeout(drift, 150));
+    Promise.all([Promise.race([fontsReady, new Promise((r) => setTimeout(r, 700))]), ready]).then(() => setTimeout(next, 250));
     return toks;
   }
 
