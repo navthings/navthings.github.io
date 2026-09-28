@@ -464,6 +464,7 @@ svg {
   color: #d6d6d6;
   font: inherit;
   font-size: 13px;
+  white-space: nowrap;
   opacity: 0;
   transform: translate(-50%, -8px);
   transition: opacity 0.4s ease, transform 0.5s var(--ease);

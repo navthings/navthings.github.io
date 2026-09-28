@@ -61,6 +61,12 @@
 
 .tl-date {
   padding-top: 10px;
+  color: var(--ink-2);
+}
+
+.tl-day {
+  display: block;
+  margin-top: 2px;
   color: var(--ink-3);
 }
 
@@ -196,6 +202,11 @@
     grid-column: 2;
     grid-row: 1;
     padding-top: 0;
+  }
+
+  .tl-day {
+    display: inline;
+    margin: 0 0 0 10px;
   }
 
   .tl-node {
