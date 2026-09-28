@@ -241,95 +241,6 @@ function scrubs() {
   }
 }
 
-// quiet tactile sounds for the physical bits: presses, the keycap, the droplet. made on the fly with web audio, so nothing
-// to download, and only ever in answer to something the visitor did
-const sound = (() => {
-  let ctx = null;
-  let out = null;
-  let on = true;
-  try {
-    on = localStorage.getItem("sound") !== "off";
-  } catch (err) {
-    on = true;
-  }
-  function audio() {
-    const AC = window.AudioContext || window.webkitAudioContext;
-    if (!on || !AC) return null;
-    if (!ctx) {
-      ctx = new AC();
-      out = ctx.createGain();
-      out.gain.value = 0.5;
-      out.connect(ctx.destination);
-    }
-    if (ctx.state === "suspended") ctx.resume();
-    return ctx;
-  }
-  // a short burst of noise through a band pass is the body of every click
-  function noise(c, t, dur, freq, q, gain) {
-    const len = Math.ceil(c.sampleRate * dur);
-    const buf = c.createBuffer(1, len, c.sampleRate);
-    const d = buf.getChannelData(0);
-    for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * (1 - i / len) ** 3;
-    const src = c.createBufferSource();
-    src.buffer = buf;
-    const bp = c.createBiquadFilter();
-    bp.type = "bandpass";
-    bp.frequency.value = freq;
-    bp.Q.value = q;
-    const g = c.createGain();
-    g.gain.value = gain;
-    src.connect(bp).connect(g).connect(out);
-    src.start(t);
-  }
-  function tone(c, t, f0, f1, dur, gain, type = "sine") {
-    const o = c.createOscillator();
-    o.type = type;
-    o.frequency.setValueAtTime(f0, t);
-    o.frequency.exponentialRampToValueAtTime(f1, t + dur);
-    const g = c.createGain();
-    g.gain.setValueAtTime(0.0001, t);
-    g.gain.exponentialRampToValueAtTime(gain, t + 0.004);
-    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
-    o.connect(g).connect(out);
-    o.start(t);
-    o.stop(t + dur + 0.02);
-  }
-  const kinds = {
-    press: (c, t) => {
-      noise(c, t, 0.012, 2600, 1.2, 0.9);
-      tone(c, t, 160, 90, 0.05, 0.14);
-    },
-    release: (c, t) => noise(c, t, 0.008, 4200, 1.5, 0.32),
-    key: (c, t) => {
-      noise(c, t, 0.018, 1900, 0.9, 0.75);
-      tone(c, t, 220, 120, 0.06, 0.16, "triangle");
-      noise(c, t + 0.05, 0.01, 3600, 1.4, 0.4);
-    },
-    open: (c, t) => tone(c, t, 110, 170, 0.12, 0.14),
-    close: (c, t) => tone(c, t, 170, 100, 0.09, 0.1),
-    plip: (c, t) => {
-      tone(c, t, 420, 980, 0.07, 0.22);
-      tone(c, t + 0.012, 900, 1400, 0.04, 0.05);
-    },
-    slurp: (c, t) => tone(c, t, 900, 360, 0.09, 0.12),
-  };
-  function play(kind) {
-    const c = audio();
-    if (c && kinds[kind]) kinds[kind](c, c.currentTime + 0.001);
-  }
-  function toggle() {
-    on = !on;
-    try {
-      localStorage.setItem("sound", on ? "on" : "off");
-    } catch (err) {
-      console.warn("couldnt save the sound setting", err);
-    }
-    play("press");
-    return on;
-  }
-  return { play, toggle, isOn: () => on };
-})();
-
 // things that lean towards the cursor when it comes near, and spring back when it leaves or lands on them
 const leaners = [];
 function leanOn(el, R, pull, mx, my) {
@@ -384,13 +295,11 @@ function squash(el, sx = 1.04, sy = 0.9) {
   el.addEventListener("pointerdown", (e) => {
     if (e.button > 0) return;
     held = el.animate([{ scale: "1 1" }, { scale: `${sx} ${sy}` }], { duration: 110, easing: "ease-out", fill: "forwards" });
-    sound.play("press");
   });
   const release = () => {
     if (!held) return;
     held.cancel();
     held = null;
-    sound.play("release");
     el.animate([{ scale: `${sx} ${sy}` }, { scale: `${2 - sx * 1.02} ${1 + (1 - sy) * 0.35}`, offset: 0.45 }, { scale: "1 1" }], { duration: 460, easing: "ease-out" });
   };
   el.addEventListener("pointerup", release);
@@ -470,13 +379,11 @@ function droplets() {
     ];
     goo.classList.add("on");
     blob.animate(frames, { duration: 680, easing: "cubic-bezier(0.3, 0.7, 0.2, 1)", fill: "forwards" });
-    setTimeout(() => sound.play("plip"), 330);
     note.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 180, delay: 500, fill: "forwards" });
     timer = setTimeout(() => {
       note.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 140, fill: "forwards" });
       const reversed = frames.map((f, i) => ({ ...f, offset: 1 - (f.offset ?? i / (frames.length - 1)) })).reverse();
       const back = blob.animate(reversed, { duration: 560, delay: 60, easing: "cubic-bezier(0.55, 0, 0.75, 0.3)", fill: "forwards" });
-      setTimeout(() => sound.play("slurp"), 420);
       back.finished.then(() => goo.classList.remove("on"), () => {});
     }, 2000);
   };
@@ -597,20 +504,6 @@ function nav() {
     openJump();
   });
   links.appendChild(k);
-  const mute = document.createElement("button");
-  mute.type = "button";
-  mute.className = "island-sound";
-  const showSound = () => {
-    mute.textContent = sound.isOn() ? "sound on" : "sound off";
-    mute.setAttribute("aria-pressed", String(sound.isOn()));
-  };
-  showSound();
-  mute.addEventListener("click", (e) => {
-    e.stopPropagation();
-    sound.toggle();
-    showSound();
-  });
-  links.appendChild(mute);
   // on a keyboard, the closed pill shows the shortcut so people know it exists
   const kbd = document.createElement("kbd");
   kbd.className = "island-kbd";
@@ -1118,7 +1011,6 @@ function jump() {
     render(true);
     box.showModal();
     input.focus();
-    sound.play("open");
     const frames = fromPill();
     if (frames) {
       box.animate(frames, { duration: 560, easing: "cubic-bezier(0.55, 0, 0.1, 1)" });
@@ -1129,7 +1021,6 @@ function jump() {
   let closing = false;
   function close() {
     if (!box.open || closing) return;
-    sound.play("close");
     const frames = fromPill();
     if (!frames) return box.close();
     closing = true;
@@ -1151,7 +1042,6 @@ function jump() {
   function press() {
     const key = document.querySelector(".island-kbd");
     if (!key || reduce || !key.animate || box.open) return 0;
-    sound.play("key");
     key.animate(
       [
         { translate: "0 0", scale: "1", color: "#9a9a9a", borderColor: "#3a3a3a" },
