@@ -1158,3 +1158,31 @@ html:not(.js) .train-track b {
     height: auto;
   }
 }
+
+/* on phones the models are a row you flick through sideways, with the next one peeking in */
+@media (max-width: 700px) {
+  .stack {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    gap: 12px;
+    margin: 0 calc(var(--gutter) * -1);
+    padding: 0 var(--gutter) 8px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding: 0 var(--gutter);
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+  }
+
+  .stack::-webkit-scrollbar {
+    display: none;
+  }
+
+  .stack .card {
+    position: relative;
+    top: auto;
+    flex: 0 0 86%;
+    scroll-snap-align: start;
+  }
+}

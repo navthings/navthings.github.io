@@ -609,6 +609,7 @@ svg {
   --r: 22px;
   width: min(560px, calc(100vw - 32px));
   max-height: min(560px, calc(100vh - 120px));
+  max-height: min(560px, calc(100dvh - 120px));
   margin: max(72px, 12vh) auto auto;
   padding: 8px;
   border: 0;
@@ -1177,4 +1178,45 @@ svg {
   .card {
     break-inside: avoid;
   }
+}
+
+/* commands in posts copy with a tap */
+pre.copyable {
+  cursor: copy;
+}
+
+/* charts grow to fill the screen on click */
+main .fig:not(.samples) {
+  cursor: zoom-in;
+}
+
+main .fig.lifted {
+  position: relative;
+  z-index: 30;
+  transition: transform 0.55s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+main .fig.zoomed {
+  cursor: zoom-out;
+}
+
+.fig-shade {
+  position: fixed;
+  z-index: 29;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.88);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+
+.fig-shade.on {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* words the jump menu sends you to get the highlighter colour */
+::target-text {
+  background: rgba(255, 79, 0, 0.3);
+  color: inherit;
 }

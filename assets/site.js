@@ -427,6 +427,67 @@ function swipeHint() {
   setTimeout(wait, 600);
 }
 
+// commands in the posts copy with a tap, and the note drips out of the pill
+function commands() {
+  for (const pre of $$("pre")) {
+    if (!/^(ollama|python3?|pip|git) /.test(pre.textContent.trim())) continue;
+    pre.classList.add("copyable");
+    pre.title = "tap to copy";
+    pre.addEventListener("click", () => {
+      if (getSelection().toString() || !navigator.clipboard) return;
+      navigator.clipboard.writeText(pre.textContent.trim()).then(
+        () => drop("command copied"),
+        (err) => console.warn("couldnt copy the command", err)
+      );
+    });
+  }
+}
+
+// charts in the case studies grow to fill the screen on click, the way the menu grows out of the pill, and shrink back
+function zoomFigs() {
+  const figs = $$("main .fig:not(.samples)");
+  const sheet = document.querySelector(".sheet");
+  if (!figs.length || !sheet || reduce) return;
+  const shade = document.createElement("div");
+  shade.className = "fig-shade";
+  sheet.appendChild(shade);
+  let on = null;
+  let at = 0;
+  function close() {
+    if (!on) return;
+    const f = on;
+    on = null;
+    f.style.transform = "";
+    f.classList.remove("zoomed");
+    shade.classList.remove("on");
+    setTimeout(() => f !== on && f.classList.remove("lifted"), 560);
+  }
+  function open(f) {
+    const r = f.getBoundingClientRect();
+    const vw = document.documentElement.clientWidth;
+    const s = Math.min((vw * 0.94) / r.width, (innerHeight * 0.84) / r.height, 2.4);
+    if (s < 1.08) return;
+    on = f;
+    at = scrollY;
+    f.classList.add("lifted", "zoomed");
+    shade.classList.add("on");
+    requestAnimationFrame(() => {
+      f.style.transform = `translate(${(vw / 2 - r.left - r.width / 2).toFixed(1)}px, ${(innerHeight / 2 - r.top - r.height / 2).toFixed(1)}px) scale(${s.toFixed(3)})`;
+    });
+  }
+  for (const f of figs) {
+    f.addEventListener("click", (e) => {
+      if (e.target.closest("a, button, input, select")) return;
+      if (on === f) return close();
+      close();
+      open(f);
+    });
+  }
+  shade.addEventListener("click", close);
+  addEventListener("keydown", (e) => e.key === "Escape" && close());
+  onScroll.push((y) => (on && Math.abs(y - at) > 40 ? close : undefined));
+}
+
 // selected text gets a highlighter stroke instead of the flat block. the real selection is still there, just see-through
 function highlighter() {
   if (!window.getSelection) return;
@@ -1147,6 +1208,45 @@ function jump() {
   let active = 0;
 
   // every word has to show up somewhere, and a hit at the start of the title counts most
+  // the posts and case studies are fetched the first time the menu opens, so it can also find words inside them
+  let texts = null;
+  function loadText() {
+    if (texts) return;
+    texts = [];
+    const pages = JUMP.filter((j) => j.kind === "case study" || j.kind === "post");
+    Promise.all(
+      pages.map((j) =>
+        fetch(j.href)
+          .then((r) => r.text())
+          .then((html) => {
+            const doc = new DOMParser().parseFromString(html, "text/html");
+            for (const n of doc.querySelectorAll("main p, main li, main h2")) {
+              const t = n.textContent.replace(/\s+/g, " ").trim();
+              if (t.length > 30) texts.push({ page: j, t, low: t.toLowerCase() });
+            }
+          })
+          .catch((err) => console.warn("couldnt index " + j.href, err))
+      )
+    ).then(() => box.open && input.value.trim().length > 2 && render(false));
+  }
+  // a line from inside a page, with a link that scrolls to those exact words and highlights them
+  function inText(words) {
+    if (!texts || words.join(" ").length < 3) return [];
+    const out = [];
+    for (const x of texts) {
+      if (!words.every((w) => x.low.includes(w))) continue;
+      const at = x.low.indexOf(words[0]);
+      const from = x.t.lastIndexOf(" ", Math.max(0, at - 18)) + 1;
+      let snip = x.t.slice(from, from + 58);
+      snip = (from > 0 ? "…" : "") + snip.slice(0, snip.lastIndexOf(" ") > 20 ? snip.lastIndexOf(" ") : snip.length) + "…";
+      const phrase = x.t.slice(at).split(" ").slice(0, 5).join(" ").replace(/[.,;:]+$/, "");
+      const frag = encodeURIComponent(phrase).replace(/-/g, "%2D");
+      out.push({ title: snip, kind: "in " + (pageName(new URL(x.page.href, location.origin)) || x.page.title.split(",")[0]), href: x.page.href + "#:~:text=" + frag });
+      if (out.length >= 4) break;
+    }
+    return out;
+  }
+
   function search(q) {
     const words = q.toLowerCase().split(/\s+/).filter(Boolean);
     if (!words.length) return JUMP.slice(0, 9);
@@ -1162,7 +1262,8 @@ function jump() {
       }
       hits.push({ item, score, i });
     });
-    return hits.sort((a, b) => b.score - a.score || a.i - b.i).slice(0, 9).map((h) => h.item);
+    const named = hits.sort((a, b) => b.score - a.score || a.i - b.i).slice(0, 6).map((h) => h.item);
+    return named.concat(inText(words)).slice(0, 9);
   }
 
   function render(fresh) {
@@ -1241,8 +1342,14 @@ function jump() {
     active = 0;
     foot.textContent = "↑ ↓ to move, enter to go, esc to close";
     render(true);
+    // on touch screens the keyboard would cover the list, so it only comes up when the box is tapped
+    if (!finePointer) {
+      list.tabIndex = -1;
+      list.setAttribute("autofocus", "");
+    }
     box.showModal();
-    input.focus();
+    if (finePointer) input.focus();
+    loadText();
     const frames = fromPill();
     if (frames) {
       box.animate(frames, { duration: 560, easing: "cubic-bezier(0.55, 0, 0.1, 1)" });
@@ -1472,6 +1579,8 @@ magnetic();
 nav();
 droplets();
 swipeHint();
+commands();
+zoomFigs();
 lean();
 squashes();
 highlighter();
