@@ -127,6 +127,10 @@ html.intro .cs-head [data-words].in .w {
   filter: none;
 }
 
+.lt {
+  -webkit-text-stroke: calc(var(--k, 0) * 0.045em) currentColor;
+}
+
 .hero-sub {
   margin-top: 36px;
   max-width: 33rem;
