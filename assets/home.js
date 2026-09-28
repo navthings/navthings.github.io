@@ -56,83 +56,6 @@
     return toks;
   }
 
-  // letters in the headline get heavier near the cursor. it thickens them with a stroke in their own colour rather than
-  // changing the font weight, so the line keeps its exact spacing and kerning and nothing moves
-  function weight() {
-    const hero = document.querySelector(".hero");
-    const el = document.querySelector("[data-tokens]");
-    if (!hero || !el || reduce || !window.site.finePointer) return;
-    const now = new WeakMap();
-    let letters = [];
-    let size = 0;
-    let px = 0;
-    let py = 0;
-    let inside = false;
-    let raf = 0;
-
-    // split the tokens into letters, again whenever the temperature has swapped a word
-    function collect() {
-      size = parseFloat(getComputedStyle(el).fontSize);
-      const box = el.getBoundingClientRect();
-      letters = [];
-      for (const t of $$(".tok", el)) {
-        if (!t.querySelector(".lt")) {
-          const text = t.textContent;
-          t.textContent = "";
-          for (const c of text) {
-            const sp = document.createElement("span");
-            sp.className = "lt";
-            sp.textContent = c;
-            t.appendChild(sp);
-          }
-        }
-        for (const sp of t.children) {
-          const r = sp.getBoundingClientRect();
-          letters.push({ sp, x: r.left + r.width / 2 - box.left, y: r.top + r.height / 2 - box.top });
-        }
-      }
-    }
-
-    function frame() {
-      raf = 0;
-      const R = size * 1.7;
-      let moving = false;
-      for (const L of letters) {
-        const d = Math.hypot(L.x - px, L.y - py);
-        const target = inside && d < R ? (1 - d / R) ** 2 : 0;
-        const cur = now.get(L.sp) || 0;
-        let next = cur + (target - cur) * 0.2;
-        if (Math.abs(target - next) < 0.004) next = target;
-        if (next !== target) moving = true;
-        if (next === cur) continue;
-        now.set(L.sp, next);
-        L.sp.style.setProperty("--k", next ? next.toFixed(3) : "");
-      }
-      if (moving) raf = requestAnimationFrame(frame);
-    }
-    const kick = () => {
-      if (!raf) raf = requestAnimationFrame(frame);
-    };
-
-    hero.addEventListener("pointerenter", () => {
-      inside = true;
-      collect();
-    });
-    hero.addEventListener("pointermove", (e) => {
-      if (!letters.length || letters.some((L) => !L.sp.isConnected)) collect();
-      const box = el.getBoundingClientRect();
-      px = e.clientX - box.left;
-      py = e.clientY - box.top;
-      inside = true;
-      kick();
-    });
-    hero.addEventListener("pointerleave", () => {
-      inside = false;
-      kick();
-    });
-    window.addEventListener("resize", () => (letters = []));
-  }
-
   // when someone lands here from outside, or reloads, the logo draws itself and flies into the nav
   function intro() {
     let seen = false;
@@ -486,7 +409,6 @@
 
   temperature(tokens(intro()));
   heroOut();
-  weight();
   stack();
   chat();
   peek();
