@@ -324,6 +324,71 @@ function squashes() {
   }
 }
 
+// a small note drops out of the bottom of the pill like a droplet, hangs there, then gets pulled back in.
+// the liquid neck comes from a goo filter on a layer of plain shapes behind the real pill, so no text gets blurred
+let drop = () => {};
+function droplets() {
+  const bar = document.querySelector(".nav");
+  const pill = bar && bar.querySelector(".island");
+  if (!pill) return;
+  const NS = "http://www.w3.org/2000/svg";
+  const defs = document.createElementNS(NS, "svg");
+  defs.setAttribute("class", "goo-defs");
+  defs.setAttribute("aria-hidden", "true");
+  defs.innerHTML =
+    '<filter id="goo" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur in="SourceGraphic" stdDeviation="5" /><feColorMatrix values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 24 -10" /></filter>';
+  document.body.appendChild(defs);
+  const goo = document.createElement("div");
+  goo.className = "goo";
+  goo.setAttribute("aria-hidden", "true");
+  const base = document.createElement("i");
+  const blob = document.createElement("i");
+  goo.append(base, blob);
+  const note = document.createElement("p");
+  note.className = "drop-note";
+  note.setAttribute("role", "status");
+  bar.prepend(goo);
+  bar.appendChild(note);
+  let timer = 0;
+
+  drop = (text) => {
+    clearTimeout(timer);
+    for (const an of [...blob.getAnimations(), ...note.getAnimations()]) an.cancel();
+    const nb = bar.getBoundingClientRect();
+    const p = pill.getBoundingClientRect();
+    const cs = getComputedStyle(pill);
+    const bottom = p.bottom - nb.top;
+    note.textContent = text;
+    note.style.cssText = `left:${p.left + p.width / 2 - nb.left}px; top:${bottom + 10}px; color:${cs.color}`;
+    if (reduce || !blob.animate) {
+      note.style.background = cs.backgroundColor;
+      note.animate([{ opacity: 0 }, { opacity: 1, offset: 0.1 }, { opacity: 1, offset: 0.9 }, { opacity: 0 }], { duration: 1800 });
+      return;
+    }
+    goo.style.color = cs.backgroundColor;
+    base.style.cssText = `left:${p.left - nb.left + 3}px; top:${p.top - nb.top + 3}px; width:${p.width - 6}px; height:${p.height - 6}px`;
+    blob.style.left = p.left + p.width / 2 - nb.left + "px";
+    blob.style.top = bottom + "px";
+    const W = note.offsetWidth;
+    const frames = [
+      { width: "14px", height: "14px", transform: "translate(-50%, -18px)" },
+      { width: "22px", height: "22px", transform: "translate(-50%, -6px)", offset: 0.3 },
+      { width: "20px", height: "26px", transform: "translate(-50%, 9px)", offset: 0.55 },
+      { width: `${W * 1.08}px`, height: "26px", transform: "translate(-50%, 12px)", offset: 0.8 },
+      { width: `${W}px`, height: "30px", transform: "translate(-50%, 10px)" },
+    ];
+    goo.classList.add("on");
+    blob.animate(frames, { duration: 680, easing: "cubic-bezier(0.3, 0.7, 0.2, 1)", fill: "forwards" });
+    note.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 180, delay: 500, fill: "forwards" });
+    timer = setTimeout(() => {
+      note.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 140, fill: "forwards" });
+      const reversed = frames.map((f, i) => ({ ...f, offset: 1 - (f.offset ?? i / (frames.length - 1)) })).reverse();
+      const back = blob.animate(reversed, { duration: 560, delay: 60, easing: "cubic-bezier(0.55, 0, 0.75, 0.3)", fill: "forwards" });
+      back.finished.then(() => goo.classList.remove("on"), () => {});
+    }, 2000);
+  };
+}
+
 // selected text gets a highlighter stroke instead of the flat block. the real selection is still there, just see-through
 function highlighter() {
   if (!window.getSelection) return;
@@ -450,13 +515,22 @@ function nav() {
   const labelled = $$("[data-label]").filter((n) => n !== bar && n !== foot);
   let label = null;
   let open = false;
+  let mini = false;
   let closeTimer = 0;
 
   function size() {
     const text = now.querySelector("span:not(.out)");
     const closed = 50 + (text ? text.offsetWidth : 0) + (kbd.isConnected ? 18 + kbd.offsetWidth + 12 : 20);
     const opened = 44 + links.offsetWidth + 8;
-    el.style.setProperty("--w", Math.round(open ? opened : closed) + "px");
+    el.style.setProperty("--w", Math.round(open ? opened : mini ? 46 : closed) + "px");
+  }
+
+  // scrolling down fast tucks the pill down to just the logo, and any scroll back up brings it out again
+  function setMini(v) {
+    if (v === mini) return;
+    mini = v;
+    el.classList.toggle("mini", v);
+    size();
   }
 
   function setLabel(text) {
@@ -483,6 +557,7 @@ function nav() {
     clearTimeout(closeTimer);
     if (v === open) return;
     open = v;
+    if (v) setMini(false);
     el.classList.toggle("open", v);
     size();
   }
@@ -509,7 +584,19 @@ function nav() {
   if (document.fonts) document.fonts.ready.then(size);
 
   let lastY = window.scrollY;
+  let prevY = window.scrollY;
+  let down = 0;
+  let up = 0;
   onScroll.push((y, vh) => {
+    const dy = y - prevY;
+    prevY = y;
+    if (dy > 0) {
+      down += dy;
+      up = 0;
+    } else if (dy < 0) {
+      up -= dy;
+      down = 0;
+    }
     let text = fallback;
     for (const n of labelled) {
       if (n.getBoundingClientRect().top < vh * 0.4) text = n.dataset.label;
@@ -520,9 +607,11 @@ function nav() {
     if (foot && foot.dataset.label && uncovered > vh * 0.45) text = foot.dataset.label;
     const hovered = el.matches(":hover");
 
+    const tuck = mini ? !(up > 24 || y < 160) : dy > 9 && down > 140 && y > 300;
     return () => {
       setLabel(text);
       el.classList.toggle("light", !!foot && uncovered > vh - 40);
+      if (!reduce) setMini(tuck && !open && !hovered);
       if (open && Math.abs(y - lastY) > 60 && !hovered) setOpen(false);
       if (!open) lastY = y;
     };
@@ -566,6 +655,8 @@ function email() {
       }
       navigator.clipboard.writeText("navneet.dagdiya@gmail.com").then(
         () => {
+          drop("copied");
+          if (el.closest(".nav")) return;
           roll(label, "copied.");
           setTimeout(() => roll(label, original), 1800);
         },
@@ -889,8 +980,8 @@ function jump() {
       const email = "navneet.dagdiya@gmail.com";
       if (!navigator.clipboard) return (window.location.href = "mailto:" + email);
       navigator.clipboard.writeText(email).then(() => {
-        foot.textContent = "copied " + email;
-        setTimeout(close, 900);
+        close();
+        setTimeout(() => drop("copied"), 380);
       });
       return;
     }
@@ -1154,6 +1245,7 @@ reveals();
 scrubs();
 magnetic();
 nav();
+droplets();
 lean();
 squashes();
 highlighter();

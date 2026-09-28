@@ -415,6 +415,58 @@ svg {
 
 /* over the dark footer it flips to white */
 
+/* tucked down to just the logo while scrolling down fast */
+.island.mini .island-now,
+.island.mini .island-kbd {
+  opacity: 0;
+  transition-delay: 0s;
+}
+
+/* the copied note and the goo layer it drips from */
+.goo-defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+
+.goo {
+  position: absolute;
+  z-index: 0;
+  inset: 0 0 auto;
+  height: 140px;
+  pointer-events: none;
+  filter: url(#goo);
+  visibility: hidden;
+}
+
+.goo.on {
+  visibility: visible;
+}
+
+.goo i {
+  position: absolute;
+  border-radius: 999px;
+  background: currentColor;
+}
+
+.nav .island {
+  z-index: 1;
+}
+
+.drop-note {
+  position: absolute;
+  z-index: 2;
+  height: 30px;
+  padding: 0 14px;
+  border-radius: 999px;
+  font-size: 13px;
+  line-height: 30px;
+  white-space: nowrap;
+  transform: translateX(-50%);
+  opacity: 0;
+  pointer-events: none;
+}
+
 .island.light {
   background: #fff;
   color: #0f0f0f;
