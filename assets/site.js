@@ -535,6 +535,65 @@ function counters() {
   window.addEventListener("beforeprint", () => els.forEach((el) => (el.textContent = info.get(el).text)));
 }
 
+// model samples write themselves out word by word the first time they scroll in, like they did when it generated them
+function generate() {
+  if (reduce) return;
+  for (const box of $$("[data-generate]")) {
+    const paras = $$("p", box).map((p) => {
+      const words = [];
+      const parts = p.textContent.split(/(\s+)/);
+      p.textContent = "";
+      for (const part of parts) {
+        if (!part) continue;
+        if (/^\s+$/.test(part)) {
+          p.appendChild(document.createTextNode(" "));
+          continue;
+        }
+        const w = document.createElement("span");
+        w.className = "g";
+        w.textContent = part;
+        p.appendChild(w);
+        words.push(w);
+      }
+      return { p, words };
+    });
+    box.classList.add("gen");
+    const caret = document.createElement("span");
+    caret.className = "gen-caret";
+    caret.setAttribute("aria-hidden", "true");
+
+    const run = async () => {
+      const rnd = seeded(paras.length * 97);
+      for (const { p, words } of paras) {
+        for (const w of words) {
+          w.classList.add("on");
+          w.after(caret);
+          await new Promise((r) => setTimeout(r, 16 + rnd() * 34));
+        }
+        p.classList.add("done");
+        await new Promise((r) => setTimeout(r, 380));
+      }
+      caret.remove();
+    };
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (!entries[0].isIntersecting) return;
+        io.disconnect();
+        run();
+      },
+      { threshold: 0.3 }
+    );
+    io.observe(box);
+    window.addEventListener("beforeprint", () => {
+      paras.forEach(({ p, words }) => {
+        words.forEach((w) => w.classList.add("on"));
+        p.classList.add("done");
+      });
+      caret.remove();
+    });
+  }
+}
+
 // cmd+k: jump to any page, post, model or link from anywhere
 const JUMP = [
   ["navthings", "/", "home", "start hi about"],
@@ -887,6 +946,7 @@ footer();
 followers();
 lives();
 counters();
+generate();
 printable();
 scribbles();
 requestAnimationFrame(tick);

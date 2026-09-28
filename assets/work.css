@@ -799,3 +799,31 @@ html:not(.js) .wsd-line {
   content: "…";
   color: var(--ink-3);
 }
+
+.gen .g {
+  opacity: 0;
+}
+
+.gen .g.on {
+  opacity: 1;
+}
+
+.gen p:not(.done)::after {
+  content: none;
+}
+
+.gen-caret {
+  display: inline-block;
+  width: 2px;
+  height: 1.05em;
+  margin-left: 2px;
+  vertical-align: -0.18em;
+  background: var(--ink);
+  animation: gen-blink 0.9s steps(2, start) infinite;
+}
+
+@keyframes gen-blink {
+  to {
+    visibility: hidden;
+  }
+}
