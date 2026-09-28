@@ -78,7 +78,7 @@ html.intro .cs-head [data-words].in .w {
 
 /* hero */
 
-.hero-pin {
+.hero {
   min-height: 100vh;
   min-height: 100svh;
   display: flex;
@@ -88,32 +88,9 @@ html.intro .cs-head [data-words].in .w {
   padding-bottom: clamp(56px, 10vh, 112px);
 }
 
-/* scrolling off the hero flies you through the o in the headline. the hero holds still for a screen while it happens,
-   and the statement slides up underneath so its already there on the other side */
-.hero.fly {
-  height: calc(100svh + 110vh);
-}
-
-.hero.fly .hero-pin {
-  position: sticky;
-  z-index: 1;
-  top: 0;
-  height: 100vh;
-  height: 100svh;
-  overflow: hidden;
-}
-
-.hero.fly .hero-pin::before {
-  content: "";
-  position: absolute;
-  z-index: -1;
-  inset: 0;
-  background: var(--bg);
-  opacity: var(--veil, 1);
-}
-
-.hero.fly + .statement {
-  margin-top: -45vh;
+.hero-inner {
+  transform-origin: 0 100%;
+  will-change: transform, opacity;
 }
 
 .hero-title {

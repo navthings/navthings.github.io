@@ -235,80 +235,16 @@
     setTimeout(() => knob.classList.add("drawn"), reduce ? 0 : 2600);
   }
 
-  // scrolling off the hero flies you through the o in the headline and out into the statement
-  function fly() {
-    const hero = document.querySelector(".hero");
-    const pin = document.querySelector(".hero-pin");
-    const title = document.querySelector(".hero-title");
-    if (!hero || !pin || !title || reduce) return;
-    const rest = $$(".hero-sub, .hero .row, .hero .temp");
-    const ctx = document.createElement("canvas").getContext("2d");
-    const smooth = (x) => x * x * (3 - 2 * x);
-    hero.classList.add("fly");
-
-    // the first o in the dark part of the headline, whatever word the temperature has put there. where its hole is, and how far to zoom so it covers the screen
-    function find() {
-      const toks = $$(".tok", title).filter((t) => t.firstChild && t.textContent.includes("o"));
-      const t = toks.find((el) => !el.closest(".soft")) || toks[0];
-      if (!t) return null;
-      const i = t.textContent.indexOf("o");
-      const range = document.createRange();
-      range.setStart(t.firstChild, i);
-      range.setEnd(t.firstChild, i + 1);
-      const r = range.getBoundingClientRect();
-      const cs = getComputedStyle(t);
-      ctx.font = `${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`;
-      const m = ctx.measureText("o");
-      const base = r.top + m.fontBoundingBoxAscent;
-      const cx = r.left + (m.actualBoundingBoxRight - m.actualBoundingBoxLeft) / 2;
-      const cy = base - (m.actualBoundingBoxAscent - m.actualBoundingBoxDescent) / 2;
-      const hole = 0.28 * Math.min(m.actualBoundingBoxRight + m.actualBoundingBoxLeft, m.actualBoundingBoxAscent + m.actualBoundingBoxDescent);
-      const box = title.getBoundingClientRect();
-      const vw = document.documentElement.clientWidth;
-      const vh = window.innerHeight;
-      return { ox: cx - box.left, oy: cy - box.top, dx: vw / 2 - cx, dy: vh / 2 - cy, max: (Math.hypot(vw, vh) / 2 / hole) * 1.15 };
-    }
-
-    function reset() {
-      title.style.transform = title.style.transformOrigin = title.style.opacity = "";
-      pin.style.removeProperty("--veil");
-      pin.style.pointerEvents = "";
-      rest.forEach((el) => (el.style.transition = el.style.opacity = el.style.transform = el.style.visibility = ""));
-    }
-
-    let aim = null;
-    let last = -1;
-    window.addEventListener("resize", () => {
-      aim = null;
-      last = -1;
-    });
+  // hero drifts and fades as you leave it
+  function heroOut() {
+    const inner = document.querySelector(".hero-inner");
+    if (!inner || reduce) return;
     onScroll.push((y, vh) => {
-      const p = clamp(y / Math.max(1, hero.offsetHeight - vh));
-      if (p === last) return;
-      last = p;
-      if (p === 0) {
-        aim = null;
-        return reset;
-      }
-      if (!aim) aim = find();
-      if (!aim) return;
-      const a = aim;
+      if (y > vh * 1.3) return;
+      const p = clamp(y / (vh * 0.6));
       return () => {
-        // drift the o to the middle of the screen first, then zoom at a steady feeling rate until the hole is all you can see
-        const k = smooth(clamp(p / 0.5));
-        const s = Math.pow(a.max, Math.pow(p, 1.4));
-        title.style.transformOrigin = `${a.ox.toFixed(1)}px ${a.oy.toFixed(1)}px`;
-        title.style.transform = `translate(${(a.dx * k).toFixed(1)}px, ${(a.dy * k).toFixed(1)}px) scale(${s.toFixed(3)})`;
-        title.style.opacity = (1 - clamp((p - 0.86) / 0.12)).toFixed(3);
-        pin.style.setProperty("--veil", (1 - clamp((p - 0.88) / 0.12)).toFixed(3));
-        pin.style.pointerEvents = p > 0.9 ? "none" : "";
-        const f = clamp(p / 0.18);
-        rest.forEach((el) => {
-          el.style.transition = "none";
-          el.style.opacity = (1 - f).toFixed(3);
-          el.style.transform = `translateY(${(f * 24).toFixed(1)}px)`;
-          el.style.visibility = f === 1 ? "hidden" : "";
-        });
+        inner.style.transform = `translate3d(0, ${(y * 0.22).toFixed(1)}px, 0) scale(${(1 - p * 0.04).toFixed(4)})`;
+        inner.style.opacity = (1 - p).toFixed(3);
       };
     });
   }
@@ -469,7 +405,7 @@
   }
 
   temperature(tokens(intro()));
-  fly();
+  heroOut();
   stack();
   chat();
   peek();
