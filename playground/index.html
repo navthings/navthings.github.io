@@ -353,6 +353,13 @@
       } catch (err) {
         if (token !== loadToken) return;
         console.error(err);
+        // first loads right after an upload sometimes fail on the cdn, one quiet retry fixes it
+        if (!m.retried) {
+          m.retried = true;
+          if (next) await next.exit().catch(() => {});
+          current = null;
+          return pick(m);
+        }
         loading = null;
         setState(m, "failed");
         ui.box.placeholder = "couldnt load it, try again?";
@@ -365,6 +372,7 @@
       }
 
       llm = next;
+      m.retried = false;
       loading = null;
       setState(m, "loaded");
       setReady(true);
