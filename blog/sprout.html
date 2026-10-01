@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script>
+    document.documentElement.classList.add("js");
+    // the only moment to know if a page transition brought us here is before the first paint
+    addEventListener("pagereveal", (e) => document.documentElement.classList.add(e.viewTransition ? "vt-in" : "revealed"), { once: true });
+  </script>
+
+  <title>sprout can talk now · navthings</title>
+
+  <meta name="description" content="sprout finished pretraining on sep 27. 523m params, 12 billion tokens from fineweb-edu, dclm, cosmopedia and project gutenberg, all on the free..." />
+  <meta property="og:type" content="article" />
+  <meta property="article:published_time" content="2026-10-01" />
+  <meta property="og:site_name" content="navthings" />
+  <meta property="og:title" content="sprout can talk now" />
+  <meta property="og:description" content="sprout finished pretraining on sep 27. 523m params, 12 billion tokens from fineweb-edu, dclm, cosmopedia and project gutenberg, all on the free..." />
+  <meta property="og:url" content="https://navthings.github.io/blog/sprout.html" />
+  <meta property="og:image" content="https://navthings.github.io/assets/og/post-sprout.png?v=1" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="sprout can talk now, a post on navthings" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="sprout can talk now" />
+  <meta name="twitter:description" content="sprout finished pretraining on sep 27. 523m params, 12 billion tokens from fineweb-edu, dclm, cosmopedia and project gutenberg, all on the free..." />
+  <meta name="twitter:image" content="https://navthings.github.io/assets/og/post-sprout.png?v=1" />
+  <link rel="canonical" href="https://navthings.github.io/blog/sprout.html" />
+  <meta name="theme-color" content="#ffffff" />
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../apple-touch-icon.png" />
+  <link rel="alternate" type="application/rss+xml" title="navthings" href="../feed.xml" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "sprout can talk now",
+    "datePublished": "2026-10-01",
+    "description": "sprout finished pretraining on sep 27. 523m params, 12 billion tokens from fineweb-edu, dclm, cosmopedia and project gutenberg, all on the free...",
+    "url": "https://navthings.github.io/blog/sprout.html",
+    "image": "https://navthings.github.io/assets/og/post-sprout.png?v=1",
+    "author": {
+      "@type": "Person",
+      "name": "nav",
+      "url": "https://navthings.github.io/"
+    }
+  }
+  </script>
+  <link rel="preload" href="../assets/fonts/geist.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="../assets/site.css" />
+  <link rel="stylesheet" href="post.css" />
+</head>
+
+<body>
+  <a class="skip" href="#main">skip to content</a>
+
+  <header class="nav" data-label="writing" data-current="writing">
+    <div class="island">
+      <span class="island-fill" aria-hidden="true"></span>
+      <a class="island-mark" href="../" aria-label="navthings, home"><img src="../favicon.svg" alt="" /></a>
+      <span class="island-now" aria-hidden="true"><span>writing</span></span>
+      <nav class="island-links" aria-label="main">
+        <a class="home" href="../">navthings</a>
+        <a href="../#work">work</a>
+        <a href="../#writing">writing</a>
+        <a href="../playground/">playground</a>
+        <a href="mailto:navneet.dagdiya@gmail.com" data-email>email</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="sheet" id="main">
+    <article class="post-wrap wrap">
+      <header class="post-head">
+        <p class="crumbs cap" data-reveal><a href="./">writing</a><span>/</span><time datetime="2026-10-01">2026-10-01</time></p>
+        <h1 class="post-title" style="view-transition-name: p-sprout" data-letters>sprout can talk now</h1>
+      </header>
+
+      <div class="post">
+        <p data-reveal>sprout finished pretraining on sep 27. 523m params, 12 billion tokens from fineweb-edu, dclm, cosmopedia and project gutenberg, all on the free kaggle tpu over 4 sessions. this time i actually saved the loss history so theres a real loss curve.</p>
+        <figure data-reveal><div class="dark-fig sq"><img width="2160" height="1040" src="img/sprout-loss.png" alt="sprout loss over 12 billion tokens: held-out fineweb-edu ends at 2.39, below lilbase's final 2.61, wikitext ends at 2.72" loading="lazy" /></div><figcaption>loss on text it never trained on, while pretraining</figcaption></figure>
+        <p data-reveal>it ended at 2.39 on held-out fineweb-edu. lilbase finished at 2.61 on the same text, and sprout passed that at about 4.7b tokens. the little drop at the end is where the learning rate starts decaying.</p>
+        <h2 data-reveal data-label="the finetune">the finetune</h2>
+        <p data-reveal>same idea as lilchat: train it on <a href="https://huggingface.co/datasets/HuggingFaceTB/smol-smoltalk" target="_blank" rel="noopener">smol-smoltalk</a> conversations with the loss only on the assistant replies. lilchat was done overnight on my macbook and only got through 12% of the data. this one ran on the tpu, so it went through the whole dataset twice, 616m tokens in about 90 minutes lol</p>
+        <figure data-reveal><div class="dark-fig sq"><img width="2160" height="919" src="img/sprout-sft-loss.png" alt="chat finetune loss: held-out loss goes from 1.61 to 0.955 over 4702 steps, train loss drops sharply at the start of epoch 2" loading="lazy" /></div><figcaption>chat finetune, 2 epochs</figcaption></figure>
+        <p data-reveal>loss on chats it hadnt seen went from 1.61 to 0.955. when epoch 2 starts the train loss drops straight away because its seen those exact chats before, but the held-out loss kept going down slowly so it wasnt just memorising them.</p>
+        <h2 data-reveal data-label="what works">what works</h2>
+        <p data-reveal>i gave it the same prompts i gave lilchat.</p>
+        <table data-reveal>
+        <thead><tr><th>prompt</th><th>lilchat</th><th>sprout</th></tr></thead>
+        <tbody>
+        <tr><td>hi</td><td>Hello! How can I help you today?</td><td>same</td></tr>
+        <tr><td>capital of australia</td><td>melbourne, then perth</td><td>canberra</td></tr>
+        <tr><td>17 + 25</td><td>48</td><td>42, then 31 on another try</td></tr>
+        <tr><td>reverse a string</td><td>right code, wrong explanation</td><td>right code, right explanation</td></tr>
+        <tr><td>haiku about a cat that hates mondays</td><td>20 lines that loop forever</td><td>4 lines, then it stops</td></tr>
+        </tbody>
+        </table>
+        <p data-reveal>it knows a lot more stuff than lilchat. it got canberra every time i asked, and for the string one it wrote <code>s[::-1]</code> and actually explained the slice properly.</p>
+        <h2 data-reveal data-label="what doesnt">what doesnt</h2>
+        <p data-reveal>maths is still a coin flip. the haiku stops now but its still not a haiku, it has no idea what 5-7-5 is. if you ask who it is it says its an ai assistant for creative writing, every time, which is just what a lot of smol-smoltalk looks like. and it still makes stuff up with total confidence, 523m params was never gonna know everything.</p>
+        <pre data-reveal class="sq">ollama run navthings/sprout</pre>
+        <p data-reveal>or <a href="../playground/?model=sprout">try it in your browser</a>, its 345mb. the weights and ggufs are on <a href="https://huggingface.co/navthings/sprout" target="_blank" rel="noopener">hugging face</a>.</p>
+        <h2 data-reveal data-label="next">next</h2>
+        <p data-reveal>put it through the same benchmark script as lilbase, against gpt-2 large and xl this time. then use sprout as the base for a coding model.</p>
+      </div>
+
+      <a class="post-callout sq" href="../work/sprout.html" data-reveal>
+        <span><span class="label">theres a case study for this</span><b>the longer version, with the data mix and how the training was split over 8 chips</b></span>
+        <span class="btn dark small"><span class="inner">read it</span></span>
+      </a>
+      <nav class="post-foot" aria-label="more posts" data-reveal>
+        <a class="prev sq" href="lilchat.html"><span class="label">older</span>teaching lilbase to talk</a>
+      </nav>
+    </article>
+  </main>
+
+  <footer class="foot" data-label="say hi">
+    <div class="foot-top">
+      <div>
+        <p class="foot-say"><button class="say" type="button" data-email data-scrib="underline" data-scrib-on="hover"><span class="inner">say hi.</span></button> <span>maybe i'll reply.</span></p>
+        <p class="hint">that copies my email. 50-50 i respond.</p>
+      </div>
+      <nav class="foot-links" aria-label="elsewhere">
+        <a href="https://github.com/navthings" target="_blank" rel="noopener">github <span>- it still works</span></a>
+        <a href="https://huggingface.co/navthings" target="_blank" rel="noopener">hugging face <span>- the weights</span></a>
+        <a href="https://ollama.com/navthings" target="_blank" rel="noopener">ollama <span>- models i've pushed</span></a>
+        <a href="https://orcid.org/0009-0002-2764-866X" target="_blank" rel="noopener">orcid <span>- research id</span></a>
+        <a href="https://doi.org/10.5281/zenodo.22340667" target="_blank" rel="noopener">zenodo <span>- the paper</span></a>
+        <a href="../feed.xml">rss <span>- new posts</span></a>
+      </nav>
+    </div>
+    <div class="foot-mark">
+      <svg viewBox="66 64 384 378" aria-hidden="true" data-mark></svg>
+      <div class="meta">navthings, made in australia<br /><button type="button" data-top>back to top</button></div>
+    </div>
+  </footer>
+
+  <script src="../assets/vendor/lenis.min.js"></script>
+  <script src="../assets/site.js"></script>
+</body>
+</html>

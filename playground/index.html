@@ -90,7 +90,7 @@
         </div>
         <div class="log" id="log" aria-live="polite"></div>
         <div class="suggest" id="suggest" hidden>
-          <p>try what i tried in <a href="../blog/lilchat.html">the post</a>:</p>
+          <p>try what i tried in <a id="suggest-post" href="../blog/lilchat.html">the post</a>:</p>
           <div class="suggest-row"></div>
         </div>
         <div class="composer">
@@ -207,8 +207,10 @@
 
     // chat models get a conversation, the rest continue whatever you start
     const MODELS = [
+      { id: "sprout", repo: "navthings/sprout", file: "sprout-q4_k_m.gguf", size: "345mb", mode: "chat",
+        what: "the newest one, 523m params", ctx: 1024, temp: 0.4, max: 300, post: "../blog/sprout.html" },
       { id: "lilchat", repo: "navthings/lilchat", file: "lilchat-q4_k_m.gguf", size: "274mb", mode: "chat",
-        what: "the chat one, finetuned from lilbase", ctx: 1024, temp: 0.4, max: 300 },
+        what: "the chat one, finetuned from lilbase", ctx: 1024, temp: 0.4, max: 300, post: "../blog/lilchat.html" },
       { id: "lilbase", repo: "navthings/lilbase", file: "lilbase-q4_k_m.gguf", size: "274mb", mode: "text",
         what: "continues whatever you start", ctx: 1024, temp: 0.8, max: 200, start: "The water cycle begins when" },
       { id: "tale", repo: "navthings/tale", file: "tale-q8_0.gguf", size: "52mb", mode: "text",
@@ -267,13 +269,14 @@
       }
     }
 
-    // the exact prompts from the lilchat post, so anyone can check what i found
+    // the exact prompts from the posts, so anyone can check what i found
     const TRIES = ["hi", "whats the capital of australia?", "whats 17 + 25?", "write a haiku about a cat that hates mondays"];
     const suggest = $("suggest");
     function renderSuggest() {
       const show = current && current.mode === "chat" && !history.length && llm && !busy;
       suggest.hidden = !show;
       if (!show) return;
+      $("suggest-post").href = current.post;
       const row = suggest.querySelector(".suggest-row");
       if (row.childElementCount) return;
       for (const text of TRIES) {

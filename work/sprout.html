@@ -60,7 +60,7 @@
     <header class="cs-head wrap wide">
       <p class="cs-kicker cap" data-reveal><a href="./">work</a><span>/</span><span>pretraining · sep 2026</span></p>
       <h1 class="cs-title" style="view-transition-name: t-sprout" data-letters>sprout</h1>
-      <p class="cs-lede" data-words style="--d: 0.15s">the next base model after lilbase. same recipe, about 1.8x the parameters and 2x the data, on a mix of four datasets instead of one. it finished training on a tpu v5e-8 on sep 27.</p>
+      <p class="cs-lede" data-words style="--d: 0.15s">the next base model after lilbase. same recipe, about 1.8x the parameters and 2x the data, on a mix of four datasets instead of one. it finished training on a tpu v5e-8 on sep 27, then got a chat finetune.</p>
       <dl class="cs-meta" data-stagger="0.06" style="--d: 0.3s">
           <div data-reveal><dt>params</dt><dd>523m</dd></div>
           <div data-reveal><dt>read</dt><dd>12b tokens from 4 sources</dd></div>
@@ -68,9 +68,9 @@
           <div data-reveal><dt>held-out loss</dt><dd>2.39 on fineweb</dd></div>
       </dl>
       <div class="row" data-reveal style="--d: 0.5s">
-        <a class="btn dark" href="https://github.com/navthings/sprout" target="_blank" rel="noopener"><span class="inner">the code</span></a>
-        <a class="btn line" href="lilbase.html"><span class="inner">how lilbase was trained</span></a>
-      </div>
+        <a class="btn dark" href="../playground/?model=sprout"><span class="inner">talk to it</span></a>
+        <a class="btn line" href="https://github.com/navthings/sprout" target="_blank" rel="noopener"><span class="inner">the code</span></a>
+              </div>
     </header>
 
     <section class="wrap wide">
@@ -203,7 +203,23 @@
             <p>In 1905, Albert Einstein was the most decorated scientist in the world. An internationally-known physicist of international renown, he was awarded the Nobel Prize in Physics in 1921. Einstein’s research on general relativity, the theory of special and general relativity, as well as quantum mechanics, has had a tremendous impact on our understanding of the universe.</p>
             <p>She opened the letter and read: “Don’t forget to read the letter. When you send a letter, it takes several days to get through the mail. If you send your letter in the mail, you have to wait a day or two. You must be careful and take every precaution. This article will show you how to send a letter fast, and how to make sure you get the letter in</p>
           </div>
-          <p>next it goes through the same benchmark script as lilbase, so the two can be compared properly.</p>
+          <p>then it got the chat finetune.</p>
+        </div>
+      </div>
+      <div class="cs-sec" data-reveal data-label="chat finetune">
+        <h2 class="cs-h">chat finetune</h2>
+        <div class="cs-text">
+          <p>same recipe as lilchat: smol-smoltalk conversations in the llama-2 <code>[INST]</code> format, with the loss only on the assistant replies. lilchat ran on my macbook and saw 12% of the data. sprout ran on the tpu, so it got <strong>2 full epochs</strong>, 616m tokens in about 90 minutes, and kept whichever checkpoint did best on held-out chats.</p>
+          <dl class="specs fig">
+            <div><dt>steps</dt><dd>4,702</dd></div>
+            <div><dt>tokens a step</dt><dd>131,072</dd></div>
+            <div><dt>learning rate</dt><dd>1e-4</dd></div>
+            <div><dt>tokens a second</dt><dd>121,000</dd></div>
+            <div><dt>held-out loss before</dt><dd>1.611</dd></div>
+            <div><dt>held-out loss after</dt><dd>0.955</dd></div>
+          </dl>
+          <p>the best checkpoint was the last one, so the second epoch still helped on chats it had never seen. it gets canberra right now, writes working python and explains it properly. maths and poems are still bad.</p>
+          <p>its on <a href="https://huggingface.co/navthings/sprout" target="_blank" rel="noopener">hugging face</a> and <a href="https://ollama.com/navthings/sprout" target="_blank" rel="noopener">ollama</a>, and in the <a href="../playground/?model=sprout">playground</a> as a 345mb q4_k_m. theres a <a href="../blog/sprout.html">post</a> with the loss curves.</p>
         </div>
       </div>
       <div class="cs-sec" data-reveal data-label="goals">
@@ -211,7 +227,7 @@
         <div class="cs-text">
           <p><strong>one:</strong> beat gpt-2 xl, which is 1.5b params, or get close to it.</p>
           <p><strong>two:</strong> finetune it into a competitive coding model at around 500m.</p>
-          <p>first though, it gets the same chat finetune as lilchat and goes in the <a href="../playground/">playground</a>.</p>
+          <p>next is the benchmark script, against gpt-2 large and xl this time.</p>
         </div>
       </div>
     </section>

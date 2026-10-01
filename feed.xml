@@ -7,6 +7,13 @@
     <language>en</language>
     <atom:link href="https://navthings.github.io/feed.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>sprout can talk now</title>
+      <link>https://navthings.github.io/blog/sprout.html</link>
+      <guid>https://navthings.github.io/blog/sprout.html</guid>
+      <pubDate>Thu, 01 Oct 2026 05:00:00 +0000</pubDate>
+      <description>sprout finished pretraining on sep 27. 523m params, 12 billion tokens from fineweb-edu, dclm, cosmopedia and project gutenberg, all on the free kaggle tpu over 4 sessions. this time i actually saved the loss history so theres a real loss curve.</description>
+    </item>
+    <item>
       <title>teaching lilbase to talk</title>
       <link>https://navthings.github.io/blog/lilchat.html</link>
       <guid>https://navthings.github.io/blog/lilchat.html</guid>

@@ -76,7 +76,7 @@
       <div class="hero-inner">
         <h1 class="hero-title" data-tokens>hi, i'm nav. i build language models <span class="soft">and research how they <span data-scrib="circle" data-scrib-on="manual">learn</span>.</span></h1>
         <p class="hero-sub" data-reveal style="--d: 1.15s">
-          machine learning engineer and researcher in australia. i train my own language models and test what they actually learned. the newest is <a href="#sprout">sprout</a>, a 523m param base model that just finished reading 12 billion tokens.
+          machine learning engineer and researcher in australia. i train my own language models and test what they actually learned. the newest is <a href="#sprout">sprout</a>, 523m params trained on 12 billion tokens and then taught to chat.
         </p>
         <div class="row" data-reveal style="--d: 1.3s">
           <a class="btn dark" href="#work"><span class="inner">see the work</span></a>
@@ -104,8 +104,8 @@
         </a>
         <a class="area-row" href="work/lilchat.html" data-reveal>
           <span class="area-name">finetuning</span>
-          <span class="area-text">chat finetuning in mlx with the loss only on the assistant turns. lilchat went from 2.230 to 1.337 val loss in one night.</span>
-          <span class="area-link cap">lilchat</span>
+          <span class="area-text">chat finetuning with the loss only on the assistant turns. lilchat in one night on my mac, sprout in 90 minutes on the tpu.</span>
+          <span class="area-link cap">lilchat, sprout</span>
         </a>
         <a class="area-row" href="work/corpus-size.html" data-reveal>
           <span class="area-name">research</span>
@@ -217,10 +217,10 @@
           </div>
           <div class="card-vis">
             <div class="mini">
-              <div class="mini-row"><span>lilchat</span><span class="track"><b style="--k: 0; --t: 2.2s; --w: 100%"></b></span><span class="size">274mb</span></div>
-              <div class="mini-row"><span>lilbase</span><span class="track"><b style="--k: 1; --t: 2.2s; --w: 100%"></b></span><span class="size">274mb</span></div>
-              <div class="mini-row"><span>tale</span><span class="track"><b style="--k: 2; --t: 0.9s; --w: 19%"></b></span><span class="size">52mb</span></div>
-              <div class="mini-row"><span>lilstory</span><span class="track"><b style="--k: 3; --t: 0.5s; --w: 6.2%"></b></span><span class="size">17mb</span></div>
+              <div class="mini-row"><span>sprout</span><span class="track"><b style="--k: 0; --t: 2.6s; --w: 100%"></b></span><span class="size">345mb</span></div>
+              <div class="mini-row"><span>lilchat</span><span class="track"><b style="--k: 1; --t: 2.2s; --w: 79%"></b></span><span class="size">274mb</span></div>
+              <div class="mini-row"><span>lilbase</span><span class="track"><b style="--k: 2; --t: 2.2s; --w: 79%"></b></span><span class="size">274mb</span></div>
+              <div class="mini-row"><span>tale</span><span class="track"><b style="--k: 3; --t: 0.9s; --w: 15%"></b></span><span class="size">52mb</span></div>
             </div>
             <div class="mini-input"><span>Once upon a time</span><span class="btn dark">go</span></div>
             <p class="mini-note">nothing leaves your computer.</p>
@@ -231,12 +231,12 @@
           <div class="card-text">
             <div>
               <h3 class="card-title" style="view-transition-name: t-sprout"><a class="stretch" href="work/sprout.html">sprout</a></h3>
-              <p class="card-desc">the next base model. 523m params trained on 12 billion tokens from a four source mix, with the optimizer state sharded across 8 tpu chips. it finished on sep 27, loss 2.39 on held-out text.</p>
+              <p class="card-desc">523m params trained on 12 billion tokens from a four source mix, with the optimizer state sharded across 8 tpu chips. then chat finetuned on all of smol-smoltalk, twice.</p>
               <p class="card-wrong"><span>the goal</span>beat gpt-2 xl, which is 1.5b params, or get close. then finetune it into a competitive coding model.</p>
             </div>
             <div class="row">
               <span class="card-go"><span>read about it</span></span>
-              <a class="btn small" href="https://github.com/navthings/sprout" target="_blank" rel="noopener"><span class="inner">github</span></a>
+              <a class="btn small" href="playground/?model=sprout"><span class="inner">talk to it</span></a>
             </div>
           </div>
           <div class="card-vis">
@@ -262,6 +262,7 @@
         <h2 class="h-section" data-words>what i've <span data-scrib="circle">written</span>.</h2>
       </div>
       <div class="posts follow" data-stagger="0.05">
+        <a class="post-row" href="blog/sprout.html" data-peek="sprout finished pretraining on sep 27. 523m params, 12 billion tokens, all on the free kaggle tpu." data-reveal><span class="cap">2026-10-01</span><span class="t" style="view-transition-name: p-sprout">sprout can talk now</span><span class="cap kind">finetuning</span></a>
         <a class="post-row" href="blog/lilchat.html" data-peek="a base model just continues text. if you ask it a question itll probably write 5 more questions instead of answering." data-reveal><span class="cap">2026-09-26</span><span class="t" style="view-transition-name: p-lilchat">teaching lilbase to talk</span><span class="cap kind">finetuning</span></a>
         <a class="post-row" href="blog/lilbase.html" data-peek="everything before this was trained on my laptop, but i wanted to make a proper base model, like one thats actually read a decent chunk of the internet." data-reveal><span class="cap">2026-09-23</span><span class="t" style="view-transition-name: p-lilbase">lilbase, 297m params on a free tpu</span><span class="cap kind">pretraining</span></a>
         <a class="post-row" href="blog/tale.html" data-peek="my little brother kept asking me for bedtime stories so i made a model that tells them." data-reveal><span class="cap">2026-09-12</span><span class="t" style="view-transition-name: p-tale">tale, bedtime stories for my little brother</span><span class="cap kind">model</span></a>
@@ -283,7 +284,8 @@
         <form class="ask" action="playground/" method="get" data-ask>
           <fieldset class="chips">
             <legend class="cap" style="margin-bottom: 10px">model</legend>
-            <label><input type="radio" name="model" value="lilchat" checked data-placeholder="say something" /><span>lilchat <small>274mb</small></span></label>
+            <label><input type="radio" name="model" value="sprout" checked data-placeholder="say something" /><span>sprout <small>345mb</small></span></label>
+            <label><input type="radio" name="model" value="lilchat" data-placeholder="say something" /><span>lilchat <small>274mb</small></span></label>
             <label><input type="radio" name="model" value="lilbase" data-placeholder="The water cycle begins when" /><span>lilbase <small>274mb</small></span></label>
             <label><input type="radio" name="model" value="tale" data-placeholder="Once upon a time" /><span>tale <small>52mb</small></span></label>
             <label><input type="radio" name="model" value="lilstory" data-placeholder="Once upon a time" /><span>lilstory <small>17mb</small></span></label>
