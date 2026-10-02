@@ -726,8 +726,8 @@ function nav() {
   // on phones the pill swipes like the home bar: sideways to the page before or after this one, down for the menu
   const ORDER = [
     ["/", "/work/", "/blog/", "/playground/"],
-    ["/work/corpus-size.html", "/work/lilbase.html", "/work/lilchat.html", "/work/sprout.html", "/work/playground.html"],
-    ["/blog/liltransformer.html", "/blog/bigtransformer.html", "/blog/lilstory.html", "/blog/dataset-size-paper.html", "/blog/tale.html", "/blog/lilbase.html", "/blog/lilchat.html"],
+    ["/work/corpus-size.html", "/work/lilchat.html", "/work/sprout.html", "/work/playground.html"],
+    ["/blog/liltransformer.html", "/blog/bigtransformer.html", "/blog/dataset-size-paper.html", "/blog/tale.html", "/blog/lilchat.html", "/blog/sprout.html"],
   ];
   function neighbour(step) {
     const path = location.pathname.replace(/index\.html$/, "");
@@ -1083,22 +1083,17 @@ const JUMP = [
   ["the models so far", "/work/", "timeline", "work models history every model"],
   ["what i've written", "/blog/", "writing", "posts blog"],
   ["talk to my models", "/playground/", "playground", "chat try run browser"],
-  ["lilbase", "/work/lilbase.html", "case study", "pretraining jax tpu base model gpt-2 hellaswag lambada"],
   ["lilchat", "/work/lilchat.html", "case study", "finetuning mlx chat sft melbourne"],
   ["the paper", "/work/corpus-size.html", "case study", "research corpus size data tinystories zenodo"],
   ["sprout", "/work/sprout.html", "case study", "finished 523m wsd sharded adamw results samples"],
   ["how the playground works", "/work/playground.html", "case study", "wllama webassembly webgpu safari firefox inference"],
   ["talk to lilchat", "/playground/?model=lilchat", "model", "chat try"],
-  ["lilbase, continues whatever you start", "/playground/?model=lilbase", "model", "try"],
   ["tale, bedtime stories", "/playground/?model=tale", "model", "try stories"],
-  ["lilstory, tinier bedtime stories", "/playground/?model=lilstory", "model", "try stories"],
   ["lilstory's tokenizer", "/playground/#tokenizer", "playground", "tokens bpe pieces"],
   ["a digit net with no libraries", "/playground/#digits", "playground", "mnist draw neural net sllm"],
   ["teaching lilbase to talk", "/blog/lilchat.html", "post", "sep 26 lilchat finetuning"],
-  ["lilbase, 297m params on a free tpu", "/blog/lilbase.html", "post", "sep 23 pretraining"],
   ["tale, bedtime stories for my little brother", "/blog/tale.html", "post", "sep 12"],
   ["i wrote a paper on how much data matters", "/blog/dataset-size-paper.html", "post", "sep 5 research"],
-  ["lilstory, my first real language model", "/blog/lilstory.html", "post", "sep 4"],
   ["bigtransformer, now it reads a whole file", "/blog/bigtransformer.html", "post", "aug 31"],
   ["my first transformer", "/blog/liltransformer.html", "post", "aug 30 liltransformer one sentence"],
   ["github", "https://github.com/navthings", "link", "code repos"],
@@ -1117,7 +1112,6 @@ const PAGES = {
   "/work/": "work",
   "/blog/": "writing",
   "/playground/": "playground",
-  "/work/lilbase.html": "lilbase",
   "/work/lilchat.html": "lilchat",
   "/work/corpus-size.html": "the paper",
   "/work/sprout.html": "sprout",

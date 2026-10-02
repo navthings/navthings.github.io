@@ -21,13 +21,6 @@
       <description>a base model just continues text. if you ask it a question itll probably write 5 more questions instead of answering. to make it a chat model you finetune it on a bunch of conversations so it learns the pattern: you say something, it answers, it stops.</description>
     </item>
     <item>
-      <title>lilbase, 297m params on a free tpu</title>
-      <link>https://navthings.github.io/blog/lilbase.html</link>
-      <guid>https://navthings.github.io/blog/lilbase.html</guid>
-      <pubDate>Wed, 23 Sep 2026 09:00:00 +0000</pubDate>
-      <description>everything before this was trained on my laptop, but i wanted to make a proper base model, like one thats actually read a decent chunk of the internet. my macbook air was never gonna do that. kaggle gives you free time on a tpu v5e-8 (8 of googles ai chips) so i rewrote the whole thing in jax and moved it there.</description>
-    </item>
-    <item>
       <title>tale, bedtime stories for my little brother</title>
       <link>https://navthings.github.io/blog/tale.html</link>
       <guid>https://navthings.github.io/blog/tale.html</guid>
@@ -40,13 +33,6 @@
       <guid>https://navthings.github.io/blog/dataset-size-paper.html</guid>
       <pubDate>Sat, 05 Sep 2026 09:00:00 +0000</pubDate>
       <description>i wanted to see how much the amount of data actually matters if you keep everything else the same. so i trained lilstory 4 times on 1%, 5%, 10% and 15% of tinystories. same model, same settings, 5000 steps each.</description>
-    </item>
-    <item>
-      <title>lilstory, my first real language model</title>
-      <link>https://navthings.github.io/blog/lilstory.html</link>
-      <guid>https://navthings.github.io/blog/lilstory.html</guid>
-      <pubDate>Fri, 04 Sep 2026 09:00:00 +0000</pubDate>
-      <description>ok this one is an actual language model. 8.2m params, llama style, trained from scratch on tinystories (a dataset of simple little stories made for tiny models like this).</description>
     </item>
     <item>
       <title>bigtransformer, now it reads a whole file</title>

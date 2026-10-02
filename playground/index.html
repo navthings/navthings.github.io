@@ -211,12 +211,8 @@
         what: "the newest one, 523m params", ctx: 1024, temp: 0.4, max: 300, post: "../blog/sprout.html" },
       { id: "lilchat", repo: "navthings/lilchat", file: "lilchat-q4_k_m.gguf", size: "274mb", mode: "chat",
         what: "the chat one, finetuned from lilbase", ctx: 1024, temp: 0.4, max: 300, post: "../blog/lilchat.html" },
-      { id: "lilbase", repo: "navthings/lilbase", file: "lilbase-q4_k_m.gguf", size: "274mb", mode: "text",
-        what: "continues whatever you start", ctx: 1024, temp: 0.8, max: 200, start: "The water cycle begins when" },
       { id: "tale", repo: "navthings/tale", file: "tale-q8_0.gguf", size: "52mb", mode: "text",
         what: "bedtime stories", ctx: 384, temp: 0.8, max: 250, start: "Once upon a time" },
-      { id: "lilstory", repo: "navthings/lilstory", file: "lilstory.gguf", size: "17mb", mode: "text",
-        what: "tinier bedtime stories", ctx: 256, temp: 0.8, max: 180, start: "Once upon a time", stop: ["[EOS]"] },
     ];
 
     const $ = (id) => document.getElementById(id);
