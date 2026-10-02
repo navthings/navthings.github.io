@@ -222,12 +222,36 @@
           <p>its on <a href="https://huggingface.co/navthings/sprout" target="_blank" rel="noopener">hugging face</a> and <a href="https://ollama.com/navthings/sprout" target="_blank" rel="noopener">ollama</a>, and in the <a href="../playground/?model=sprout">playground</a> as a 345mb q4_k_m. theres a <a href="../blog/sprout.html">post</a> with the loss curves.</p>
         </div>
       </div>
+      <!-- bench:start -->
+<div class="cs-sec" data-reveal data-label="vs gpt-2">
+        <h2 class="cs-h">vs gpt-2</h2>
+        <div class="cs-text">
+          <p>i put sprout through the same test script as openai's gpt-2, which came out in 2019 in four sizes, from 124m up to 1.5b params. lilbase is in there too. each test is a few thousand questions none of the models trained on, every model gets the exact same ones, and it all runs on my macbook.</p>
+          <p>on <strong>arc-easy</strong>, which is grade school science questions, sprout gets <strong>50.3%</strong> and lilbase gets 48.1%. both beat gpt-2 medium at 44.7%, and lilbase is smaller than it. on <strong>lambada</strong>, where you guess the last word of a passage from a novel, gpt-2 wins: medium gets 44.3%, sprout 39.2% and lilbase 28.5%.</p>
+          <div class="fig bench" data-live><div class="bench-grid"><div class="bench-panel"><p class="bench-title"><b>arc-easy</b> <span>grade school science questions</span></p><svg viewBox="0 0 300 230" role="img" aria-label="arc-easy: score against model size"><line class="b-grid" x1="34" x2="286" y1="190.0" y2="190.0"/><text x="28" y="194.0" text-anchor="end">35%</text><line class="b-grid" x1="34" x2="286" y1="146.5" y2="146.5"/><text x="28" y="150.5" text-anchor="end">40%</text><line class="b-grid" x1="34" x2="286" y1="103.0" y2="103.0"/><text x="28" y="107.0" text-anchor="end">45%</text><line class="b-grid" x1="34" x2="286" y1="59.5" y2="59.5"/><text x="28" y="63.5" text-anchor="end">50%</text><line class="b-grid" x1="34" x2="286" y1="16.0" y2="16.0"/><text x="28" y="20.0" text-anchor="end">55%</text><text x="52.1" y="208" text-anchor="middle">124m</text><text x="140.6" y="208" text-anchor="middle">355m</text><text x="206.1" y="208" text-anchor="middle">774m</text><text x="265.0" y="208" text-anchor="middle">1.5b</text><text x="160.0" y="226" text-anchor="middle" class="b-axis">model size (params)</text><path class="b-gpt2" d="M52.4 141.2 L140.5 105.6"/><circle class="b-gpt2-dot" cx="52.4" cy="141.2" r="3.5"/><text class="b-gpt2-lab" x="52.4" y="156.2" text-anchor="middle">small</text><circle class="b-gpt2-dot" cx="140.5" cy="105.6" r="3.5"/><text class="b-gpt2-lab" x="140.5" y="120.6" text-anchor="middle">medium</text><circle class="b-me" cx="173.1" cy="57.3" r="5"/><text class="b-me-lab" x="173.1" y="46.3" text-anchor="middle">sprout 50.3</text><circle class="b-me2" cx="125.6" cy="76.0" r="5"/><text class="b-me-lab" x="125.6" y="65.0" text-anchor="middle">lilbase 48.1</text></svg></div><div class="bench-panel"><p class="bench-title"><b>lambada</b> <span>guessing the last word of a passage</span></p><svg viewBox="0 0 300 230" role="img" aria-label="lambada: score against model size"><line class="b-grid" x1="34" x2="286" y1="190.0" y2="190.0"/><text x="28" y="194.0" text-anchor="end">25%</text><line class="b-grid" x1="34" x2="286" y1="155.2" y2="155.2"/><text x="28" y="159.2" text-anchor="end">30%</text><line class="b-grid" x1="34" x2="286" y1="120.4" y2="120.4"/><text x="28" y="124.4" text-anchor="end">35%</text><line class="b-grid" x1="34" x2="286" y1="85.6" y2="85.6"/><text x="28" y="89.6" text-anchor="end">40%</text><line class="b-grid" x1="34" x2="286" y1="50.8" y2="50.8"/><text x="28" y="54.8" text-anchor="end">45%</text><line class="b-grid" x1="34" x2="286" y1="16.0" y2="16.0"/><text x="28" y="20.0" text-anchor="end">50%</text><text x="52.1" y="208" text-anchor="middle">124m</text><text x="140.6" y="208" text-anchor="middle">355m</text><text x="206.1" y="208" text-anchor="middle">774m</text><text x="265.0" y="208" text-anchor="middle">1.5b</text><text x="160.0" y="226" text-anchor="middle" class="b-axis">model size (params)</text><path class="b-gpt2" d="M52.4 120.4 L140.5 55.7"/><circle class="b-gpt2-dot" cx="52.4" cy="120.4" r="3.5"/><text class="b-gpt2-lab" x="52.4" y="135.4" text-anchor="middle">small</text><circle class="b-gpt2-dot" cx="140.5" cy="55.7" r="3.5"/><text class="b-gpt2-lab" x="140.5" y="70.7" text-anchor="middle">medium</text><circle class="b-me" cx="173.1" cy="90.8" r="5"/><text class="b-me-lab" x="173.1" y="109.8" text-anchor="middle">sprout 39.2</text><circle class="b-me2" cx="125.6" cy="165.6" r="5"/><text class="b-me-lab" x="125.6" y="184.6" text-anchor="middle">lilbase 28.5</text></svg></div></div><div class="bench-key"><span><i class="k-me"></i>sprout (chat version), 523m</span><span><i class="k-me2"></i>lilbase, 297m</span><span><i class="k-gpt2"></i>openai gpt-2, 2 sizes so far</span></div><p class="cap muted">higher is better. a dot above the grey line beats a gpt-2 of the same size. same test script for every model, on my macbook</p></div>
+          <details class="table-view">
+          <summary>see the numbers</summary>
+          <table>
+            <thead><tr><th>model</th><th class="num">params</th><th class="num">arc-easy</th><th class="num">lambada</th></tr></thead>
+            <tbody>
+            <tr><td>gpt-2 small</td><td class="num">124m</td><td class="num">40.6%</td><td class="num">35.0%</td></tr>
+            <tr><td>lilbase</td><td class="num">297m</td><td class="num">48.1%</td><td class="num">28.5%</td></tr>
+            <tr><td>gpt-2 medium</td><td class="num">355m</td><td class="num">44.7%</td><td class="num">44.3%</td></tr>
+            <tr class="hi"><td>sprout (chat)</td><td class="num">523m</td><td class="num">50.3%</td><td class="num">39.2%</td></tr>
+            </tbody>
+          </table>
+        </details>
+          <p>this is the chat version of sprout, the base weights are still on kaggle, and chat finetuning usually costs a few points on tests like these. gpt-2 large and xl are still running, and hellaswag is getting rerun because of a bug in how it was scored (the story and the answer got glued together with no space). ill update this when theyre done.</p>
+        </div>
+      </div>
+
+      <!-- bench:end -->
       <div class="cs-sec" data-reveal data-label="goals">
         <h2 class="cs-h">goals</h2>
         <div class="cs-text">
           <p><strong>one:</strong> beat gpt-2 xl, which is 1.5b params, or get close to it.</p>
           <p><strong>two:</strong> finetune it into a competitive coding model at around 500m.</p>
-          <p>next is the benchmark script, against gpt-2 large and xl this time.</p>
+          <p>the first benchmark results are above. gpt-2 large and xl are still running.</p>
         </div>
       </div>
     </section>
