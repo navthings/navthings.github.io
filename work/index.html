@@ -11,11 +11,11 @@
 
   <title>work · navthings</title>
 
-  <meta name="description" content="case studies: pretraining sprout, finetuning lilchat and sprout, a paper on corpus size, and in-browser inference." />
+  <meta name="description" content="case studies: pretraining lilbase and sprout, finetuning lilchat and sprout, a paper on corpus size, and in-browser inference." />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="navthings" />
   <meta property="og:title" content="work" />
-  <meta property="og:description" content="case studies: pretraining sprout, finetuning lilchat and sprout, a paper on corpus size, and in-browser inference." />
+  <meta property="og:description" content="case studies: pretraining lilbase and sprout, finetuning lilchat and sprout, a paper on corpus size, and in-browser inference." />
   <meta property="og:url" content="https://navthings.github.io/work/" />
   <meta property="og:image" content="https://navthings.github.io/assets/og/work.png?v=2" />
   <meta property="og:image:width" content="1200" />
@@ -23,7 +23,7 @@
   <meta property="og:image:alt" content="the models so far, on navthings" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="work" />
-  <meta name="twitter:description" content="case studies: pretraining sprout, finetuning lilchat and sprout, a paper on corpus size, and in-browser inference." />
+  <meta name="twitter:description" content="case studies: pretraining lilbase and sprout, finetuning lilchat and sprout, a paper on corpus size, and in-browser inference." />
   <meta name="twitter:image" content="https://navthings.github.io/assets/og/work.png?v=2" />
   <link rel="canonical" href="https://navthings.github.io/work/" />
   <meta name="theme-color" content="#ffffff" />
@@ -83,6 +83,16 @@
           </div>
         </li>
         <li class="tl-item" data-reveal>
+          <p class="tl-date cap"><time datetime="2026-09-04">sep 4</time><span class="tl-day">day 6</span></p>
+          <span class="tl-node" style="--s: 16px" aria-hidden="true"></span>
+          <div class="tl-body">
+            <h2 class="tl-name">lilstory</h2>
+            <p class="tl-text">my first real language model. llama style, trained on tinystories on my macbooks gpu, with a bpe tokenizer i trained myself. it writes little stories that mostly make sense and then kinda wander off.</p>
+            <p class="tl-facts cap"><span>8.2m params</span><span>4 layers</span><span>8000 token vocab</span></p>
+            <p class="tl-links cap"><a href="../blog/lilstory.html">post</a><a href="../playground/#tokenizer">its tokenizer</a><a href="https://ollama.com/navthings/lilstory" target="_blank" rel="noopener">ollama</a></p>
+          </div>
+        </li>
+        <li class="tl-item" data-reveal>
           <p class="tl-date cap"><time datetime="2026-09-05">sep 5</time><span class="tl-day">day 7</span></p>
           <span class="tl-node" style="--s: 16px" aria-hidden="true"></span>
           <div class="tl-body">
@@ -100,6 +110,16 @@
             <p class="tl-text">lilstory but bigger, because my little brother kept asking me for bedtime stories. it got a proper warmup and decay schedule and exports to gguf, so it runs in ollama.</p>
             <p class="tl-facts cap"><span>around 50m params</span><span>13 layers</span><span>gguf</span></p>
             <p class="tl-links cap"><a href="../blog/tale.html">post</a><a href="../playground/?model=tale">try it</a></p>
+          </div>
+        </li>
+        <li class="tl-item" data-reveal>
+          <p class="tl-date cap"><time datetime="2026-09-23">sep 23</time><span class="tl-day">day 25</span></p>
+          <span class="tl-node" style="--s: 53px" aria-hidden="true"></span>
+          <div class="tl-body">
+            <h2 class="tl-name"><a href="lilbase.html" style="view-transition-name: t-lilbase">lilbase</a></h2>
+            <p class="tl-text">a proper base model. i rewrote the training in jax and moved it to a kaggle tpu v5e-8. it beats gpt-2 small on hellaswag and arc-easy and loses on lambada.</p>
+            <p class="tl-facts cap"><span>297m params</span><span>6.1b tokens</span><span>tpu v5e-8</span></p>
+            <p class="tl-links cap"><a href="lilbase.html">case study</a><a href="../blog/lilbase.html">post</a><a href="https://ollama.com/navthings/lilbase" target="_blank" rel="noopener">ollama</a></p>
           </div>
         </li>
         <li class="tl-item" data-reveal>

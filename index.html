@@ -100,7 +100,7 @@
         <a class="area-row" href="work/sprout.html" data-reveal>
           <span class="area-name">pretraining</span>
           <span class="area-text">llama style models from 8m to 523m params. the big ones are written in jax and trained on a kaggle tpu v5e-8, in 8.4 hour sessions that save and pick up where they left off.</span>
-          <span class="area-link cap">sprout</span>
+          <span class="area-link cap">lilbase, sprout</span>
         </a>
         <a class="area-row" href="work/lilchat.html" data-reveal>
           <span class="area-name">finetuning</span>
@@ -112,10 +112,10 @@
           <span class="area-text">how much data a model actually needs. i trained the same model on four amounts of data and wrote it up as a paper.</span>
           <span class="area-link cap">the paper</span>
         </a>
-        <a class="area-row" href="work/sprout.html" data-reveal>
+        <a class="area-row" href="work/lilbase.html" data-reveal>
           <span class="area-name">evaluation</span>
           <span class="area-text">every model goes through the same zero shot script, hellaswag, arc-easy and lambada, and gets compared against gpt-2.</span>
-          <span class="area-link cap">sprout</span>
+          <span class="area-link cap">lilbase</span>
         </a>
         <a class="area-row" href="work/playground.html" data-reveal>
           <span class="area-name">inference</span>
@@ -132,6 +132,37 @@
 
       <div class="stack">
         <article class="card" data-live style="--i: 0">
+          <div class="card-text">
+            <div>
+              <h3 class="card-title" style="view-transition-name: t-lilbase"><a class="stretch" href="work/lilbase.html">lilbase</a></h3>
+              <p class="card-desc">a 297m param llama style base model, pretrained from scratch in jax on a tpu v5e-8. it beats gpt-2 small on hellaswag and arc-easy, and loses on lambada.</p>
+              <p class="card-wrong"><span>what went wrong</span>kaggle sometimes hands you a tpu with 1 working chip out of 8. the script now refuses to start without all of them.</p>
+            </div>
+            <div class="row">
+              <span class="card-go"><span>read how it went</span></span>
+              <a class="btn small" href="https://ollama.com/navthings/lilbase" target="_blank" rel="noopener"><span class="inner">run it with ollama</span></a>
+            </div>
+          </div>
+          <div class="card-vis">
+            <div class="legend"><span><i style="background: var(--ink)"></i>lilbase</span><span><i style="background: #c9c9c6"></i>gpt-2 small, 124m</span></div>
+            <div class="hbars">
+              <div class="hbar-group"><span>hellaswag</span>
+                <div class="hbar" style="--k: 0"><b style="--w: 68.3%; background: var(--ink)"></b><em>41.0%</em></div>
+                <div class="hbar" style="--k: 1"><b style="--w: 51.8%; background: #c9c9c6"></b><em>31.1%</em></div>
+              </div>
+              <div class="hbar-group"><span>arc-easy</span>
+                <div class="hbar" style="--k: 2"><b style="--w: 84.2%; background: var(--ink)"></b><em>50.5%</em></div>
+                <div class="hbar" style="--k: 3"><b style="--w: 65.8%; background: #c9c9c6"></b><em>39.5%</em></div>
+              </div>
+              <div class="hbar-group"><span>lambada</span>
+                <div class="hbar" style="--k: 4"><b style="--w: 47.8%; background: var(--ink)"></b><em>28.7%</em></div>
+                <div class="hbar" style="--k: 5"><b style="--w: 54.3%; background: #c9c9c6"></b><em>32.6%</em></div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="card" data-live style="--i: 1">
           <div class="card-text">
             <div>
               <h3 class="card-title" style="view-transition-name: t-lilchat"><a class="stretch" href="work/lilchat.html">lilchat</a></h3>
@@ -154,7 +185,7 @@
           </div>
         </article>
 
-        <article class="card" data-live style="--i: 1">
+        <article class="card" data-live style="--i: 2">
           <div class="card-text">
             <div>
               <h3 class="card-title" style="view-transition-name: t-paper"><a class="stretch" href="work/corpus-size.html">the paper</a></h3>
@@ -172,7 +203,7 @@
           </div>
         </article>
 
-        <article class="card" data-live style="--i: 2">
+        <article class="card" data-live style="--i: 3">
           <div class="card-text">
             <div>
               <h3 class="card-title" style="view-transition-name: t-playground"><a class="stretch" href="work/playground.html">playground</a></h3>
@@ -195,7 +226,7 @@
           </div>
         </article>
 
-        <article class="card" data-live style="--i: 3" id="sprout">
+        <article class="card" data-live style="--i: 4" id="sprout">
           <div class="card-text">
             <div>
               <h3 class="card-title" style="view-transition-name: t-sprout"><a class="stretch" href="work/sprout.html">sprout</a></h3>
@@ -232,8 +263,10 @@
       <div class="posts follow" data-stagger="0.05">
         <a class="post-row" href="blog/sprout.html" data-peek="sprout finished pretraining on sep 27. 523m params, 12 billion tokens, all on the free kaggle tpu." data-reveal><span class="cap">2026-10-01</span><span class="t" style="view-transition-name: p-sprout">sprout can talk now</span><span class="cap kind">finetuning</span></a>
         <a class="post-row" href="blog/lilchat.html" data-peek="a base model just continues text. if you ask it a question itll probably write 5 more questions instead of answering." data-reveal><span class="cap">2026-09-26</span><span class="t" style="view-transition-name: p-lilchat">teaching lilbase to talk</span><span class="cap kind">finetuning</span></a>
+        <a class="post-row" href="blog/lilbase.html" data-peek="everything before this was trained on my laptop, but i wanted to make a proper base model, like one thats actually read a decent chunk of the internet." data-reveal><span class="cap">2026-09-23</span><span class="t" style="view-transition-name: p-lilbase">lilbase, 297m params on a free tpu</span><span class="cap kind">pretraining</span></a>
         <a class="post-row" href="blog/tale.html" data-peek="my little brother kept asking me for bedtime stories so i made a model that tells them." data-reveal><span class="cap">2026-09-12</span><span class="t" style="view-transition-name: p-tale">tale, bedtime stories for my little brother</span><span class="cap kind">model</span></a>
         <a class="post-row" href="blog/dataset-size-paper.html" data-peek="i wanted to see how much the amount of data actually matters if you keep everything else the same." data-reveal><span class="cap">2026-09-05</span><span class="t" style="view-transition-name: p-dataset-size-paper">i wrote a paper on how much data matters</span><span class="cap kind">research</span></a>
+        <a class="post-row" href="blog/lilstory.html" data-peek="ok this one is an actual language model. 8.2m params, llama style, trained from scratch on tinystories." data-reveal><span class="cap">2026-09-04</span><span class="t" style="view-transition-name: p-lilstory">lilstory, my first real language model</span><span class="cap kind">model</span></a>
         <a class="post-row" href="blog/bigtransformer.html" data-peek="made this the day after liltransformer. instead of one sentence it reads a whole text file." data-reveal><span class="cap">2026-08-31</span><span class="t" style="view-transition-name: p-bigtransformer">bigtransformer, now it reads a whole file</span><span class="cap kind">basics</span></a>
         <a class="post-row" href="blog/liltransformer.html" data-peek="first ml thing i ever made lol. you give it a sentence, pick a word from it, and it tries to guess the next word." data-reveal><span class="cap">2026-08-30</span><span class="t" style="view-transition-name: p-liltransformer">my first transformer (it only knows one sentence)</span><span class="cap kind">basics</span></a>
       </div>
