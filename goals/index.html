@@ -433,16 +433,36 @@
         }
       }
 
-      // a newer copy on this device wins over the published one, e.g. edits made before sync was set up
+      // a newer copy on this device wins. if the published one is newer, keep this device's ticks for goals with the same text
       const local = store.get("goals.local");
+      let mine = null;
       if (local) {
         try {
-          const mine = JSON.parse(await open(JSON.parse(local)));
-          if (mine.updated > best.updated) best = mine;
+          mine = JSON.parse(await open(JSON.parse(local)));
         } catch {}
+      }
+      if (mine && mine.updated > best.updated) {
+        state = mine;
+        normalise();
+        return;
       }
       state = best;
       normalise();
+      if (mine) carryTicks(mine);
+    }
+
+    function carryTicks(mine) {
+      const old = new Map();
+      for (const sec of mine.sections) {
+        const items = sec.groups ? sec.groups.flatMap((g) => g.items) : sec.items || [];
+        for (const i of items) old.set(i.t, i);
+      }
+      for (const i of state.sections.flatMap(itemsOf)) {
+        const m = old.get(i.t);
+        if (!m) continue;
+        if (m.done) i.done = true;
+        if (i.n > 0 && m.c) i.c = Math.min(i.n, Math.max(i.c || 0, m.c));
+      }
     }
 
     function changed() {
