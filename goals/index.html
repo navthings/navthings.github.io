@@ -144,6 +144,17 @@
       transition: background 0.2s var(--ease), border-color 0.2s var(--ease);
     }
 
+    .g .tick[style] {
+      background: conic-gradient(var(--ink) var(--p), transparent 0);
+    }
+
+    .g .n {
+      margin-left: 8px;
+      font-size: 13px;
+      color: var(--ink-3);
+      font-variant-numeric: tabular-nums;
+    }
+
     .g li.done .tick {
       background: var(--ink);
       border-color: var(--ink);
@@ -476,20 +487,31 @@
 
     function row(item, list, ii) {
       const li = document.createElement("li");
+      const counted = item.n > 0;
+      if (counted) item.done = (item.c || 0) >= item.n;
       if (item.done) li.className = "done";
 
+      // counted goals: the circle fills up and each click adds one
       const tick = btn("", () => {
-        item.done = !item.done;
+        if (counted) item.c = Math.min(item.n, (item.c || 0) + 1);
+        else item.done = !item.done;
         changed();
       });
       tick.className = "tick";
-      tick.setAttribute("aria-label", item.done ? "mark not done" : "mark done");
+      if (counted && !item.done) tick.style.setProperty("--p", `${((item.c || 0) / item.n) * 100}%`);
+      tick.setAttribute("aria-label", counted ? "add one" : item.done ? "mark not done" : "mark done");
 
       const t = btn(item.t, () => {
         if (matchMedia("(hover: none)").matches) li.classList.toggle("sel");
         else tick.onclick();
       });
       t.className = "t";
+      if (counted) {
+        const n = document.createElement("span");
+        n.className = "n";
+        n.textContent = `${item.c || 0}/${item.n}`;
+        t.append(n);
+      }
       if (item.s) {
         const tag = document.createElement("span");
         tag.className = "s";
@@ -499,27 +521,62 @@
 
       const act = document.createElement("span");
       act.className = "act";
+
+      const inline = (value, placeholder, apply) => {
+        const inp = document.createElement("input");
+        inp.type = "text";
+        inp.value = value;
+        inp.placeholder = placeholder;
+        let gone = false;
+        const finish = (keep) => {
+          if (gone) return;
+          gone = true;
+          if (keep && apply(inp.value.trim())) changed();
+          else render();
+        };
+        inp.onkeydown = (e) => {
+          if (e.key === "Enter") finish(true);
+          if (e.key === "Escape") finish(false);
+        };
+        inp.onblur = () => finish(true);
+        t.replaceWith(inp);
+        act.remove();
+        inp.focus();
+      };
+
       act.append(
-        btn("edit", () => {
-          const inp = document.createElement("input");
-          inp.type = "text";
-          inp.value = item.t;
-          const done = (keep) => {
-            const v = inp.value.trim();
-            if (keep && v && v !== item.t) {
-              item.t = v;
-              changed();
-            } else render();
-          };
-          inp.onkeydown = (e) => {
-            if (e.key === "Enter") done(true);
-            if (e.key === "Escape") done(false);
-          };
-          inp.onblur = () => done(true);
-          t.replaceWith(inp);
-          act.remove();
-          inp.focus();
-        }),
+        btn("edit", () =>
+          inline(item.t, "", (v) => {
+            if (!v || v === item.t) return false;
+            item.t = v;
+            return true;
+          })
+        )
+      );
+      if (counted) {
+        act.append(
+          btn("-1", () => {
+            item.c = Math.max(0, (item.c || 0) - 1);
+            changed();
+          })
+        );
+      }
+      act.append(
+        btn("count", () =>
+          inline(counted ? String(item.n) : "", "out of how many? 0 turns it off", (v) => {
+            const n = parseInt(v, 10);
+            if (Number.isNaN(n) || n < 0) return false;
+            if (n === 0) {
+              delete item.n;
+              delete item.c;
+              item.done = false;
+            } else {
+              item.n = n;
+              item.c = Math.min(item.c || 0, n);
+            }
+            return true;
+          })
+        ),
         btn(item.s ? "core" : "stretch", () => {
           item.s = !item.s;
           changed();
