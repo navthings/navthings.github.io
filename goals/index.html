@@ -449,6 +449,7 @@
         b.onclick = () => {
           if (!undo) return;
           undo.list.splice(undo.ii, 0, undo.item);
+          if (undo.dead) state.removed.pop();
           undo = null;
           changed();
         };
@@ -522,7 +523,7 @@
         say("offline. changes save on this device");
       }
 
-      // a newer copy on this device wins. if the published one is newer, keep this device's ticks for goals with the same text
+      // the newer copy is the base, and anything only the older copy has gets added in, unless it was removed on purpose
       const local = store.get("goals.local");
       let mine = null;
       if (local) {
@@ -533,13 +534,53 @@
       if (mine && mine.updated > best.updated) {
         state = mine;
         normalise();
+        mergeIn(best);
         // edits made offline haven't reached github yet
         if (token && navigator.onLine) save();
         return;
       }
       state = best;
       normalise();
-      if (mine) carryTicks(mine);
+      if (mine) {
+        carryTicks(mine);
+        mergeIn(mine);
+      }
+    }
+
+    const goalKey = (sec, t) => sec.title + "|" + t;
+
+    function sectionOf(item) {
+      return state.sections.find((sec) => itemsOf(sec).includes(item));
+    }
+
+    function tombstone(item) {
+      const sec = sectionOf(item);
+      if (sec) state.removed.push(goalKey(sec, item.t));
+    }
+
+    function mergeIn(other) {
+      const gone = new Set([...(state.removed || []), ...(other.removed || [])]);
+      for (const osec of other.sections) {
+        let sec = state.sections.find((s) => s.title === osec.title);
+        if (!sec) {
+          sec = { title: osec.title, note: osec.note, groups: [] };
+          state.sections.push(sec);
+        }
+        const have = new Set(itemsOf(sec).map((i) => i.t));
+        for (const og of osec.groups || [{ name: "", items: osec.items || [] }]) {
+          const fresh = og.items.filter((i) => !have.has(i.t) && !gone.has(goalKey(sec, i.t)));
+          if (!fresh.length) continue;
+          let g = sec.groups.find((x) => x.name === og.name);
+          if (!g) {
+            g = { name: og.name, items: [] };
+            sec.groups.push(g);
+          }
+          g.items.push(...fresh.map((i) => ({ ...i })));
+          fresh.forEach((i) => have.add(i.t));
+        }
+      }
+      if (!state.rules.length && other.rules) state.rules = other.rules;
+      if (!state.checks.length && other.checks) state.checks = other.checks;
     }
 
     function carryTicks(mine) {
@@ -602,6 +643,7 @@
       }
       state.checks ||= [];
       state.rules ||= [];
+      state.removed ||= [];
     }
 
     const itemsOf = (sec) => sec.groups.flatMap((g) => g.items);
@@ -711,6 +753,7 @@
         btn("edit", () =>
           inline(item.t, "", (v) => {
             if (!v || v === item.t) return false;
+            tombstone(item);
             item.t = v;
             return true;
           })
@@ -764,7 +807,8 @@
           changed();
         }),
         btn("remove", () => {
-          undo = { list, ii, item: list.splice(ii, 1)[0] };
+          tombstone(item);
+          undo = { list, ii, item: list.splice(ii, 1)[0], dead: true };
           changed();
           say("removed", true);
         })
