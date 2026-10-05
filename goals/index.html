@@ -7,6 +7,10 @@
   <title>navthings</title>
   <meta name="theme-color" content="#ffffff" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="goals" />
   <link rel="preload" href="/assets/fonts/geist.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="stylesheet" href="/assets/site.css" />
   <style>
@@ -429,8 +433,10 @@
         try {
           best = JSON.parse(await open(await ghGet()));
         } catch (e) {
-          say(`couldn't reach github (${e.message}), using the last saved copy`);
+          say(navigator.onLine ? `couldn't reach github (${e.message}), using the last saved copy` : "offline. changes save here and go to github next time you're online");
         }
+      } else if (!navigator.onLine) {
+        say("offline. changes save on this device");
       }
 
       // a newer copy on this device wins. if the published one is newer, keep this device's ticks for goals with the same text
@@ -444,6 +450,8 @@
       if (mine && mine.updated > best.updated) {
         state = mine;
         normalise();
+        // edits made offline haven't reached github yet
+        if (token && navigator.onLine) save();
         return;
       }
       state = best;
@@ -477,6 +485,10 @@
       store.set("goals.local", JSON.stringify(blob));
       if (!token) {
         say("saved on this device. set up sync to save it everywhere");
+        return;
+      }
+      if (!navigator.onLine) {
+        say("offline, saved on this device. it goes to github when you're back");
         return;
       }
       try {
@@ -693,6 +705,13 @@
     };
 
     $("lockbtn").onclick = () => location.reload();
+
+    // push anything saved while offline as soon as the connection comes back
+    addEventListener("online", () => {
+      if (state && token) save();
+    });
+
+    if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch((e) => console.warn("offline mode off:", e));
 
     $("syncbtn").onclick = () => ($("syncbox").hidden = !$("syncbox").hidden);
 
