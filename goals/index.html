@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>navthings</title>
+  <meta name="theme-color" content="#ffffff" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="preload" href="/assets/fonts/geist.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="/assets/site.css" />
+  <style>
+    .g {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 96px 20px 120px;
+    }
+
+    .g h1 {
+      font-size: clamp(40px, 7vw, 64px);
+      line-height: 1;
+      letter-spacing: -0.05em;
+      font-weight: 450;
+    }
+
+    .g .sub {
+      margin-top: 14px;
+      color: var(--ink-3);
+    }
+
+    .g .links {
+      margin-top: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+      color: var(--ink-3);
+      font-size: 14px;
+    }
+
+    .g button {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .g .links button:hover,
+    .g .act button:hover {
+      color: var(--ink);
+    }
+
+    .g form.lock {
+      margin-top: 40px;
+      display: flex;
+      gap: 14px;
+      align-items: baseline;
+    }
+
+    .g input[type="password"],
+    .g input[type="text"] {
+      font: inherit;
+      color: var(--ink);
+      background: none;
+      border: 0;
+      border-bottom: 1px solid var(--line);
+      padding: 6px 0;
+      outline: none;
+      width: 100%;
+      max-width: 320px;
+    }
+
+    .g input:focus {
+      border-bottom-color: var(--ink);
+    }
+
+    .g .err {
+      margin-top: 12px;
+      color: var(--accent);
+      font-size: 14px;
+      min-height: 1.6em;
+    }
+
+    .g .sync {
+      margin-top: 18px;
+      font-size: 14px;
+      color: var(--ink-3);
+    }
+
+    .g .sync p {
+      margin-bottom: 8px;
+    }
+
+    .g .sync form {
+      display: flex;
+      gap: 14px;
+      align-items: baseline;
+    }
+
+    .g section {
+      margin-top: 64px;
+    }
+
+    .g h2 {
+      font-size: 22px;
+      font-weight: 500;
+      letter-spacing: -0.02em;
+    }
+
+    .g h2 span {
+      margin-left: 10px;
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--ink-4);
+      letter-spacing: 0;
+    }
+
+    .g .note {
+      margin-top: 4px;
+      color: var(--ink-3);
+      font-size: 15px;
+    }
+
+    .g ul {
+      list-style: none;
+      margin-top: 18px;
+    }
+
+    .g li {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 9px 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .g li:last-child {
+      border-bottom: 1px solid var(--line);
+    }
+
+    .g .tick {
+      flex: none;
+      width: 16px;
+      height: 16px;
+      margin-top: 5px;
+      border-radius: 50%;
+      border: 1.5px solid var(--ink-4);
+      transition: background 0.2s var(--ease), border-color 0.2s var(--ease);
+    }
+
+    .g li.done .tick {
+      background: var(--ink);
+      border-color: var(--ink);
+    }
+
+    .g .t {
+      flex: 1;
+      text-align: left;
+      line-height: 1.55;
+    }
+
+    .g li.done .t {
+      color: var(--ink-4);
+      text-decoration: line-through;
+      text-decoration-color: var(--ink-4);
+    }
+
+    .g .s {
+      margin-left: 8px;
+      font-size: 12px;
+      color: var(--ink-4);
+    }
+
+    .g .act {
+      flex: none;
+      display: flex;
+      gap: 12px;
+      font-size: 13px;
+      color: var(--ink-4);
+      opacity: 0;
+      transition: opacity 0.15s;
+    }
+
+    .g li:hover .act,
+    .g li:focus-within .act {
+      opacity: 1;
+    }
+
+    /* touch screens: tap the text to show the actions on their own line, tap the circle to tick */
+    @media (hover: none) {
+      .g li {
+        flex-wrap: wrap;
+      }
+
+      .g .act {
+        display: none;
+        width: 100%;
+        padding-left: 30px;
+        opacity: 1;
+        font-size: 14px;
+        gap: 20px;
+      }
+
+      .g li.sel .act {
+        display: flex;
+      }
+    }
+
+    .g li input[type="text"] {
+      max-width: none;
+      flex: 1;
+      padding: 0;
+    }
+
+    .g .add {
+      margin-top: 12px;
+      display: flex;
+      gap: 14px;
+      align-items: baseline;
+      font-size: 14px;
+      color: var(--ink-3);
+    }
+
+    .g .status {
+      position: fixed;
+      left: 50%;
+      bottom: 20px;
+      transform: translateX(-50%);
+      font-size: 13px;
+      color: var(--ink-3);
+      background: var(--bg);
+      border: 1px solid var(--line);
+      padding: 4px 14px;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+
+    .g .status button {
+      margin-left: 8px;
+      color: var(--ink);
+    }
+  </style>
+</head>
+
+<body>
+  <main class="g">
+    <h1>goals.</h1>
+
+    <div id="locked">
+      <form class="lock" id="lockform">
+        <input type="password" id="pw" placeholder="password" autocomplete="current-password" autofocus />
+        <button type="submit">open</button>
+      </form>
+      <p class="err" id="err"></p>
+    </div>
+
+    <div id="open" hidden>
+      <p class="sub" id="count"></p>
+      <div class="links">
+        <button type="button" id="syncbtn">sync</button>
+        <button type="button" id="lockbtn">lock</button>
+      </div>
+      <div class="sync" id="syncbox" hidden>
+        <p>to save from any device, paste a github fine-grained token with access to only navthings.github.io and contents set to read and write. it stays on this device, encrypted with the password.</p>
+        <form id="syncform">
+          <input type="text" id="tok" placeholder="github_pat_..." autocomplete="off" spellcheck="false" />
+          <button type="submit">save</button>
+          <button type="button" id="untok">remove</button>
+        </form>
+      </div>
+      <div id="list"></div>
+    </div>
+
+    <p class="status" id="status" hidden></p>
+  </main>
+
+  <script>
+    const REPO = "navthings/navthings.github.io";
+    const PATH = "goals/data.json";
+    const API = `https://api.github.com/repos/${REPO}/contents/${PATH}`;
+    const ITER = 600000;
+    const enc = new TextEncoder();
+    const dec = new TextDecoder();
+    const $ = (id) => document.getElementById(id);
+
+    let key = null;
+    let salt = null;
+    let state = null;
+    let token = null;
+    let sha = null;
+    let saveTimer = null;
+    let undo = null;
+
+    const b64 = (buf) => btoa(String.fromCharCode(...new Uint8Array(buf)));
+    const unb64 = (s) => Uint8Array.from(atob(s), (c) => c.charCodeAt(0));
+
+    const store = {
+      get(k) {
+        try { return localStorage.getItem(k); } catch { return null; }
+      },
+      set(k, v) {
+        try { localStorage.setItem(k, v); return true; } catch { return false; }
+      },
+      del(k) {
+        try { localStorage.removeItem(k); } catch {}
+      },
+    };
+
+    async function deriveKey(pw, saltBytes) {
+      const base = await crypto.subtle.importKey("raw", enc.encode(pw), "PBKDF2", false, ["deriveKey"]);
+      return crypto.subtle.deriveKey(
+        { name: "PBKDF2", salt: saltBytes, iterations: ITER, hash: "SHA-256" },
+        base,
+        { name: "AES-GCM", length: 256 },
+        false,
+        ["encrypt", "decrypt"]
+      );
+    }
+
+    async function seal(text) {
+      const iv = crypto.getRandomValues(new Uint8Array(12));
+      const ct = await crypto.subtle.encrypt({ name: "AES-GCM", iv }, key, enc.encode(text));
+      return { v: 1, salt: b64(salt), iv: b64(iv), ct: b64(ct) };
+    }
+
+    async function open(blob) {
+      const pt = await crypto.subtle.decrypt({ name: "AES-GCM", iv: unb64(blob.iv) }, key, unb64(blob.ct));
+      return dec.decode(pt);
+    }
+
+    function say(msg, withUndo) {
+      const el = $("status");
+      el.textContent = msg;
+      if (withUndo) {
+        const b = document.createElement("button");
+        b.type = "button";
+        b.textContent = "undo";
+        b.onclick = () => {
+          if (!undo) return;
+          state.sections[undo.si].items.splice(undo.ii, 0, undo.item);
+          undo = null;
+          changed();
+        };
+        el.append(b);
+      }
+      el.hidden = false;
+      clearTimeout(say.t);
+      say.t = setTimeout(() => (el.hidden = true), withUndo ? 6000 : 2500);
+    }
+
+    async function ghGet() {
+      const r = await fetch(API + "?t=" + Date.now(), {
+        headers: { Authorization: `Bearer ${token}`, Accept: "application/vnd.github+json" },
+        cache: "no-store",
+      });
+      if (!r.ok) throw new Error(`github said ${r.status}`);
+      const j = await r.json();
+      sha = j.sha;
+      return JSON.parse(atob(j.content.replace(/\n/g, "")));
+    }
+
+    async function ghPut(blob, retry = true) {
+      const r = await fetch(API, {
+        method: "PUT",
+        headers: { Authorization: `Bearer ${token}`, Accept: "application/vnd.github+json" },
+        body: JSON.stringify({
+          message: "update goals",
+          content: btoa(JSON.stringify(blob) + "\n"),
+          sha,
+        }),
+      });
+      if ((r.status === 409 || r.status === 422) && retry) {
+        await ghGet();
+        return ghPut(blob, false);
+      }
+      if (!r.ok) throw new Error(`github said ${r.status}`);
+      sha = (await r.json()).content.sha;
+    }
+
+    async function unlock(pw) {
+      const r = await fetch("data.json?t=" + Date.now(), { cache: "no-store" });
+      if (!r.ok) throw new Error("couldn't load the goals file");
+      const site = await r.json();
+      salt = unb64(site.salt);
+      key = await deriveKey(pw, salt);
+
+      let best;
+      try {
+        best = JSON.parse(await open(site));
+      } catch {
+        key = null;
+        throw new Error("wrong password");
+      }
+
+      const sealedTok = store.get("goals.tok");
+      if (sealedTok) {
+        try {
+          token = await open(JSON.parse(sealedTok));
+        } catch {
+          store.del("goals.tok");
+        }
+      }
+
+      if (token) {
+        try {
+          best = JSON.parse(await open(await ghGet()));
+        } catch (e) {
+          say(`couldn't reach github (${e.message}), using the last saved copy`);
+        }
+      }
+
+      // a newer copy on this device wins over the published one, e.g. edits made before sync was set up
+      const local = store.get("goals.local");
+      if (local) {
+        try {
+          const mine = JSON.parse(await open(JSON.parse(local)));
+          if (mine.updated > best.updated) best = mine;
+        } catch {}
+      }
+      state = best;
+    }
+
+    function changed() {
+      state.updated = new Date().toISOString();
+      render();
+      clearTimeout(saveTimer);
+      saveTimer = setTimeout(save, 1500);
+    }
+
+    async function save() {
+      const blob = await seal(JSON.stringify(state));
+      store.set("goals.local", JSON.stringify(blob));
+      if (!token) {
+        say("saved on this device. set up sync to save it everywhere");
+        return;
+      }
+      try {
+        await ghPut(blob);
+        say("saved");
+      } catch (e) {
+        say(`saved on this device, github failed (${e.message})`);
+      }
+    }
+
+    function btn(label, fn) {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.textContent = label;
+      b.onclick = fn;
+      return b;
+    }
+
+    function render() {
+      const all = state.sections.flatMap((s) => s.items);
+      $("count").textContent = `${all.filter((i) => i.done).length} of ${all.length} done.`;
+      const list = $("list");
+      list.replaceChildren();
+
+      state.sections.forEach((sec, si) => {
+        const s = document.createElement("section");
+        const h = document.createElement("h2");
+        h.textContent = sec.title;
+        const c = document.createElement("span");
+        c.textContent = `${sec.items.filter((i) => i.done).length}/${sec.items.length}`;
+        h.append(c);
+        s.append(h);
+        if (sec.note) {
+          const n = document.createElement("p");
+          n.className = "note";
+          n.textContent = sec.note;
+          s.append(n);
+        }
+
+        const ul = document.createElement("ul");
+        sec.items.forEach((item, ii) => {
+          const li = document.createElement("li");
+          if (item.done) li.className = "done";
+
+          const tick = btn("", () => {
+            item.done = !item.done;
+            changed();
+          });
+          tick.className = "tick";
+          tick.setAttribute("aria-label", item.done ? "mark not done" : "mark done");
+
+          const t = btn(item.t, () => {
+            if (matchMedia("(hover: none)").matches) li.classList.toggle("sel");
+            else tick.onclick();
+          });
+          t.className = "t";
+          if (item.s) {
+            const tag = document.createElement("span");
+            tag.className = "s";
+            tag.textContent = "stretch";
+            t.append(tag);
+          }
+
+          const act = document.createElement("span");
+          act.className = "act";
+          act.append(
+            btn("edit", () => {
+              const inp = document.createElement("input");
+              inp.type = "text";
+              inp.value = item.t;
+              const done = (keep) => {
+                const v = inp.value.trim();
+                if (keep && v && v !== item.t) {
+                  item.t = v;
+                  changed();
+                } else render();
+              };
+              inp.onkeydown = (e) => {
+                if (e.key === "Enter") done(true);
+                if (e.key === "Escape") done(false);
+              };
+              inp.onblur = () => done(true);
+              t.replaceWith(inp);
+              act.remove();
+              inp.focus();
+            }),
+            btn(item.s ? "core" : "stretch", () => {
+              item.s = !item.s;
+              changed();
+            }),
+            btn("remove", () => {
+              undo = { si, ii, item: sec.items.splice(ii, 1)[0] };
+              changed();
+              say("removed", true);
+            })
+          );
+
+          li.append(tick, t, act);
+          ul.append(li);
+        });
+        s.append(ul);
+
+        const add = document.createElement("form");
+        add.className = "add";
+        const inp = document.createElement("input");
+        inp.type = "text";
+        inp.placeholder = "add a goal";
+        add.append(inp);
+        add.onsubmit = (e) => {
+          e.preventDefault();
+          const v = inp.value.trim();
+          if (!v) return;
+          sec.items.push({ t: v, done: false });
+          changed();
+        };
+        s.append(add);
+        list.append(s);
+      });
+
+      $("syncbtn").textContent = token ? "sync is on" : "sync";
+    }
+
+    $("lockform").onsubmit = async (e) => {
+      e.preventDefault();
+      $("err").textContent = "opening...";
+      try {
+        await unlock($("pw").value);
+        $("pw").value = "";
+        $("err").textContent = "";
+        $("locked").hidden = true;
+        $("open").hidden = false;
+        render();
+      } catch (err) {
+        $("err").textContent = err.message;
+      }
+    };
+
+    $("lockbtn").onclick = () => location.reload();
+
+    $("syncbtn").onclick = () => ($("syncbox").hidden = !$("syncbox").hidden);
+
+    $("syncform").onsubmit = async (e) => {
+      e.preventDefault();
+      const v = $("tok").value.trim();
+      if (!v) return;
+      token = v;
+      try {
+        await ghGet();
+      } catch (err) {
+        token = null;
+        say(`that token didn't work (${err.message})`);
+        return;
+      }
+      store.set("goals.tok", JSON.stringify(await seal(token)));
+      $("tok").value = "";
+      $("syncbox").hidden = true;
+      render();
+      await save();
+    };
+
+    $("untok").onclick = () => {
+      store.del("goals.tok");
+      token = null;
+      sha = null;
+      $("syncbox").hidden = true;
+      render();
+      say("sync off on this device");
+    };
+  </script>
+</body>
+</html>
