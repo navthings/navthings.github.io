@@ -208,13 +208,30 @@
       padding: 0;
     }
 
-    .g .add {
-      margin-top: 12px;
-      display: flex;
-      gap: 14px;
-      align-items: baseline;
-      font-size: 14px;
+    .g h3 {
+      margin-top: 30px;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
       color: var(--ink-3);
+    }
+
+    .g h3 + ul {
+      margin-top: 8px;
+    }
+
+    .g .add {
+      margin-top: 8px;
+      font-size: 13px;
+      color: var(--ink-4);
+    }
+
+    .g .add button:hover {
+      color: var(--ink);
+    }
+
+    .g .addform input {
+      font-size: 15px;
     }
 
     .g .status {
@@ -333,7 +350,7 @@
         b.textContent = "undo";
         b.onclick = () => {
           if (!undo) return;
-          state.sections[undo.si].items.splice(undo.ii, 0, undo.item);
+          undo.list.splice(undo.ii, 0, undo.item);
           undo = null;
           changed();
         };
@@ -414,6 +431,7 @@
         } catch {}
       }
       state = best;
+      normalise();
     }
 
     function changed() {
@@ -446,18 +464,117 @@
       return b;
     }
 
+    // older saves had items straight on the section, newer ones group them
+    function normalise() {
+      for (const sec of state.sections) {
+        if (!sec.groups) sec.groups = [{ name: "", items: sec.items || [] }];
+        delete sec.items;
+      }
+    }
+
+    const itemsOf = (sec) => sec.groups.flatMap((g) => g.items);
+
+    function row(item, list, ii) {
+      const li = document.createElement("li");
+      if (item.done) li.className = "done";
+
+      const tick = btn("", () => {
+        item.done = !item.done;
+        changed();
+      });
+      tick.className = "tick";
+      tick.setAttribute("aria-label", item.done ? "mark not done" : "mark done");
+
+      const t = btn(item.t, () => {
+        if (matchMedia("(hover: none)").matches) li.classList.toggle("sel");
+        else tick.onclick();
+      });
+      t.className = "t";
+      if (item.s) {
+        const tag = document.createElement("span");
+        tag.className = "s";
+        tag.textContent = "stretch";
+        t.append(tag);
+      }
+
+      const act = document.createElement("span");
+      act.className = "act";
+      act.append(
+        btn("edit", () => {
+          const inp = document.createElement("input");
+          inp.type = "text";
+          inp.value = item.t;
+          const done = (keep) => {
+            const v = inp.value.trim();
+            if (keep && v && v !== item.t) {
+              item.t = v;
+              changed();
+            } else render();
+          };
+          inp.onkeydown = (e) => {
+            if (e.key === "Enter") done(true);
+            if (e.key === "Escape") done(false);
+          };
+          inp.onblur = () => done(true);
+          t.replaceWith(inp);
+          act.remove();
+          inp.focus();
+        }),
+        btn(item.s ? "core" : "stretch", () => {
+          item.s = !item.s;
+          changed();
+        }),
+        btn("remove", () => {
+          undo = { list, ii, item: list.splice(ii, 1)[0] };
+          changed();
+          say("removed", true);
+        })
+      );
+
+      li.append(tick, t, act);
+      return li;
+    }
+
+    function adder(g) {
+      const wrap = document.createElement("div");
+      wrap.className = "add";
+      const open = btn("add", () => {
+        const f = document.createElement("form");
+        f.className = "addform";
+        const inp = document.createElement("input");
+        inp.type = "text";
+        inp.placeholder = "add a goal";
+        f.append(inp);
+        f.onsubmit = (e) => {
+          e.preventDefault();
+          const v = inp.value.trim();
+          if (!v) return;
+          g.items.push({ t: v, done: false });
+          changed();
+        };
+        inp.onkeydown = (e) => {
+          if (e.key === "Escape") render();
+        };
+        open.replaceWith(f);
+        inp.focus();
+      });
+      wrap.append(open);
+      return wrap;
+    }
+
     function render() {
-      const all = state.sections.flatMap((s) => s.items);
+      const all = state.sections.flatMap(itemsOf);
       $("count").textContent = `${all.filter((i) => i.done).length} of ${all.length} done.`;
       const list = $("list");
       list.replaceChildren();
 
-      state.sections.forEach((sec, si) => {
+      for (const sec of state.sections) {
         const s = document.createElement("section");
         const h = document.createElement("h2");
         h.textContent = sec.title;
+        const items = itemsOf(sec);
         const c = document.createElement("span");
-        c.textContent = `${sec.items.filter((i) => i.done).length}/${sec.items.length}`;
+        c.textContent = `${items.filter((i) => i.done).length}/${items.length}`;
         h.append(c);
         s.append(h);
         if (sec.note) {
@@ -467,85 +584,18 @@
           s.append(n);
         }
 
-        const ul = document.createElement("ul");
-        sec.items.forEach((item, ii) => {
-          const li = document.createElement("li");
-          if (item.done) li.className = "done";
-
-          const tick = btn("", () => {
-            item.done = !item.done;
-            changed();
-          });
-          tick.className = "tick";
-          tick.setAttribute("aria-label", item.done ? "mark not done" : "mark done");
-
-          const t = btn(item.t, () => {
-            if (matchMedia("(hover: none)").matches) li.classList.toggle("sel");
-            else tick.onclick();
-          });
-          t.className = "t";
-          if (item.s) {
-            const tag = document.createElement("span");
-            tag.className = "s";
-            tag.textContent = "stretch";
-            t.append(tag);
+        for (const g of sec.groups) {
+          if (g.name) {
+            const gh = document.createElement("h3");
+            gh.textContent = g.name;
+            s.append(gh);
           }
-
-          const act = document.createElement("span");
-          act.className = "act";
-          act.append(
-            btn("edit", () => {
-              const inp = document.createElement("input");
-              inp.type = "text";
-              inp.value = item.t;
-              const done = (keep) => {
-                const v = inp.value.trim();
-                if (keep && v && v !== item.t) {
-                  item.t = v;
-                  changed();
-                } else render();
-              };
-              inp.onkeydown = (e) => {
-                if (e.key === "Enter") done(true);
-                if (e.key === "Escape") done(false);
-              };
-              inp.onblur = () => done(true);
-              t.replaceWith(inp);
-              act.remove();
-              inp.focus();
-            }),
-            btn(item.s ? "core" : "stretch", () => {
-              item.s = !item.s;
-              changed();
-            }),
-            btn("remove", () => {
-              undo = { si, ii, item: sec.items.splice(ii, 1)[0] };
-              changed();
-              say("removed", true);
-            })
-          );
-
-          li.append(tick, t, act);
-          ul.append(li);
-        });
-        s.append(ul);
-
-        const add = document.createElement("form");
-        add.className = "add";
-        const inp = document.createElement("input");
-        inp.type = "text";
-        inp.placeholder = "add a goal";
-        add.append(inp);
-        add.onsubmit = (e) => {
-          e.preventDefault();
-          const v = inp.value.trim();
-          if (!v) return;
-          sec.items.push({ t: v, done: false });
-          changed();
-        };
-        s.append(add);
+          const ul = document.createElement("ul");
+          g.items.forEach((item, ii) => ul.append(row(item, g.items, ii)));
+          s.append(ul, adder(g));
+        }
         list.append(s);
-      });
+      }
 
       $("syncbtn").textContent = token ? "sync is on" : "sync";
     }
