@@ -7,6 +7,13 @@
     <language>en</language>
     <atom:link href="https://navthings.github.io/feed.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>my first pr got merged into mlx</title>
+      <link>https://navthings.github.io/blog/mlx-pr.html</link>
+      <guid>https://navthings.github.io/blog/mlx-pr.html</guid>
+      <pubDate>Mon, 05 Oct 2026 08:00:00 +0000</pubDate>
+      <description>mlx is apples machine learning library, the one i used to finetune lilchat on my macbook. i found an open issue on it, fixed it, and on oct 4 it got merged into main.</description>
+    </item>
+    <item>
       <title>sprout can talk now</title>
       <link>https://navthings.github.io/blog/sprout.html</link>
       <guid>https://navthings.github.io/blog/sprout.html</guid>

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script>
+    document.documentElement.classList.add("js");
+    // the only moment to know if a page transition brought us here is before the first paint
+    addEventListener("pagereveal", (e) => document.documentElement.classList.add(e.viewTransition ? "vt-in" : "revealed"), { once: true });
+  </script>
+
+  <title>my first pr got merged into mlx · navthings</title>
+
+  <meta name="description" content="mlx is apples machine learning library, the one i used to finetune lilchat on my macbook. i found an open issue on it, fixed it, and on oct 4 it got merged into main." />
+  <meta property="og:type" content="article" />
+  <meta property="article:published_time" content="2026-10-05" />
+  <meta property="og:site_name" content="navthings" />
+  <meta property="og:title" content="my first pr got merged into mlx" />
+  <meta property="og:description" content="mlx is apples machine learning library, the one i used to finetune lilchat on my macbook. i found an open issue on it, fixed it, and on oct 4 it got merged into main." />
+  <meta property="og:url" content="https://navthings.github.io/blog/mlx-pr.html" />
+  <meta property="og:image" content="https://navthings.github.io/assets/og/writing.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="my first pr got merged into mlx, a post on navthings" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="my first pr got merged into mlx" />
+  <meta name="twitter:description" content="mlx is apples machine learning library, the one i used to finetune lilchat on my macbook. i found an open issue on it, fixed it, and on oct 4 it got merged into main." />
+  <meta name="twitter:image" content="https://navthings.github.io/assets/og/writing.png" />
+  <link rel="canonical" href="https://navthings.github.io/blog/mlx-pr.html" />
+  <meta name="theme-color" content="#ffffff" />
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../apple-touch-icon.png" />
+  <link rel="alternate" type="application/rss+xml" title="navthings" href="../feed.xml" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "my first pr got merged into mlx",
+    "datePublished": "2026-10-05",
+    "description": "mlx is apples machine learning library, the one i used to finetune lilchat on my macbook. i found an open issue on it, fixed it, and on oct 4 it got merged into main.",
+    "url": "https://navthings.github.io/blog/mlx-pr.html",
+    "image": "https://navthings.github.io/assets/og/writing.png",
+    "author": {
+      "@type": "Person",
+      "name": "nav",
+      "url": "https://navthings.github.io/"
+    }
+  }
+  </script>
+  <link rel="preload" href="../assets/fonts/geist.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="../assets/site.css" />
+  <link rel="stylesheet" href="post.css" />
+</head>
+
+<body>
+  <a class="skip" href="#main">skip to content</a>
+
+  <header class="nav" data-label="writing" data-current="writing">
+    <div class="island">
+      <span class="island-fill" aria-hidden="true"></span>
+      <a class="island-mark" href="../" aria-label="navthings, home"><img src="../favicon.svg" alt="" /></a>
+      <span class="island-now" aria-hidden="true"><span>writing</span></span>
+      <nav class="island-links" aria-label="main">
+        <a class="home" href="../">navthings</a>
+        <a href="../#work">work</a>
+        <a href="../#writing">writing</a>
+        <a href="../playground/">playground</a>
+        <a href="mailto:navneet.dagdiya@gmail.com" data-email>email</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="sheet" id="main">
+    <article class="post-wrap wrap">
+      <header class="post-head">
+        <p class="crumbs cap" data-reveal><a href="./">writing</a><span>/</span><time datetime="2026-10-05">2026-10-05</time></p>
+        <h1 class="post-title" style="view-transition-name: p-mlx-pr" data-letters>my first pr got merged into mlx</h1>
+      </header>
+
+      <div class="post">
+        <p data-reveal>mlx is apples machine learning library, its what i used to finetune lilchat on my macbook. i found an open issue on it, <a href="https://github.com/ml-explore/mlx/issues/3710" target="_blank" rel="noopener">#3710</a>: <code>mx.jvp</code> crashed if you used it on <code>logcumsumexp</code>. i fixed it, and on oct 4 it got merged into main. so theres a bit of my code in mlx now which is kinda crazy.</p>
+        <h2 data-reveal data-label="jvp">whats a jvp</h2>
+        <p data-reveal>most of ml uses gradients backwards. you run the model, get the loss, then go back through it working out how much each number was to blame. thats a vjp, and mlx already had it for logcumsumexp.</p>
+        <p data-reveal>a jvp goes forwards instead. you nudge the inputs a tiny bit in some direction and ask how much the output moves. its used for forward mode autodiff and stuff like hessian vector products. mlx just didnt have it for this one function, it threw a RuntimeError.</p>
+        <h2 data-reveal data-label="logcumsumexp">whats logcumsumexp</h2>
+        <p data-reveal>its a running total, but in log space. at every position it does this:</p>
+        <pre data-reveal class="sq">out_i = log(exp(x_1) + exp(x_2) + ... + exp(x_i))</pre>
+        <p data-reveal>you need it whenever adding up the plain exps would overflow, which happens a lot with probabilities.</p>
+        <h2 data-reveal data-label="the fix">the fix</h2>
+        <p data-reveal>inside mlx, logcumsumexp is a <code>Scan</code> with a <code>LogAddExp</code> reduction, and <code>Scan::jvp</code> only knew how to do <code>Sum</code>. so i added the LogAddExp case.</p>
+        <p data-reveal>the maths ends up pretty nice. if you nudge input j, output i moves by the softmax weight of j (softmax over everything up to i) times the nudge. so the jvp is just a softmax weighted running sum of the tangents:</p>
+        <pre data-reveal class="sq">dout_i = sum over j &lt;= i of exp(x_j - out_i) * t_j</pre>
+        <p data-reveal>the annoying part is doing that without overflowing. the existing vjp works in log space, so i did the same. but you cant take the log of a negative number, and tangents can be negative. so i split them into the positive part and the negative part, ran each one through logcumsumexp in log space, and subtracted at the end.</p>
+        <p data-reveal>two edge cases. with <code>inclusive=False</code> the first position has nothing added into it, so its tangent is zero now instead of NaN. and complex tangents raise a ValueError for now, because the vjp assumes real numbers too. i saw that come up in another pr so i added it before anyone asked.</p>
+        <h2 data-reveal data-label="testing">testing</h2>
+        <p data-reveal>the test, <code>test_logcumsumexp_jvp</code>, checks inclusive and exclusive, both directions, really big inputs, and compares the jvp against finite differences (nudge the input by a tiny number and measure the change by hand). all 58 autograd tests passed.</p>
+        <h2 data-reveal data-label="merging">getting it merged</h2>
+        <p data-reveal>opened it on oct 2. it got a "low priority" label, which is fair. main kept moving so i had to merge it back into my branch a few times. zcbenz, one of the mlx maintainers, approved it and merged it on oct 4. 6 commits, 30 checks passed.</p>
+        <p data-reveal>i asked claude for a quick rundown of how jvps are done in mlx before i started, and said so in the pr. the code and tests are mine.</p>
+        <p data-reveal>heres <a href="https://github.com/ml-explore/mlx/pull/4611" target="_blank" rel="noopener">the pr</a> if you want to see the actual diff.</p>
+        <h2 data-reveal data-label="next">next</h2>
+        <p data-reveal>find another issue. one merged pr is cool but i want it to be a normal thing.</p>
+      </div>
+
+      <nav class="post-foot" aria-label="more posts" data-reveal>
+        <a class="prev sq" href="sprout.html"><span class="label">older</span>sprout can talk now</a>
+      </nav>
+    </article>
+  </main>
+
+  <footer class="foot" data-label="say hi">
+    <div class="foot-top">
+      <div>
+        <p class="foot-say"><button class="say" type="button" data-email data-scrib="underline" data-scrib-on="hover"><span class="inner">say hi.</span></button> <span>maybe i'll reply.</span></p>
+        <p class="hint">that copies my email. 50-50 i respond.</p>
+      </div>
+      <nav class="foot-links" aria-label="elsewhere">
+        <a href="https://github.com/navthings" target="_blank" rel="noopener">github <span>- it still works</span></a>
+        <a href="https://huggingface.co/navthings" target="_blank" rel="noopener">hugging face <span>- the weights</span></a>
+        <a href="https://ollama.com/navthings" target="_blank" rel="noopener">ollama <span>- models i've pushed</span></a>
+        <a href="https://orcid.org/0009-0002-2764-866X" target="_blank" rel="noopener">orcid <span>- research id</span></a>
+        <a href="https://doi.org/10.5281/zenodo.22340667" target="_blank" rel="noopener">zenodo <span>- the paper</span></a>
+        <a href="../feed.xml">rss <span>- new posts</span></a>
+      </nav>
+    </div>
+    <div class="foot-mark">
+      <svg viewBox="66 64 384 378" aria-hidden="true" data-mark></svg>
+      <div class="meta">navthings, made in australia<br /><button type="button" data-top>back to top</button></div>
+    </div>
+  </footer>
+
+  <script src="../assets/vendor/lenis.min.js"></script>
+  <script src="../assets/site.js"></script>
+</body>
+</html>
