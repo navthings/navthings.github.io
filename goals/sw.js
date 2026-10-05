@@ -1,4 +1,4 @@
-const CACHE = "goals-v1";
+const CACHE = "goals-v2";
 const CORE = ["./", "./data.json", "./manifest.json", "/assets/site.css", "/assets/fonts/geist.woff2", "/favicon.svg", "/apple-touch-icon.png"];
 
 self.addEventListener("install", (e) => {

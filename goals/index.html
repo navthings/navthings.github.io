@@ -128,8 +128,9 @@
 
     .g li {
       display: flex;
+      flex-wrap: wrap;
       align-items: flex-start;
-      gap: 14px;
+      gap: 0 14px;
       padding: 9px 0;
       border-top: 1px solid var(--line);
     }
@@ -197,19 +198,37 @@
       opacity: 1;
     }
 
-    /* touch screens: tap the text to show the actions on their own line, tap the circle to tick */
-    @media (hover: none) {
+    /* mouse: actions float over the end of the row so the text keeps the full width */
+    @media (hover: hover) {
       .g li {
-        flex-wrap: wrap;
+        position: relative;
       }
 
+      .g .act {
+        position: absolute;
+        right: 0;
+        top: 9px;
+        padding-left: 64px;
+        background: linear-gradient(to right, rgb(255 255 255 / 0), var(--bg) 52px);
+        pointer-events: none;
+      }
+
+      .g li:hover .act,
+      .g li:focus-within .act {
+        pointer-events: auto;
+      }
+    }
+
+    /* touch screens: tap the text to show the actions on their own line, tap the circle to tick */
+    @media (hover: none) {
       .g .act {
         display: none;
         width: 100%;
         padding-left: 30px;
         opacity: 1;
+        flex-wrap: wrap;
         font-size: 14px;
-        gap: 20px;
+        gap: 6px 20px;
       }
 
       .g li.sel .act {
@@ -249,6 +268,68 @@
       font-size: 15px;
     }
 
+    .g .meta {
+      width: 100%;
+      padding-left: 30px;
+      font-size: 13px;
+      color: var(--ink-3);
+      overflow-wrap: anywhere;
+    }
+
+    .g .meta a {
+      color: inherit;
+      text-decoration: underline;
+      text-decoration-color: var(--ink-4);
+      text-underline-offset: 2px;
+    }
+
+    .g .rules {
+      margin-top: 28px;
+      font-size: 14px;
+      color: var(--ink-2);
+    }
+
+    .g .ck li {
+      gap: 0 16px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .g .ck .when {
+      width: 96px;
+      color: var(--ink-3);
+    }
+
+    .g .ck .score {
+      flex: 1;
+    }
+
+    .g .ck .up {
+      color: var(--ink);
+    }
+
+    .g .ck .down {
+      color: var(--accent);
+    }
+
+    .g .ckform {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 18px;
+      align-items: baseline;
+      font-size: 14px;
+      color: var(--ink-3);
+    }
+
+    .g .ckform input[type="text"] {
+      width: 40px;
+      text-align: center;
+    }
+
+    .g .ckform input.label {
+      width: 160px;
+      text-align: left;
+    }
+
     .g .status {
       position: fixed;
       left: 50%;
@@ -286,8 +367,10 @@
       <p class="sub" id="count"></p>
       <div class="links">
         <button type="button" id="syncbtn">sync</button>
+        <button type="button" id="backupbtn">backup</button>
         <button type="button" id="lockbtn">lock</button>
       </div>
+      <div class="rules" id="rules"></div>
       <div class="sync" id="syncbox" hidden>
         <p>to save from any device, paste a github fine-grained token with access to only navthings.github.io and contents set to read and write. it stays on this device, encrypted with the password.</p>
         <form id="syncform">
@@ -460,17 +543,21 @@
     }
 
     function carryTicks(mine) {
+      // goals match by year + wording, since some wording repeats across years
       const old = new Map();
       for (const sec of mine.sections) {
         const items = sec.groups ? sec.groups.flatMap((g) => g.items) : sec.items || [];
-        for (const i of items) old.set(i.t, i);
+        for (const i of items) old.set(sec.title + "|" + i.t, i);
       }
-      for (const i of state.sections.flatMap(itemsOf)) {
-        const m = old.get(i.t);
+      for (const sec of state.sections) for (const i of itemsOf(sec)) {
+        const m = old.get(sec.title + "|" + i.t);
         if (!m) continue;
         if (m.done) i.done = true;
         if (i.n > 0 && m.c) i.c = Math.min(i.n, Math.max(i.c || 0, m.c));
+        for (const k of ["d", "p", "w"]) if (m[k] && !i[k]) i[k] = m[k];
+        settle(i);
       }
+      if (mine.checks && mine.checks.length > state.checks.length) state.checks = mine.checks;
     }
 
     function changed() {
@@ -513,20 +600,64 @@
         if (!sec.groups) sec.groups = [{ name: "", items: sec.items || [] }];
         delete sec.items;
       }
+      state.checks ||= [];
+      state.rules ||= [];
     }
 
     const itemsOf = (sec) => sec.groups.flatMap((g) => g.items);
+    const allItems = () => state.sections.flatMap(itemsOf);
+
+    const today = () => {
+      const d = new Date();
+      return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+    };
+
+    const fmt = (iso) => {
+      const [y, m, d] = iso.split("-").map(Number);
+      return new Date(y, m - 1, d).toLocaleDateString("en-AU", { day: "numeric", month: "short", year: "numeric" }).toLowerCase();
+    };
+
+    // done follows the count for counted goals, and the date follows done
+    function settle(item) {
+      if (item.n > 0) item.done = (item.c || 0) >= item.n;
+      if (item.done && !item.d) item.d = today();
+      if (!item.done) delete item.d;
+    }
+
+    function where(item) {
+      for (const sec of state.sections)
+        for (const g of sec.groups) {
+          const ii = g.items.indexOf(item);
+          if (ii !== -1) return { list: g.items, ii };
+        }
+      return null;
+    }
+
+    function linkify(text) {
+      const frag = document.createDocumentFragment();
+      text.split(/(\s+)/).forEach((w) => {
+        if (/^(https?:\/\/|(github\.com|huggingface\.co|arxiv\.org|doi\.org|kaggle\.com|navthings\.github\.io)\/)/.test(w)) {
+          const a = document.createElement("a");
+          a.href = w.startsWith("http") ? w : "https://" + w;
+          a.target = "_blank";
+          a.rel = "noopener";
+          a.textContent = w;
+          frag.append(a);
+        } else frag.append(w);
+      });
+      return frag;
+    }
 
     function row(item, list, ii) {
       const li = document.createElement("li");
       const counted = item.n > 0;
-      if (counted) item.done = (item.c || 0) >= item.n;
       if (item.done) li.className = "done";
 
       // counted goals: the circle fills up and each click adds one
       const tick = btn("", () => {
         if (counted) item.c = Math.min(item.n, (item.c || 0) + 1);
         else item.done = !item.done;
+        settle(item);
         changed();
       });
       tick.className = "tick";
@@ -589,6 +720,7 @@
         act.append(
           btn("-1", () => {
             item.c = Math.max(0, (item.c || 0) - 1);
+            settle(item);
             changed();
           })
         );
@@ -606,9 +738,27 @@
               item.n = n;
               item.c = Math.min(item.c || 0, n);
             }
+            settle(item);
             return true;
           })
         ),
+        btn("proof", () =>
+          inline(item.p || "", "score, link or note", (v) => {
+            if (v === (item.p || "")) return false;
+            if (v) item.p = v;
+            else delete item.p;
+            return true;
+          })
+        ),
+        btn(item.w ? "unpin" : "pin", () => {
+          if (!item.w && allItems().filter((i) => i.w).length >= 3) {
+            say("3 pinned max, unpin one first");
+            return;
+          }
+          if (item.w) delete item.w;
+          else item.w = true;
+          changed();
+        }),
         btn(item.s ? "core" : "stretch", () => {
           item.s = !item.s;
           changed();
@@ -621,6 +771,15 @@
       );
 
       li.append(tick, t, act);
+
+      if ((item.done && item.d) || item.p) {
+        const meta = document.createElement("div");
+        meta.className = "meta";
+        if (item.done && item.d) meta.append(`done ${fmt(item.d)}`);
+        if (item.done && item.d && item.p) meta.append(" · ");
+        if (item.p) meta.append(linkify(item.p));
+        li.append(meta);
+      }
       return li;
     }
 
@@ -651,28 +810,139 @@
       return wrap;
     }
 
+    function heading(text, countText, note) {
+      const frag = document.createDocumentFragment();
+      const h = document.createElement("h2");
+      h.textContent = text;
+      if (countText) {
+        const c = document.createElement("span");
+        c.textContent = countText;
+        h.append(c);
+      }
+      frag.append(h);
+      if (note) {
+        const n = document.createElement("p");
+        n.className = "note";
+        n.textContent = note;
+        frag.append(n);
+      }
+      return frag;
+    }
+
+    const SCORES = ["grades", "depth", "proof", "voice"];
+
+    function checkins() {
+      const s = document.createElement("section");
+      s.append(heading("check-ins", "", "end of every term, score each out of 10. it multiplies, so fix the lowest one first."));
+      const ul = document.createElement("ul");
+      ul.className = "ck";
+      const list = state.checks;
+      for (let k = list.length - 1; k >= 0; k--) {
+        const c = list[k];
+        const prev = list[k - 1];
+        const li = document.createElement("li");
+        const when = document.createElement("span");
+        when.className = "when";
+        when.textContent = c.label || fmt(c.d);
+        const score = document.createElement("span");
+        score.className = "score";
+        SCORES.forEach((name, j) => {
+          if (j) score.append(" · ");
+          const v = c[name];
+          score.append(`${name} ${v == null ? "–" : v}`);
+          if (prev && v != null && prev[name] != null && v !== prev[name]) {
+            const d = document.createElement("span");
+            d.className = v > prev[name] ? "up" : "down";
+            d.textContent = ` (${v > prev[name] ? "+" : ""}${v - prev[name]})`;
+            score.append(d);
+          }
+        });
+        const act = document.createElement("span");
+        act.className = "act";
+        act.append(
+          btn("remove", () => {
+            const gone = list.splice(k, 1)[0];
+            undo = { list, ii: k, item: gone };
+            changed();
+            say("removed", true);
+          })
+        );
+        li.append(when, score, act);
+        ul.append(li);
+      }
+      s.append(ul);
+
+      const wrap = document.createElement("div");
+      wrap.className = "add";
+      const open = btn("add a check-in", () => {
+        const f = document.createElement("form");
+        f.className = "ckform";
+        const label = document.createElement("input");
+        label.type = "text";
+        label.className = "label";
+        label.placeholder = "term, e.g. t1 year 9";
+        f.append(label);
+        const inputs = SCORES.map((name) => {
+          const l = document.createElement("label");
+          const inp = document.createElement("input");
+          inp.type = "text";
+          inp.inputMode = "numeric";
+          const last = list[list.length - 1];
+          if (last && last[name] != null) inp.value = last[name];
+          l.append(`${name} `, inp);
+          f.append(l);
+          return inp;
+        });
+        const go = document.createElement("button");
+        go.type = "submit";
+        go.textContent = "save";
+        f.append(go);
+        f.onsubmit = (e) => {
+          e.preventDefault();
+          const c = { d: today() };
+          if (label.value.trim()) c.label = label.value.trim();
+          SCORES.forEach((name, j) => {
+            const v = parseInt(inputs[j].value, 10);
+            c[name] = Number.isNaN(v) ? null : Math.max(0, Math.min(10, v));
+          });
+          list.push(c);
+          changed();
+        };
+        open.replaceWith(f);
+        label.focus();
+      });
+      wrap.append(open);
+      s.append(wrap);
+      return s;
+    }
+
     function render() {
-      const all = state.sections.flatMap(itemsOf);
+      const all = allItems();
       $("count").textContent = `${all.filter((i) => i.done).length} of ${all.length} done.`;
+
+      const rules = $("rules");
+      rules.replaceChildren(...state.rules.map((r) => Object.assign(document.createElement("p"), { textContent: r })));
+
       const list = $("list");
       list.replaceChildren();
 
+      const pinned = all.filter((i) => i.w);
+      const week = document.createElement("section");
+      week.append(heading("this week", pinned.length ? `${pinned.filter((i) => i.done).length}/${pinned.length}` : "", pinned.length ? "" : "pin up to 3 goals to see them here."));
+      if (pinned.length) {
+        const ul = document.createElement("ul");
+        for (const item of pinned) {
+          const at = where(item);
+          ul.append(row(item, at.list, at.ii));
+        }
+        week.append(ul);
+      }
+      list.append(week);
+
       for (const sec of state.sections) {
         const s = document.createElement("section");
-        const h = document.createElement("h2");
-        h.textContent = sec.title;
         const items = itemsOf(sec);
-        const c = document.createElement("span");
-        c.textContent = `${items.filter((i) => i.done).length}/${items.length}`;
-        h.append(c);
-        s.append(h);
-        if (sec.note) {
-          const n = document.createElement("p");
-          n.className = "note";
-          n.textContent = sec.note;
-          s.append(n);
-        }
-
+        s.append(heading(sec.title, `${items.filter((i) => i.done).length}/${items.length}`, sec.note));
         for (const g of sec.groups) {
           if (g.name) {
             const gh = document.createElement("h3");
@@ -686,7 +956,39 @@
         list.append(s);
       }
 
+      list.append(checkins());
       $("syncbtn").textContent = token ? "sync is on" : "sync";
+    }
+
+    function backup() {
+      const lines = [`goals backup, ${fmt(today())}`, ""];
+      if (state.rules.length) lines.push("rules", ...state.rules.map((r) => `- ${r}`), "");
+      for (const sec of state.sections) {
+        lines.push(`## ${sec.title}`);
+        for (const g of sec.groups) {
+          if (g.name) lines.push(`### ${g.name}`);
+          for (const i of g.items) {
+            let l = `[${i.done ? "x" : " "}] ${i.t}`;
+            if (i.n > 0) l += ` (${i.c || 0}/${i.n})`;
+            if (i.s) l += " (stretch)";
+            if (i.w) l += " (this week)";
+            if (i.done && i.d) l += ` - done ${fmt(i.d)}`;
+            if (i.p) l += ` - proof: ${i.p}`;
+            lines.push(l);
+          }
+        }
+        lines.push("");
+      }
+      lines.push("## check-ins");
+      for (const c of state.checks) lines.push(`${c.label || fmt(c.d)}: ${SCORES.map((n) => `${n} ${c[n] == null ? "-" : c[n]}`).join(", ")}`);
+      lines.push("", "---- raw data, for restoring ----", JSON.stringify(state));
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(new Blob([lines.join("\n")], { type: "text/plain" }));
+      a.download = `goals-${today()}.txt`;
+      document.body.append(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(a.href), 1000);
     }
 
     $("lockform").onsubmit = async (e) => {
@@ -705,6 +1007,7 @@
     };
 
     $("lockbtn").onclick = () => location.reload();
+    $("backupbtn").onclick = backup;
 
     // push anything saved while offline as soon as the connection comes back
     addEventListener("online", () => {
