@@ -1,0 +1,630 @@
+@font-face {
+  font-family: "Geist";
+  src: url("fonts/geist.woff2") format("woff2");
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+:root {
+  --bg: #ffffff;
+  --ink: #0f0f0f;
+  --ink-2: #555553;
+  --ink-3: #8b8b87;
+  --dim: #a9a9a4;
+  --line: #e7e7e3;
+  --tint: #f4f4f1;
+  --accent: #ff4f00;
+  --ease: cubic-bezier(0.22, 0.8, 0.2, 1);
+  --sans: "Geist", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --name: clamp(40px, min(5.4vw, 8.2vh), 84px);
+  color-scheme: only light;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font: 400 15px/1.55 var(--sans);
+  font-feature-settings: "ss01", "tnum";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+::selection {
+  background: var(--ink);
+  color: var(--bg);
+}
+
+a {
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 4px;
+  border-radius: 2px;
+}
+
+.skip {
+  position: absolute;
+  left: 16px;
+  top: -60px;
+  padding: 8px 12px;
+  background: var(--ink);
+  color: var(--bg);
+  z-index: 5;
+}
+
+.skip:focus {
+  top: 16px;
+}
+
+/* plain text links: thin underline that darkens on hover */
+.u {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  text-decoration-color: #c9c9c4;
+  transition: text-decoration-color 0.2s;
+}
+
+.u:hover {
+  text-decoration-color: currentColor;
+}
+
+/* the whole site is one screen on desktop: header, the index, footer */
+.frame {
+  min-height: 100vh;
+  min-height: 100dvh;
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: clamp(24px, 4.5vh, 48px) clamp(20px, 4vw, 56px) clamp(20px, 3.5vh, 36px);
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: clamp(24px, 5vh, 56px);
+}
+
+.cols {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 500px);
+  column-gap: clamp(32px, 6vw, 96px);
+}
+
+.top {
+  align-items: start;
+}
+
+.who {
+  font-size: 15px;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.bio {
+  color: var(--ink-2);
+  max-width: 46ch;
+}
+
+.index {
+  align-self: center;
+  list-style: none;
+  grid-template-rows: repeat(6, auto) 1fr;
+  align-items: start;
+}
+
+.index > li {
+  display: contents;
+}
+
+.row {
+  grid-column: 1;
+  display: flex;
+  align-items: baseline;
+  gap: clamp(10px, 1.2vw, 16px);
+  width: fit-content;
+  max-width: 100%;
+  padding: 0.035em 0;
+  font-size: var(--name);
+  font-weight: 500;
+  letter-spacing: -0.045em;
+  line-height: 0.98;
+  text-decoration: none;
+  color: var(--dim);
+  transition: color 0.18s;
+}
+
+.row small {
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 0;
+  color: var(--ink-3);
+  white-space: nowrap;
+  transform: translateY(-0.1em);
+}
+
+.row:hover,
+.is-active > .row {
+  color: var(--ink);
+}
+
+.is-active > .row small {
+  color: var(--ink-2);
+}
+
+.panel {
+  grid-column: 2;
+  grid-row: 1 / -1;
+}
+
+.kind {
+  color: var(--ink-3);
+}
+
+.sum {
+  margin-top: 6px;
+  font-size: 17px;
+  line-height: 1.5;
+  max-width: 48ch;
+}
+
+.sum cite {
+  font-style: normal;
+  font-weight: 500;
+}
+
+figure {
+  margin-top: 22px;
+}
+
+figcaption {
+  margin-bottom: 10px;
+  color: var(--ink-3);
+  font-size: 13px;
+}
+
+.stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 28px;
+  margin-top: 20px;
+}
+
+.stats div {
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+.stats dt {
+  font-size: 13px;
+  color: var(--ink-3);
+}
+
+.stats dd {
+  font-size: 20px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+
+.note {
+  margin-top: 18px;
+  font-size: 14px;
+  color: var(--ink-2);
+  max-width: 52ch;
+}
+
+.note b {
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.go {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 20px;
+  margin-top: 18px;
+}
+
+.go a:first-child {
+  font-weight: 500;
+}
+
+/* sprout: what it read */
+.mix {
+  display: flex;
+  gap: 2px;
+  height: 36px;
+}
+
+.mix i {
+  flex: var(--w) 0 0;
+  background: var(--c);
+  transform-origin: left;
+}
+
+/* lilbase vs gpt-2 small */
+.bars {
+  display: grid;
+  grid-template-columns: 76px 1fr 44px;
+  align-items: center;
+  row-gap: 3px;
+  font-size: 13px;
+}
+
+.bars .t {
+  grid-row: span 2;
+  color: var(--ink-2);
+}
+
+.bars i {
+  display: block;
+  height: 9px;
+  width: calc(var(--v) / 60 * 100%);
+  background: var(--c, #cfcfca);
+  transform-origin: left;
+}
+
+.bars em {
+  font-style: normal;
+  text-align: right;
+  color: var(--ink-3);
+}
+
+.bars em.mine {
+  color: var(--ink);
+  font-weight: 500;
+  font-size: 13px;
+}
+
+.bars .gap {
+  grid-column: 1 / -1;
+  height: 10px;
+}
+
+.key {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 18px;
+  margin-top: 12px;
+  font-size: 13px;
+  color: var(--ink-2);
+}
+
+.key span::before {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  margin-right: 7px;
+  background: var(--c);
+}
+
+/* paper: loss by data size */
+.loss {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  font-size: 12px;
+  font-family: var(--sans);
+}
+
+.loss text {
+  fill: var(--ink-3);
+}
+
+.loss .grid {
+  stroke: var(--line);
+}
+
+.loss .ln {
+  fill: none;
+  stroke-width: 2;
+  stroke-linejoin: round;
+  stroke-dasharray: 420;
+  stroke-dashoffset: 0;
+}
+
+.loss .val {
+  stroke: var(--accent);
+}
+
+.loss .train {
+  stroke: #bdbdb8;
+}
+
+.loss .dot-val {
+  fill: var(--accent);
+}
+
+.loss .dot-train {
+  fill: #bdbdb8;
+}
+
+.loss .gapline {
+  stroke: var(--ink);
+  stroke-dasharray: 2 3;
+}
+
+.loss .lab {
+  fill: var(--ink);
+}
+
+/* lilchat transcript */
+.chat {
+  display: grid;
+  gap: 6px;
+  font-size: 15px;
+}
+
+.chat p {
+  display: grid;
+  grid-template-columns: 44px 1fr;
+}
+
+.chat span {
+  color: var(--ink-3);
+  font-size: 13px;
+  padding-top: 1px;
+}
+
+.wrong {
+  text-decoration: underline wavy var(--accent);
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 4px;
+}
+
+/* mlx: the maths */
+.math {
+  padding: 18px 20px;
+  background: var(--tint);
+  font-size: 19px;
+  letter-spacing: -0.01em;
+}
+
+.math var {
+  font-style: italic;
+}
+
+.math sub {
+  font-size: 0.66em;
+}
+
+.math small {
+  display: block;
+  margin-top: 8px;
+  font-size: 13px;
+  color: var(--ink-2);
+  letter-spacing: 0;
+}
+
+/* writing */
+.posts {
+  list-style: none;
+}
+
+.posts a {
+  display: grid;
+  grid-template-columns: 64px 1fr;
+  gap: 12px;
+  padding: 5px 0;
+  text-decoration: none;
+}
+
+.posts time {
+  color: var(--ink-3);
+  font-size: 13px;
+  padding-top: 1px;
+}
+
+.posts a:hover span {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+.bottom {
+  align-items: end;
+  font-size: 14px;
+  color: var(--ink-2);
+}
+
+.bottom nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 20px;
+}
+
+.copy {
+  font: inherit;
+  color: var(--ink);
+  background: none;
+  border: 0;
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  text-decoration-color: #c9c9c4;
+}
+
+.copy:hover {
+  text-decoration-color: currentColor;
+}
+
+.where {
+  color: var(--ink-3);
+}
+
+/* without js the panels are plain anchors, :target picks one */
+html:not(.js) .panel {
+  display: none;
+}
+
+html:not(.js) .panel:target,
+html:not(.js) .index:not(:has(.panel:target)) > li:first-child .panel {
+  display: block;
+}
+
+/* desktop: every panel sits in the same cell and only the active one shows */
+@media (min-width: 900px) {
+  html.js .panel {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.14s, visibility 0s 0.14s;
+  }
+
+  html.js .is-active > .panel {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.26s 0.04s;
+  }
+
+  .bottom .where {
+    text-align: left;
+  }
+
+  /* figures redraw each time a panel opens */
+  html.js .panel .mix i,
+  html.js .panel .bars i {
+    transform: scaleX(0);
+    transition: transform 0s 0.14s;
+  }
+
+  html.js .is-active > .panel .mix i,
+  html.js .is-active > .panel .bars i {
+    transform: none;
+    transition: transform 0.6s var(--ease) calc(0.05s + var(--k, 0) * 0.04s);
+  }
+
+  html.js .panel .loss .ln {
+    stroke-dashoffset: 420;
+    transition: stroke-dashoffset 0s 0.14s;
+  }
+
+  html.js .is-active > .panel .loss .ln {
+    stroke-dashoffset: 0;
+    transition: stroke-dashoffset 0.8s var(--ease) 0.08s;
+  }
+}
+
+/* phones and narrow windows: the panel opens under its name */
+@media (max-width: 899px) {
+  .cols {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .frame {
+    gap: 36px;
+  }
+
+  .bio {
+    margin-top: 12px;
+  }
+
+  .index {
+    align-self: start;
+    display: block;
+  }
+
+  .index > li {
+    display: block;
+    border-top: 1px solid var(--line);
+  }
+
+  .index > li:last-child {
+    border-bottom: 1px solid var(--line);
+  }
+
+  .row {
+    width: 100%;
+    justify-content: space-between;
+    padding: 14px 0 12px;
+    font-size: clamp(32px, 9vw, 48px);
+  }
+
+  html.js .panel {
+    display: grid;
+    grid-template-rows: 0fr;
+    visibility: hidden;
+    transition: grid-template-rows 0.34s var(--ease), visibility 0s 0.34s;
+  }
+
+  html.js .is-active > .panel {
+    grid-template-rows: 1fr;
+    visibility: visible;
+    transition: grid-template-rows 0.38s var(--ease);
+  }
+
+  .panel-in {
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .panel-in > :last-child {
+    margin-bottom: 26px;
+  }
+
+  .bottom {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+  }
+}
+
+/* one entrance: the names settle in once, top to bottom */
+@media (prefers-reduced-motion: no-preference) {
+  html.js .row {
+    animation: settle 0.7s var(--ease) both;
+    animation-delay: calc(var(--i) * 55ms);
+  }
+
+  html.js .top,
+  html.js .bottom,
+  html.js .panel-in {
+    animation: fade 0.6s ease both 0.3s;
+  }
+}
+
+@keyframes settle {
+  from {
+    opacity: 0;
+    transform: translateY(0.25em);
+  }
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0s !important;
+    transition-delay: 0s !important;
+  }
+}
+
+.chat q {
+  quotes: none;
+}
+
+.chat mark {
+  background: none;
+  color: inherit;
+}
+
+code {
+  font-family: inherit;
+  font-weight: 500;
+}

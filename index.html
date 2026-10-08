@@ -3,11 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <script>
-    document.documentElement.classList.add("js");
-    // the only moment to know if a page transition brought us here is before the first paint
-    addEventListener("pagereveal", (e) => document.documentElement.classList.add(e.viewTransition ? "vt-in" : "revealed"), { once: true });
-  </script>
+  <script>document.documentElement.classList.add("js")</script>
 
   <title>navthings · nav, machine learning engineer and researcher</title>
 
@@ -49,283 +45,175 @@
     }
   </script>
   <link rel="preload" href="assets/fonts/geist.woff2" as="font" type="font/woff2" crossorigin />
-  <link rel="stylesheet" href="assets/site.css" />
-  <link rel="stylesheet" href="assets/home.css" />
+  <link rel="stylesheet" href="assets/one.css" />
 </head>
 
 <body>
-  <a class="skip" href="#main">skip to content</a>
+  <a class="skip" href="#index">skip to the work</a>
 
-  <header class="nav" data-label="navthings">
-    <div class="island">
-      <span class="island-fill" aria-hidden="true"></span>
-      <a class="island-mark" href="./" aria-label="navthings, home"><img src="favicon.svg" alt="" /></a>
-      <span class="island-now" aria-hidden="true"><span>navthings</span></span>
-      <nav class="island-links" aria-label="main">
-        <a class="home" href="./">navthings</a>
-        <a href="#work">work</a>
-        <a href="#writing">writing</a>
-        <a href="playground/">playground</a>
-        <a href="mailto:navneet.dagdiya@gmail.com" data-email>email</a>
+  <div class="frame">
+    <header class="top cols">
+      <a class="who" href="./">nav</a>
+      <p class="bio">i pretrain small language models from scratch, on free kaggle tpus and my macbook, then work out what they actually learned. every model ships with its weights, and most of them run in your browser.</p>
+    </header>
+
+    <main>
+      <ul class="index cols" id="index" aria-label="work">
+        <li>
+          <a class="row" href="#sprout" id="r-sprout" style="--i: 0">sprout<small>523m params</small></a>
+          <section class="panel" id="sprout" aria-labelledby="r-sprout">
+            <div class="panel-in">
+              <p class="kind">pretraining, finished sep 27, 2026</p>
+              <p class="sum">a 523m parameter base model written in jax, trained on a kaggle tpu v5e-8 with the adamw state sharded across all 8 chips. then chat finetuned on smol-smoltalk, twice.</p>
+              <figure>
+                <figcaption>what it read, 12 billion tokens</figcaption>
+                <div class="mix" role="img" aria-label="fineweb-edu 55%, dclm 25%, cosmopedia 10%, gutenberg 10%">
+                  <i style="--w: 55; --c: #0f0f0f; --k: 0"></i><i style="--w: 25; --c: #6b6b68; --k: 1"></i><i style="--w: 10; --c: #a9a9a4; --k: 2"></i><i style="--w: 10; --c: #d6d6d1; --k: 3"></i>
+                </div>
+                <div class="key" aria-hidden="true"><span style="--c: #0f0f0f">fineweb-edu 55%</span><span style="--c: #6b6b68">dclm 25%</span><span style="--c: #a9a9a4">cosmopedia 10%</span><span style="--c: #d6d6d1">gutenberg 10%</span></div>
+              </figure>
+              <dl class="stats">
+                <div><dt>steps</dt><dd>22,888</dd></div>
+                <div><dt>fineweb perplexity</dt><dd>10.9</dd></div>
+                <div><dt>tokens a second</dt><dd>130k</dd></div>
+              </dl>
+              <p class="note"><b>next:</b> beat gpt-2 xl, which is 1.5b params, or get close. then finetune it into a coding model.</p>
+              <p class="go"><a class="u" href="work/sprout.html">read how it went</a><a class="u" href="https://github.com/navthings/sprout" target="_blank" rel="noopener">code</a><a class="u" href="https://huggingface.co/navthings/sprout" target="_blank" rel="noopener">weights</a><a class="u" href="playground/?model=sprout">talk to it</a></p>
+            </div>
+          </section>
+        </li>
+
+        <li>
+          <a class="row" href="#paper" id="r-paper" style="--i: 1">the paper<small>zenodo</small></a>
+          <section class="panel" id="paper" aria-labelledby="r-paper">
+            <div class="panel-in">
+              <p class="kind">research, sep 2026</p>
+              <p class="sum"><cite>the effect of corpus size on the performance of a llm.</cite> the same 8.2m model trained on 1, 5, 10 and 15% of tinystories, nothing else changed.</p>
+              <figure>
+                <figcaption>final loss by how much data it got</figcaption>
+                <svg class="loss" viewBox="0 0 440 172" role="img" aria-label="at 1% train loss is 1.33 and val loss 2.40; at 5% 1.70 and 1.93; at 10% 1.83 and 1.82; at 15% 1.74 and 1.84">
+                  <g class="grid">
+                    <line x1="34" x2="440" y1="20" y2="20" /><line x1="34" x2="440" y1="60" y2="60" /><line x1="34" x2="440" y1="100" y2="100" /><line x1="34" x2="440" y1="140" y2="140" />
+                  </g>
+                  <text x="0" y="24">2.4</text><text x="0" y="64">2.0</text><text x="0" y="104">1.6</text><text x="0" y="144">1.2</text>
+                  <text x="48" y="166" text-anchor="middle">1%</text><text x="172" y="166" text-anchor="middle">5%</text><text x="296" y="166" text-anchor="middle">10%</text><text x="420" y="166" text-anchor="middle">15%</text>
+                  <line class="gapline" x1="48" x2="48" y1="24" y2="123" />
+                  <text class="lab" x="58" y="70">memorised</text><text class="lab" x="58" y="85">its stories</text>
+                  <text class="lab" x="296" y="62" text-anchor="middle">gap gone</text>
+                  <polyline class="ln train" points="48,127.1 172,89.9 296,77.4 420,86.3" />
+                  <polyline class="ln val" points="48,19.8 172,66.8 296,78.4 420,76.3" />
+                  <circle class="dot-val" cx="48" cy="19.8" r="3.5" /><circle class="dot-val" cx="172" cy="66.8" r="3.5" /><circle class="dot-val" cx="296" cy="78.4" r="3.5" /><circle class="dot-val" cx="420" cy="76.3" r="3.5" />
+                  <circle class="dot-train" cx="48" cy="127.1" r="3.5" /><circle class="dot-train" cx="172" cy="89.9" r="3.5" /><circle class="dot-train" cx="296" cy="77.4" r="3.5" /><circle class="dot-train" cx="420" cy="86.3" r="3.5" />
+                </svg>
+                <div class="key"><span style="--c: var(--accent)">validation</span><span style="--c: #bdbdb8">train</span></div>
+              </figure>
+              <p class="note"><b>what went wrong:</b> 15% did slightly worse than 10%. it probably never got through all its data in 5000 steps.</p>
+              <p class="go"><a class="u" href="https://doi.org/10.5281/zenodo.22340667" target="_blank" rel="noopener">read the paper</a><a class="u" href="work/corpus-size.html">how it went</a></p>
+            </div>
+          </section>
+        </li>
+
+        <li>
+          <a class="row" href="#lilbase" id="r-lilbase" style="--i: 2">lilbase<small>297m params</small></a>
+          <section class="panel" id="lilbase" aria-labelledby="r-lilbase">
+            <div class="panel-in">
+              <p class="kind">pretraining, sep 2026</p>
+              <p class="sum">a 297m parameter llama style base model, pretrained from scratch in jax on 6.1b tokens. same zero shot evals as gpt-2 small, which is 124m.</p>
+              <figure>
+                <figcaption>zero shot accuracy</figcaption>
+                <div class="bars" role="img" aria-label="hellaswag 36.8% vs 35.1%, arc-easy 48.1% vs 40.6%, lambada 28.5% vs 35.0%">
+                  <span class="t">hellaswag</span><i style="--v: 36.8; --c: var(--accent); --k: 0"></i><em class="mine">36.8</em><i style="--v: 35.1; --k: 1"></i><em>35.1</em>
+                  <span class="gap"></span>
+                  <span class="t">arc-easy</span><i style="--v: 48.1; --c: var(--accent); --k: 2"></i><em class="mine">48.1</em><i style="--v: 40.6; --k: 3"></i><em>40.6</em>
+                  <span class="gap"></span>
+                  <span class="t">lambada</span><i style="--v: 28.5; --c: var(--accent); --k: 4"></i><em class="mine">28.5</em><i style="--v: 35.0; --k: 5"></i><em>35.0</em>
+                </div>
+                <div class="key"><span style="--c: var(--accent)">lilbase</span><span style="--c: #cfcfca">gpt-2 small</span></div>
+              </figure>
+              <p class="note"><b>what went wrong:</b> kaggle sometimes hands you a tpu with 1 working chip out of 8. the script now refuses to start without all of them.</p>
+              <p class="go"><a class="u" href="work/lilbase.html">read how it went</a><a class="u" href="https://github.com/navthings/lilbase" target="_blank" rel="noopener">code</a><a class="u" href="https://huggingface.co/navthings/lilbase" target="_blank" rel="noopener">weights</a><a class="u" href="https://ollama.com/navthings/lilbase" target="_blank" rel="noopener">ollama</a></p>
+            </div>
+          </section>
+        </li>
+
+        <li>
+          <a class="row" href="#lilchat" id="r-lilchat" style="--i: 3">lilchat<small>finetuned lilbase</small></a>
+          <section class="panel" id="lilchat" aria-labelledby="r-lilchat">
+            <div class="panel-in">
+              <p class="kind">finetuning, sep 2026</p>
+              <p class="sum">lilbase taught to chat, in one night on my macbook. supervised finetuning in mlx with the loss only on the assistant turns. validation loss went from 2.230 to 1.337.</p>
+              <figure>
+                <figcaption>an actual reply</figcaption>
+                <div class="chat">
+                  <p><span>me</span>whats the capital of australia?</p>
+                  <p><span>lilchat</span><q>The capital of Australia is <mark class="wrong">Melbourne</mark>.</q></p>
+                </div>
+              </figure>
+              <p class="note"><b>what went wrong:</b> see above. its canberra. asked again, it said perth.</p>
+              <p class="go"><a class="u" href="work/lilchat.html">read how it went</a><a class="u" href="https://huggingface.co/navthings/lilchat" target="_blank" rel="noopener">weights</a><a class="u" href="playground/?model=lilchat">talk to it</a></p>
+            </div>
+          </section>
+        </li>
+
+        <li>
+          <a class="row" href="#mlx" id="r-mlx" style="--i: 4">mlx<small>merged pr</small></a>
+          <section class="panel" id="mlx" aria-labelledby="r-mlx">
+            <div class="panel-in">
+              <p class="kind">open source, merged into apple's mlx oct 4, 2026</p>
+              <p class="sum"><code>mx.jvp</code> crashed on logcumsumexp. i added forward mode autodiff for it: a softmax weighted running sum of the tangents, done in log space so big inputs dont overflow.</p>
+              <figure>
+                <figcaption>the jvp</figcaption>
+                <div class="math">
+                  <var>ẏ</var><sub><var>i</var></sub> = &sum;<sub><var>j</var>&thinsp;&le;&thinsp;<var>i</var></sub> exp(<var>x</var><sub><var>j</var></sub> &minus; <var>y</var><sub><var>i</var></sub>)&thinsp;<var>ṫ</var><sub><var>j</var></sub>
+                  <small>tangents can be negative and logs cant, so they get split into a positive and a negative part, each goes through logcumsumexp, then they're subtracted.</small>
+                </div>
+              </figure>
+              <dl class="stats">
+                <div><dt>issue</dt><dd>#3710</dd></div>
+                <div><dt>pull request</dt><dd>#4611</dd></div>
+                <div><dt>autograd tests passing</dt><dd>58</dd></div>
+              </dl>
+              <p class="go"><a class="u" href="https://github.com/ml-explore/mlx/pull/4611" target="_blank" rel="noopener">see the pull request</a><a class="u" href="blog/mlx-pr.html">the story</a></p>
+            </div>
+          </section>
+        </li>
+
+        <li>
+          <a class="row" href="#writing" id="r-writing" style="--i: 5">writing<small>9 posts</small></a>
+          <section class="panel" id="writing" aria-labelledby="r-writing">
+            <div class="panel-in">
+              <p class="kind">everything i've made, written up as i went</p>
+              <ul class="posts">
+                <li><a href="blog/mlx-pr.html"><time datetime="2026-10-05">oct 5</time><span>my first pr got merged into mlx</span></a></li>
+                <li><a href="blog/sprout.html"><time datetime="2026-10-01">oct 1</time><span>sprout can talk now</span></a></li>
+                <li><a href="blog/lilchat.html"><time datetime="2026-09-26">sep 26</time><span>teaching lilbase to talk</span></a></li>
+                <li><a href="blog/lilbase.html"><time datetime="2026-09-23">sep 23</time><span>lilbase, 297m params on a free tpu</span></a></li>
+                <li><a href="blog/tale.html"><time datetime="2026-09-12">sep 12</time><span>tale, bedtime stories for my little brother</span></a></li>
+                <li><a href="blog/dataset-size-paper.html"><time datetime="2026-09-05">sep 5</time><span>i wrote a paper on how much data matters</span></a></li>
+                <li><a href="blog/lilstory.html"><time datetime="2026-09-04">sep 4</time><span>lilstory, my first real language model</span></a></li>
+                <li><a href="blog/bigtransformer.html"><time datetime="2026-08-31">aug 31</time><span>bigtransformer, now it reads a whole file</span></a></li>
+                <li><a href="blog/liltransformer.html"><time datetime="2026-08-30">aug 30</time><span>my first transformer (it only knows one sentence)</span></a></li>
+              </ul>
+              <p class="go"><a class="u" href="work/">every model on a timeline</a><a class="u" href="feed.xml">rss</a></p>
+            </div>
+          </section>
+        </li>
+      </ul>
+    </main>
+
+    <footer class="bottom cols">
+      <nav aria-label="elsewhere">
+        <button class="copy" type="button" data-copy="navneet.dagdiya@gmail.com" aria-live="polite">navneet.dagdiya@gmail.com</button>
+        <a class="u" href="https://github.com/navthings" target="_blank" rel="noopener">github</a>
+        <a class="u" href="https://huggingface.co/navthings" target="_blank" rel="noopener">hugging face</a>
+        <a class="u" href="https://ollama.com/navthings" target="_blank" rel="noopener">ollama</a>
+        <a class="u" href="https://orcid.org/0009-0002-2764-866X" target="_blank" rel="noopener">orcid</a>
+        <a class="u" href="playground/">playground</a>
       </nav>
-    </div>
-  </header>
+      <p class="where">perth, australia</p>
+    </footer>
+  </div>
 
-  <main class="sheet" id="main">
-    <section class="hero wrap">
-      <div class="hero-inner">
-        <h1 class="hero-title" data-tokens>hi, i'm nav. i build language models <span class="soft">and research how they <span data-scrib="circle" data-scrib-on="manual">learn</span>.</span></h1>
-        <p class="hero-sub" data-reveal style="--d: 1.15s">
-          machine learning engineer and researcher in australia. i train my own language models and test what they actually learned. the newest is <a href="#sprout">sprout</a>, 523m params trained on 12 billion tokens and then taught to chat.
-        </p>
-        <div class="row" data-reveal style="--d: 1.3s">
-          <a class="btn dark" href="#work"><span class="inner">see the work</span></a>
-          <a class="btn" href="playground/"><span class="inner">talk to my models</span></a>
-        </div>
-        <p class="temp" data-reveal style="--d: 1.5s">
-          this headline is at temperature <span class="knob" id="temp" role="slider" tabindex="0" aria-label="temperature" aria-valuemin="0" aria-valuemax="1.5" aria-valuenow="0" data-scrib="underline" data-scrib-on="manual"><span class="knob-v">0.0</span></span><span id="temp-note">. drag the number.</span>
-        </p>
-      </div>
-    </section>
-
-    <section class="statement wrap">
-      <p class="scrub">i like knowing how every part of a model works, from the tokenizer to why the loss does what it does, and then getting it running somewhere people can actually try it.</p>
-    </section>
-
-    <section class="areas wrap wide" data-label="what i do">
-      <div class="section-head">
-        <h2 class="h-section" data-words>what i work on.</h2>
-      </div>
-      <div class="area-list follow" data-stagger="0.06">
-        <a class="area-row" href="work/sprout.html" data-reveal>
-          <span class="area-name">pretraining</span>
-          <span class="area-text">llama style models from 8m to 523m params. the big ones are written in jax and trained on a kaggle tpu v5e-8, in 8.4 hour sessions that save and pick up where they left off.</span>
-          <span class="area-link cap">lilbase, sprout</span>
-        </a>
-        <a class="area-row" href="work/lilchat.html" data-reveal>
-          <span class="area-name">finetuning</span>
-          <span class="area-text">chat finetuning with the loss only on the assistant turns. lilchat in one night on my mac, sprout in 90 minutes on the tpu.</span>
-          <span class="area-link cap">lilchat, sprout</span>
-        </a>
-        <a class="area-row" href="work/corpus-size.html" data-reveal>
-          <span class="area-name">research</span>
-          <span class="area-text">how much data a model actually needs. i trained the same model on four amounts of data and wrote it up as a paper.</span>
-          <span class="area-link cap">the paper</span>
-        </a>
-        <a class="area-row" href="work/lilbase.html" data-reveal>
-          <span class="area-name">evaluation</span>
-          <span class="area-text">every model goes through the same zero shot script, hellaswag, arc-easy and lambada, and gets compared against gpt-2.</span>
-          <span class="area-link cap">lilbase</span>
-        </a>
-        <a class="area-row" href="work/playground.html" data-reveal>
-          <span class="area-name">inference</span>
-          <span class="area-text">every model gets a 4 and 8 bit gguf, so they run in ollama and right here in the browser.</span>
-          <span class="area-link cap">playground</span>
-        </a>
-        <a class="area-row" href="https://github.com/ml-explore/mlx/pull/4611" target="_blank" rel="noopener" data-reveal>
-          <span class="area-name">open source</span>
-          <span class="area-text">my first merged pr in apple's mlx. mx.jvp crashed on logcumsumexp, so i worked out the derivative in log space, wrote the tests and it got merged into main on oct 4.</span>
-          <span class="area-link cap">mlx #4611</span>
-        </a>
-      </div>
-    </section>
-
-    <section class="work wrap wide" id="work" data-label="work">
-      <div class="section-head">
-        <h2 class="h-section" data-words>the models <span data-scrib="double">so far</span>.</h2>
-      </div>
-
-      <div class="stack">
-        <article class="card" data-live style="--i: 0">
-          <div class="card-text">
-            <div>
-              <h3 class="card-title" style="view-transition-name: t-lilbase"><a class="stretch" href="work/lilbase.html">lilbase</a></h3>
-              <p class="card-desc">a 297m param llama style base model, pretrained from scratch in jax on a tpu v5e-8. it beats gpt-2 small on hellaswag and arc-easy, and loses on lambada.</p>
-              <p class="card-wrong"><span>what went wrong</span>kaggle sometimes hands you a tpu with 1 working chip out of 8. the script now refuses to start without all of them.</p>
-            </div>
-            <div class="row">
-              <span class="card-go"><span>read how it went</span></span>
-              <a class="btn small" href="https://ollama.com/navthings/lilbase" target="_blank" rel="noopener"><span class="inner">run it with ollama</span></a>
-            </div>
-          </div>
-          <div class="card-vis">
-            <div class="legend"><span><i style="background: var(--ink)"></i>lilbase</span><span><i style="background: #c9c9c6"></i>gpt-2 small, 124m</span></div>
-            <div class="hbars">
-              <div class="hbar-group"><span>hellaswag</span>
-                <div class="hbar" style="--k: 0"><b style="--w: 61.3%; background: var(--ink)"></b><em>36.8%</em></div>
-                <div class="hbar" style="--k: 1"><b style="--w: 58.5%; background: #c9c9c6"></b><em>35.1%</em></div>
-              </div>
-              <div class="hbar-group"><span>arc-easy</span>
-                <div class="hbar" style="--k: 2"><b style="--w: 80.2%; background: var(--ink)"></b><em>48.1%</em></div>
-                <div class="hbar" style="--k: 3"><b style="--w: 67.7%; background: #c9c9c6"></b><em>40.6%</em></div>
-              </div>
-              <div class="hbar-group"><span>lambada</span>
-                <div class="hbar" style="--k: 4"><b style="--w: 47.5%; background: var(--ink)"></b><em>28.5%</em></div>
-                <div class="hbar" style="--k: 5"><b style="--w: 58.3%; background: #c9c9c6"></b><em>35.0%</em></div>
-              </div>
-            </div>
-          </div>
-        </article>
-
-        <article class="card" data-live style="--i: 1">
-          <div class="card-text">
-            <div>
-              <h3 class="card-title" style="view-transition-name: t-lilchat"><a class="stretch" href="work/lilchat.html">lilchat</a></h3>
-              <p class="card-desc">supervised finetuning of lilbase on smol-smoltalk in mlx, with the loss only on the assistant turns. val loss went from 2.230 to 1.337.</p>
-              <p class="card-wrong"><span>what went wrong</span>it told me the capital of australia is melbourne. then perth.</p>
-            </div>
-            <div class="row">
-              <span class="card-go"><span>read how it went</span></span>
-              <a class="btn small" href="playground/?model=lilchat"><span class="inner">talk to it</span></a>
-            </div>
-          </div>
-          <div class="card-vis">
-            <div class="chat" data-chat>
-              <div class="bubble you">hi</div>
-              <div class="bubble bot">Hello! How can I help you today?</div>
-              <div class="bubble you">whats the capital of australia?</div>
-              <div class="bubble bot">The capital of Australia is Melbourne.</div>
-              <span class="chat-note cap">(it's canberra)</span>
-            </div>
-          </div>
-        </article>
-
-        <article class="card" data-live style="--i: 2">
-          <div class="card-text">
-            <div>
-              <h3 class="card-title" style="view-transition-name: t-paper"><a class="stretch" href="work/corpus-size.html">the paper</a></h3>
-              <p class="card-desc">the same model trained on 1, 5, 10 and 15% of tinystories. at 1% it memorised its stories, and by 10% the gap between train and val loss was gone.</p>
-              <p class="card-wrong"><span>what went wrong</span>15% did slightly worse than 10%. it probably never got through all its data in 5000 steps.</p>
-            </div>
-            <div class="row">
-              <span class="card-go"><span>read how it went</span></span>
-              <a class="btn small" href="https://doi.org/10.5281/zenodo.22340667" target="_blank" rel="noopener"><span class="inner">the paper</span></a>
-            </div>
-          </div>
-          <div class="card-vis">
-            <div class="legend"><span><i style="background: var(--ink)"></i>val loss</span><span><i style="background: #c9c9c6"></i>train loss</span></div>
-            <div class="chart" data-chart="paper" style="margin-top: 20px"></div>
-          </div>
-        </article>
-
-        <article class="card" data-live style="--i: 3">
-          <div class="card-text">
-            <div>
-              <h3 class="card-title" style="view-transition-name: t-playground"><a class="stretch" href="work/playground.html">playground</a></h3>
-              <p class="card-desc">all my models running in the browser, on llama.cpp compiled to webassembly. nothing you type leaves your computer.</p>
-              <p class="card-wrong"><span>what went wrong</span>safari says it can run the fast engine, then cant. multithreading broke firefox, so i undid it.</p>
-            </div>
-            <div class="row">
-              <span class="card-go"><span>read how it works</span></span>
-              <a class="btn small" href="playground/"><span class="inner">open it</span></a>
-            </div>
-          </div>
-          <div class="card-vis">
-            <div class="mini">
-              <div class="mini-row"><span>sprout</span><span class="track"><b style="--k: 0; --t: 2.6s; --w: 100%"></b></span><span class="size">345mb</span></div>
-              <div class="mini-row"><span>lilchat</span><span class="track"><b style="--k: 1; --t: 2.2s; --w: 79%"></b></span><span class="size">274mb</span></div>
-              <div class="mini-row"><span>tale</span><span class="track"><b style="--k: 2; --t: 0.9s; --w: 15%"></b></span><span class="size">52mb</span></div>
-            </div>
-            <div class="mini-input"><span>Once upon a time</span><span class="btn dark">go</span></div>
-            <p class="mini-note">nothing leaves your computer.</p>
-          </div>
-        </article>
-
-        <article class="card" data-live style="--i: 4" id="sprout">
-          <div class="card-text">
-            <div>
-              <h3 class="card-title" style="view-transition-name: t-sprout"><a class="stretch" href="work/sprout.html">sprout</a></h3>
-              <p class="card-desc">523m params trained on 12 billion tokens from a four source mix, with the optimizer state sharded across 8 tpu chips. then chat finetuned on all of smol-smoltalk, twice.</p>
-              <p class="card-wrong"><span>the goal</span>beat gpt-2 xl, which is 1.5b params, or get close. then finetune it into a competitive coding model.</p>
-            </div>
-            <div class="row">
-              <span class="card-go"><span>read about it</span></span>
-              <a class="btn small" href="playground/?model=sprout"><span class="inner">talk to it</span></a>
-            </div>
-          </div>
-          <div class="card-vis">
-            <div class="train">
-              <div class="train-top"><span>tokens read</span><span class="cap">finished sep 27</span></div>
-              <div class="train-num">all 12 billion</div>
-              <div class="train-track"><b></b><i style="left: 50.8%"></i></div>
-              <div class="train-ticks"><span>0</span><span class="mark" style="left: 50.8%">lilbase read 6.1b in total</span><span>12b</span></div>
-              <div class="mixmini">
-                <div class="mixmini-bar"><b style="--w: 55%; --c: var(--ink)"></b><b style="--w: 27.2%; --c: #5f5f5f"></b><b style="--w: 8.7%; --c: #a3a3a0"></b><b style="--w: 9.1%; --c: #d0d0cc"></b></div>
-                <div class="mixmini-key"><span><i style="background: var(--ink)"></i>fineweb-edu 55%</span><span><i style="background: #5f5f5f"></i>dclm 27%</span><span><i style="background: #a3a3a0"></i>cosmopedia 9%</span><span><i style="background: #d0d0cc"></i>gutenberg 9%</span></div>
-              </div>
-            </div>
-          </div>
-        </article>
-      </div>
-      <p class="rss cap" data-reveal>theres a <a href="work/">timeline</a> of every model too, back to the first one that only knew one sentence.</p>
-    </section>
-
-
-    <section class="writing wrap wide" id="writing" data-label="writing">
-      <div class="section-head">
-        <h2 class="h-section" data-words>what i've <span data-scrib="circle">written</span>.</h2>
-      </div>
-      <div class="posts follow" data-stagger="0.05">
-        <a class="post-row" href="blog/mlx-pr.html" data-peek="i found an open issue in apples mlx, fixed it, and on oct 4 it got merged into main." data-reveal><span class="cap">2026-10-05</span><span class="t" style="view-transition-name: p-mlx-pr">my first pr got merged into mlx</span><span class="cap kind">open source</span></a>
-        <a class="post-row" href="blog/sprout.html" data-peek="sprout finished pretraining on sep 27. 523m params, 12 billion tokens, all on the free kaggle tpu." data-reveal><span class="cap">2026-10-01</span><span class="t" style="view-transition-name: p-sprout">sprout can talk now</span><span class="cap kind">finetuning</span></a>
-        <a class="post-row" href="blog/lilchat.html" data-peek="a base model just continues text. if you ask it a question itll probably write 5 more questions instead of answering." data-reveal><span class="cap">2026-09-26</span><span class="t" style="view-transition-name: p-lilchat">teaching lilbase to talk</span><span class="cap kind">finetuning</span></a>
-        <a class="post-row" href="blog/lilbase.html" data-peek="everything before this was trained on my laptop, but i wanted to make a proper base model, like one thats actually read a decent chunk of the internet." data-reveal><span class="cap">2026-09-23</span><span class="t" style="view-transition-name: p-lilbase">lilbase, 297m params on a free tpu</span><span class="cap kind">pretraining</span></a>
-        <a class="post-row" href="blog/tale.html" data-peek="my little brother kept asking me for bedtime stories so i made a model that tells them." data-reveal><span class="cap">2026-09-12</span><span class="t" style="view-transition-name: p-tale">tale, bedtime stories for my little brother</span><span class="cap kind">model</span></a>
-        <a class="post-row" href="blog/dataset-size-paper.html" data-peek="i wanted to see how much the amount of data actually matters if you keep everything else the same." data-reveal><span class="cap">2026-09-05</span><span class="t" style="view-transition-name: p-dataset-size-paper">i wrote a paper on how much data matters</span><span class="cap kind">research</span></a>
-        <a class="post-row" href="blog/lilstory.html" data-peek="ok this one is an actual language model. 8.2m params, llama style, trained from scratch on tinystories." data-reveal><span class="cap">2026-09-04</span><span class="t" style="view-transition-name: p-lilstory">lilstory, my first real language model</span><span class="cap kind">model</span></a>
-        <a class="post-row" href="blog/bigtransformer.html" data-peek="made this the day after liltransformer. instead of one sentence it reads a whole text file." data-reveal><span class="cap">2026-08-31</span><span class="t" style="view-transition-name: p-bigtransformer">bigtransformer, now it reads a whole file</span><span class="cap kind">basics</span></a>
-        <a class="post-row" href="blog/liltransformer.html" data-peek="first ml thing i ever made lol. you give it a sentence, pick a word from it, and it tries to guess the next word." data-reveal><span class="cap">2026-08-30</span><span class="t" style="view-transition-name: p-liltransformer">my first transformer (it only knows one sentence)</span><span class="cap kind">basics</span></a>
-      </div>
-      <p class="rss cap" data-reveal>theres an <a href="feed.xml">rss feed</a> too, if you still use those.</p>
-    </section>
-
-    <section class="play wrap wide" id="play" data-label="playground">
-      <div class="play-card sq" data-reveal="scale">
-        <div>
-          <h2 class="h-section">talk to my models, right here in your browser.</h2>
-          <p class="soft">pick one and say something. it downloads once, then runs on your own computer. theyre small, so they make stuff up a lot.</p>
-          <p class="soft">the <a href="playground/">playground</a> also has lilstory's tokenizer and a neural net you can draw digits for.</p>
-        </div>
-        <form class="ask" action="playground/" method="get" data-ask>
-          <fieldset class="chips">
-            <legend class="cap" style="margin-bottom: 10px">model</legend>
-            <label><input type="radio" name="model" value="sprout" checked data-placeholder="say something" /><span>sprout <small>345mb</small></span></label>
-            <label><input type="radio" name="model" value="lilchat" data-placeholder="say something" /><span>lilchat <small>274mb</small></span></label>
-            <label><input type="radio" name="model" value="tale" data-placeholder="Once upon a time" /><span>tale <small>52mb</small></span></label>
-          </fieldset>
-          <div class="field">
-            <input name="q" type="text" placeholder="say something" autocomplete="off" aria-label="what to say" />
-            <button class="btn dark" type="submit"><span class="inner">send</span></button>
-          </div>
-        </form>
-      </div>
-    </section>
-  </main>
-
-  <footer class="foot" data-label="say hi">
-    <div class="foot-top">
-      <div>
-        <p class="foot-say"><button class="say" type="button" data-email data-scrib="underline" data-scrib-on="hover"><span class="inner">say hi.</span></button> <span>maybe i'll reply.</span></p>
-        <p class="hint">that copies my email. 50-50 i respond.</p>
-      </div>
-      <nav class="foot-links" aria-label="elsewhere">
-        <a href="https://github.com/navthings" target="_blank" rel="noopener">github <span>- it still works</span></a>
-        <a href="https://huggingface.co/navthings" target="_blank" rel="noopener">hugging face <span>- the weights</span></a>
-        <a href="https://ollama.com/navthings" target="_blank" rel="noopener">ollama <span>- models i've pushed</span></a>
-        <a href="https://orcid.org/0009-0002-2764-866X" target="_blank" rel="noopener">orcid <span>- research id</span></a>
-        <a href="https://doi.org/10.5281/zenodo.22340667" target="_blank" rel="noopener">zenodo <span>- the paper</span></a>
-        <a href="feed.xml">rss <span>- new posts</span></a>
-      </nav>
-    </div>
-    <div class="foot-mark">
-      <svg viewBox="66 64 384 378" aria-hidden="true" data-mark></svg>
-      <div class="meta">navthings, made in australia<br /><button type="button" data-top>back to top</button></div>
-    </div>
-  </footer>
-
-  <script src="assets/vendor/lenis.min.js"></script>
-  <script src="assets/site.js"></script>
-  <script src="assets/charts.js"></script>
-  <script src="assets/home.js"></script>
+  <script src="assets/one.js"></script>
 </body>
 </html>
