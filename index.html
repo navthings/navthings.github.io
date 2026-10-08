@@ -143,7 +143,6 @@
               <p class="kind">finetuning, sep 2026</p>
               <p class="sum">lilbase taught to chat, in one night on my macbook. supervised finetuning in mlx with the loss only on the assistant turns. validation loss went from 2.230 to 1.337.</p>
               <figure>
-                <figcaption>an actual reply</figcaption>
                 <div class="chat">
                   <p><span>me</span>whats the capital of australia?</p>
                   <p><span>lilchat</span><q>The capital of Australia is <mark class="wrong">Melbourne</mark>.</q></p>
@@ -164,7 +163,7 @@
               <figure>
                 <figcaption>the jvp</figcaption>
                 <div class="math">
-                  <var>ẏ</var><sub><var>i</var></sub> = &sum;<sub><var>j</var>&thinsp;&le;&thinsp;<var>i</var></sub> exp(<var>x</var><sub><var>j</var></sub> &minus; <var>y</var><sub><var>i</var></sub>)&thinsp;<var>ṫ</var><sub><var>j</var></sub>
+                  <span class="eq">ẏ<sub>i</sub> = <span class="big">&sum;</span><sub class="lim">j &le; i</sub> exp(x<sub>j</sub> &minus; y<sub>i</sub>) ṫ<sub>j</sub></span>
                   <small>tangents can be negative and logs cant, so they get split into a positive and a negative part, each goes through logcumsumexp, then they're subtracted.</small>
                 </div>
               </figure>
