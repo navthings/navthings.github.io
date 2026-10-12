@@ -88,48 +88,6 @@
       </div>
     </section>
 
-    <section class="statement wrap">
-      <p class="scrub">i like knowing how every part of a model works, from the tokenizer to why the loss does what it does, and then getting it running somewhere people can actually try it.</p>
-    </section>
-
-    <section class="areas wrap wide" data-label="what i do">
-      <div class="section-head">
-        <h2 class="h-section" data-words>what i work on.</h2>
-      </div>
-      <div class="area-list follow" data-stagger="0.06">
-        <a class="area-row" href="work/sprout.html" data-reveal>
-          <span class="area-name">pretraining</span>
-          <span class="area-text">llama style models from 8m to 523m params. the big ones are written in jax and trained on a kaggle tpu v5e-8, in 8.4 hour sessions that save and pick up where they left off.</span>
-          <span class="area-link cap">lilbase, sprout</span>
-        </a>
-        <a class="area-row" href="work/lilchat.html" data-reveal>
-          <span class="area-name">finetuning</span>
-          <span class="area-text">chat finetuning with the loss only on the assistant turns. lilchat in one night on my mac, sprout in 90 minutes on the tpu.</span>
-          <span class="area-link cap">lilchat, sprout</span>
-        </a>
-        <a class="area-row" href="work/corpus-size.html" data-reveal>
-          <span class="area-name">research</span>
-          <span class="area-text">how much data a model actually needs. i trained the same model on four amounts of data and wrote it up as a paper.</span>
-          <span class="area-link cap">the paper</span>
-        </a>
-        <a class="area-row" href="work/lilbase.html" data-reveal>
-          <span class="area-name">evaluation</span>
-          <span class="area-text">every model goes through the same zero shot script, hellaswag, arc-easy and lambada, and gets compared against gpt-2.</span>
-          <span class="area-link cap">lilbase</span>
-        </a>
-        <a class="area-row" href="work/playground.html" data-reveal>
-          <span class="area-name">inference</span>
-          <span class="area-text">every model gets a 4 and 8 bit gguf, so they run in ollama and right here in the browser.</span>
-          <span class="area-link cap">playground</span>
-        </a>
-        <a class="area-row" href="https://github.com/ml-explore/mlx/pull/4611" target="_blank" rel="noopener" data-reveal>
-          <span class="area-name">open source</span>
-          <span class="area-text">my first merged pr in apple's mlx. mx.jvp crashed on logcumsumexp, so i worked out the derivative in log space, wrote the tests and it got merged into main on oct 4.</span>
-          <span class="area-link cap">mlx #4611</span>
-        </a>
-      </div>
-    </section>
-
     <section class="work wrap wide" id="work" data-label="work">
       <div class="section-head">
         <h2 class="h-section" data-words>the models <span data-scrib="double">so far</span>.</h2>
@@ -260,6 +218,48 @@
       <p class="rss cap" data-reveal>theres a <a href="work/">timeline</a> of every model too, back to the first one that only knew one sentence.</p>
     </section>
 
+
+    <section class="statement wrap">
+      <p class="scrub">i like knowing how every part of a model works, from the tokenizer to why the loss does what it does, and then getting it running somewhere people can actually try it.</p>
+    </section>
+
+    <section class="areas wrap wide" data-label="what i do">
+      <div class="section-head">
+        <h2 class="h-section" data-words>what i work on.</h2>
+      </div>
+      <div class="area-list follow" data-stagger="0.06">
+        <a class="area-row" href="work/sprout.html" data-reveal>
+          <span class="area-name">pretraining</span>
+          <span class="area-text">llama style models from 8m to 523m params. the big ones are written in jax and trained on a kaggle tpu v5e-8, in 8.4 hour sessions that save and pick up where they left off.</span>
+          <span class="area-link cap">lilbase, sprout</span>
+        </a>
+        <a class="area-row" href="work/lilchat.html" data-reveal>
+          <span class="area-name">finetuning</span>
+          <span class="area-text">chat finetuning with the loss only on the assistant turns. lilchat in one night on my mac, sprout in 90 minutes on the tpu.</span>
+          <span class="area-link cap">lilchat, sprout</span>
+        </a>
+        <a class="area-row" href="work/corpus-size.html" data-reveal>
+          <span class="area-name">research</span>
+          <span class="area-text">how much data a model actually needs. i trained the same model on four amounts of data and wrote it up as a paper.</span>
+          <span class="area-link cap">the paper</span>
+        </a>
+        <a class="area-row" href="work/lilbase.html" data-reveal>
+          <span class="area-name">evaluation</span>
+          <span class="area-text">every model goes through the same zero shot script, hellaswag, arc-easy and lambada, and gets compared against gpt-2.</span>
+          <span class="area-link cap">lilbase</span>
+        </a>
+        <a class="area-row" href="work/playground.html" data-reveal>
+          <span class="area-name">inference</span>
+          <span class="area-text">every model gets a 4 and 8 bit gguf, so they run in ollama and right here in the browser.</span>
+          <span class="area-link cap">playground</span>
+        </a>
+        <a class="area-row" href="https://github.com/ml-explore/mlx/pull/4611" target="_blank" rel="noopener" data-reveal>
+          <span class="area-name">open source</span>
+          <span class="area-text">my first merged pr in apple's mlx. mx.jvp crashed on logcumsumexp, so i worked out the derivative in log space, wrote the tests and it got merged into main on oct 4.</span>
+          <span class="area-link cap">mlx #4611</span>
+        </a>
+      </div>
+    </section>
 
     <section class="writing wrap wide" id="writing" data-label="writing">
       <div class="section-head">
