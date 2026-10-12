@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script>
+    document.documentElement.classList.add("js");
+    // the only moment to know if a page transition brought us here is before the first paint
+    addEventListener("pagereveal", (e) => document.documentElement.classList.add(e.viewTransition ? "vt-in" : "revealed"), { once: true });
+  </script>
+
+  <title>airgpt, train a chatbot from scratch on a mac · navthings</title>
+
+  <meta name="description" content="every repo i found for training your own llm needed an nvidia gpu. i have a macbook air with no fan, so i made one that runs on a mac." />
+  <meta property="og:type" content="article" />
+  <meta property="article:published_time" content="2026-10-12" />
+  <meta property="og:site_name" content="navthings" />
+  <meta property="og:title" content="airgpt, train a chatbot from scratch on a mac" />
+  <meta property="og:description" content="every repo i found for training your own llm needed an nvidia gpu. i have a macbook air with no fan, so i made one that runs on a mac." />
+  <meta property="og:url" content="https://navthings.github.io/blog/airgpt.html" />
+  <meta property="og:image" content="https://navthings.github.io/assets/og/writing.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="airgpt, train a chatbot from scratch on a mac, a post on navthings" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="airgpt, train a chatbot from scratch on a mac" />
+  <meta name="twitter:description" content="every repo i found for training your own llm needed an nvidia gpu. i have a macbook air with no fan, so i made one that runs on a mac." />
+  <meta name="twitter:image" content="https://navthings.github.io/assets/og/writing.png" />
+  <link rel="canonical" href="https://navthings.github.io/blog/airgpt.html" />
+  <meta name="theme-color" content="#ffffff" />
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../apple-touch-icon.png" />
+  <link rel="alternate" type="application/rss+xml" title="navthings" href="../feed.xml" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "airgpt, train a chatbot from scratch on a mac",
+    "datePublished": "2026-10-12",
+    "description": "every repo i found for training your own llm needed an nvidia gpu. i have a macbook air with no fan, so i made one that runs on a mac.",
+    "url": "https://navthings.github.io/blog/airgpt.html",
+    "image": "https://navthings.github.io/assets/og/writing.png",
+    "author": {
+      "@type": "Person",
+      "name": "nav",
+      "url": "https://navthings.github.io/"
+    }
+  }
+  </script>
+  <link rel="preload" href="../assets/fonts/geist.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="../assets/site.css" />
+  <link rel="stylesheet" href="post.css" />
+</head>
+
+<body>
+  <a class="skip" href="#main">skip to content</a>
+
+  <header class="nav" data-label="writing" data-current="writing">
+    <div class="island">
+      <span class="island-fill" aria-hidden="true"></span>
+      <a class="island-mark" href="../" aria-label="navthings, home"><img src="../favicon.svg" alt="" /></a>
+      <span class="island-now" aria-hidden="true"><span>writing</span></span>
+      <nav class="island-links" aria-label="main">
+        <a class="home" href="../">navthings</a>
+        <a href="../#work">work</a>
+        <a href="../#writing">writing</a>
+        <a href="../playground/">playground</a>
+        <a href="mailto:navneet.dagdiya@gmail.com" data-email>email</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="sheet" id="main">
+    <article class="post-wrap wrap">
+      <header class="post-head">
+        <p class="crumbs cap" data-reveal><a href="./">writing</a><span>/</span><time datetime="2026-10-12">2026-10-12</time></p>
+        <h1 class="post-title" style="view-transition-name: p-airgpt" data-letters>airgpt, train a chatbot from scratch on a mac</h1>
+      </header>
+
+      <div class="post">
+        <p data-reveal>every repo i found for training your own llm (nanochat, minimind) needed an nvidia gpu. i have a macbook air with no fan. so i made <a href="https://github.com/navthings/airgpt" target="_blank" rel="noopener">airgpt</a>, which does the whole thing on a mac with one command. it downloads some text, trains a tokenizer, pretrains a small model, finetunes it for chat, and then you can talk to it. its all mlx.</p>
+        <figure data-reveal><div class="dark-fig sq"><img width="885" height="644" src="img/airgpt-train.gif" alt="airgpt training in the terminal, the samples go from gibberish to little stories" loading="lazy" /></div><figcaption>8 minutes of training, sped up 16x</figcaption></figure>
+        <h2 data-reveal data-label="time">it runs on time, not steps</h2>
+        <p data-reveal>you tell it how long to train, not how many steps. the hour preset takes an hour on any mac, a faster mac just gets through more text in that hour. the learning rate schedule runs off the clock too so it always finishes properly.</p>
+        <h2 data-reveal data-label="hour">what an hour gets you</h2>
+        <p data-reveal>8M params, 55M tokens, val loss 2.27. it prints a sample every 2 minutes with the same prompt so you can watch it learn. 2 minutes in it was already writing "Once upon a time, there was a little boy named Tim. Timmy loved to play with his friends. One day, Timmy was a very excited." by the end its writing little stories with dialogue in them.</p>
+        <p data-reveal>the chat part is pretty bad at this size. it says hi fine, then you ask it the capital of france and it says "the capital of france is the capital of the france of the tech of decimal".</p>
+        <h2 data-reveal data-label="night">what 8 hours gets you</h2>
+        <p data-reveal>the night preset is 40M params. it read 120M tokens overnight and got to val loss 2.11. the stories are longer and hold together better. the chat is still weak, now its "the capital of france is the capital of france", which is at least true.</p>
+        <h2 data-reveal data-label="heat">it never throttled</h2>
+        <p data-reveal>the trainer reads the macs thermal state while it runs so you can see if its slowing down. it never did. the hour run stayed at nominal the whole time, and so did the 8 hour one, about 5.3k tokens a second from start to finish.</p>
+        <h2 data-reveal data-label="try it">try it</h2>
+        <pre data-reveal class="sq">git clone https://github.com/navthings/airgpt
+cd airgpt
+pip install -r requirements.txt
+python train.py --preset hour</pre>
+        <p data-reveal>or if you dont want to wait, both models are on <a href="https://huggingface.co/navthings" target="_blank" rel="noopener">hugging face</a>. theres also a 2 minute benchmark to see how your mac compares, and a speedrun for the best loss in an hour.</p>
+        <p data-reveal>i built this with a lot of help from claude.</p>
+      </div>
+
+      <nav class="post-foot" aria-label="more posts" data-reveal>
+        <a class="prev sq" href="mlx-pr.html"><span class="label">older</span>my first pr got merged into mlx</a>
+      </nav>
+    </article>
+  </main>
+
+  <footer class="foot" data-label="say hi">
+    <div class="foot-top">
+      <div>
+        <p class="foot-say"><button class="say" type="button" data-email data-scrib="underline" data-scrib-on="hover"><span class="inner">say hi.</span></button> <span>maybe i'll reply.</span></p>
+        <p class="hint">that copies my email. 50-50 i respond.</p>
+      </div>
+      <nav class="foot-links" aria-label="elsewhere">
+        <a href="https://github.com/navthings" target="_blank" rel="noopener">github <span>- it still works</span></a>
+        <a href="https://huggingface.co/navthings" target="_blank" rel="noopener">hugging face <span>- the weights</span></a>
+        <a href="https://ollama.com/navthings" target="_blank" rel="noopener">ollama <span>- models i've pushed</span></a>
+        <a href="https://orcid.org/0009-0002-2764-866X" target="_blank" rel="noopener">orcid <span>- research id</span></a>
+        <a href="https://doi.org/10.5281/zenodo.22340667" target="_blank" rel="noopener">zenodo <span>- the paper</span></a>
+        <a href="../feed.xml">rss <span>- new posts</span></a>
+      </nav>
+    </div>
+    <div class="foot-mark">
+      <svg viewBox="66 64 384 378" aria-hidden="true" data-mark></svg>
+      <div class="meta">navthings, made in australia<br /><button type="button" data-top>back to top</button></div>
+    </div>
+  </footer>
+
+  <script src="../assets/vendor/lenis.min.js"></script>
+  <script src="../assets/site.js"></script>
+</body>
+</html>

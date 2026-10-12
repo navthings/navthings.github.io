@@ -7,6 +7,13 @@
     <language>en</language>
     <atom:link href="https://navthings.github.io/feed.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>airgpt, train a chatbot from scratch on a mac</title>
+      <link>https://navthings.github.io/blog/airgpt.html</link>
+      <guid>https://navthings.github.io/blog/airgpt.html</guid>
+      <pubDate>Mon, 12 Oct 2026 08:00:00 +0000</pubDate>
+      <description>every repo i found for training your own llm needed an nvidia gpu. i have a macbook air with no fan, so i made one that runs on a mac.</description>
+    </item>
+    <item>
       <title>my first pr got merged into mlx</title>
       <link>https://navthings.github.io/blog/mlx-pr.html</link>
       <guid>https://navthings.github.io/blog/mlx-pr.html</guid>
