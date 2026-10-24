@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>concept · margin notes</title>
+<link href="https://fonts.googleapis.com/css2?family=Reenie+Beanie&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="_base.css" />
+<style>
+  :root { --bg: #f3f4f6; --ink: #16181d; --soft: #6b6f7a; --line: #e1e3e8; --biro: #2443e0; }
+  body { background: var(--bg); color: var(--ink); }
+  .entry { display: grid; grid-template-columns: minmax(0, 640px) 260px; column-gap: 72px; margin-top: 56px; }
+  .entry h2 { grid-column: 1; font-size: 22px; font-weight: 600; letter-spacing: -.01em; display: flex; gap: 12px; align-items: baseline; }
+  .entry h2 small { font-size: 14px; font-weight: 400; color: var(--soft); }
+  .entry .body { grid-column: 1; font-size: 19px; line-height: 1.65; color: #2b2e36; margin-top: 8px; }
+  .entry .body a { text-decoration: underline; text-decoration-color: #c9ccd4; text-underline-offset: 4px; text-decoration-thickness: 2px; }
+  .entry .m { grid-column: 2; grid-row: 2; align-self: start; margin-top: 14px; font: 400 30px/.95 "Reenie Beanie", cursive; color: var(--biro); position: relative; transform: rotate(-1.5deg); }
+  .entry .m::before { content: ""; position: absolute; left: -60px; top: 14px; width: 46px; height: 1.5px; background: var(--biro); opacity: .45; transform: rotate(-8deg); }
+  u { text-decoration: none; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='6'%3E%3Cpath d='M0 3 Q3 0 6 3 T12 3' fill='none' stroke='%232443e0' stroke-width='1.4' opacity='.7'/%3E%3C/svg%3E") repeat-x 0 100% / 12px 6px; padding-bottom: 3px; }
+  .label { margin-top: 110px; }
+  @media (max-width: 960px) {
+    .entry { grid-template-columns: 1fr; }
+    .entry .m { grid-column: 1; grid-row: auto; padding-left: 20px; font-size: 27px; } .entry .m::before { left: 0; top: 12px; width: 12px; }
+  }
+</style>
+</head>
+<body>
+  <header class="top"><b>navthings</b><nav><a>models</a><a>writing</a><a>playground</a><a>email</a></nav></header>
+  <main class="col">
+    <p class="intro">hi, i'm nav. i train small language models from scratch and write down what went wrong. <span class="q">there's usually something.</span></p>
+
+    <p class="label">the models</p>
+    <div>
+      <div class="entry">
+        <h2>sprout <small>523m · oct 2026</small></h2>
+        <p class="body">12 billion tokens from a four source mix, with the optimizer state sharded across 8 tpu chips. then chat finetuned on all of smol-smoltalk, <u>twice</u>. you can <a>talk to it</a> in your browser.</p>
+        <p class="m">once wasn't enough. the first run still rambled</p>
+      </div>
+      <div class="entry">
+        <h2>lilbase <small>297m · sep 2026</small></h2>
+        <p class="body">a llama style base model, pretrained from scratch in jax on a <u>free kaggle tpu</u>. it beats gpt-2 small on hellaswag, 36.8 to 35.1, and on arc-easy, 48.1 to 40.6. it loses on lambada.</p>
+        <p class="m">kaggle gave me 1 working chip out of 8 once. the script now refuses to start</p>
+      </div>
+      <div class="entry">
+        <h2>lilchat <small>297m · sep 2026</small></h2>
+        <p class="body">lilbase taught to chat in one night on my macbook air, in mlx, with the loss only on the assistant turns. val loss went from 2.230 to 1.337. it told me the capital of australia is <u>melbourne</u>.</p>
+        <p class="m">then perth. it's canberra</p>
+      </div>
+      <div class="entry">
+        <h2>the paper <small>8.2m · sep 2026</small></h2>
+        <p class="body">the same model trained on 1, 5, 10 and 15% of tinystories. at 1% it memorised its stories, and by 10% the gap between train and val loss was gone. <u>15% did slightly worse</u> than 10%.</p>
+        <p class="m">probably never got through all its data in 5000 steps</p>
+      </div>
+    </div>
+
+    <p class="label">writing</p>
+    <div class="posts">
+      <a><span>oct 12</span><span>airgpt, train a chatbot from scratch on a mac</span></a>
+      <a><span>oct 5</span><span>my first pr got merged into mlx</span></a>
+      <a><span>oct 1</span><span>sprout can talk now</span></a>
+      <a><span>sep 12</span><span>tale, bedtime stories for my little brother</span></a>
+    </div>
+    <div class="end"><span>made in australia</span><div><a>github</a><a>hugging face</a><a>ollama</a><a>rss</a></div></div>
+  </main>
+</body>
+</html>

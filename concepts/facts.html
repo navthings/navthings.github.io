@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>concept · model facts</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;600;800;900&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="_base.css" />
+<style>
+  :root { --bg: #ffffff; --ink: #0d0d0d; --line: #e8e8e6; }
+  body { background: var(--bg); color: var(--ink); }
+  .row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; align-items: start; }
+  .nf { border: 1.5px solid var(--ink); padding: 6px 8px 8px; font: 400 13px/1.25 "Libre Franklin", sans-serif; }
+  .nf h3 { font: 900 34px/1 "Libre Franklin"; letter-spacing: -.02em; padding-bottom: 3px; }
+  .nf .serv { border-bottom: 10px solid var(--ink); padding: 3px 0 4px; }
+  .nf .serv b { font-weight: 800; }
+  .nf .big { display: flex; justify-content: space-between; align-items: end; border-bottom: 5px solid var(--ink); padding: 4px 0 2px; }
+  .nf .big span { font: 900 15px "Libre Franklin"; }
+  .nf .big b { font: 900 34px/1 "Libre Franklin"; }
+  .nf .dv { text-align: right; font-weight: 800; font-size: 11px; padding: 3px 0; border-bottom: 1px solid var(--ink); }
+  .nf .r { display: flex; justify-content: space-between; gap: 8px; padding: 3px 0; border-bottom: 1px solid var(--ink); }
+  .nf .r.in { padding-left: 14px; }
+  .nf .r b { font-weight: 800; }
+  .nf .r em { font-style: normal; font-weight: 800; }
+  .nf .thick { border-bottom: 10px solid var(--ink); }
+  .nf .ing { padding-top: 6px; font-size: 11.5px; line-height: 1.35; }
+  .nf .ing b { font-weight: 800; }
+  .nf .go { display: block; margin-top: 10px; font: 800 12px "Libre Franklin"; text-transform: uppercase; letter-spacing: .04em; }
+  @media (max-width: 980px) { .row { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 520px) { .row { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+  <header class="top"><b>navthings</b><nav><a>models</a><a>writing</a><a>playground</a><a>email</a></nav></header>
+  <main class="col">
+    <p class="intro">hi, i'm nav. i train small language models from scratch and test what they actually learned. <span class="q">mostly on a free kaggle tpu, sometimes overnight on my macbook air.</span></p>
+
+    <p class="label">the models, with full ingredients</p>
+    <div class="row">
+      <article class="nf">
+        <h3>Model Facts</h3>
+        <div class="serv"><b>sprout</b> · serving size 1 prompt</div>
+        <div class="big"><span>Parameters</span><b>523M</b></div>
+        <div class="dv">% of gpt-2 xl*</div>
+        <div class="r"><span><b>Params</b> vs 1.5B</span><em>35%</em></div>
+        <div class="r"><span><b>Tokens</b> 12B</span><em></em></div>
+        <div class="r in"><span>tpu chips</span><em>8</em></div>
+        <div class="r thick"><span><b>Chat finetunes</b> 2</span><em></em></div>
+        <p class="ing"><b>Ingredients:</b> fineweb-edu (55%), dclm (27%), cosmopedia (9%), gutenberg (9%).<br />*goal is to get close to gpt-2 xl.</p>
+        <a class="go">talk to it →</a>
+      </article>
+      <article class="nf">
+        <h3>Model Facts</h3>
+        <div class="serv"><b>lilbase</b> · serving size 1 prompt</div>
+        <div class="big"><span>Parameters</span><b>297M</b></div>
+        <div class="dv">vs gpt-2 small</div>
+        <div class="r"><span><b>HellaSwag</b> 36.8%</span><em>+1.7</em></div>
+        <div class="r"><span><b>ARC-Easy</b> 48.1%</span><em>+7.5</em></div>
+        <div class="r"><span><b>LAMBADA</b> 28.5%</span><em>−6.5</em></div>
+        <div class="r thick"><span><b>Tokens</b> 6.1B</span><em></em></div>
+        <p class="ing"><b>Ingredients:</b> jax, a tpu v5e-8, 8.4 hour kaggle sessions. <b>Warning:</b> kaggle may supply 1 working chip out of 8.</p>
+        <a class="go">read how it went →</a>
+      </article>
+      <article class="nf">
+        <h3>Model Facts</h3>
+        <div class="serv"><b>lilchat</b> · serving size 1 chat</div>
+        <div class="big"><span>Val loss</span><b>1.337</b></div>
+        <div class="dv">from base</div>
+        <div class="r"><span><b>Started at</b> 2.230</span><em>−40%</em></div>
+        <div class="r"><span><b>Trained</b> 1 night</span><em></em></div>
+        <div class="r thick"><span><b>Loss on</b> assistant turns only</span><em></em></div>
+        <p class="ing"><b>Ingredients:</b> lilbase, smol-smoltalk, mlx. <b>May contain:</b> confident wrong answers about capitals. it's canberra.</p>
+        <a class="go">talk to it →</a>
+      </article>
+      <article class="nf">
+        <h3>Study Facts</h3>
+        <div class="serv"><b>the paper</b> · serving size 1 pdf</div>
+        <div class="big"><span>Enough data</span><b>10%</b></div>
+        <div class="dv">of tinystories</div>
+        <div class="r"><span><b>1%</b> memorised</span><em></em></div>
+        <div class="r"><span><b>10%</b> gap closed</span><em></em></div>
+        <div class="r thick"><span><b>15%</b> slightly worse</span><em></em></div>
+        <p class="ing"><b>Ingredients:</b> one 8.2m model, four slices of data, 5000 steps each. 15% probably never finished its data.</p>
+        <a class="go">read the paper →</a>
+      </article>
+    </div>
+
+    <p class="label">writing</p>
+    <div class="posts">
+      <a><span>oct 12</span><span>airgpt, train a chatbot from scratch on a mac</span></a>
+      <a><span>oct 5</span><span>my first pr got merged into mlx</span></a>
+      <a><span>oct 1</span><span>sprout can talk now</span></a>
+      <a><span>sep 26</span><span>teaching lilbase to talk</span></a>
+      <a><span>sep 12</span><span>tale, bedtime stories for my little brother</span></a>
+    </div>
+
+    <div class="end"><span>made in australia</span><div><a>github</a><a>hugging face</a><a>ollama</a><a>rss</a></div></div>
+  </main>
+</body>
+</html>
