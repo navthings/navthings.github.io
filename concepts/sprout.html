@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>concept · sprout writes it</title>
+<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;700;800&family=Fragment+Mono&family=Gochi+Hand&display=swap" rel="stylesheet" />
+<style>
+  :root { --bg: #ffc93c; --ink: #17140f; --biro: #1f2cff; --t1: #fffaf0; --t2: #ffd9ec; --t3: #d6e2ff; --t4: #efe0ff; --t5: #ffe9c7; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { overflow-x: clip; font-variant-ligatures: none; background: var(--bg); color: var(--ink); font: 16px/1.5 "Schibsted Grotesk", sans-serif; -webkit-font-smoothing: antialiased; }
+  .bar { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 14px 28px; background: var(--ink); color: #f6efe0; font: 13px "Fragment Mono", monospace; }
+  .bar .live::before { content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #ff5c8a; margin-right: 8px; }
+  .bar nav { display: flex; gap: 20px; opacity: .8; }
+  main { max-width: 1120px; margin: 0 auto; padding: 0 32px; }
+  .prompt { font: 15px "Fragment Mono", monospace; margin: 56px 0 26px; display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+  .prompt b { background: var(--ink); color: var(--bg); padding: 3px 9px; border-radius: 5px; font-weight: 400; }
+  .gen { font-weight: 700; font-size: 66px; line-height: 1.32; letter-spacing: -.025em; }
+  .gen .t { border-radius: 6px; padding: 0 .04em; white-space: pre-wrap; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+  .x { text-decoration: line-through; text-decoration-color: var(--biro); text-decoration-thickness: 6px; }
+  .fix { display: inline-block; margin: 0 .2em 0 .25em; vertical-align: .35em; white-space: nowrap; font: 400 40px/1 "Gochi Hand", cursive; color: var(--biro); transform: rotate(-3deg); letter-spacing: 0; }
+  .ok { font: 400 40px "Gochi Hand", cursive; color: var(--biro); margin-left: 10px; letter-spacing: 0; display: inline-block; transform: rotate(-4deg); }
+  .cursor { display: inline-block; width: .5em; height: .9em; background: var(--ink); vertical-align: -.08em; margin-left: .08em; }
+  .meta { display: flex; gap: 24px; flex-wrap: wrap; margin: 30px 0 0; font: 13px "Fragment Mono", monospace; opacity: .75; }
+  h2 { font: 13px "Fragment Mono", monospace; margin: 110px 0 18px; display: flex; justify-content: space-between; border-bottom: 2px solid var(--ink); padding-bottom: 10px; }
+  .things { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .thing { background: var(--t1); border: 2px solid var(--ink); border-radius: 14px; padding: 22px 22px 20px; position: relative; box-shadow: 5px 5px 0 var(--ink); }
+  .thing .n { font: 13px "Fragment Mono", monospace; opacity: .6; }
+  .thing h3 { font-weight: 800; font-size: 34px; letter-spacing: -.03em; margin: 2px 0 8px; }
+  .thing p { font-size: 17px; line-height: 1.45; }
+  .thing .note { position: absolute; right: 18px; top: 16px; font: 400 26px/1 "Gochi Hand", cursive; color: var(--biro); transform: rotate(4deg); text-align: right; max-width: 220px; }
+  .thing .go { display: inline-block; margin-top: 16px; font: 13px "Fragment Mono", monospace; background: var(--ink); color: var(--bg); padding: 6px 12px; border-radius: 99px; }
+  .posts a { display: grid; grid-template-columns: 110px 1fr; gap: 16px; padding: 14px 0; border-bottom: 2px solid rgba(23,20,15,.15); font-size: 22px; font-weight: 500; letter-spacing: -.01em; }
+  .posts a span { font: 13px/2.2 "Fragment Mono", monospace; opacity: .6; }
+  .eot { margin: 90px 0 0; padding-bottom: 60px; display: flex; justify-content: space-between; align-items: end; flex-wrap: wrap; gap: 20px; }
+  .eot code { font-feature-settings: "liga" 0, "calt" 0; font: 15px "Fragment Mono", monospace; background: var(--ink); color: var(--bg); padding: 8px 12px; border-radius: 6px; }
+  .eot div { display: flex; gap: 18px; font-weight: 500; }
+  @media (max-width: 760px) {
+    .bar { padding: 12px 16px; } .bar nav { display: none; }
+    main { padding: 0 16px; }
+    .gen { font-size: 38px; } .fix, .ok { font-size: 26px; }
+    .things { grid-template-columns: 1fr; }
+    .thing .note { position: static; display: block; margin-top: 12px; text-align: left; }
+    .posts a { grid-template-columns: 1fr; gap: 0; font-size: 19px; }
+  }
+</style>
+</head>
+<body>
+  <div class="bar"><span class="live">sprout-523m · temp 0.8 · running in your browser</span><nav><a>things</a><a>writing</a><a>playground</a><a>email</a></nav></div>
+
+  <main>
+    <p class="prompt"><b>user</b> write the homepage for navthings. keep it short.</p>
+
+    <p class="gen" data-gen>nav|things| is| the| website| of| nav|,|<x fix="i train small language models"> a| famous| chef| from| mel|bourne</x>|.| nav| trained| me| on| 12| billion| tokens| using| a| free| tpu|.<ok>✓ yes</ok>| nav| also| made| a| model| that| tells| bedtime| stories| to|<x fix="my little brother"> the| king| of| australia</x>|.</p>
+
+    <div class="meta"><span>sampled at temp 0.8</span><span>runs on your computer</span><span>2 corrections by nav</span></div>
+
+    <h2><span>sprout's list of things nav made</span><span>checked by nav</span></h2>
+    <div class="things">
+      <article class="thing"><span class="n">01 · 523m params</span><h3>sprout</h3><p>that's me. 12 billion tokens from fineweb-edu, dclm, cosmopedia and gutenberg. then i learned to chat.</p><span class="note">aiming for gpt-2 xl</span><a class="go">talk to it</a></article>
+      <article class="thing"><span class="n">02 · 297m params</span><h3>lilbase</h3><p>my older sibling. beats gpt-2 small on hellaswag, 36.8 to 35.1, and arc-easy, 48.1 to 40.6.</p><span class="note">lost on lambada though</span><a class="go">read how it went</a></article>
+      <article class="thing"><span class="n">03 · sft in mlx</span><h3>lilchat</h3><p>lilbase taught to chat in one night. val loss went from 2.230 to 1.337. very smart about capitals.</p><span class="note">it is not.</span><a class="go">talk to it</a></article>
+      <article class="thing"><span class="n">04 · zenodo</span><h3>the paper</h3><p>one model, trained on 1, 5, 10 and 15% of tinystories. at 10% the gap between train and val loss closes.</p><span class="note">15% did worse. ran out of steps</span><a class="go">read it</a></article>
+    </div>
+
+    <h2><span>writing</span><span>by nav, not sprout</span></h2>
+    <div class="posts">
+      <a><span>2026-10-12</span>airgpt, train a chatbot from scratch on a mac</a>
+      <a><span>2026-10-05</span>my first pr got merged into mlx</a>
+      <a><span>2026-10-01</span>sprout can talk now</a>
+      <a><span>2026-09-12</span>tale, bedtime stories for my little brother</a>
+    </div>
+
+    <div class="eot"><code>&lt;|endoftext|&gt;</code><div><a>github</a><a>hugging face</a><a>ollama</a><a>rss</a></div></div>
+  </main>
+
+  <script>
+    const tints = ["--t1", "--t2", "--t3", "--t4", "--t5"];
+    let k = 0;
+    const tok = (s) => s.split("|").filter(Boolean).map((t) => `<span class="t" style="background:var(${tints[k++ % 5]})">${t}</span>`).join("");
+    const el = document.querySelector("[data-gen]");
+    el.innerHTML = el.innerHTML
+      .replace(/<x fix="([^"]+)">(.*?)<\/x>/g, (_, fix, body) => `\u0000X${fix}\u0001${body}\u0000`)
+      .split("\u0000")
+      .map((part) => {
+        if (part.startsWith("X")) {
+          const [fix, body] = part.slice(1).split("\u0001");
+          return `<span class="x">${tok(body)}</span><span class="fix">^ ${fix}</span>`;
+        }
+        return part.replace(/<ok>(.*?)<\/ok>/, "\u0002$1\u0002").split("\u0002").map((p, i) => (i === 1 ? `<span class="ok">${p}</span>` : tok(p))).join("");
+      })
+      .join("") + '<span class="cursor"></span>';
+  </script>
+</body>
+</html>

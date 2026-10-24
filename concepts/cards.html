@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>concept · cards</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=Martian+Mono:wght@400;600&display=swap" rel="stylesheet" />
+<style>
+  :root { --table: #1d2fd6; --table-2: #1526b8; --white: #fffdf6; --ink: #14121a; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: radial-gradient(1400px 900px at 50% 30%, #2b3ff0, var(--table) 50%, var(--table-2)); color: var(--white); font: 16px/1.5 "Bricolage Grotesque", sans-serif; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+  body::before { content: ""; position: fixed; inset: 0; pointer-events: none; opacity: .22; mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+  .mono { font-family: "Martian Mono", monospace; }
+  header { display: flex; justify-content: space-between; align-items: center; padding: 26px 40px; font-weight: 600; }
+  header nav { display: flex; gap: 8px; }
+  header nav a { padding: 8px 14px; border-radius: 99px; background: rgba(255,255,255,.1); font-size: 14px; }
+  .logo { font: 800 22px "Bricolage Grotesque"; letter-spacing: -.03em; display: flex; align-items: center; gap: 10px; }
+  .logo i { width: 26px; height: 34px; border-radius: 5px; background: var(--white); transform: rotate(-8deg); box-shadow: 4px 4px 0 #ff6fb5; }
+  .intro { text-align: center; padding: 40px 24px 0; }
+  .intro h1 { font: 800 clamp(48px, 7.4vw, 112px)/.9 "Bricolage Grotesque"; font-variation-settings: "wdth" 80; letter-spacing: -.04em; }
+  .intro h1 span { color: #ffd23f; }
+  .intro p { max-width: 520px; margin: 22px auto 0; font-size: 18px; color: rgba(255,253,246,.78); }
+  .hand { position: relative; height: 560px; margin-top: 30px; }
+  .card { position: absolute; left: 50%; top: 40px; width: 268px; height: 380px; margin-left: -134px; border-radius: 16px; padding: 10px; color: var(--ink);
+    background: var(--c); box-shadow: 0 2px 0 rgba(0,0,0,.15), 0 30px 50px -18px rgba(5,10,60,.6); transform: translateX(var(--x)) translateY(var(--y)) rotate(var(--r)); }
+  .card .face { height: 100%; border-radius: 10px; background: var(--white); padding: 12px; display: flex; flex-direction: column; gap: 8px; position: relative; overflow: hidden; }
+  .card .top { display: flex; justify-content: space-between; align-items: baseline; }
+  .card h3 { font: 800 26px/1 "Bricolage Grotesque"; letter-spacing: -.03em; }
+  .card .hp { font: 600 11px "Martian Mono"; }
+  .card .hp b { font-size: 17px; }
+  .art { flex: none; height: 132px; border-radius: 6px; background: var(--c); position: relative; overflow: hidden; border: 2px solid var(--ink); }
+  .art svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .type { white-space: nowrap; font: 600 9.5px "Martian Mono"; text-transform: uppercase; letter-spacing: .04em; background: var(--ink); color: var(--white); padding: 4px 8px; border-radius: 4px; align-self: flex-start; }
+  .move { display: flex; justify-content: space-between; gap: 10px; font-size: 13px; line-height: 1.3; }
+  .move b { font-weight: 700; display: block; font-size: 14px; }
+  .move .n { font: 600 18px "Martian Mono"; white-space: nowrap; }
+  .flavor { margin-top: auto; font-size: 12px; font-style: italic; line-height: 1.35; border-top: 1.5px solid var(--ink); padding-top: 7px; color: #4b4757; }
+  .foot { display: flex; justify-content: space-between; font: 400 9px "Martian Mono"; color: #7a7686; }
+  .foil .art::after { content: ""; position: absolute; inset: 0; pointer-events: none; mix-blend-mode: color-dodge; opacity: .55;
+    background: linear-gradient(115deg, transparent 25%, #ff9de2 38%, #9df7ff 48%, #fff79d 58%, transparent 72%); }
+  .c1 { --c: #ff6fb5; --x: -470px; --y: 70px; --r: -14deg; }
+  .c2 { --c: #ffd23f; --x: -160px; --y: 14px; --r: -5deg; }
+  .c3 { --c: #7fe0ff; --x: 160px; --y: 14px; --r: 5deg; }
+  .c4 { --c: #ff8a3d; --x: 470px; --y: 70px; --r: 14deg; }
+  .tag { position: absolute; top: -14px; right: -12px; z-index: 2; background: var(--ink); color: #ffd23f; font: 600 10px "Martian Mono"; padding: 6px 10px; border-radius: 99px; transform: rotate(8deg); }
+  .binder { max-width: 1100px; margin: 40px auto 0; padding: 0 40px 90px; display: grid; grid-template-columns: 1fr 1.3fr; gap: 56px; }
+  h2 { font: 800 40px/1 "Bricolage Grotesque"; letter-spacing: -.03em; margin-bottom: 18px; }
+  .slots { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  .slot { aspect-ratio: .7; border-radius: 10px; background: var(--white); color: var(--ink); padding: 8px; display: flex; flex-direction: column; justify-content: space-between; font-weight: 700; font-size: 14px; line-height: 1.1; }
+  .slot i { display: block; height: 46%; border-radius: 5px; background: var(--s); }
+  .slot small { font: 400 9px "Martian Mono"; color: #7a7686; }
+  .slot.empty { background: transparent; border: 2px dashed rgba(255,255,255,.35); color: rgba(255,255,255,.6); align-items: center; justify-content: center; font-weight: 500; font-size: 12px; text-align: center; }
+  .log a { display: flex; justify-content: space-between; gap: 16px; padding: 13px 0; border-bottom: 1.5px solid rgba(255,255,255,.18); font-size: 18px; font-weight: 500; }
+  .log a span { font: 400 12px/2 "Martian Mono"; color: rgba(255,253,246,.6); white-space: nowrap; }
+  @media (max-width: 760px) {
+    header { padding: 20px; } header nav a:not(:last-child) { display: none; }
+    .hand { height: 470px; }
+    .card { width: 220px; height: 330px; margin-left: -110px; }
+    .art { height: 100px; } .type { font-size: 8px; }
+    .c2 { --x: -46px; --y: 30px; --r: -7deg; } .c3 { --x: 46px; --y: 10px; --r: 6deg; }
+    .c1, .c4 { display: none; }
+    .binder { grid-template-columns: 1fr; padding: 0 20px 60px; }
+  }
+</style>
+</head>
+<body>
+  <header>
+    <span class="logo"><i></i>navthings</span>
+    <nav><a>models</a><a>writing</a><a>playground</a><a>email</a></nav>
+  </header>
+
+  <section class="intro">
+    <h1>i make language models.<br /><span>collect them all.</span></h1>
+    <p>trained from scratch on a free kaggle tpu and my macbook air. every card runs in your browser, nothing leaves your computer.</p>
+  </section>
+
+  <section class="hand">
+    <article class="card c1"><div class="face">
+      <div class="top"><h3>lilchat</h3><span class="hp mono"><b>297</b>M</span></div>
+      <div class="art"><svg viewBox="0 0 240 130"><rect x="22" y="22" width="120" height="40" rx="20" fill="#14121a"/><rect x="96" y="70" width="122" height="40" rx="20" fill="#fffdf6" stroke="#14121a" stroke-width="3"/><circle cx="56" cy="42" r="5" fill="#ff6fb5"/><circle cx="76" cy="42" r="5" fill="#ff6fb5"/><circle cx="96" cy="42" r="5" fill="#ff6fb5"/></svg></div>
+      <span class="type">finetune · mlx · one night</span>
+      <div class="move"><span><b>sft</b>loss only on the assistant turns</span><span class="n">1.337</span></div>
+      <p class="flavor">"the capital of australia is melbourne." then perth.</p>
+      <div class="foot"><span>no. 006</span><span>◆ uncommon</span></div>
+    </div></article>
+
+    <article class="card c2"><div class="face">
+      <div class="top"><h3>lilbase</h3><span class="hp mono"><b>297</b>M</span></div>
+      <div class="art"><svg viewBox="0 0 240 130"><rect x="30" y="58" width="34" height="60" fill="#14121a"/><rect x="72" y="70" width="34" height="48" fill="#fffdf6" stroke="#14121a" stroke-width="3"/><rect x="134" y="30" width="34" height="88" fill="#14121a"/><rect x="176" y="50" width="34" height="68" fill="#fffdf6" stroke="#14121a" stroke-width="3"/></svg></div>
+      <span class="type">base model · jax · tpu v5e-8</span>
+      <div class="move"><span><b>arc-easy</b>gpt-2 small gets 40.6</span><span class="n">48.1</span></div>
+      <div class="move"><span><b>hellaswag</b>gpt-2 small gets 35.1</span><span class="n">36.8</span></div>
+      <p class="flavor">weak to lambada. kaggle once gave it 1 working chip out of 8.</p>
+      <div class="foot"><span>no. 005</span><span>◆◆ rare</span></div>
+    </div></article>
+
+    <article class="card c3 foil"><span class="tag">newest</span><div class="face">
+      <div class="top"><h3>sprout</h3><span class="hp mono"><b>523</b>M</span></div>
+      <div class="art"><svg viewBox="0 0 240 130"><g fill="none" stroke="#14121a" stroke-width="3"><circle cx="120" cy="140" r="30"/><circle cx="120" cy="140" r="56"/><circle cx="120" cy="140" r="82"/><circle cx="120" cy="140" r="108"/></g><circle cx="120" cy="140" r="30" fill="#14121a"/></svg></div>
+      <span class="type">pretrain + chat · 12b tokens</span>
+      <div class="move"><span><b>sharded</b>optimizer split across 8 tpu chips</span><span class="n">×8</span></div>
+      <div class="move"><span><b>diet</b>fineweb-edu, dclm, cosmopedia, gutenberg</span><span class="n">55%</span></div>
+      <p class="flavor">goal: get close to gpt-2 xl, which is three times its size.</p>
+      <div class="foot"><span>no. 009</span><span>★ holo</span></div>
+    </div></article>
+
+    <article class="card c4"><div class="face">
+      <div class="top"><h3>the paper</h3><span class="hp mono"><b>8.2</b>M</span></div>
+      <div class="art"><svg viewBox="0 0 240 130"><path d="M10 20 C 60 90, 120 100, 230 104" fill="none" stroke="#14121a" stroke-width="4"/><path d="M10 20 C 50 60, 100 40, 230 30" fill="none" stroke="#fffdf6" stroke-width="4"/></svg></div>
+      <span class="type">research · tinystories</span>
+      <div class="move"><span><b>data diet</b>1, 5, 10 and 15% of the set</span><span class="n">10%</span></div>
+      <p class="flavor">at 1% it memorised its stories. 15% did worse than 10%. probably ran out of steps.</p>
+      <div class="foot"><span>no. 004</span><span>◆◆ rare</span></div>
+    </div></article>
+  </section>
+
+  <section class="binder">
+    <div>
+      <h2>the binder</h2>
+      <div class="slots">
+        <div class="slot"><i style="--s:#c7b8ff"></i>tale<small>no. 003 · 52mb</small></div>
+        <div class="slot"><i style="--s:#d9c9ff"></i>lilstory<small>no. 002 · 8.2m</small></div>
+        <div class="slot"><i style="--s:#ffc4a8"></i>bigtrans­former<small>no. 001</small></div>
+        <div class="slot"><i style="--s:#e6e3dc"></i>liltrans­former<small>no. 000 · 1 sentence</small></div>
+        <div class="slot"><i style="--s:#ffd23f"></i>mlx #4611<small>merged oct 4</small></div>
+        <div class="slot"><i style="--s:#7fe0ff"></i>airgpt<small>oct 12</small></div>
+        <div class="slot"><i style="--s:#ff6fb5"></i>playground<small>wasm</small></div>
+        <div class="slot empty">next one<br />training</div>
+      </div>
+    </div>
+    <div>
+      <h2>notes from each pull</h2>
+      <div class="log">
+        <a>airgpt, train a chatbot from scratch on a mac<span>oct 12</span></a>
+        <a>my first pr got merged into mlx<span>oct 05</span></a>
+        <a>sprout can talk now<span>oct 01</span></a>
+        <a>teaching lilbase to talk<span>sep 26</span></a>
+        <a>lilbase, 297m params on a free tpu<span>sep 23</span></a>
+        <a>tale, bedtime stories for my little brother<span>sep 12</span></a>
+      </div>
+    </div>
+  </section>
+</body>
+</html>
