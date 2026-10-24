@@ -1,0 +1,232 @@
+<meta charset="utf-8">
+<title>navthings hover</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500&family=Geist+Mono:wght@400;500&family=Gochi+Hand&display=swap">
+<style>
+  /* layout: one narrow column of sentences; every link opens a floating card that shows the thing itself */
+  :root {
+    --bg: #ffffff; --fg: #111111; --soft: #6e6e6e; --faint: #a8a8a8; --line: #ececec; --hover: #f5f5f4;
+    --card: #ffffff; --card-edge: rgba(0,0,0,.06); --shadow: 0 1px 2px rgba(0,0,0,.04), 0 12px 32px -8px rgba(0,0,0,.16);
+    --red: #e5251b; --t1: #fde2ee; --t2: #dde7ff; --t3: #fff0c9; --t4: #e9e1ff; --t5: #ffe3d3;
+    --bar: #111111; --bar-2: #d6d6d3; --merged: #8250df;
+    --sans: "Geist", "Helvetica Neue", Helvetica, Arial, sans-serif; --mono: "Geist Mono", ui-monospace, Menlo, monospace; --hand: "Gochi Hand", "Comic Sans MS", cursive;
+    --ease: cubic-bezier(.2, .8, .2, 1);
+  }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+    --bg: #0f0f10; --fg: #f2f2f0; --soft: #9a9a9e; --faint: #5f5f64; --line: #222225; --hover: #19191b;
+    --card: #1a1a1c; --card-edge: rgba(255,255,255,.07); --shadow: 0 1px 2px rgba(0,0,0,.4), 0 16px 40px -10px rgba(0,0,0,.7);
+    --red: #ff5146; --t1: #4a2333; --t2: #23304f; --t3: #463a1c; --t4: #352a52; --t5: #4a2e22; --bar: #f2f2f0; --bar-2: #47474b; --merged: #a371f7; color-scheme: dark; } }
+  :root[data-theme="dark"] {
+    --bg: #0f0f10; --fg: #f2f2f0; --soft: #9a9a9e; --faint: #5f5f64; --line: #222225; --hover: #19191b;
+    --card: #1a1a1c; --card-edge: rgba(255,255,255,.07); --shadow: 0 1px 2px rgba(0,0,0,.4), 0 16px 40px -10px rgba(0,0,0,.7);
+    --red: #ff5146; --t1: #4a2333; --t2: #23304f; --t3: #463a1c; --t4: #352a52; --t5: #4a2e22; --bar: #f2f2f0; --bar-2: #47474b; --merged: #a371f7; color-scheme: dark; }
+
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--soft); font: 400 19px/1.75 var(--sans); -webkit-font-smoothing: antialiased;
+    padding-left: max(24px, env(safe-area-inset-left, 0px)); padding-right: max(24px, env(safe-area-inset-right, 0px)); padding-block: 0 120px; }
+  main { max-width: 640px; margin: 0 0 0 max(0px, calc((100vw - 1120px) / 2)); padding-top: 120px; }
+  h1, h2 { color: var(--fg); font-weight: 500; font-size: 19px; margin: 0 0 22px; }
+  h2 { margin-top: 96px; }
+  p { margin: 0 0 18px; text-wrap: pretty; }
+  a, .w { color: var(--fg); text-decoration: none; cursor: pointer; transition: opacity .15s; }
+  a:focus-visible { outline: 2px solid var(--fg); outline-offset: 3px; border-radius: 4px; }
+
+  .w { position: relative; display: inline-block; }
+  .w svg { position: absolute; left: -4px; right: -4px; top: 50%; width: calc(100% + 8px); height: 22px; transform: translateY(-50%); overflow: visible; pointer-events: none; }
+  .w path { fill: none; stroke: var(--red); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 260; stroke-dashoffset: 260; transition: stroke-dashoffset .45s var(--ease); }
+  .w .fix { position: absolute; left: 50%; bottom: 72%; transform: translate(-50%, 4px) rotate(-4deg); font: 400 20px/1 var(--hand); color: var(--red); white-space: nowrap; opacity: 0; transition: opacity .2s .3s, transform .3s .3s var(--ease); }
+  .w:hover path, .w.on path { stroke-dashoffset: 0; }
+  .w:hover .fix, .w.on .fix { opacity: 1; transform: translate(-50%, 0) rotate(-4deg); }
+
+  .rows { margin: 0 -18px; }
+  .row { display: grid; grid-template-columns: 1fr auto; align-items: baseline; gap: 16px; padding: 14px 18px; border-radius: 16px; transition: background .18s; }
+  .row:hover { background: var(--hover); }
+  .row b { display: block; color: var(--fg); font-weight: 400; }
+  .row span { display: block; color: var(--soft); }
+  .row i { font-style: normal; color: var(--faint); font: 13px var(--mono); transition: color .18s, transform .25s var(--ease); }
+  .row:hover i { color: var(--fg); transform: translateX(3px); }
+  .post { grid-template-columns: 96px 1fr; }
+  .post i { order: -1; }
+
+  .copy { position: relative; display: inline-grid; }
+  .copy > * { grid-area: 1 / 1; transition: opacity .2s, filter .2s, transform .25s var(--ease); }
+  .copy .done { opacity: 0; filter: blur(4px); transform: translateY(4px); }
+  .copy.ok .label { opacity: 0; filter: blur(4px); transform: translateY(-4px); }
+  .copy.ok .done { opacity: 1; filter: none; transform: none; }
+
+  @keyframes up { from { opacity: 0; transform: translateY(6px); filter: blur(2px); } }
+  main > * { animation: up .6s var(--ease) both; }
+  main > *:nth-child(2) { animation-delay: .06s; } main > *:nth-child(3) { animation-delay: .12s; } main > *:nth-child(4) { animation-delay: .18s; }
+  main > *:nth-child(5) { animation-delay: .24s; } main > *:nth-child(n+6) { animation-delay: .3s; }
+
+  #card { position: fixed; left: 0; top: 0; z-index: 20; width: 300px; padding: 14px; border-radius: 16px; background: var(--card); box-shadow: var(--shadow), 0 0 0 1px var(--card-edge);
+    font: 400 14px/1.5 var(--sans); color: var(--soft); pointer-events: none; opacity: 0; transform-origin: 50% 100%;
+    transition: opacity .16s, scale .22s var(--ease), filter .2s; scale: .96; filter: blur(3px); will-change: transform; }
+  #card.on { opacity: 1; scale: 1; filter: none; }
+  #card.below { transform-origin: 50% 0; }
+  .k { display: flex; justify-content: space-between; font: 12px var(--mono); color: var(--faint); margin-bottom: 10px; }
+  .k b { color: var(--fg); font-weight: 500; }
+  .foot { margin-top: 12px; color: var(--fg); font-size: 13px; }
+  .tok { border-radius: 4px; padding: 1px 0; animation: tk .18s var(--ease) both; color: var(--fg); }
+  @keyframes tk { from { opacity: 0; filter: blur(3px); } }
+  .stream { min-height: 66px; font-size: 15px; line-height: 1.6; }
+  .ask { font: 12px var(--mono); color: var(--faint); margin-bottom: 6px; }
+  .bars { display: grid; gap: 9px; }
+  .bars .g { display: grid; grid-template-columns: 74px 1fr 40px; gap: 8px; align-items: center; font-size: 12.5px; }
+  .bars .g div { display: grid; gap: 3px; }
+  .bars .g i { display: block; height: 7px; border-radius: 4px; width: 0; transition: width .6s var(--ease); }
+  .bars .g em { font: 11.5px var(--mono); font-style: normal; color: var(--fg); text-align: right; }
+  .legend { display: flex; gap: 14px; margin-top: 10px; font-size: 12px; }
+  .legend span::before { content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 2px; margin-right: 6px; background: var(--c); }
+  .bub { display: grid; gap: 6px; }
+  .bub p { margin: 0; padding: 6px 11px; border-radius: 14px; max-width: 85%; font-size: 14px; animation: tk .25s var(--ease) both; }
+  .bub .u { justify-self: end; background: var(--fg); color: var(--bg); }
+  .bub .b { background: var(--hover); color: var(--fg); animation-delay: .35s; margin-top: 14px; overflow: visible; }
+  .bub .b { max-width: 100%; padding-top: 20px; } .bub .w { white-space: nowrap; } .bub .w .fix { font-size: 17px; bottom: 62%; }
+  .chips { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+  .chips i { aspect-ratio: 1.6; border-radius: 6px; background: var(--line); transition: background .25s; display: grid; place-items: center; font: 11px var(--mono); font-style: normal; color: var(--faint); }
+  .chips i.lit { background: var(--fg); color: var(--bg); }
+  .pr { display: flex; align-items: center; gap: 10px; }
+  .pill { display: inline-flex; align-items: center; gap: 5px; background: var(--merged); color: #fff; font: 500 12px var(--sans); padding: 3px 10px 3px 8px; border-radius: 99px; animation: pop .35s var(--ease) both .1s; }
+  @keyframes pop { from { scale: .6; opacity: 0; } }
+  .pr-t { color: var(--fg); font-size: 15px; margin-top: 8px; line-height: 1.35; }
+  .heat { height: 8px; border-radius: 4px; background: var(--line); overflow: hidden; margin: 10px 0 6px; }
+  .heat i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, #ffc93c, #ff7a1a, var(--red)); transition: width 1.8s cubic-bezier(.4, 0, .2, 1); border-radius: 4px; }
+  .scale { display: flex; justify-content: space-between; font: 11.5px var(--mono); color: var(--faint); }
+  .story { font-size: 15px; color: var(--fg); min-height: 70px; }
+  .caret { display: inline-block; width: 7px; height: 15px; background: var(--fg); vertical-align: -2px; margin-left: 1px; animation: blink 1s steps(1) infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+  .list div { display: flex; justify-content: space-between; padding: 6px 0; border-top: 1px solid var(--line); color: var(--fg); font-size: 14px; animation: tk .3s var(--ease) both; }
+  .list div span { font: 12px var(--mono); color: var(--faint); }
+  svg.loss { display: block; width: 100%; height: 92px; }
+  svg.loss path { fill: none; stroke-width: 2; stroke-linecap: round; stroke-dasharray: 400; stroke-dashoffset: 400; transition: stroke-dashoffset .9s var(--ease); }
+  svg.loss text { font: 10px var(--mono); fill: var(--faint); }
+
+  @media (max-width: 700px) { body { font-size: 17px; } main { padding-top: 64px; } .post { grid-template-columns: 1fr; gap: 0; } .post i { order: 0; } }
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+</style>
+
+<main>
+  <h1>nav</h1>
+  <p>i'm a machine learning engineer in australia. i train small language models from scratch and then test what they actually learned.</p>
+  <p>the newest is <a data-card="sprout" href="#">sprout</a>, 523m params pretrained on a free <a data-card="tpu" href="#">kaggle tpu</a> and then taught to chat. before it came <a data-card="lilbase" href="#">lilbase</a>, which beats gpt-2 small on two of three evals, and <a data-card="lilchat" href="#">lilchat</a>, which told me the capital of australia is <span class="w" tabindex="0">melbourne<svg viewBox="0 0 100 22" preserveAspectRatio="none"><path d="M2 14 C 12 4, 18 20, 28 9 S 44 19, 54 8 S 70 18, 80 9 S 94 16, 98 7" /></svg><span class="fix">canberra</span></span>.</p>
+  <p>i also wrote <a data-card="paper" href="#">a paper</a> on how much data a model really needs, got my first pr merged into <a data-card="mlx" href="#">mlx</a>, and made a model that tells my <a data-card="tale" href="#">little brother</a> bedtime stories. the small stuff trains overnight on my <a data-card="mac" href="#">macbook air</a>.</p>
+  <p>say hi at <a class="copy" data-card="email" href="#" id="email"><span class="label">my email</span><span class="done">copied</span></a>, or grab the weights on <a data-card="hf" href="#">hugging face</a>.</p>
+
+  <h2>models</h2>
+  <div class="rows">
+    <a class="row" data-card="sprout" href="#"><div><b>sprout</b><span>523m params, 12 billion tokens, chat finetuned twice.</span></div><i>→</i></a>
+    <a class="row" data-card="lilbase" href="#"><div><b>lilbase</b><span>297m base model in jax, measured against gpt-2 small.</span></div><i>→</i></a>
+    <a class="row" data-card="lilchat" href="#"><div><b>lilchat</b><span>lilbase, taught to chat in one night in mlx.</span></div><i>→</i></a>
+    <a class="row" data-card="paper" href="#"><div><b>the paper</b><span>one model, four amounts of tinystories.</span></div><i>→</i></a>
+  </div>
+
+  <h2>writing</h2>
+  <div class="rows">
+    <a class="row post" href="#"><b>airgpt, train a chatbot from scratch on a mac</b><i>oct 12</i></a>
+    <a class="row post" href="#"><b>my first pr got merged into mlx</b><i>oct 05</i></a>
+    <a class="row post" href="#"><b>sprout can talk now</b><i>oct 01</i></a>
+    <a class="row post" href="#"><b>tale, bedtime stories for my little brother</b><i>sep 12</i></a>
+  </div>
+</main>
+
+<div id="card" aria-hidden="true"></div>
+
+<template id="c-sprout"><div class="k"><b>sprout</b><span>523m · runs in your browser</span></div><div class="ask">&gt; say hi to whoever's reading</div><div class="stream" data-stream></div><div class="foot">talk to it →</div></template>
+<template id="c-lilbase"><div class="k"><b>lilbase</b><span>zero shot, same script</span></div><div class="bars">
+  <div class="g"><span>hellaswag</span><div><i data-w="61%" style="background:var(--bar)"></i><i data-w="58%" style="background:var(--bar-2)"></i></div><em>36.8</em></div>
+  <div class="g"><span>arc-easy</span><div><i data-w="80%" style="background:var(--bar)"></i><i data-w="68%" style="background:var(--bar-2)"></i></div><em>48.1</em></div>
+  <div class="g"><span>lambada</span><div><i data-w="47%" style="background:var(--bar)"></i><i data-w="58%" style="background:var(--bar-2)"></i></div><em>28.5</em></div>
+</div><div class="legend"><span style="--c:var(--bar)">lilbase 297m</span><span style="--c:var(--bar-2)">gpt-2 small 124m</span></div></template>
+<template id="c-lilchat"><div class="k"><b>lilchat</b><span>val loss 2.230 → 1.337</span></div><div class="bub"><p class="u">whats the capital of australia?</p><p class="b">The capital of Australia is <span class="w" data-auto>Melbourne<svg viewBox="0 0 100 22" preserveAspectRatio="none"><path d="M2 14 C 12 4, 18 20, 28 9 S 44 19, 54 8 S 70 18, 80 9 S 94 16, 98 7" /></svg><span class="fix">canberra</span></span>.</p></div><div class="foot">talk to it anyway →</div></template>
+<template id="c-tpu"><div class="k"><b>tpu v5e-8</b><span>free on kaggle</span></div><div class="chips"><i>0</i><i>1</i><i>2</i><i>3</i><i>4</i><i>5</i><i>6</i><i>7</i></div><div class="foot" data-tpu-note>8 chips, 8.4 hour sessions.</div></template>
+<template id="c-paper"><div class="k"><b>the paper</b><span>val loss on tinystories</span></div><svg class="loss" viewBox="0 0 270 92"><path d="M6 8 C 40 40, 70 54, 110 50 S 200 40, 264 30" style="stroke:var(--bar-2)"/><path d="M6 8 C 40 50, 80 70, 130 76 S 220 82, 264 82" style="stroke:var(--bar)"/><text x="232" y="24">1%</text><text x="226" y="74">10%</text></svg><div class="foot">at 1% it memorised. by 10% the gap was gone.</div></template>
+<template id="c-mlx"><div class="k"><b>ml-explore/mlx</b><span>#4611</span></div><div class="pr"><span class="pill"><svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M5 3.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm0 2.122a2.25 2.25 0 1 0-1.5 0v5.256a2.25 2.25 0 1 0 1.5 0V9.25A3.25 3.25 0 0 0 8.25 6H10.4a2.25 2.25 0 1 0 0-1.5H8.25A4.74 4.74 0 0 0 5 5.37ZM4.25 12a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5ZM12.5 5.25a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z"/></svg>Merged</span><span style="font-size:12.5px">into main · oct 4</span></div><div class="pr-t">fix mx.jvp crashing on logcumsumexp</div><div class="foot" style="color:var(--soft)">worked out the derivative in log space, then wrote the tests.</div></template>
+<template id="c-mac"><div class="k"><b>macbook air m5</b><span>16gb · no fan</span></div><div style="color:var(--fg)">lilchat, one night of sft</div><div class="heat"><i></i></div><div class="scale"><span>cool</span><span>very warm</span></div><div class="foot" style="color:var(--soft)">no fan means it slows down when it gets hot. it still finished by morning.</div></template>
+<template id="c-tale"><div class="k"><b>tale</b><span>52mb · sample</span></div><div class="story" data-story></div></template>
+<template id="c-hf"><div class="k"><b>huggingface.co/navthings</b><span>gguf, 4 and 8 bit</span></div><div class="list"><div>sprout<span>345mb</span></div><div style="animation-delay:.05s">lilchat<span>274mb</span></div><div style="animation-delay:.1s">tale<span>52mb</span></div></div></template>
+<template id="c-email"><div class="k"><b>email</b><span>click to copy</span></div><div style="color:var(--fg)">50-50 i reply.</div></template>
+
+<script>
+  const card = document.getElementById("card");
+  const tints = ["--t1", "--t2", "--t3", "--t4", "--t5"];
+  const sproutSay = ["Hi", "!", " I'm", " sprout", ",", " a", " 523", "m", " model", " nav", " trained", " on", " 12", " billion", " tokens", ".", " I'm", " running", " in", " your", " browser", " right", " now", "."];
+  const story = "Once upon a time, a little rabbit named Pip wanted to touch the moon. Every night Pip hopped onto the tallest hill and";
+  let run = 0, mx = 0, cx = 0, link = null, raf = 0;
+
+  // each card animates itself once it's shown; `id` lets a newer hover cancel an old one
+  const play = {
+    sprout(el, id) {
+      const out = el.querySelector("[data-stream]");
+      sproutSay.forEach((t, i) => setTimeout(() => {
+        if (id !== run) return;
+        const s = document.createElement("span");
+        s.className = "tok"; s.textContent = t; s.style.background = `var(${tints[i % 5]})`;
+        out.append(s);
+      }, 120 + i * 55));
+    },
+    lilbase(el) { requestAnimationFrame(() => el.querySelectorAll("[data-w]").forEach((b) => (b.style.width = b.dataset.w))); },
+    paper(el) { requestAnimationFrame(() => el.querySelectorAll("path").forEach((p) => (p.style.strokeDashoffset = 0))); },
+    mac(el) { requestAnimationFrame(() => (el.querySelector(".heat i").style.width = "88%")); },
+    tpu(el, id) {
+      const chips = [...el.querySelectorAll(".chips i")], note = el.querySelector("[data-tpu-note]");
+      chips.forEach((c, i) => setTimeout(() => id === run && c.classList.add("lit"), 80 + i * 70));
+      setTimeout(() => {
+        if (id !== run) return;
+        chips.forEach((c, i) => i && c.classList.remove("lit"));
+        note.textContent = "once it gave me 1 working chip out of 8. the script now refuses to start.";
+      }, 1100);
+    },
+    lilchat(el, id) { setTimeout(() => id === run && el.querySelector("[data-auto]").classList.add("on"), 900); },
+    tale(el, id) {
+      const out = el.querySelector("[data-story]");
+      const caret = document.createElement("span"); caret.className = "caret"; out.append(caret);
+      [...story].forEach((ch, i) => setTimeout(() => id === run && caret.before(ch), 100 + i * 22));
+    },
+  };
+
+  function place() {
+    if (!link) return;
+    cx += (mx - cx) * 0.2;
+    const r = link.getBoundingClientRect(), w = card.offsetWidth, h = card.offsetHeight;
+    const x = Math.min(Math.max(cx - w / 2, 12), innerWidth - w - 12);
+    const above = r.top - h - 12 > 12;
+    card.classList.toggle("below", !above);
+    card.style.transform = `translate(${x}px, ${above ? r.top - h - 12 : r.bottom + 12}px)`;
+    raf = requestAnimationFrame(place);
+  }
+
+  function show(el, x) {
+    const t = document.getElementById("c-" + el.dataset.card);
+    if (!t) return;
+    const id = ++run;
+    link = el; mx = cx = x;
+    card.innerHTML = t.innerHTML;
+    play[el.dataset.card]?.(card, id);
+    cancelAnimationFrame(raf); place();
+    card.classList.add("on");
+  }
+
+  function hide() { link = null; run++; cancelAnimationFrame(raf); card.classList.remove("on"); }
+
+  const hoverable = matchMedia("(hover: hover)").matches;
+  document.querySelectorAll("[data-card]").forEach((el) => {
+    el.addEventListener("click", (e) => e.preventDefault());
+    if (!hoverable) return;
+    el.addEventListener("mouseenter", (e) => show(el, e.clientX));
+    el.addEventListener("mousemove", (e) => (mx = e.clientX));
+    el.addEventListener("mouseleave", hide);
+    el.addEventListener("focus", () => { const r = el.getBoundingClientRect(); show(el, r.left + r.width / 2); });
+    el.addEventListener("blur", hide);
+  });
+  addEventListener("scroll", hide, { passive: true });
+
+  const email = document.getElementById("email");
+  email.addEventListener("click", () => {
+    navigator.clipboard?.writeText("navneet.dagdiya@gmail.com").catch(() => {});
+    email.classList.add("ok");
+    setTimeout(() => email.classList.remove("ok"), 1400);
+  });
+  document.querySelectorAll("a.row:not([data-card])").forEach((a) => a.addEventListener("click", (e) => e.preventDefault()));
+</script>
