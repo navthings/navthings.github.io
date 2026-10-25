@@ -246,46 +246,6 @@ svg {
   transform: none;
 }
 
-/* the background anneals from noise into a pattern, and your cursor heats it back up */
-
-.field {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  -webkit-mask-image: radial-gradient(ellipse 34rem 75% at 50% 36%, transparent 35%, #000 85%);
-  mask-image: radial-gradient(ellipse 34rem 75% at 50% 36%, transparent 35%, #000 85%);
-  transition: opacity 0.5s ease;
-}
-
-.viewing .field,
-.viewing .temp-readout {
-  opacity: 0;
-}
-
-.temp-readout {
-  position: fixed;
-  left: 20px;
-  bottom: 16px;
-  z-index: 2;
-  font-family: ui-monospace, "SF Mono", Menlo, monospace;
-  font-size: 11px;
-  color: var(--ink-3);
-  pointer-events: none;
-  transition: opacity 0.5s ease;
-}
-
-.temp-readout b {
-  font-weight: 400;
-  color: var(--ink-2);
-  font-variant-numeric: tabular-nums;
-}
-
-main {
-  position: relative;
-  z-index: 1;
-}
-
 /* the page is one narrow column, a little above the middle */
 
 main {

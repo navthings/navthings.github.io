@@ -314,7 +314,6 @@
       document.title = SECTIONS[key] + " · nav";
     }
     current = key;
-    document.body.classList.toggle("viewing", !!key);
     window.scrollTo(0, 0);
   }
 
