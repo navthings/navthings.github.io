@@ -4,6 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script>
+    try {
+      const t = localStorage.getItem("theme");
+      if (t === "light" || t === "dark") document.documentElement.dataset.theme = t;
+    } catch (err) {}
+  </script>
+  <script>
     document.documentElement.classList.add("js");
     // the only moment to know if a page transition brought us here is before the first paint
     addEventListener("pagereveal", (e) => document.documentElement.classList.add(e.viewTransition ? "vt-in" : "revealed"), { once: true });
@@ -27,7 +33,8 @@
   <meta name="twitter:description" content="my little brother kept asking me for bedtime stories so i made a model that tells them." />
   <meta name="twitter:image" content="https://navthings.github.io/assets/og/post-tale.png?v=1" />
   <link rel="canonical" href="https://navthings.github.io/blog/tale.html" />
-  <meta name="theme-color" content="#ffffff" />
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#0c0c0c" media="(prefers-color-scheme: dark)" />
   <link rel="icon" type="image/svg+xml" href="../favicon.svg" />
   <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png" />
   <link rel="apple-touch-icon" href="../apple-touch-icon.png" />
