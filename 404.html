@@ -24,7 +24,6 @@
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
   <link rel="preload" href="/assets/fonts/geist.woff2" as="font" type="font/woff2" crossorigin />
-  <link rel="stylesheet" href="/assets/site.css" />
 
   <style>
     .lost {
@@ -78,55 +77,35 @@
       margin-top: 32px;
     }
   </style>
+  <link rel="stylesheet" href="/assets/base.css" />
+  <link rel="stylesheet" href="/assets/page.css" />
 </head>
 
-<body data-native-scroll>
-  <a class="skip" href="#main">skip to content</a>
+<body>
+  <div class="controls">
+    <button class="theme" type="button" aria-label="switch to dark mode" aria-pressed="false">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <mask id="moon-cut"><rect width="24" height="24" fill="#fff" /><circle class="cut" cx="24" cy="2" r="7" fill="#000" /></mask>
+        <circle class="disc" cx="12" cy="12" r="5" mask="url(#moon-cut)" />
+        <g class="rays">
+          <path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4" />
+        </g>
+      </svg>
+      <span class="theme-tip" aria-hidden="true">following your system</span>
+    </button>
+  </div>
 
-  <header class="nav" data-label="lost">
-    <div class="island">
-      <span class="island-fill" aria-hidden="true"></span>
-      <a class="island-mark" href="/" aria-label="navthings, home"><img src="/favicon.svg" alt="" /></a>
-      <span class="island-now" aria-hidden="true"><span>lost</span></span>
-      <nav class="island-links" aria-label="main">
-        <a class="home" href="/">navthings</a>
-        <a href="/#work">work</a>
-        <a href="/#writing">writing</a>
-        <a href="/playground/">playground</a>
-        <a href="mailto:navneet.dagdiya@gmail.com" data-email>email</a>
-      </nav>
-    </div>
-  </header>
-
-  <main class="lost wrap" id="main">
-    <svg viewBox="66 64 384 378" aria-hidden="true" id="mark"></svg>
-    <h1 data-letters>404</h1>
-    <p data-reveal style="--d: 0.2s">this page doesnt exist. i asked lilchat where it went and it said <span data-scrib="circle" data-scrib-delay="0.9">melbourne</span>, so thats no help.</p>
-    <div class="row" data-reveal style="--d: 0.3s">
-      <a class="btn dark" href="/"><span class="inner">take me home</span></a>
-      <a class="btn" href="/playground/"><span class="inner">talk to my models</span></a>
-    </div>
+  <main class="page" id="main">
+    <header class="page-head">
+      <a class="page-name" href="/">nav</a>
+      <p class="crumb"><span>404</span></p>
+      <h1 class="page-title">this page doesnt exist</h1>
+      <p class="lede">i asked lilchat where it went and it said melbourne, so thats no help.</p>
+      <p class="links"><a href="/">take me home</a><a href="/playground/">talk to my models</a></p>
+    </header>
   </main>
 
-  <script src="/assets/site.js"></script>
-  <script>
-    // the hand drawn mark draws itself, same as in the footer
-    (async function () {
-      const mark = document.getElementById("mark");
-      try {
-        const svg = await (await fetch("/favicon.svg")).text();
-        mark.innerHTML = new DOMParser().parseFromString(svg, "image/svg+xml").querySelector("g").innerHTML;
-      } catch (err) {
-        console.error("couldnt load the mark", err);
-        return;
-      }
-      for (const s of mark.querySelectorAll("path, circle")) {
-        const len = s.getTotalLength();
-        s.style.strokeDasharray = len;
-        s.animate([{ strokeDashoffset: len }, { strokeDashoffset: 0 }], { duration: 2200, easing: "cubic-bezier(0.2, 0.7, 0.1, 1)", fill: "both" });
-      }
-      mark.classList.add("drawn");
-    })();
-  </script>
+  <script src="/assets/base.js"></script>
+  <script src="/assets/page.js"></script>
 </body>
 </html>

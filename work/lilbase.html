@@ -40,48 +40,44 @@
   <link rel="alternate" type="application/rss+xml" title="navthings" href="../feed.xml" />
 
   <link rel="preload" href="../assets/fonts/geist.woff2" as="font" type="font/woff2" crossorigin />
-  <link rel="stylesheet" href="../assets/site.css" />
-  <link rel="stylesheet" href="../assets/home.css" />
+  <link rel="stylesheet" href="../assets/base.css" />
   <link rel="stylesheet" href="../assets/work.css" />
+  <link rel="stylesheet" href="../assets/page.css" />
 </head>
 
 <body>
   <a class="skip" href="#main">skip to content</a>
 
-  <header class="nav" data-label="lilbase" data-current="work">
-    <div class="island">
-      <span class="island-fill" aria-hidden="true"></span>
-      <a class="island-mark" href="../" aria-label="navthings, home"><img src="../favicon.svg" alt="" /></a>
-      <span class="island-now" aria-hidden="true"><span>lilbase</span></span>
-      <nav class="island-links" aria-label="main">
-        <a class="home" href="../">navthings</a>
-        <a href="../#work">work</a>
-        <a href="../#writing">writing</a>
-        <a href="../playground/">playground</a>
-        <a href="mailto:navneet.dagdiya@gmail.com" data-email>email</a>
-      </nav>
-    </div>
-  </header>
+  <div class="controls">
+    <button class="theme" type="button" aria-label="switch to dark mode" aria-pressed="false">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <mask id="moon-cut"><rect width="24" height="24" fill="#fff" /><circle class="cut" cx="24" cy="2" r="7" fill="#000" /></mask>
+        <circle class="disc" cx="12" cy="12" r="5" mask="url(#moon-cut)" />
+        <g class="rays">
+          <path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4" />
+        </g>
+      </svg>
+      <span class="theme-tip" aria-hidden="true">following your system</span>
+    </button>
+  </div>
 
-  <main class="sheet" id="main">
-    <header class="cs-head wrap wide">
-      <p class="cs-kicker cap" data-reveal><a href="./">work</a><span>/</span><span>pretraining · sep 2026</span></p>
-      <h1 class="cs-title" style="view-transition-name: t-lilbase" data-letters>lilbase</h1>
-      <p class="cs-lede" data-words style="--d: 0.15s">a 297m param llama style base model, pretrained from scratch in jax on a tpu v5e-8. it read 6.1 billion tokens and beats gpt-2 small on two of three benchmarks.</p>
-      <dl class="cs-meta" data-stagger="0.06" style="--d: 0.3s">
-          <div data-reveal><dt>params</dt><dd>297m</dd></div>
-          <div data-reveal><dt>read</dt><dd>6.1b tokens of fineweb-edu</dd></div>
-          <div data-reveal><dt>trained on</dt><dd>kaggle tpu v5e-8</dd></div>
-          <div data-reveal><dt>written in</dt><dd>jax</dd></div>
+  <main class="page wide" id="main">
+    <header class="page-head">
+      <a class="page-name" href="../">nav</a>
+      <p class="crumb"><a href="../#work">work</a><span>pretraining</span><span>sep 2026</span></p>
+      <h1 class="page-title" style="view-transition-name: t-lilbase">lilbase</h1>
+      <p class="lede">a 297m param llama style base model, pretrained from scratch in jax on a tpu v5e-8. it read 6.1 billion tokens and beats gpt-2 small on two of three benchmarks.</p>
+      <dl class="facts">
+        <div><dt>params</dt><dd>297m</dd></div>
+        <div><dt>read</dt><dd>6.1b tokens of fineweb-edu</dd></div>
+        <div><dt>trained on</dt><dd>kaggle tpu v5e-8</dd></div>
+        <div><dt>written in</dt><dd>jax</dd></div>
       </dl>
-      <div class="row" data-reveal style="--d: 0.5s">
-        <a class="btn dark" href="https://ollama.com/navthings/lilbase" target="_blank" rel="noopener"><span class="inner">run it with ollama</span></a>
-        <a class="btn" href="https://github.com/navthings/lilbase" target="_blank" rel="noopener"><span class="inner">code</span></a>
-        <a class="btn line" href="../blog/lilbase.html"><span class="inner">the original post</span></a>
-      </div>
+      <p class="links"><a href="https://ollama.com/navthings/lilbase" target="_blank" rel="noopener">run it with ollama</a><a href="https://github.com/navthings/lilbase" target="_blank" rel="noopener">code</a><a href="../blog/lilbase.html">the original post</a></p>
     </header>
+
     <section class="wrap wide">
-      <div class="cs-figure sq" data-live data-reveal="scale">
+      <div class="cs-figure" data-reveal data-live>
         <p class="fig-title">lilbase vs gpt-2 small, higher is better</p>
           <div class="legend"><span><i style="background: var(--ink)"></i>lilbase, 297m</span><span><i style="background: #c9c9c6"></i>gpt-2 small, 124m</span></div>
           <div class="hbars">
@@ -100,27 +96,27 @@
           </div>
           <details class="table-view">
             <summary>see the numbers</summary>
-            <table>
+            <div class="table-scroll"><table>
               <thead><tr><th>benchmark</th><th class="num">lilbase</th><th class="num">gpt-2 124m</th></tr></thead>
               <tbody>
               <tr><td>hellaswag</td><td class="num">36.8%</td><td class="num">35.1%</td></tr>
               <tr><td>arc-easy</td><td class="num">48.1%</td><td class="num">40.6%</td></tr>
               <tr><td>lambada</td><td class="num">28.5%</td><td class="num">35.0%</td></tr>
               </tbody>
-            </table>
+            </table></div>
           </details>
       </div>
     </section>
 
     <section class="cs-body wrap wide">
-      <div class="cs-sec" data-reveal data-label="why">
+      <div class="cs-sec" data-reveal>
         <h2 class="cs-h">why</h2>
         <div class="cs-text">
           <p>everything before this was small enough to train locally. tinystories is great for learning, but its simple little stories. i wanted a proper base model, one thats actually read a decent chunk of the internet.</p>
           <p>that needs real compute, so i rewrote the training code in jax and moved it to a <strong>tpu v5e-8</strong> through kaggle, which is 8 of googles ai chips working together.</p>
         </div>
       </div>
-      <div class="cs-sec" data-reveal data-label="the model">
+      <div class="cs-sec" data-reveal>
         <h2 class="cs-h">the model</h2>
         <div class="cs-text">
           <p>its llama style, with grouped query attention, rope, rmsnorm and swiglu, and the llama tokenizer with a 32k vocab. it read <strong>6.1 billion tokens</strong> of <a href="https://huggingface.co/datasets/HuggingFaceFW/fineweb-edu" target="_blank" rel="noopener">fineweb-edu</a>, which is about the right amount for its size. thats the chinchilla thing, around 20 tokens per param.</p>
@@ -146,26 +142,26 @@
           </div>
         </div>
       </div>
-      <div class="cs-sec" data-reveal data-label="how it ran">
+      <div class="cs-sec" data-reveal>
         <h2 class="cs-h">how it ran</h2>
         <div class="cs-text">
           <p>each step is <strong>524,288 tokens</strong>, data parallel over the 8 chips: 8 chips, times 8 sequences, times 8 accumulation steps, times 1024 tokens. every chip chews through 65,536 of them, then they all agree on one update.</p>
           <div class="fig" data-live>
-            <div class="chips8"><span class="sq" style="--k: 0"></span><span class="sq" style="--k: 1"></span><span class="sq" style="--k: 2"></span><span class="sq" style="--k: 3"></span><span class="sq" style="--k: 4"></span><span class="sq" style="--k: 5"></span><span class="sq" style="--k: 6"></span><span class="sq" style="--k: 7"></span></div>
+            <div class="chips8"><span style="--k: 0"></span><span style="--k: 1"></span><span style="--k: 2"></span><span style="--k: 3"></span><span style="--k: 4"></span><span style="--k: 5"></span><span style="--k: 6"></span><span style="--k: 7"></span></div>
             <div class="chips8-note"><span>one step, 8 chips</span><span>65,536 tokens each</span></div>
           </div>
           <p>a kaggle session only lasts about <strong>8.4 hours</strong>, so the script checkpoints every 500 steps, stops before its time runs out, and the next session picks up from there.</p>
           <p>every 250 steps it logs grad norm, learning rate, tokens per second, eta, host ram, peak tpu memory, and a number called <code>q</code>. if <code>q</code> sits near zero, tokenization is the bottleneck and the tpu is waiting on the cpu.</p>
         </div>
       </div>
-      <div class="cs-sec" data-reveal data-label="what went wrong">
+      <div class="cs-sec" data-reveal>
         <h2 class="cs-h">what went wrong</h2>
         <div class="cs-text">
           <p>kaggle sometimes gives you a broken tpu with <strong>only 1 chip working instead of 8</strong>. so now the script just refuses to run unless it sees all 8.</p>
           <p>i also tried 16 sequences with 4 accumulation steps instead of 8 and 8. it ran out of memory by like <strong data-scrib="double">400mb</strong>. so close. now if the first compile overflows anyway, the script halves the micro batch and retries on its own.</p>
         </div>
       </div>
-      <div class="cs-sec" data-reveal data-label="how it did">
+      <div class="cs-sec" data-reveal>
         <h2 class="cs-h">how it did</h2>
         <div class="cs-text">
           <p>every model goes through the same script, zero shot: the first 2000 hellaswag validation examples, 2000 lambada examples and the full arc-easy test set. multiple choice is scored by log likelihood, normalised by the length of each answer, and every sequence starts with an end of text token, the same way training did. <a href="https://github.com/navthings/sprout/blob/main/eval/bench.py" target="_blank" rel="noopener">the script</a> lives in the sprout repo now, where lilbase gets tested alongside sprout and all four gpt-2 sizes.</p>
@@ -173,44 +169,29 @@
           <p>the old script, a smaller earlier test run, had lilbase way further ahead on hellaswag (41.0% vs 31.1%). rerunning everything through one fixed script, with the exact same questions for every model, its 36.8% vs 35.1%, so it still wins but only just.</p>
           <p>lambada perplexity came out at <strong>53.78</strong>. the learning rate was 4e-4, a bit above the 3e-4 gpt-3 350m used at a similar batch size, so slightly optimistic.</p>
           <p>its a base model, so it just continues whatever you give it instead of answering. it gets grammar right and makes up most facts.</p>
-          <code class="cmd sq">ollama run navthings/lilbase "The water cycle begins when"</code>
+          <code class="cmd">ollama run navthings/lilbase "The water cycle begins when"</code>
         </div>
       </div>
     </section>
 
-    <section class="cs-next wrap wide">
-      <a class="next-card sq" href="lilchat.html" data-reveal="scale">
-        <span class="label">next case study</span>
-        <span class="next-title" style="view-transition-name: t-lilchat">lilchat</span>
-        <p>lilbase, finetuned into a chat model in one night on a macbook air.</p>
-      </a>
-    </section>
+    
 
+    <nav class="pager" aria-label="next">
+      <a class="newer" href="lilchat.html"><span>next case study</span>lilchat</a>
+    </nav>
+
+    <footer class="page-foot">
+      <nav class="elsewhere" aria-label="elsewhere">
+        <a href="https://github.com/navthings" target="_blank" rel="noopener">github</a>
+        <a href="https://huggingface.co/navthings" target="_blank" rel="noopener">hugging face</a>
+        <a href="https://ollama.com/navthings" target="_blank" rel="noopener">ollama</a>
+        <a href="https://orcid.org/0009-0002-2764-866X" target="_blank" rel="noopener">orcid</a>
+        <a class="email" href="mailto:navneet.dagdiya@gmail.com"><span class="slot"><span>email</span><span aria-hidden="true">copied</span></span></a>
+      </nav>
+    </footer>
   </main>
 
-  <footer class="foot" data-label="say hi">
-    <div class="foot-top">
-      <div>
-        <p class="foot-say"><button class="say" type="button" data-email data-scrib="underline" data-scrib-on="hover"><span class="inner">say hi.</span></button> <span>maybe i'll reply.</span></p>
-        <p class="hint">that copies my email. 50-50 i respond.</p>
-      </div>
-      <nav class="foot-links" aria-label="elsewhere">
-        <a href="https://github.com/navthings" target="_blank" rel="noopener">github <span>- it still works</span></a>
-        <a href="https://huggingface.co/navthings" target="_blank" rel="noopener">hugging face <span>- the weights</span></a>
-        <a href="https://ollama.com/navthings" target="_blank" rel="noopener">ollama <span>- models i've pushed</span></a>
-        <a href="https://orcid.org/0009-0002-2764-866X" target="_blank" rel="noopener">orcid <span>- research id</span></a>
-        <a href="https://doi.org/10.5281/zenodo.22340667" target="_blank" rel="noopener">zenodo <span>- the paper</span></a>
-        <a href="../feed.xml">rss <span>- new posts</span></a>
-      </nav>
-    </div>
-    <div class="foot-mark">
-      <svg viewBox="66 64 384 378" aria-hidden="true" data-mark></svg>
-      <div class="meta">navthings, made in australia<br /><button type="button" data-top>back to top</button></div>
-    </div>
-  </footer>
-
-  <script src="../assets/vendor/lenis.min.js"></script>
-  <script src="../assets/site.js"></script>
-  <script src="../assets/home.js"></script>
+  <script src="../assets/base.js"></script>
+  <script src="../assets/page.js"></script>
 </body>
 </html>

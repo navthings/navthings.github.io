@@ -1,0 +1,380 @@
+@font-face {
+  font-family: "Geist";
+  src: url("fonts/geist.woff2") format("woff2");
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+:root {
+  --bg: #ffffff;
+  --ink: #111111;
+  --ink-2: #5d5d5c;
+  --ink-3: #8c8c8a;
+  --ink-4: #c4c4c1;
+  --line: #ececea;
+  --card: #ffffff;
+  --card-2: #f5f5f3;
+  --shadow: 0 1px 1px rgba(0, 0, 0, 0.03), 0 8px 24px -6px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.05);
+  --accent: #ff4f00;
+  --spring: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease: cubic-bezier(0.2, 0.7, 0.1, 1);
+  --soft: cubic-bezier(0.25, 0.8, 0.25, 1);
+  --sans: "Geist", "Helvetica Neue", Helvetica, sans-serif;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0c0c0c;
+    --ink: #ededeb;
+    --ink-2: #a3a3a0;
+    --ink-3: #6e6e6c;
+    --ink-4: #3a3a39;
+    --line: #1f1f1e;
+    --card: #161616;
+    --card-2: #1c1c1b;
+    --shadow: 0 0 0 1px rgba(255, 255, 255, 0.07), 0 12px 32px -8px rgba(0, 0, 0, 0.7);
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg: #0c0c0c;
+  --ink: #ededeb;
+  --ink-2: #a3a3a0;
+  --ink-3: #6e6e6c;
+  --ink-4: #3a3a39;
+  --line: #1f1f1e;
+  --card: #161616;
+  --card-2: #1c1c1b;
+  --shadow: 0 0 0 1px rgba(255, 255, 255, 0.07), 0 12px 32px -8px rgba(0, 0, 0, 0.7);
+  color-scheme: dark;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  min-height: 100vh;
+  min-height: 100dvh;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-tap-highlight-color: transparent;
+}
+
+::selection {
+  background: var(--ink);
+  color: var(--bg);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+ul {
+  list-style: none;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+/* theme toggle, top right */
+
+.controls {
+  position: fixed;
+  top: 18px;
+  right: 18px;
+  z-index: 20;
+}
+
+.theme {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  color: var(--ink-3);
+  transition: color 0.25s ease, background-color 0.25s ease, transform 0.35s var(--spring);
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.theme:hover {
+  color: var(--ink);
+  background: var(--card-2);
+}
+
+.theme:active {
+  transform: scale(0.9);
+}
+
+.theme svg {
+  width: 20px;
+  height: 20px;
+  overflow: visible;
+  transition: transform 0.6s var(--spring);
+}
+
+.theme .disc {
+  fill: currentColor;
+  transform-origin: 12px 12px;
+  transition: r 0.5s var(--spring);
+}
+
+.theme .cut {
+  transition: cx 0.6s var(--spring), cy 0.6s var(--spring);
+}
+
+.theme .rays {
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  fill: none;
+  transform-origin: 12px 12px;
+  transition: transform 0.6s var(--spring), opacity 0.3s ease;
+}
+
+/* light shows the moon you can switch to, dark shows the sun */
+.theme[aria-pressed="false"] .disc {
+  r: 8px;
+}
+
+.theme[aria-pressed="false"] .cut {
+  cx: 17px;
+  cy: 7px;
+}
+
+.theme[aria-pressed="false"] .rays {
+  opacity: 0;
+  transform: rotate(-45deg) scale(0.5);
+}
+
+.theme[aria-pressed="false"] svg {
+  transform: rotate(-20deg);
+}
+
+.theme[aria-pressed="true"] svg {
+  transform: rotate(90deg);
+}
+
+/* holding it hands the theme back to the device, this ring fills while you hold */
+.theme::after {
+  content: "";
+  position: absolute;
+  inset: 2px;
+  border-radius: 50%;
+  border: 1.5px solid var(--ink);
+  opacity: 0;
+  transform: scale(0.6);
+  pointer-events: none;
+}
+
+.theme.holding::after {
+  opacity: 0.5;
+  transform: scale(1);
+  transition: transform 0.6s linear, opacity 0.6s linear;
+}
+
+.theme.pulse::after {
+  animation: pulse 0.7s var(--soft);
+}
+
+@keyframes pulse {
+  from {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(1.7);
+  }
+}
+
+.theme-tip {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 6px);
+  white-space: nowrap;
+  font-size: 12px;
+  color: var(--ink-3);
+  opacity: 0;
+  transform: translateY(-4px);
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.4s var(--spring);
+}
+
+.theme.told .theme-tip {
+  opacity: 1;
+  transform: none;
+}
+
+
+/* links to elsewhere, and email copies itself */
+
+.elsewhere {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 18px;
+  margin-top: 40px;
+  font-size: 14px;
+  color: var(--ink-3);
+}
+
+.elsewhere a {
+  position: relative;
+  transition: color 0.2s ease;
+}
+
+.elsewhere a:hover {
+  color: var(--ink);
+}
+
+/* email copies itself and the word rolls over to "copied" */
+.slot {
+  display: inline-grid;
+  height: 1.6em;
+  overflow: hidden;
+  vertical-align: bottom;
+}
+
+.slot span {
+  grid-area: 1 / 1;
+  transition: transform 0.5s var(--spring), opacity 0.3s ease;
+}
+
+.slot span + span {
+  transform: translateY(100%);
+  opacity: 0;
+}
+
+.email.copied .slot span:first-child {
+  transform: translateY(-100%);
+  opacity: 0;
+}
+
+.email.copied .slot span + span {
+  transform: none;
+  opacity: 1;
+  color: var(--ink);
+}
+
+/* page transitions, inside the home and between pages: the old page lifts away, the new one settles in, names and titles fly */
+
+@view-transition {
+  navigation: auto;
+}
+
+::view-transition-group(*) {
+  animation-duration: 0.55s;
+  animation-timing-function: var(--spring);
+}
+
+::view-transition-group(name),
+::view-transition-group(title) {
+  animation-duration: 0.6s;
+  animation-timing-function: var(--spring);
+}
+
+::view-transition-old(name),
+::view-transition-new(name),
+::view-transition-old(title),
+::view-transition-new(title) {
+  height: 100%;
+  animation-duration: 0.45s;
+}
+
+::view-transition-old(root) {
+  animation: vt-out 0.28s ease both;
+}
+
+::view-transition-new(root) {
+  animation: vt-in 0.55s var(--spring) 0.08s both;
+}
+
+@keyframes vt-out {
+  to {
+    opacity: 0;
+    filter: blur(4px);
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes vt-in {
+  from {
+    opacity: 0;
+    filter: blur(4px);
+    transform: translateY(10px);
+  }
+}
+
+/* switching theme wipes the new colours out from the toggle in a circle */
+html.theming ::view-transition-old(root) {
+  animation: none;
+}
+
+html.theming ::view-transition-new(root) {
+  animation: wipe 0.7s cubic-bezier(0.65, 0, 0.35, 1) both;
+}
+
+html.theming * {
+  view-transition-name: none !important;
+}
+
+@keyframes wipe {
+  from {
+    clip-path: circle(0 at var(--tx, 100%) var(--ty, 0));
+  }
+  to {
+    clip-path: circle(var(--tr, 150vmax) at var(--tx, 100%) var(--ty, 0));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
+  }
+}

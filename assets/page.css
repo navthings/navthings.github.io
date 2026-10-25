@@ -1,0 +1,1120 @@
+/* every page that isn't the home: same column, same name in the corner, same quiet links at the bottom */
+
+:root {
+  --surface: var(--card-2);
+  --surface-2: color-mix(in srgb, var(--card-2) 70%, var(--ink-4));
+  --ease: cubic-bezier(0.2, 0.7, 0.1, 1);
+}
+
+.skip {
+  position: fixed;
+  left: 12px;
+  top: 12px;
+  z-index: 100;
+  padding: 6px 12px;
+  border-radius: 8px;
+  background: var(--ink);
+  color: var(--bg);
+  font-size: 14px;
+  transform: translateY(-200%);
+}
+
+.skip:focus-visible {
+  transform: none;
+}
+
+.page {
+  --col: 600px;
+  max-width: var(--col);
+  margin: 0 auto;
+  padding: max(14vh, 88px) 24px 72px;
+}
+
+.page.wide {
+  --col: 680px;
+}
+
+.page-name {
+  display: inline-block;
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: var(--ink-3);
+  view-transition-name: name;
+  transition: color 0.2s ease, transform 0.4s var(--spring);
+}
+
+.page-name:hover {
+  color: var(--ink);
+  transform: translateX(-3px);
+}
+
+.crumb {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 8px;
+  margin-top: 6px;
+  font-size: 13px;
+  color: var(--ink-3);
+  font-variant-numeric: tabular-nums;
+}
+
+.crumb a {
+  transition: color 0.2s ease;
+}
+
+.crumb a:hover {
+  color: var(--ink);
+}
+
+.crumb > * + *::before {
+  content: "·";
+  margin-right: 8px;
+  color: var(--ink-4);
+}
+
+.page-title {
+  width: fit-content;
+  margin-top: 8px;
+  font-size: 30px;
+  font-weight: 500;
+  letter-spacing: -0.035em;
+  line-height: 1.15;
+  text-wrap: balance;
+}
+
+.lede {
+  margin-top: 16px;
+  color: var(--ink-2);
+  font-size: 17px;
+  line-height: 1.6;
+  text-wrap: pretty;
+}
+
+/* the facts under a case study title, small and in two columns */
+.facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px 24px;
+  margin-top: 28px;
+}
+
+.facts dt {
+  font-size: 12px;
+  color: var(--ink-3);
+}
+
+.facts dd {
+  margin-top: 1px;
+  font-size: 15px;
+  color: var(--ink);
+}
+
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 18px;
+  margin-top: 24px;
+  font-size: 15px;
+}
+
+.links a,
+.prose a,
+.cs-text a,
+.also a,
+.tl-links a {
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-color: var(--ink-4);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  transition: text-decoration-color 0.2s ease, color 0.2s ease;
+}
+
+.links a:hover,
+.prose a:hover,
+.cs-text a:hover,
+.also a:hover,
+.tl-links a:hover {
+  text-decoration-color: currentColor;
+}
+
+/* reading */
+
+.prose,
+.cs-text {
+  margin-top: 40px;
+  color: var(--ink-2);
+  font-size: 16.5px;
+  line-height: 1.75;
+  text-wrap: pretty;
+}
+
+.prose > * + *,
+.cs-text > * + * {
+  margin-top: 1.1em;
+}
+
+.prose h2,
+.cs-h {
+  margin-top: 2.4em;
+  font-size: 16.5px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+
+.prose h2 + *,
+.cs-h + .cs-text > :first-child {
+  margin-top: 0.5em;
+}
+
+.prose strong,
+.cs-text strong {
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.prose ul,
+.prose ol,
+.cs-text ul,
+.cs-text ol {
+  padding-left: 1.2em;
+}
+
+.prose li + li,
+.cs-text li + li {
+  margin-top: 0.35em;
+}
+
+.prose blockquote {
+  padding-left: 16px;
+  border-left: 1.5px solid var(--line);
+  color: var(--ink);
+}
+
+code {
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 0.84em;
+  color: var(--ink);
+  background: var(--card-2);
+  padding: 2px 6px;
+  border-radius: 5px;
+}
+
+pre,
+.cmd {
+  display: block;
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: var(--card-2);
+  color: var(--ink);
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 13px;
+  line-height: 1.6;
+  overflow-x: auto;
+  white-space: pre;
+}
+
+pre code {
+  padding: 0;
+  background: none;
+  font-size: inherit;
+}
+
+.prose table,
+.cs-text table,
+.table-view table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  line-height: 1.5;
+  font-variant-numeric: tabular-nums;
+}
+
+.prose th,
+.prose td,
+.cs-text th,
+.cs-text td,
+.table-view th,
+.table-view td {
+  padding: 9px 12px 9px 0;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--line);
+  font-weight: 400;
+}
+
+.prose th,
+.cs-text th,
+.table-view th {
+  font-size: 12px;
+  color: var(--ink-3);
+}
+
+.prose td,
+.cs-text td,
+.table-view td {
+  color: var(--ink);
+}
+
+.num {
+  text-align: right !important;
+}
+
+tr.hi td {
+  font-weight: 500;
+}
+
+.table-scroll {
+  overflow-x: auto;
+}
+
+/* figures: a soft card, images open bigger when clicked */
+
+.prose figure,
+.cs-text figure {
+  margin-top: 2em;
+  margin-bottom: 2em;
+}
+
+.prose img,
+.cs-text img {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+}
+
+.dark-fig {
+  padding: 10px;
+  border-radius: 16px;
+  background: #111;
+}
+
+.dark-fig img {
+  border-radius: 8px;
+}
+
+figcaption {
+  margin-top: 10px;
+  font-size: 13px;
+  color: var(--ink-3);
+}
+
+.zoomable {
+  cursor: zoom-in;
+}
+
+.zoom {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  cursor: zoom-out;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.zoom.on {
+  opacity: 1;
+}
+
+.zoom img {
+  max-width: min(1200px, 100%);
+  max-height: 100%;
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  transform: scale(0.96);
+  transition: transform 0.45s var(--spring);
+}
+
+.zoom.on img {
+  transform: none;
+}
+
+/* the cards charts and diagrams sit in */
+
+.cs-figure,
+.fig.card {
+  margin-top: 40px;
+  padding: 20px;
+  border-radius: 16px;
+  background: var(--card);
+  box-shadow: var(--shadow);
+}
+
+.cs-figure .fig-title,
+.fig-title {
+  margin-bottom: 14px;
+  font-size: 13px;
+  color: var(--ink-3);
+}
+
+.cs-text .fig {
+  margin-top: 2em;
+  margin-bottom: 2em;
+}
+
+.cap {
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+
+.muted {
+  color: var(--ink-3);
+}
+
+.soft {
+  color: var(--ink-2);
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  font-size: 12px;
+  color: var(--ink-2);
+}
+
+.legend i {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  margin-right: 6px;
+  border-radius: 3px;
+  vertical-align: -1px;
+}
+
+.hbars {
+  display: grid;
+  gap: 16px;
+  margin-top: 18px;
+}
+
+.hbar-group > span {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 13px;
+  color: var(--ink-2);
+}
+
+.hbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 14px;
+  margin-top: 4px;
+  font-size: 12px;
+  color: var(--ink-2);
+  font-variant-numeric: tabular-nums;
+}
+
+.hbar b {
+  display: block;
+  height: 100%;
+  width: 0;
+  border-radius: 0 4px 4px 0;
+  transition: width 1.1s var(--spring);
+  transition-delay: calc(var(--k) * 70ms + 120ms);
+}
+
+.live .hbar b,
+html:not(.js) .hbar b {
+  width: var(--w);
+}
+
+.hbar em {
+  font-style: normal;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  transition-delay: calc(var(--k) * 70ms + 200ms);
+}
+
+.live .hbar em,
+html:not(.js) .hbar em {
+  opacity: 1;
+}
+
+.table-view {
+  margin-top: 18px;
+  font-size: 14px;
+}
+
+.table-view summary {
+  display: inline-block;
+  font-size: 13px;
+  color: var(--ink-3);
+  cursor: pointer;
+  list-style: none;
+  text-decoration: underline;
+  text-decoration-color: var(--ink-4);
+  text-underline-offset: 3px;
+  transition: color 0.2s ease;
+}
+
+.table-view summary::-webkit-details-marker {
+  display: none;
+}
+
+.table-view summary:hover {
+  color: var(--ink);
+}
+
+.table-view[open] summary {
+  margin-bottom: 10px;
+}
+
+/* the paper chart, drawn by charts.js */
+
+.chart {
+  position: relative;
+  width: 100%;
+}
+
+.chart svg {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.chart .grid line {
+  stroke: var(--line);
+  stroke-width: 1;
+}
+
+.chart text {
+  font-family: var(--sans);
+  font-size: 11px;
+  fill: var(--ink-3);
+}
+
+.chart .ln {
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: var(--len);
+  stroke-dashoffset: var(--len);
+  transition: stroke-dashoffset 1.5s var(--ease);
+}
+
+.live .chart .ln,
+.chart.in .ln {
+  stroke-dashoffset: 0;
+}
+
+.chart .pt {
+  stroke: var(--bg);
+  stroke-width: 2;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.live .chart .pt,
+.chart.in .pt {
+  opacity: 1;
+  transition-delay: calc(var(--k) * 160ms + 400ms);
+}
+
+.chart .gap {
+  opacity: 0;
+  transition: opacity 1s ease 1s;
+}
+
+.live .chart .gap,
+.chart.in .gap {
+  opacity: 1;
+}
+
+.chart .endlabel {
+  fill: var(--ink-2);
+  font-size: 12px;
+}
+
+.chart .tip {
+  position: absolute;
+  z-index: 3;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: var(--card);
+  box-shadow: var(--shadow);
+  font-size: 12px;
+  color: var(--ink);
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+/* sprout vs gpt-2, one small chart per benchmark */
+
+.bench-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px 18px;
+}
+
+.bench-title {
+  margin: 0 0 6px;
+  min-height: 2.8em;
+  font-size: 12px;
+  line-height: 1.35;
+  color: var(--ink-3);
+}
+
+.bench-title b {
+  display: block;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.bench svg {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.bench text {
+  font-family: var(--sans);
+  font-size: 11px;
+  fill: var(--ink-3);
+}
+
+.bench .b-axis {
+  fill: var(--ink-3);
+}
+
+.bench .b-gpt2-lab {
+  font-size: 10px;
+}
+
+.bench .b-me-lab {
+  font-size: 11.5px;
+  font-weight: 500;
+  fill: var(--ink);
+}
+
+.bench-key {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  margin-top: 12px;
+  font-size: 12px;
+  color: var(--ink-3);
+}
+
+.bench-key i {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  margin-right: 6px;
+  border-radius: 50%;
+}
+
+.k-me {
+  background: var(--ink);
+}
+
+.k-me2 {
+  border: 1.6px solid var(--ink);
+}
+
+.k-gpt2 {
+  background: var(--ink-4);
+}
+
+.bench .cap {
+  margin-top: 8px;
+}
+
+/* svg figures were drawn with fixed colours, so they follow the theme here */
+.bench [stroke="#ececea"],
+[stroke="#ececea"] {
+  stroke: var(--line);
+}
+
+[fill="#c9c9c6"] {
+  fill: var(--ink-4);
+}
+
+[stroke="#c9c9c6"] {
+  stroke: var(--ink-4);
+}
+
+[fill="#0f0f0f"] {
+  fill: var(--ink);
+}
+
+[stroke="#0f0f0f"] {
+  stroke: var(--ink);
+}
+
+[fill="#ffffff"] {
+  fill: var(--bg);
+}
+
+[style*="background: #c9c9c6"] {
+  background: var(--ink-4) !important;
+}
+
+.wsd-line.faint,
+.ratio-ticks.faint {
+  stroke: var(--ink-4);
+  --tick: var(--ink-4);
+}
+
+/* case studies: the old two column sections become one column with small headings */
+
+.cs-body {
+  margin-top: 16px;
+}
+
+.cs-sec {
+  display: block;
+  padding: 0;
+  border: 0;
+}
+
+.cs-h {
+  position: static;
+  margin-top: 2.6em;
+}
+
+.cs-text {
+  max-width: none;
+  margin-top: 0.5em;
+}
+
+.next-card {
+  display: block;
+  padding: 0;
+  background: none;
+}
+
+/* buttons, mostly in the playground demos */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 34px;
+  padding: 0 14px;
+  border-radius: 999px;
+  background: var(--card-2);
+  color: var(--ink);
+  font-size: 14px;
+  white-space: nowrap;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.35s var(--spring), opacity 0.2s ease;
+}
+
+.btn:hover {
+  background: var(--surface-2);
+}
+
+.btn:active {
+  transform: scale(0.96);
+}
+
+.btn.dark {
+  background: var(--ink);
+  color: var(--bg);
+}
+
+.btn.dark:hover {
+  background: color-mix(in srgb, var(--ink) 85%, var(--bg));
+}
+
+.btn.line {
+  background: transparent;
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+
+.btn.line:hover {
+  box-shadow: inset 0 0 0 1px var(--ink-3);
+}
+
+.btn.small {
+  height: 30px;
+  padding: 0 12px;
+  font-size: 13px;
+}
+
+.btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+/* the playground: its own pieces, rounded and fitted into the column */
+
+.pg .models {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.pg .model {
+  border-radius: 14px;
+}
+
+.pg .model.on {
+  color: color-mix(in srgb, var(--bg) 55%, var(--ink));
+}
+
+.pg .model.on .name,
+.pg .msg.you,
+.fmt .you {
+  color: var(--bg);
+}
+
+.pg .model.on .state {
+  color: color-mix(in srgb, var(--bg) 45%, var(--ink));
+}
+
+.pg .model.on .bar {
+  background: color-mix(in srgb, var(--bg) 25%, var(--ink));
+  color: var(--bg);
+}
+
+.pg .chat-panel,
+.pg .reads-card,
+.pg .digits {
+  border-radius: 18px;
+}
+
+.pg .ff {
+  margin-top: 18px;
+  border-radius: 12px;
+  font-size: 14px;
+}
+
+.pg .pg-models,
+.pg .chat-panel {
+  margin-top: 28px;
+}
+
+.pg .suggest-row .btn:hover {
+  background: var(--card);
+}
+
+.pg .outs b {
+  background: linear-gradient(to top, var(--ink-4) calc(var(--v) * 100%), transparent 0);
+}
+
+.pg .tk.cut b {
+  background: color-mix(in srgb, var(--accent) 22%, transparent);
+}
+
+.pg .note {
+  margin-top: 16px;
+  font-size: 13px;
+  color: var(--ink-3);
+}
+
+.pg .note a {
+  color: var(--ink-2);
+  text-decoration: underline;
+  text-decoration-color: var(--ink-4);
+  text-underline-offset: 3px;
+}
+
+.pg-demo {
+  margin-top: 64px;
+}
+
+.pg .reads-card {
+  order: 0;
+}
+
+.pg .demo-grid,
+.pg .reads-grid {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 20px;
+}
+
+.h-section {
+  font-size: 16.5px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+
+.demo-copy .soft {
+  margin-top: 10px;
+  font-size: 15.5px;
+  line-height: 1.7;
+  color: var(--ink-2);
+}
+
+.demo-copy .row {
+  display: flex;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+@media (max-width: 620px) {
+  .pg .models {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* the end of a page: what's next, then the same links as the home */
+
+.also {
+  margin-top: 40px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+  font-size: 15px;
+  color: var(--ink-2);
+}
+
+.pager {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 40px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+}
+
+.pager a {
+  display: block;
+  font-size: 15px;
+  line-height: 1.4;
+  transition: transform 0.4s var(--spring);
+}
+
+.pager a span {
+  display: block;
+  margin-bottom: 2px;
+  font-size: 12px;
+  color: var(--ink-3);
+}
+
+.pager a:hover {
+  transform: translateX(3px);
+}
+
+.pager .newer {
+  grid-column: 2;
+  text-align: right;
+}
+
+.pager .newer:hover {
+  transform: translateX(-3px);
+}
+
+.page-foot {
+  margin-top: 64px;
+}
+
+.page-foot .elsewhere {
+  margin-top: 0;
+}
+
+/* lists: the timeline and the writing index */
+
+.list {
+  margin-top: 28px;
+}
+
+.group + .group {
+  margin-top: 28px;
+}
+
+.group h2 {
+  margin-bottom: 6px;
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--ink-3);
+}
+
+.list .row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 7px 0;
+  transition: opacity 0.3s ease, transform 0.45s var(--spring);
+}
+
+.list .row .m {
+  flex-shrink: 0;
+  font-size: 13px;
+  color: var(--ink-3);
+  font-variant-numeric: tabular-nums;
+}
+
+@media (hover: hover) {
+  .list:has(.row:hover) .row:not(:hover) {
+    opacity: 0.4;
+  }
+
+  .list .row:hover {
+    transform: translateX(3px);
+  }
+}
+
+.tl {
+  position: relative;
+  margin-top: 36px;
+  list-style: none;
+}
+
+.tl-line {
+  position: absolute;
+  left: 5px;
+  top: 8px;
+  bottom: 8px;
+  width: 1px;
+  background: var(--line);
+}
+
+.tl-fill {
+  display: none;
+}
+
+.tl-item {
+  position: relative;
+  padding-left: 32px;
+}
+
+.tl-item + .tl-item {
+  margin-top: 36px;
+}
+
+/* dots still grow with the model, just smaller than before */
+.tl-node {
+  --s: 7px;
+  --d: clamp(5px, calc(var(--s) * 0.42), 13px);
+  position: absolute;
+  left: calc(5.5px - var(--d) / 2);
+  top: calc(31px - var(--d) / 2);
+  width: var(--d);
+  height: var(--d);
+  border-radius: 50%;
+  background: var(--ink);
+  box-shadow: 0 0 0 4px var(--bg);
+}
+
+.tl-node.tiny {
+  --s: 0px;
+}
+
+.tl-date {
+  display: flex;
+  gap: 8px;
+  color: var(--ink-3);
+}
+
+.tl-day {
+  color: var(--ink-4);
+}
+
+.tl-name {
+  margin-top: 2px;
+  font-size: 17px;
+  font-weight: 500;
+  letter-spacing: -0.015em;
+}
+
+.tl-text {
+  margin-top: 4px;
+  color: var(--ink-2);
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+.tl-facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 6px;
+  margin-top: 10px;
+}
+
+.tl-facts span {
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: var(--card-2);
+  font-size: 12px;
+  color: var(--ink-2);
+}
+
+.tl-links {
+  display: flex;
+  gap: 14px;
+  margin-top: 8px;
+}
+
+/* scrolling brings things in softly, once */
+
+.js [data-reveal] {
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.7s ease, transform 0.9s var(--spring);
+}
+
+.js [data-reveal].in {
+  opacity: 1;
+  transform: none;
+}
+
+.page-head > * {
+  animation: up 0.7s var(--spring) both;
+  animation-delay: calc(var(--k, 0) * 60ms);
+}
+
+@keyframes up {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+    filter: blur(4px);
+  }
+}
+
+/* views arriving from another page skip the stagger, the transition already moved them */
+html.vt-in .page-head > * {
+  animation: none;
+}
+
+@media (max-width: 620px) {
+  .page {
+    padding-top: 84px;
+  }
+
+  .page-title {
+    font-size: 27px;
+  }
+
+  .bench-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .pager {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .pager .newer {
+    grid-column: 1;
+    text-align: left;
+  }
+
+  .wsd text {
+    font-size: 22px;
+  }
+}
+
+@media print {
+  .controls,
+  .page-foot,
+  .pager {
+    display: none;
+  }
+
+  .js [data-reveal] {
+    opacity: 1;
+    transform: none;
+  }
+}

@@ -40,47 +40,44 @@
   <link rel="alternate" type="application/rss+xml" title="navthings" href="../feed.xml" />
 
   <link rel="preload" href="../assets/fonts/geist.woff2" as="font" type="font/woff2" crossorigin />
-  <link rel="stylesheet" href="../assets/site.css" />
-  <link rel="stylesheet" href="../assets/home.css" />
+  <link rel="stylesheet" href="../assets/base.css" />
   <link rel="stylesheet" href="../assets/work.css" />
+  <link rel="stylesheet" href="../assets/page.css" />
 </head>
 
 <body>
   <a class="skip" href="#main">skip to content</a>
 
-  <header class="nav" data-label="playground" data-current="work">
-    <div class="island">
-      <span class="island-fill" aria-hidden="true"></span>
-      <a class="island-mark" href="../" aria-label="navthings, home"><img src="../favicon.svg" alt="" /></a>
-      <span class="island-now" aria-hidden="true"><span>playground</span></span>
-      <nav class="island-links" aria-label="main">
-        <a class="home" href="../">navthings</a>
-        <a href="../#work">work</a>
-        <a href="../#writing">writing</a>
-        <a href="../playground/">playground</a>
-        <a href="mailto:navneet.dagdiya@gmail.com" data-email>email</a>
-      </nav>
-    </div>
-  </header>
+  <div class="controls">
+    <button class="theme" type="button" aria-label="switch to dark mode" aria-pressed="false">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <mask id="moon-cut"><rect width="24" height="24" fill="#fff" /><circle class="cut" cx="24" cy="2" r="7" fill="#000" /></mask>
+        <circle class="disc" cx="12" cy="12" r="5" mask="url(#moon-cut)" />
+        <g class="rays">
+          <path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4" />
+        </g>
+      </svg>
+      <span class="theme-tip" aria-hidden="true">following your system</span>
+    </button>
+  </div>
 
-  <main class="sheet" id="main">
-    <header class="cs-head wrap wide">
-      <p class="cs-kicker cap" data-reveal><a href="./">work</a><span>/</span><span>web · sep 2026</span></p>
-      <h1 class="cs-title" style="view-transition-name: t-playground" data-letters>playground</h1>
-      <p class="cs-lede" data-words style="--d: 0.15s">i wanted people to be able to try my models without installing anything. so theres a page where they run right in your browser tab, on your own computer.</p>
-      <dl class="cs-meta" data-stagger="0.06" style="--d: 0.3s">
-          <div data-reveal><dt>engine</dt><dd>wllama, llama.cpp in wasm</dd></div>
-          <div data-reveal><dt>models</dt><dd>4, from 17mb to 274mb</dd></div>
-          <div data-reveal><dt>hosted on</dt><dd>github pages and hugging face</dd></div>
-          <div data-reveal><dt>server</dt><dd>none</dd></div>
+  <main class="page wide" id="main">
+    <header class="page-head">
+      <a class="page-name" href="../">nav</a>
+      <p class="crumb"><a href="../#work">work</a><span>web</span><span>sep 2026</span></p>
+      <h1 class="page-title" style="view-transition-name: t-playground">playground</h1>
+      <p class="lede">i wanted people to be able to try my models without installing anything. so theres a page where they run right in your browser tab, on your own computer.</p>
+      <dl class="facts">
+        <div><dt>engine</dt><dd>wllama, llama.cpp in wasm</dd></div>
+        <div><dt>models</dt><dd>4, from 17mb to 274mb</dd></div>
+        <div><dt>hosted on</dt><dd>github pages and hugging face</dd></div>
+        <div><dt>server</dt><dd>none</dd></div>
       </dl>
-      <div class="row" data-reveal style="--d: 0.5s">
-        <a class="btn dark" href="../playground/"><span class="inner">open the playground</span></a>
-        <a class="btn line" href="https://github.com/ngxson/wllama" target="_blank" rel="noopener"><span class="inner">wllama</span></a>
-      </div>
+      <p class="links"><a href="../playground/">open the playground</a><a href="https://github.com/ngxson/wllama" target="_blank" rel="noopener">wllama</a></p>
     </header>
+
     <section class="wrap wide">
-      <div class="cs-figure sq" data-live data-reveal="scale">
+      <div class="cs-figure" data-reveal data-live>
         <p class="fig-title">what your browser downloads, once</p>
           <div class="hbars" style="margin-top: 0">
             <div class="hbar-group"><span>sprout <span class="cap muted">q4_k_m</span></span><div class="hbar" style="--k: 0"><b style="--w: 95.8%; background: var(--ink)"></b><em>345mb</em></div></div>
@@ -91,7 +88,7 @@
     </section>
 
     <section class="cs-body wrap wide">
-      <div class="cs-sec" data-reveal data-label="how it works">
+      <div class="cs-sec" data-reveal>
         <h2 class="cs-h">how it works</h2>
         <div class="cs-text">
           <p>it runs on <a href="https://github.com/ngxson/wllama" target="_blank" rel="noopener">wllama</a>, which is llama.cpp compiled to webassembly. you pick a model, the page pulls the gguf file straight from <a href="https://huggingface.co/navthings" target="_blank" rel="noopener">hugging face</a>, and then everything happens on your machine.</p>
@@ -99,24 +96,24 @@
           <p>this site is just static files on github pages. <strong>theres no server doing any of it</strong>, so nothing you type gets sent anywhere.</p>
         </div>
       </div>
-      <div class="cs-sec" data-reveal data-label="making it fit">
+      <div class="cs-sec" data-reveal>
         <h2 class="cs-h">making it fit</h2>
         <div class="cs-text">
           <p>sprout and lilchat are quantized to 4 bit (<code>q4_k_m</code>), which gets them down to 345mb and 274mb. tale is 8 bit at 52mb.</p>
           <p>the context is small too. <strong>1024 tokens</strong> for sprout and lilchat, 384 for tale. when a chat gets too long, the page drops the oldest turns so theres always room left for a reply.</p>
         </div>
       </div>
-      <div class="cs-sec" data-reveal data-label="talking to lilchat">
+      <div class="cs-sec" data-reveal>
         <h2 class="cs-h">talking to lilchat</h2>
         <div class="cs-text">
           <p>lilchat only understands the format it was trained on, so the page rebuilds the whole conversation in that format every time you send something, and stops as soon as the model writes <code>[INST]</code> or <code>&lt;/s&gt;</code>.</p>
           <div class="fig">
-            <div class="fmt sq"><span class="ctl">[INST]</span> <span class="you">hi</span> <span class="ctl">[/INST]</span> <span class="bot">Hello! How can I help you today?</span><span class="ctl">&lt;/s&gt;</span><span class="ctl">[INST]</span> <span class="you">whats 17 + 25?</span> <span class="ctl">[/INST]</span></div>
+            <div class="fmt"><span class="ctl">[INST]</span> <span class="you">hi</span> <span class="ctl">[/INST]</span> <span class="bot">Hello! How can I help you today?</span><span class="ctl">&lt;/s&gt;</span><span class="ctl">[INST]</span> <span class="you">whats 17 + 25?</span> <span class="ctl">[/INST]</span></div>
             <div class="fmt-key"><span>the model writes whatever comes next</span></div>
           </div>
         </div>
       </div>
-      <div class="cs-sec" data-reveal data-label="what broke">
+      <div class="cs-sec" data-reveal>
         <h2 class="cs-h">what broke</h2>
         <div class="cs-text">
           <p><strong>safari.</strong> it passes wllamas memory64 check, then cant actually run that build. so on safari the page points the engine at the compat build instead, which swaps jspi for asyncify and drops memory64. it still gets webgpu, but its noticeably slower than chrome.</p>
@@ -126,39 +123,24 @@
       </div>
     </section>
 
-    <section class="cs-next wrap wide">
-      <a class="next-card sq" href="sprout.html" data-reveal="scale">
-        <span class="label">next case study</span>
-        <span class="next-title" style="view-transition-name: t-sprout">sprout</span>
-        <p>the 523m base model, trained on 12b tokens from four sources.</p>
-      </a>
-    </section>
+    
 
+    <nav class="pager" aria-label="next">
+      <a class="newer" href="sprout.html"><span>next case study</span>sprout</a>
+    </nav>
+
+    <footer class="page-foot">
+      <nav class="elsewhere" aria-label="elsewhere">
+        <a href="https://github.com/navthings" target="_blank" rel="noopener">github</a>
+        <a href="https://huggingface.co/navthings" target="_blank" rel="noopener">hugging face</a>
+        <a href="https://ollama.com/navthings" target="_blank" rel="noopener">ollama</a>
+        <a href="https://orcid.org/0009-0002-2764-866X" target="_blank" rel="noopener">orcid</a>
+        <a class="email" href="mailto:navneet.dagdiya@gmail.com"><span class="slot"><span>email</span><span aria-hidden="true">copied</span></span></a>
+      </nav>
+    </footer>
   </main>
 
-  <footer class="foot" data-label="say hi">
-    <div class="foot-top">
-      <div>
-        <p class="foot-say"><button class="say" type="button" data-email data-scrib="underline" data-scrib-on="hover"><span class="inner">say hi.</span></button> <span>maybe i'll reply.</span></p>
-        <p class="hint">that copies my email. 50-50 i respond.</p>
-      </div>
-      <nav class="foot-links" aria-label="elsewhere">
-        <a href="https://github.com/navthings" target="_blank" rel="noopener">github <span>- it still works</span></a>
-        <a href="https://huggingface.co/navthings" target="_blank" rel="noopener">hugging face <span>- the weights</span></a>
-        <a href="https://ollama.com/navthings" target="_blank" rel="noopener">ollama <span>- models i've pushed</span></a>
-        <a href="https://orcid.org/0009-0002-2764-866X" target="_blank" rel="noopener">orcid <span>- research id</span></a>
-        <a href="https://doi.org/10.5281/zenodo.22340667" target="_blank" rel="noopener">zenodo <span>- the paper</span></a>
-        <a href="../feed.xml">rss <span>- new posts</span></a>
-      </nav>
-    </div>
-    <div class="foot-mark">
-      <svg viewBox="66 64 384 378" aria-hidden="true" data-mark></svg>
-      <div class="meta">navthings, made in australia<br /><button type="button" data-top>back to top</button></div>
-    </div>
-  </footer>
-
-  <script src="../assets/vendor/lenis.min.js"></script>
-  <script src="../assets/site.js"></script>
-  <script src="../assets/home.js"></script>
+  <script src="../assets/base.js"></script>
+  <script src="../assets/page.js"></script>
 </body>
 </html>

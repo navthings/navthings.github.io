@@ -40,68 +40,65 @@
   <link rel="alternate" type="application/rss+xml" title="navthings" href="../feed.xml" />
 
   <link rel="preload" href="../assets/fonts/geist.woff2" as="font" type="font/woff2" crossorigin />
-  <link rel="stylesheet" href="../assets/site.css" />
-  <link rel="stylesheet" href="../assets/home.css" />
+  <link rel="stylesheet" href="../assets/base.css" />
   <link rel="stylesheet" href="../assets/work.css" />
+  <link rel="stylesheet" href="../assets/page.css" />
 </head>
 
 <body>
   <a class="skip" href="#main">skip to content</a>
 
-  <header class="nav" data-label="lilchat" data-current="work">
-    <div class="island">
-      <span class="island-fill" aria-hidden="true"></span>
-      <a class="island-mark" href="../" aria-label="navthings, home"><img src="../favicon.svg" alt="" /></a>
-      <span class="island-now" aria-hidden="true"><span>lilchat</span></span>
-      <nav class="island-links" aria-label="main">
-        <a class="home" href="../">navthings</a>
-        <a href="../#work">work</a>
-        <a href="../#writing">writing</a>
-        <a href="../playground/">playground</a>
-        <a href="mailto:navneet.dagdiya@gmail.com" data-email>email</a>
-      </nav>
-    </div>
-  </header>
+  <div class="controls">
+    <button class="theme" type="button" aria-label="switch to dark mode" aria-pressed="false">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <mask id="moon-cut"><rect width="24" height="24" fill="#fff" /><circle class="cut" cx="24" cy="2" r="7" fill="#000" /></mask>
+        <circle class="disc" cx="12" cy="12" r="5" mask="url(#moon-cut)" />
+        <g class="rays">
+          <path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4" />
+        </g>
+      </svg>
+      <span class="theme-tip" aria-hidden="true">following your system</span>
+    </button>
+  </div>
 
-  <main class="sheet" id="main">
-    <header class="cs-head wrap wide">
-      <p class="cs-kicker cap" data-reveal><a href="./">work</a><span>/</span><span>finetuning · sep 2026</span></p>
-      <h1 class="cs-title" style="view-transition-name: t-lilchat" data-letters>lilchat</h1>
-      <p class="cs-lede" data-words style="--d: 0.15s">a base model just continues text. ask it a question and itll probably write 5 more questions instead of answering. lilchat is lilbase after supervised finetuning on conversations, done in mlx in one night.</p>
-      <dl class="cs-meta" data-stagger="0.06" style="--d: 0.3s">
-          <div data-reveal><dt>started from</dt><dd>lilbase, 297m</dd></div>
-          <div data-reveal><dt>finetuned on</dt><dd>37m tokens of smol-smoltalk</dd></div>
-          <div data-reveal><dt>trained on</dt><dd>macbook air, mlx</dd></div>
-          <div data-reveal><dt>took</dt><dd>one night</dd></div>
+  <main class="page wide" id="main">
+    <header class="page-head">
+      <a class="page-name" href="../">nav</a>
+      <p class="crumb"><a href="../#work">work</a><span>finetuning</span><span>sep 2026</span></p>
+      <h1 class="page-title" style="view-transition-name: t-lilchat">lilchat</h1>
+      <p class="lede">a base model just continues text. ask it a question and itll probably write 5 more questions instead of answering. lilchat is lilbase after supervised finetuning on conversations, done in mlx in one night.</p>
+      <dl class="facts">
+        <div><dt>started from</dt><dd>lilbase, 297m</dd></div>
+        <div><dt>finetuned on</dt><dd>37m tokens of smol-smoltalk</dd></div>
+        <div><dt>trained on</dt><dd>macbook air, mlx</dd></div>
+        <div><dt>took</dt><dd>one night</dd></div>
       </dl>
-      <div class="row" data-reveal style="--d: 0.5s">
-        <a class="btn dark" href="../playground/?model=lilchat"><span class="inner">talk to it</span></a>
-        <a class="btn line" href="../blog/lilchat.html"><span class="inner">the original post</span></a>
-      </div>
+      <p class="links"><a href="../playground/?model=lilchat">talk to it</a><a href="../blog/lilchat.html">the original post</a></p>
     </header>
+
     <section class="wrap wide">
-      <div class="cs-figure sq" data-live data-reveal="scale">
+      <div class="cs-figure" data-reveal data-live>
         <p class="fig-title">loss on conversations it hadnt seen, lower is better</p>
         <div class="pair">
-          <div class="sq"><span class="cap muted">plain lilbase</span><span class="big was">2.230</span><div class="track"><b style="--w: 89.2%; background: #c9c9c6"></b></div></div>
-          <div class="sq"><span class="cap muted">lilchat</span><span class="big">1.337</span><div class="track"><b style="--w: 53.5%; background: var(--ink)"></b></div></div>
+          <div><span class="cap muted">plain lilbase</span><span class="big was">2.230</span><div class="track"><b style="--w: 89.2%; background: #c9c9c6"></b></div></div>
+          <div><span class="cap muted">lilchat</span><span class="big">1.337</span><div class="track"><b style="--w: 53.5%; background: var(--ink)"></b></div></div>
         </div>
       </div>
     </section>
 
     <section class="cs-body wrap wide">
-      <div class="cs-sec" data-reveal data-label="the idea">
+      <div class="cs-sec" data-reveal>
         <h2 class="cs-h">the idea</h2>
         <div class="cs-text">
           <p>to make a chat model you finetune it on a bunch of conversations, so it learns the pattern: <strong>you say something, it answers, it stops.</strong></p>
           <p>every conversation gets flattened into one line of text with some markers in it. lilchat learned this exact format, so the playground builds prompts the same way.</p>
           <div class="fig">
-            <div class="fmt sq"><span class="ctl">[INST]</span> <span class="you">hi</span> <span class="ctl">[/INST]</span> <span class="bot">Hello! How can I help you today?</span><span class="ctl">&lt;/s&gt;</span></div>
+            <div class="fmt"><span class="ctl">[INST]</span> <span class="you">hi</span> <span class="ctl">[/INST]</span> <span class="bot">Hello! How can I help you today?</span><span class="ctl">&lt;/s&gt;</span></div>
             <div class="fmt-key"><span>grey is formatting</span><span>black is you</span><span>underlined is the model</span><span>&lt;/s&gt; means stop</span></div>
           </div>
         </div>
       </div>
-      <div class="cs-sec" data-reveal data-label="training">
+      <div class="cs-sec" data-reveal>
         <h2 class="cs-h">training</h2>
         <div class="cs-text">
           <p>i did it overnight on my macbook air with mlx. the data is <a href="https://huggingface.co/datasets/HuggingFaceTB/smol-smoltalk" target="_blank" rel="noopener">smol-smoltalk</a>, and it only gets trained on the assistant replies, so it learns to answer rather than to write your half of the chat.</p>
@@ -112,14 +109,14 @@
           </div>
         </div>
       </div>
-      <div class="cs-sec" data-reveal data-label="what works">
+      <div class="cs-sec" data-reveal>
         <h2 class="cs-h">what works</h2>
         <div class="cs-text">
           <p>if you say "hi" it says "Hello! How can I help you today?" and stops. plain lilbase just repeats the chat formatting forever when you do that.</p>
           <p>it does lists and code blocks, and it wrote a correct one line function to reverse a string. then explained it completely wrong.</p>
         </div>
       </div>
-      <div class="cs-sec" data-reveal data-label="what doesnt">
+      <div class="cs-sec" data-reveal>
         <h2 class="cs-h">what doesnt</h2>
         <div class="cs-text">
           <p>it does not know things. it told me the capital of australia is <strong data-scrib="circle">melbourne</strong>, then <strong>perth</strong> on another try. 17 + 25 was 48, and then "so, the answer is 17".</p>
@@ -127,7 +124,7 @@
           <p>thats not really a finetuning problem. 297m params just doesnt know much.</p>
         </div>
       </div>
-      <div class="cs-sec" data-reveal data-label="one knob">
+      <div class="cs-sec" data-reveal>
         <h2 class="cs-h">one knob</h2>
         <div class="cs-text">
           <p>turning the temperature down helps a bit. out of 12 tries saying "hi", heres how often it gave a normal reply.</p>
@@ -138,7 +135,7 @@
           <p>going all the way to zero doesnt work either. greedy decoding just loops, so it needs some temperature. it ships at 0.4, with top-k 40 and a repeat penalty of 1.1, and the playground uses the same.</p>
         </div>
       </div>
-      <div class="cs-sec" data-reveal data-label="shipping it">
+      <div class="cs-sec" data-reveal>
         <h2 class="cs-h">shipping it</h2>
         <div class="cs-text">
           <p>its on ollama in three sizes. the 8 bit one is the default because its the same quality as the full 16 bit weights at a bit over half the size.</p>
@@ -151,48 +148,33 @@
           </div>
         </div>
       </div>
-      <div class="cs-sec" data-reveal data-label="next">
+      <div class="cs-sec" data-reveal>
         <h2 class="cs-h">next</h2>
         <div class="cs-text">
           <p>the real fix is a bigger base model, which is <a href="https://github.com/navthings/sprout" target="_blank" rel="noopener">sprout</a>. 523m params, 12 billion tokens from fineweb-edu, dclm, cosmopedia and project gutenberg, back on the kaggle tpu. it finished on sep 27, and next it gets the same finetune.</p>
-          <code class="cmd sq">ollama run navthings/lilchat</code>
+          <code class="cmd">ollama run navthings/lilchat</code>
         </div>
       </div>
     </section>
 
-    <section class="cs-next wrap wide">
-      <a class="next-card sq" href="corpus-size.html" data-reveal="scale">
-        <span class="label">next case study</span>
-        <span class="next-title" style="view-transition-name: t-paper">the paper</span>
-        <p>the same model trained on four amounts of data, written up as a paper.</p>
-      </a>
-    </section>
+    
 
+    <nav class="pager" aria-label="next">
+      <a class="newer" href="corpus-size.html"><span>next case study</span>the paper</a>
+    </nav>
+
+    <footer class="page-foot">
+      <nav class="elsewhere" aria-label="elsewhere">
+        <a href="https://github.com/navthings" target="_blank" rel="noopener">github</a>
+        <a href="https://huggingface.co/navthings" target="_blank" rel="noopener">hugging face</a>
+        <a href="https://ollama.com/navthings" target="_blank" rel="noopener">ollama</a>
+        <a href="https://orcid.org/0009-0002-2764-866X" target="_blank" rel="noopener">orcid</a>
+        <a class="email" href="mailto:navneet.dagdiya@gmail.com"><span class="slot"><span>email</span><span aria-hidden="true">copied</span></span></a>
+      </nav>
+    </footer>
   </main>
 
-  <footer class="foot" data-label="say hi">
-    <div class="foot-top">
-      <div>
-        <p class="foot-say"><button class="say" type="button" data-email data-scrib="underline" data-scrib-on="hover"><span class="inner">say hi.</span></button> <span>maybe i'll reply.</span></p>
-        <p class="hint">that copies my email. 50-50 i respond.</p>
-      </div>
-      <nav class="foot-links" aria-label="elsewhere">
-        <a href="https://github.com/navthings" target="_blank" rel="noopener">github <span>- it still works</span></a>
-        <a href="https://huggingface.co/navthings" target="_blank" rel="noopener">hugging face <span>- the weights</span></a>
-        <a href="https://ollama.com/navthings" target="_blank" rel="noopener">ollama <span>- models i've pushed</span></a>
-        <a href="https://orcid.org/0009-0002-2764-866X" target="_blank" rel="noopener">orcid <span>- research id</span></a>
-        <a href="https://doi.org/10.5281/zenodo.22340667" target="_blank" rel="noopener">zenodo <span>- the paper</span></a>
-        <a href="../feed.xml">rss <span>- new posts</span></a>
-      </nav>
-    </div>
-    <div class="foot-mark">
-      <svg viewBox="66 64 384 378" aria-hidden="true" data-mark></svg>
-      <div class="meta">navthings, made in australia<br /><button type="button" data-top>back to top</button></div>
-    </div>
-  </footer>
-
-  <script src="../assets/vendor/lenis.min.js"></script>
-  <script src="../assets/site.js"></script>
-  <script src="../assets/home.js"></script>
+  <script src="../assets/base.js"></script>
+  <script src="../assets/page.js"></script>
 </body>
 </html>

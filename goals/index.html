@@ -19,19 +19,33 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-title" content="goals" />
   <link rel="preload" href="/assets/fonts/geist.woff2" as="font" type="font/woff2" crossorigin />
-  <link rel="stylesheet" href="/assets/site.css" />
+  <link rel="stylesheet" href="/assets/base.css" />
   <style>
     .g {
-      max-width: 640px;
+      max-width: 600px;
       margin: 0 auto;
-      padding: 96px 20px 120px;
+      padding: max(14vh, 88px) 24px 120px;
+    }
+
+    .g .home {
+      display: inline-block;
+      font-size: 15px;
+      font-weight: 500;
+      letter-spacing: -0.02em;
+      color: var(--ink-3);
+      transition: color 0.2s ease;
+    }
+
+    .g .home:hover {
+      color: var(--ink);
     }
 
     .g h1 {
-      font-size: clamp(40px, 7vw, 64px);
-      line-height: 1;
-      letter-spacing: -0.05em;
-      font-weight: 450;
+      margin-top: 6px;
+      font-size: 30px;
+      line-height: 1.15;
+      letter-spacing: -0.035em;
+      font-weight: 500;
     }
 
     .g .sub {
@@ -359,8 +373,22 @@
 </head>
 
 <body>
+  <div class="controls">
+    <button class="theme" type="button" aria-label="switch to dark mode" aria-pressed="false">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <mask id="moon-cut"><rect width="24" height="24" fill="#fff" /><circle class="cut" cx="24" cy="2" r="7" fill="#000" /></mask>
+        <circle class="disc" cx="12" cy="12" r="5" mask="url(#moon-cut)" />
+        <g class="rays">
+          <path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4" />
+        </g>
+      </svg>
+      <span class="theme-tip" aria-hidden="true">following your system</span>
+    </button>
+  </div>
+
   <main class="g">
-    <h1>goals.</h1>
+    <a class="home" href="/">nav</a>
+    <h1>goals</h1>
 
     <div id="locked">
       <form class="lock" id="lockform">
@@ -1097,5 +1125,6 @@
       say("sync off on this device");
     };
   </script>
+  <script src="/assets/base.js"></script>
 </body>
 </html>

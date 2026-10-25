@@ -53,6 +53,7 @@
     }
   </script>
   <link rel="preload" href="assets/fonts/geist.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="assets/base.css" />
   <link rel="stylesheet" href="assets/front.css" />
 </head>
 
@@ -124,11 +125,11 @@
 
   <template id="t-work">
     <ul class="list">
-      <li><a class="row" href="work/sprout.html" data-pv="sprout"><span class="t">sprout</span><span class="m">523m, 12b tokens</span></a></li>
-      <li><a class="row" href="work/lilchat.html" data-pv="lilchat"><span class="t">lilchat</span><span class="m">chat finetune</span></a></li>
-      <li><a class="row" href="work/lilbase.html" data-pv="lilbase"><span class="t">lilbase</span><span class="m">297m, jax on tpu</span></a></li>
-      <li><a class="row" href="work/corpus-size.html" data-pv="paper"><span class="t">the paper</span><span class="m">how much data matters</span></a></li>
-      <li><a class="row" href="work/playground.html" data-pv="wasm"><span class="t">playground</span><span class="m">llama.cpp in wasm</span></a></li>
+      <li><a class="row" href="work/sprout.html" data-vt="t-sprout" data-pv="sprout"><span class="t">sprout</span><span class="m">523m, 12b tokens</span></a></li>
+      <li><a class="row" href="work/lilchat.html" data-vt="t-lilchat" data-pv="lilchat"><span class="t">lilchat</span><span class="m">chat finetune</span></a></li>
+      <li><a class="row" href="work/lilbase.html" data-vt="t-lilbase" data-pv="lilbase"><span class="t">lilbase</span><span class="m">297m, jax on tpu</span></a></li>
+      <li><a class="row" href="work/corpus-size.html" data-vt="t-paper" data-pv="paper"><span class="t">the paper</span><span class="m">how much data matters</span></a></li>
+      <li><a class="row" href="work/playground.html" data-vt="t-playground" data-pv="wasm"><span class="t">playground</span><span class="m">llama.cpp in wasm</span></a></li>
       <li><a class="row" href="https://github.com/navthings/airgpt" target="_blank" rel="noopener" data-pv="airgpt"><span class="t">airgpt</span><span class="m">train one on a mac</span></a></li>
       <li><a class="row" href="https://github.com/ml-explore/mlx/pull/4611" target="_blank" rel="noopener" data-pv="mlx"><span class="t">mlx #4611</span><span class="m">merged into apple's mlx</span></a></li>
     </ul>
@@ -139,26 +140,26 @@
     <div class="group">
       <h3>october</h3>
       <ul class="list">
-        <li><a class="row" href="blog/airgpt.html" data-pv="p-airgpt"><span class="t">airgpt, train a chatbot from scratch on a mac</span><span class="m">12</span></a></li>
-        <li><a class="row" href="blog/mlx-pr.html" data-pv="p-mlx"><span class="t">my first pr got merged into mlx</span><span class="m">05</span></a></li>
-        <li><a class="row" href="blog/sprout.html" data-pv="p-sprout"><span class="t">sprout can talk now</span><span class="m">01</span></a></li>
+        <li><a class="row" href="blog/airgpt.html" data-vt="p-airgpt" data-pv="p-airgpt"><span class="t">airgpt, train a chatbot from scratch on a mac</span><span class="m">12</span></a></li>
+        <li><a class="row" href="blog/mlx-pr.html" data-vt="p-mlx-pr" data-pv="p-mlx"><span class="t">my first pr got merged into mlx</span><span class="m">05</span></a></li>
+        <li><a class="row" href="blog/sprout.html" data-vt="p-sprout" data-pv="p-sprout"><span class="t">sprout can talk now</span><span class="m">01</span></a></li>
       </ul>
     </div>
     <div class="group">
       <h3>september</h3>
       <ul class="list">
-        <li><a class="row" href="blog/lilchat.html" data-pv="p-lilchat"><span class="t">teaching lilbase to talk</span><span class="m">26</span></a></li>
-        <li><a class="row" href="blog/lilbase.html" data-pv="p-lilbase"><span class="t">lilbase, 297m params on a free tpu</span><span class="m">23</span></a></li>
-        <li><a class="row" href="blog/tale.html" data-pv="p-tale"><span class="t">tale, bedtime stories for my little brother</span><span class="m">12</span></a></li>
-        <li><a class="row" href="blog/dataset-size-paper.html" data-pv="p-paper"><span class="t">i wrote a paper on how much data matters</span><span class="m">05</span></a></li>
-        <li><a class="row" href="blog/lilstory.html" data-pv="p-lilstory"><span class="t">lilstory, my first real language model</span><span class="m">04</span></a></li>
+        <li><a class="row" href="blog/lilchat.html" data-vt="p-lilchat" data-pv="p-lilchat"><span class="t">teaching lilbase to talk</span><span class="m">26</span></a></li>
+        <li><a class="row" href="blog/lilbase.html" data-vt="p-lilbase" data-pv="p-lilbase"><span class="t">lilbase, 297m params on a free tpu</span><span class="m">23</span></a></li>
+        <li><a class="row" href="blog/tale.html" data-vt="p-tale" data-pv="p-tale"><span class="t">tale, bedtime stories for my little brother</span><span class="m">12</span></a></li>
+        <li><a class="row" href="blog/dataset-size-paper.html" data-vt="p-dataset-size-paper" data-pv="p-paper"><span class="t">i wrote a paper on how much data matters</span><span class="m">05</span></a></li>
+        <li><a class="row" href="blog/lilstory.html" data-vt="p-lilstory" data-pv="p-lilstory"><span class="t">lilstory, my first real language model</span><span class="m">04</span></a></li>
       </ul>
     </div>
     <div class="group">
       <h3>august</h3>
       <ul class="list">
-        <li><a class="row" href="blog/bigtransformer.html" data-pv="p-big"><span class="t">bigtransformer, now it reads a whole file</span><span class="m">31</span></a></li>
-        <li><a class="row" href="blog/liltransformer.html" data-pv="p-lil"><span class="t">my first transformer (it only knows one sentence)</span><span class="m">30</span></a></li>
+        <li><a class="row" href="blog/bigtransformer.html" data-vt="p-bigtransformer" data-pv="p-big"><span class="t">bigtransformer, now it reads a whole file</span><span class="m">31</span></a></li>
+        <li><a class="row" href="blog/liltransformer.html" data-vt="p-liltransformer" data-pv="p-lil"><span class="t">my first transformer (it only knows one sentence)</span><span class="m">30</span></a></li>
       </ul>
     </div>
     <p class="aside">theres an <a href="feed.xml">rss feed</a> too, if you still use those.</p>
@@ -288,6 +289,7 @@
     </div>
   </template>
 
+  <script src="assets/base.js"></script>
   <script src="assets/front.js"></script>
 </body>
 </html>

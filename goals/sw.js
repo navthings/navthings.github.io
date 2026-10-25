@@ -1,5 +1,5 @@
-const CACHE = "goals-v3";
-const CORE = ["./", "./data.json", "./manifest.json", "/assets/site.css", "/assets/fonts/geist.woff2", "/favicon.svg", "/apple-touch-icon.png"];
+const CACHE = "goals-v4";
+const CORE = ["./", "./data.json", "./manifest.json", "/assets/base.css", "/assets/base.js", "/assets/fonts/geist.woff2", "/favicon.svg", "/apple-touch-icon.png"];
 
 self.addEventListener("install", (e) => {
   e.waitUntil(caches.open(CACHE).then((c) => c.addAll(CORE)).then(() => self.skipWaiting()));

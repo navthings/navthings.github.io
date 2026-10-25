@@ -40,73 +40,75 @@
   <link rel="alternate" type="application/rss+xml" title="navthings" href="../feed.xml" />
 
   <link rel="preload" href="../assets/fonts/geist.woff2" as="font" type="font/woff2" crossorigin />
-  <link rel="stylesheet" href="../assets/site.css" />
-  <link rel="stylesheet" href="../assets/home.css" />
   <style>.list-page{padding-top:clamp(130px,20vh,190px)}.list-title{margin-top:24px;font-size:clamp(40px,6vw,80px);line-height:.95;letter-spacing:-.055em;font-weight:450;max-width:16ch}.list-page .posts{margin-top:48px}</style>
+  <link rel="stylesheet" href="../assets/base.css" />
+  <link rel="stylesheet" href="../assets/page.css" />
 </head>
 
 <body>
   <a class="skip" href="#main">skip to content</a>
 
-  <header class="nav" data-label="writing">
-    <div class="island">
-      <span class="island-fill" aria-hidden="true"></span>
-      <a class="island-mark" href="../" aria-label="navthings, home"><img src="../favicon.svg" alt="" /></a>
-      <span class="island-now" aria-hidden="true"><span>writing</span></span>
-      <nav class="island-links" aria-label="main">
-        <a class="home" href="../">navthings</a>
-        <a href="../#work">work</a>
-        <a href="../#writing">writing</a>
-        <a href="../playground/">playground</a>
-        <a href="mailto:navneet.dagdiya@gmail.com" data-email>email</a>
-      </nav>
+  <div class="controls">
+    <button class="theme" type="button" aria-label="switch to dark mode" aria-pressed="false">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <mask id="moon-cut"><rect width="24" height="24" fill="#fff" /><circle class="cut" cx="24" cy="2" r="7" fill="#000" /></mask>
+        <circle class="disc" cx="12" cy="12" r="5" mask="url(#moon-cut)" />
+        <g class="rays">
+          <path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4" />
+        </g>
+      </svg>
+      <span class="theme-tip" aria-hidden="true">following your system</span>
+    </button>
+  </div>
+
+  <main class="page" id="main">
+    <header class="page-head">
+      <a class="page-name" href="../">nav</a>
+      <p class="crumb"><span>writing</span></p>
+      <h1 class="page-title" style="view-transition-name: title">writing</h1>
+    </header>
+
+    <div class="list">
+<div class="group">
+      <h2>october</h2>
+      <ul class="list">
+        <li><a class="row" href="airgpt.html"><span class="t">airgpt, train a chatbot from scratch on a mac</span><span class="m">12</span></a></li>
+        <li><a class="row" href="mlx-pr.html"><span class="t">my first pr got merged into mlx</span><span class="m">05</span></a></li>
+        <li><a class="row" href="sprout.html"><span class="t">sprout can talk now</span><span class="m">01</span></a></li>
+      </ul>
     </div>
-  </header>
+    <div class="group">
+      <h2>september</h2>
+      <ul class="list">
+        <li><a class="row" href="lilchat.html"><span class="t">teaching lilbase to talk</span><span class="m">26</span></a></li>
+        <li><a class="row" href="lilbase.html"><span class="t">lilbase, 297m params on a free tpu</span><span class="m">23</span></a></li>
+        <li><a class="row" href="tale.html"><span class="t">tale, bedtime stories for my little brother</span><span class="m">12</span></a></li>
+        <li><a class="row" href="dataset-size-paper.html"><span class="t">i wrote a paper on how much data matters</span><span class="m">05</span></a></li>
+        <li><a class="row" href="lilstory.html"><span class="t">lilstory, my first real language model</span><span class="m">04</span></a></li>
+      </ul>
+    </div>
+    <div class="group">
+      <h2>august</h2>
+      <ul class="list">
+        <li><a class="row" href="bigtransformer.html"><span class="t">bigtransformer, now it reads a whole file</span><span class="m">31</span></a></li>
+        <li><a class="row" href="liltransformer.html"><span class="t">my first transformer (it only knows one sentence)</span><span class="m">30</span></a></li>
+      </ul>
+    </div>
+    </div>
+    <p class="also">theres an <a href="../feed.xml">rss feed</a> too, if you still use those.</p>
 
-  <main class="sheet" id="main">
-    <section class="list-page wrap wide" data-label="writing">
-      <p class="cs-kicker cap" data-reveal><a href="../">navthings</a><span>/</span><span>writing</span></p>
-      <h1 class="list-title" data-words>what i've written so far.</h1>
-      <div class="posts follow" data-stagger="0.05">
-        <a class="post-row" href="airgpt.html" data-peek="every repo i found for training your own llm needed an nvidia gpu, so i made one that runs on my macbook air." data-reveal><span class="cap">2026-10-12</span><span class="t" style="view-transition-name: p-airgpt">airgpt, train a chatbot from scratch on a mac</span><span class="cap kind">open source</span></a>
-        <a class="post-row" href="mlx-pr.html" data-peek="i found an open issue in apples mlx, fixed it, and on oct 4 it got merged into main." data-reveal><span class="cap">2026-10-05</span><span class="t" style="view-transition-name: p-mlx-pr">my first pr got merged into mlx</span><span class="cap kind">open source</span></a>
-        <a class="post-row" href="sprout.html" data-peek="sprout finished pretraining on sep 27. 523m params, 12 billion tokens, all on the free kaggle tpu." data-reveal><span class="cap">2026-10-01</span><span class="t" style="view-transition-name: p-sprout">sprout can talk now</span><span class="cap kind">finetuning</span></a>
-        <a class="post-row" href="lilchat.html" data-peek="a base model just continues text. if you ask it a question itll probably write 5 more questions instead of answering." data-reveal><span class="cap">2026-09-26</span><span class="t" style="view-transition-name: p-lilchat">teaching lilbase to talk</span><span class="cap kind">finetuning</span></a>
-        <a class="post-row" href="lilbase.html" data-peek="everything before this was trained on my laptop, but i wanted to make a proper base model, like one thats actually read a decent chunk of the internet." data-reveal><span class="cap">2026-09-23</span><span class="t" style="view-transition-name: p-lilbase">lilbase, 297m params on a free tpu</span><span class="cap kind">pretraining</span></a>
-        <a class="post-row" href="tale.html" data-peek="my little brother kept asking me for bedtime stories so i made a model that tells them." data-reveal><span class="cap">2026-09-12</span><span class="t" style="view-transition-name: p-tale">tale, bedtime stories for my little brother</span><span class="cap kind">model</span></a>
-        <a class="post-row" href="dataset-size-paper.html" data-peek="i wanted to see how much the amount of data actually matters if you keep everything else the same." data-reveal><span class="cap">2026-09-05</span><span class="t" style="view-transition-name: p-dataset-size-paper">i wrote a paper on how much data matters</span><span class="cap kind">research</span></a>
-        <a class="post-row" href="lilstory.html" data-peek="ok this one is an actual language model. 8.2m params, llama style, trained from scratch on tinystories." data-reveal><span class="cap">2026-09-04</span><span class="t" style="view-transition-name: p-lilstory">lilstory, my first real language model</span><span class="cap kind">model</span></a>
-        <a class="post-row" href="bigtransformer.html" data-peek="made this the day after liltransformer. instead of one sentence it reads a whole text file." data-reveal><span class="cap">2026-08-31</span><span class="t" style="view-transition-name: p-bigtransformer">bigtransformer, now it reads a whole file</span><span class="cap kind">basics</span></a>
-        <a class="post-row" href="liltransformer.html" data-peek="first ml thing i ever made lol. you give it a sentence, pick a word from it, and it tries to guess the next word." data-reveal><span class="cap">2026-08-30</span><span class="t" style="view-transition-name: p-liltransformer">my first transformer (it only knows one sentence)</span><span class="cap kind">basics</span></a>
-      </div>
-      <p class="rss cap" data-reveal>theres an <a href="../feed.xml">rss feed</a> too, if you still use those.</p>
-    </section>
-
+    <footer class="page-foot">
+      <nav class="elsewhere" aria-label="elsewhere">
+        <a href="https://github.com/navthings" target="_blank" rel="noopener">github</a>
+        <a href="https://huggingface.co/navthings" target="_blank" rel="noopener">hugging face</a>
+        <a href="https://ollama.com/navthings" target="_blank" rel="noopener">ollama</a>
+        <a href="https://orcid.org/0009-0002-2764-866X" target="_blank" rel="noopener">orcid</a>
+        <a class="email" href="mailto:navneet.dagdiya@gmail.com"><span class="slot"><span>email</span><span aria-hidden="true">copied</span></span></a>
+      </nav>
+    </footer>
   </main>
 
-  <footer class="foot" data-label="say hi">
-    <div class="foot-top">
-      <div>
-        <p class="foot-say"><button class="say" type="button" data-email><span class="inner">say hi.</span></button> <span>maybe i'll reply.</span></p>
-        <p class="hint">that copies my email. 50-50 i respond.</p>
-      </div>
-      <nav class="foot-links" aria-label="elsewhere">
-        <a href="https://github.com/navthings" target="_blank" rel="noopener">github <span>- it still works</span></a>
-        <a href="https://huggingface.co/navthings" target="_blank" rel="noopener">hugging face <span>- the weights</span></a>
-        <a href="https://ollama.com/navthings" target="_blank" rel="noopener">ollama <span>- models i've pushed</span></a>
-        <a href="https://orcid.org/0009-0002-2764-866X" target="_blank" rel="noopener">orcid <span>- research id</span></a>
-        <a href="https://doi.org/10.5281/zenodo.22340667" target="_blank" rel="noopener">zenodo <span>- the paper</span></a>
-        <a href="../feed.xml">rss <span>- new posts</span></a>
-      </nav>
-    </div>
-    <div class="foot-mark">
-      <svg viewBox="66 64 384 378" aria-hidden="true" data-mark></svg>
-      <div class="meta">navthings, made in australia<br /><button type="button" data-top>back to top</button></div>
-    </div>
-  </footer>
-
-  <script src="../assets/vendor/lenis.min.js"></script>
-  <script src="../assets/site.js"></script>
-  <script src="../assets/home.js"></script>
+  <script src="../assets/base.js"></script>
+  <script src="../assets/page.js"></script>
 </body>
 </html>

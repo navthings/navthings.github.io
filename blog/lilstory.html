@@ -57,77 +57,61 @@
   }
   </script>
   <link rel="preload" href="../assets/fonts/geist.woff2" as="font" type="font/woff2" crossorigin />
-  <link rel="stylesheet" href="../assets/site.css" />
-  <link rel="stylesheet" href="post.css" />
+  <link rel="stylesheet" href="../assets/base.css" />
+  <link rel="stylesheet" href="../assets/page.css" />
 </head>
 
 <body>
   <a class="skip" href="#main">skip to content</a>
 
-  <header class="nav" data-label="writing" data-current="writing">
-    <div class="island">
-      <span class="island-fill" aria-hidden="true"></span>
-      <a class="island-mark" href="../" aria-label="navthings, home"><img src="../favicon.svg" alt="" /></a>
-      <span class="island-now" aria-hidden="true"><span>writing</span></span>
-      <nav class="island-links" aria-label="main">
-        <a class="home" href="../">navthings</a>
-        <a href="../#work">work</a>
-        <a href="../#writing">writing</a>
-        <a href="../playground/">playground</a>
-        <a href="mailto:navneet.dagdiya@gmail.com" data-email>email</a>
-      </nav>
-    </div>
-  </header>
+  <div class="controls">
+    <button class="theme" type="button" aria-label="switch to dark mode" aria-pressed="false">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <mask id="moon-cut"><rect width="24" height="24" fill="#fff" /><circle class="cut" cx="24" cy="2" r="7" fill="#000" /></mask>
+        <circle class="disc" cx="12" cy="12" r="5" mask="url(#moon-cut)" />
+        <g class="rays">
+          <path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4" />
+        </g>
+      </svg>
+      <span class="theme-tip" aria-hidden="true">following your system</span>
+    </button>
+  </div>
 
-  <main class="sheet" id="main">
-    <article class="post-wrap wrap">
-      <header class="post-head">
-        <p class="crumbs cap" data-reveal><a href="./">writing</a><span>/</span><time datetime="2026-09-04">2026-09-04</time></p>
-        <h1 class="post-title" style="view-transition-name: p-lilstory" data-letters>lilstory, my first real language model</h1>
-      </header>
+  <main class="page" id="main">
+    <header class="page-head">
+      <a class="page-name" href="../">nav</a>
+      <p class="crumb"><a href="../#writing">writing</a><time datetime="2026-09-04">4 sep 2026</time></p>
+      <h1 class="page-title" style="view-transition-name: p-lilstory">lilstory, my first real language model</h1>
+    </header>
 
-      <div class="post">
-        <p data-reveal>ok this one is an actual language model. 8.2m params, llama style, trained from scratch on <a href="https://huggingface.co/datasets/roneneldan/TinyStories" target="_blank" rel="noopener">tinystories</a> (a dataset of simple little stories made for tiny models like this).</p>
-        <p data-reveal>i trained my own tokenizer this time (bpe, 8000 tokens), used the llama model from hugging face (4 layers, 256 wide, 4 heads, 384 tokens of context) and trained it on my macbooks gpu.</p>
-        <p data-reveal>it writes little stories that mostly make sense and then kinda wander off. its also my first model on ollama so you can just run it:</p>
-        <pre data-reveal class="sq">ollama run navthings/lilstory</pre>
-        <p data-reveal>i also ended up using it for a paper, thats the next post :)</p>
-        <p data-reveal><a href="https://github.com/navthings/lilstory" target="_blank" rel="noopener">code</a></p>
-      </div>
-
-      <a class="post-callout sq" href="../playground/#tokenizer" data-reveal>
-        <span><span class="label">its tokenizer runs in the playground</span><b>type anything and watch it get cut into pieces</b></span>
-        <span class="btn dark small"><span class="inner">try it</span></span>
-      </a>
-      <nav class="post-foot" aria-label="more posts" data-reveal>
-        <a class="prev sq" href="bigtransformer.html"><span class="label">older</span>bigtransformer, now it reads a whole file</a>
-        <a class="next sq" href="dataset-size-paper.html"><span class="label">newer</span>i wrote a paper on how much data matters</a>
-      </nav>
+    <article class="prose">
+        <p>ok this one is an actual language model. 8.2m params, llama style, trained from scratch on <a href="https://huggingface.co/datasets/roneneldan/TinyStories" target="_blank" rel="noopener">tinystories</a> (a dataset of simple little stories made for tiny models like this).</p>
+        <p>i trained my own tokenizer this time (bpe, 8000 tokens), used the llama model from hugging face (4 layers, 256 wide, 4 heads, 384 tokens of context) and trained it on my macbooks gpu.</p>
+        <p>it writes little stories that mostly make sense and then kinda wander off. its also my first model on ollama so you can just run it:</p>
+        <pre>ollama run navthings/lilstory</pre>
+        <p>i also ended up using it for a paper, thats the next post :)</p>
+        <p><a href="https://github.com/navthings/lilstory" target="_blank" rel="noopener">code</a></p>
+      
     </article>
+
+    <p class="also"><a href="../playground/#tokenizer">its tokenizer runs in the playground</a>, type anything and watch it get cut into pieces.</p>
+    <nav class="pager" aria-label="more posts">
+      <a class="older" href="bigtransformer.html"><span>older</span>bigtransformer, now it reads a whole file</a>
+      <a class="newer" href="dataset-size-paper.html"><span>newer</span>i wrote a paper on how much data matters</a>
+    </nav>
+
+    <footer class="page-foot">
+      <nav class="elsewhere" aria-label="elsewhere">
+        <a href="https://github.com/navthings" target="_blank" rel="noopener">github</a>
+        <a href="https://huggingface.co/navthings" target="_blank" rel="noopener">hugging face</a>
+        <a href="https://ollama.com/navthings" target="_blank" rel="noopener">ollama</a>
+        <a href="https://orcid.org/0009-0002-2764-866X" target="_blank" rel="noopener">orcid</a>
+        <a class="email" href="mailto:navneet.dagdiya@gmail.com"><span class="slot"><span>email</span><span aria-hidden="true">copied</span></span></a>
+      </nav>
+    </footer>
   </main>
 
-  <footer class="foot" data-label="say hi">
-    <div class="foot-top">
-      <div>
-        <p class="foot-say"><button class="say" type="button" data-email data-scrib="underline" data-scrib-on="hover"><span class="inner">say hi.</span></button> <span>maybe i'll reply.</span></p>
-        <p class="hint">that copies my email. 50-50 i respond.</p>
-      </div>
-      <nav class="foot-links" aria-label="elsewhere">
-        <a href="https://github.com/navthings" target="_blank" rel="noopener">github <span>- it still works</span></a>
-        <a href="https://huggingface.co/navthings" target="_blank" rel="noopener">hugging face <span>- the weights</span></a>
-        <a href="https://ollama.com/navthings" target="_blank" rel="noopener">ollama <span>- models i've pushed</span></a>
-        <a href="https://orcid.org/0009-0002-2764-866X" target="_blank" rel="noopener">orcid <span>- research id</span></a>
-        <a href="https://doi.org/10.5281/zenodo.22340667" target="_blank" rel="noopener">zenodo <span>- the paper</span></a>
-        <a href="../feed.xml">rss <span>- new posts</span></a>
-      </nav>
-    </div>
-    <div class="foot-mark">
-      <svg viewBox="66 64 384 378" aria-hidden="true" data-mark></svg>
-      <div class="meta">navthings, made in australia<br /><button type="button" data-top>back to top</button></div>
-    </div>
-  </footer>
-
-  <script src="../assets/vendor/lenis.min.js"></script>
-  <script src="../assets/site.js"></script>
+  <script src="../assets/base.js"></script>
+  <script src="../assets/page.js"></script>
 </body>
 </html>

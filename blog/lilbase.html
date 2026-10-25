@@ -57,88 +57,72 @@
   }
   </script>
   <link rel="preload" href="../assets/fonts/geist.woff2" as="font" type="font/woff2" crossorigin />
-  <link rel="stylesheet" href="../assets/site.css" />
-  <link rel="stylesheet" href="post.css" />
+  <link rel="stylesheet" href="../assets/base.css" />
+  <link rel="stylesheet" href="../assets/page.css" />
 </head>
 
 <body>
   <a class="skip" href="#main">skip to content</a>
 
-  <header class="nav" data-label="writing" data-current="writing">
-    <div class="island">
-      <span class="island-fill" aria-hidden="true"></span>
-      <a class="island-mark" href="../" aria-label="navthings, home"><img src="../favicon.svg" alt="" /></a>
-      <span class="island-now" aria-hidden="true"><span>writing</span></span>
-      <nav class="island-links" aria-label="main">
-        <a class="home" href="../">navthings</a>
-        <a href="../#work">work</a>
-        <a href="../#writing">writing</a>
-        <a href="../playground/">playground</a>
-        <a href="mailto:navneet.dagdiya@gmail.com" data-email>email</a>
-      </nav>
-    </div>
-  </header>
+  <div class="controls">
+    <button class="theme" type="button" aria-label="switch to dark mode" aria-pressed="false">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <mask id="moon-cut"><rect width="24" height="24" fill="#fff" /><circle class="cut" cx="24" cy="2" r="7" fill="#000" /></mask>
+        <circle class="disc" cx="12" cy="12" r="5" mask="url(#moon-cut)" />
+        <g class="rays">
+          <path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4" />
+        </g>
+      </svg>
+      <span class="theme-tip" aria-hidden="true">following your system</span>
+    </button>
+  </div>
 
-  <main class="sheet" id="main">
-    <article class="post-wrap wrap">
-      <header class="post-head">
-        <p class="crumbs cap" data-reveal><a href="./">writing</a><span>/</span><time datetime="2026-09-23">2026-09-23</time></p>
-        <h1 class="post-title" style="view-transition-name: p-lilbase" data-letters>lilbase, 297m params on a free tpu</h1>
-      </header>
+  <main class="page" id="main">
+    <header class="page-head">
+      <a class="page-name" href="../">nav</a>
+      <p class="crumb"><a href="../#writing">writing</a><time datetime="2026-09-23">23 sep 2026</time></p>
+      <h1 class="page-title" style="view-transition-name: p-lilbase">lilbase, 297m params on a free tpu</h1>
+    </header>
 
-      <div class="post">
-        <p data-reveal>everything before this was trained on my laptop, but i wanted to make a proper base model, like one thats actually read a decent chunk of the internet. my macbook air was never gonna do that. kaggle gives you free time on a tpu v5e-8 (8 of googles ai chips) so i rewrote the whole thing in jax and moved it there.</p>
-        <p data-reveal>its 297m params, llama style, 24 layers, 1024 wide, 16 query heads and 4 kv heads. it read 6.1 billion tokens of <a href="https://huggingface.co/datasets/HuggingFaceFW/fineweb-edu" target="_blank" rel="noopener">fineweb-edu</a>, which is about the right amount for its size (the chinchilla thing, around 20 tokens per param). each step is 524,288 tokens split over the 8 chips, and each kaggle session gets about 8.4 hours before it has to save and stop.</p>
-        <figure data-reveal><div class="dark-fig sq"><img width="2160" height="711" src="img/lilbase-vs-gpt2.png" alt="lilbase vs gpt-2 on three benchmarks" loading="lazy" /></div><figcaption>lilbase vs gpt-2 small</figcaption></figure>
-        <table data-reveal>
+    <article class="prose">
+        <p>everything before this was trained on my laptop, but i wanted to make a proper base model, like one thats actually read a decent chunk of the internet. my macbook air was never gonna do that. kaggle gives you free time on a tpu v5e-8 (8 of googles ai chips) so i rewrote the whole thing in jax and moved it there.</p>
+        <p>its 297m params, llama style, 24 layers, 1024 wide, 16 query heads and 4 kv heads. it read 6.1 billion tokens of <a href="https://huggingface.co/datasets/HuggingFaceFW/fineweb-edu" target="_blank" rel="noopener">fineweb-edu</a>, which is about the right amount for its size (the chinchilla thing, around 20 tokens per param). each step is 524,288 tokens split over the 8 chips, and each kaggle session gets about 8.4 hours before it has to save and stop.</p>
+        <figure data-reveal><div class="dark-fig"><img width="2160" height="711" src="img/lilbase-vs-gpt2.png" alt="lilbase vs gpt-2 on three benchmarks" loading="lazy" /></div><figcaption>lilbase vs gpt-2 small</figcaption></figure>
+        <div class="table-scroll"><table>
         <thead><tr><th>benchmark</th><th class="num">lilbase</th><th class="num">gpt-2 124m</th></tr></thead>
         <tbody>
         <tr><td>hellaswag</td><td class="num">36.8%</td><td class="num">35.1%</td></tr>
         <tr><td>arc-easy</td><td class="num">48.1%</td><td class="num">40.6%</td></tr>
         <tr><td>lambada</td><td class="num">28.5%</td><td class="num">35.0%</td></tr>
         </tbody>
-        </table>
-        <p data-reveal>it beats gpt-2 small on hellaswag and arc-easy and loses on lambada. to be fair gpt-2 is from 2019, trained on different data, and lilbase is more than twice its size, so its not exactly a fair fight lol</p>
-        <p data-reveal>update: the old script, a smaller earlier test run, had lilbase way further ahead on hellaswag (41.0% vs 31.1%). rerunning everything through one fixed script, with the exact same questions for every model, its 36.8% vs 35.1%, so it still wins but only just.</p>
-        <p data-reveal>stuff that went wrong: kaggle sometimes gives you a broken tpu with only 1 chip working instead of 8, so now the script just refuses to run unless it sees all 8. also doubling the batch size ran out of memory by like 400mb.</p>
-        <pre data-reveal class="sq">ollama run navthings/lilbase "The water cycle begins when"</pre>
-        <p data-reveal>its a base model so it just continues whatever you give it instead of answering. it gets grammar right and makes up most facts.</p>
-        <p data-reveal><a href="https://github.com/navthings/lilbase" target="_blank" rel="noopener">code</a></p>
-      </div>
-
-      <a class="post-callout sq" href="../work/lilbase.html" data-reveal>
-        <span><span class="label">theres a case study for this</span><b>the longer version, with the tpu setup and charts</b></span>
-        <span class="btn dark small"><span class="inner">read it</span></span>
-      </a>
-      <nav class="post-foot" aria-label="more posts" data-reveal>
-        <a class="prev sq" href="tale.html"><span class="label">older</span>tale, bedtime stories for my little brother</a>
-        <a class="next sq" href="lilchat.html"><span class="label">newer</span>teaching lilbase to talk</a>
-      </nav>
+        </table></div>
+        <p>it beats gpt-2 small on hellaswag and arc-easy and loses on lambada. to be fair gpt-2 is from 2019, trained on different data, and lilbase is more than twice its size, so its not exactly a fair fight lol</p>
+        <p>update: the old script, a smaller earlier test run, had lilbase way further ahead on hellaswag (41.0% vs 31.1%). rerunning everything through one fixed script, with the exact same questions for every model, its 36.8% vs 35.1%, so it still wins but only just.</p>
+        <p>stuff that went wrong: kaggle sometimes gives you a broken tpu with only 1 chip working instead of 8, so now the script just refuses to run unless it sees all 8. also doubling the batch size ran out of memory by like 400mb.</p>
+        <pre>ollama run navthings/lilbase "The water cycle begins when"</pre>
+        <p>its a base model so it just continues whatever you give it instead of answering. it gets grammar right and makes up most facts.</p>
+        <p><a href="https://github.com/navthings/lilbase" target="_blank" rel="noopener">code</a></p>
+      
     </article>
+
+    <p class="also"><a href="../work/lilbase.html">theres a case study for this</a>, the longer version, with the tpu setup and charts.</p>
+    <nav class="pager" aria-label="more posts">
+      <a class="older" href="tale.html"><span>older</span>tale, bedtime stories for my little brother</a>
+      <a class="newer" href="lilchat.html"><span>newer</span>teaching lilbase to talk</a>
+    </nav>
+
+    <footer class="page-foot">
+      <nav class="elsewhere" aria-label="elsewhere">
+        <a href="https://github.com/navthings" target="_blank" rel="noopener">github</a>
+        <a href="https://huggingface.co/navthings" target="_blank" rel="noopener">hugging face</a>
+        <a href="https://ollama.com/navthings" target="_blank" rel="noopener">ollama</a>
+        <a href="https://orcid.org/0009-0002-2764-866X" target="_blank" rel="noopener">orcid</a>
+        <a class="email" href="mailto:navneet.dagdiya@gmail.com"><span class="slot"><span>email</span><span aria-hidden="true">copied</span></span></a>
+      </nav>
+    </footer>
   </main>
 
-  <footer class="foot" data-label="say hi">
-    <div class="foot-top">
-      <div>
-        <p class="foot-say"><button class="say" type="button" data-email data-scrib="underline" data-scrib-on="hover"><span class="inner">say hi.</span></button> <span>maybe i'll reply.</span></p>
-        <p class="hint">that copies my email. 50-50 i respond.</p>
-      </div>
-      <nav class="foot-links" aria-label="elsewhere">
-        <a href="https://github.com/navthings" target="_blank" rel="noopener">github <span>- it still works</span></a>
-        <a href="https://huggingface.co/navthings" target="_blank" rel="noopener">hugging face <span>- the weights</span></a>
-        <a href="https://ollama.com/navthings" target="_blank" rel="noopener">ollama <span>- models i've pushed</span></a>
-        <a href="https://orcid.org/0009-0002-2764-866X" target="_blank" rel="noopener">orcid <span>- research id</span></a>
-        <a href="https://doi.org/10.5281/zenodo.22340667" target="_blank" rel="noopener">zenodo <span>- the paper</span></a>
-        <a href="../feed.xml">rss <span>- new posts</span></a>
-      </nav>
-    </div>
-    <div class="foot-mark">
-      <svg viewBox="66 64 384 378" aria-hidden="true" data-mark></svg>
-      <div class="meta">navthings, made in australia<br /><button type="button" data-top>back to top</button></div>
-    </div>
-  </footer>
-
-  <script src="../assets/vendor/lenis.min.js"></script>
-  <script src="../assets/site.js"></script>
+  <script src="../assets/base.js"></script>
+  <script src="../assets/page.js"></script>
 </body>
 </html>
