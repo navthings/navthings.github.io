@@ -1,504 +1,417 @@
 (function () {
-  const root = document.documentElement;
-  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const hover = matchMedia("(hover: hover) and (pointer: fine)").matches;
-  const $ = (s, el = document) => el.querySelector(s);
-  const $$ = (s, el = document) => [...el.querySelectorAll(s)];
-  const frame = () => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+  const { onScroll, clamp, reduce, $$, requestTick } = window.site;
 
-  const home = $("#home");
-  const view = $("#view");
-  const viewTitle = $(".view-title");
-  const viewBody = $(".view-body");
-  const viewName = $(".view-name");
-  const preview = $(".preview");
-  const card = $(".preview-card");
-
-  // theme: a tap flips it, holding hands it back to the device
-
-  const themeBtn = $(".theme");
-  const systemDark = matchMedia("(prefers-color-scheme: dark)");
-  const metas = $$('meta[name="theme-color"]');
-  const isDark = () => (root.dataset.theme ? root.dataset.theme === "dark" : systemDark.matches);
-
-  function syncTheme() {
-    const dark = isDark();
-    themeBtn.setAttribute("aria-pressed", String(dark));
-    themeBtn.setAttribute("aria-label", dark ? "switch to light mode" : "switch to dark mode");
-    for (const m of metas) {
-      if (root.dataset.theme) m.content = dark ? "#0c0c0c" : "#ffffff";
-      else m.content = m.media.includes("dark") ? "#0c0c0c" : "#ffffff";
-    }
-  }
-
-  function setTheme(value) {
-    if (value) root.dataset.theme = value;
-    else delete root.dataset.theme;
-    try {
-      if (value) localStorage.setItem("theme", value);
-      else localStorage.removeItem("theme");
-    } catch (err) {
-      console.warn("couldnt save the theme", err);
-    }
-    syncTheme();
-  }
-
-  // the new colours spread out in a circle from the button
-  function changeTheme(value) {
-    const before = isDark();
-    if (!document.startViewTransition || reduce) return setTheme(value);
-    const r = themeBtn.getBoundingClientRect();
-    const x = r.left + r.width / 2;
-    const y = r.top + r.height / 2;
-    root.style.setProperty("--tx", x + "px");
-    root.style.setProperty("--ty", y + "px");
-    root.style.setProperty("--tr", Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y)) + "px");
-    root.classList.add("theming");
-    const t = document.startViewTransition(() => {
-      setTheme(value);
-      if (isDark() === before) root.classList.remove("theming");
-    });
-    t.finished.finally(() => root.classList.remove("theming"));
-  }
-
-  let holdTimer = 0;
-  let held = false;
-  themeBtn.addEventListener("pointerdown", (e) => {
-    if (e.button > 0) return;
-    held = false;
-    themeBtn.classList.add("holding");
-    holdTimer = setTimeout(() => {
-      held = true;
-      themeBtn.classList.remove("holding", "pulse");
-      void themeBtn.offsetWidth;
-      themeBtn.classList.add("pulse", "told");
-      changeTheme(null);
-      setTimeout(() => themeBtn.classList.remove("told"), 1600);
-    }, 600);
-  });
-  for (const ev of ["pointerup", "pointerleave", "pointercancel"]) {
-    themeBtn.addEventListener(ev, () => {
-      clearTimeout(holdTimer);
-      themeBtn.classList.remove("holding");
-    });
-  }
-  themeBtn.addEventListener("click", () => {
-    if (held) return (held = false);
-    changeTheme(isDark() ? "light" : "dark");
-  });
-  themeBtn.addEventListener("contextmenu", (e) => e.preventDefault());
-  systemDark.addEventListener("change", syncTheme);
-  syncTheme();
-
-  // perth time, shown when you hover the place
-
-  const clock = $(".clock-time");
-  const fmt = new Intl.DateTimeFormat("en-AU", { timeZone: "Australia/Perth", hour: "numeric", minute: "2-digit" });
-  const tickClock = () => (clock.textContent = fmt.format(new Date()).toLowerCase().replace(/\s/g, " "));
-  tickClock();
-  setInterval(tickClock, 15000);
-
-  // email copies itself, and falls back to opening the mail app
-
-  const email = $(".email");
-  email.addEventListener("click", async (e) => {
-    if (!navigator.clipboard) return;
-    e.preventDefault();
-    try {
-      await navigator.clipboard.writeText("navneet.dagdiya@gmail.com");
-      email.classList.add("copied");
-      setTimeout(() => email.classList.remove("copied"), 1600);
-    } catch (err) {
-      console.warn("clipboard said no, opening mail instead", err);
-      location.href = email.href;
-    }
-  });
-
-  // first visit: the bio streams in a token at a time, then the rest settles
-
-  function stream() {
-    const bio = $("[data-stream]");
-    let first = true;
-    try {
-      first = sessionStorage.getItem("streamed") !== "1";
-      sessionStorage.setItem("streamed", "1");
-    } catch (err) {
-      first = false;
-    }
-    if (!first || reduce) return 0;
-
-    const walker = document.createTreeWalker(bio, NodeFilter.SHOW_TEXT, {
-      acceptNode: (n) => (n.parentElement.closest(".secret-fill") ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT),
-    });
+  // the headline streams in a token at a time, the way the models write
+  function tokens(ready) {
+    const el = document.querySelector("[data-tokens]");
+    if (!el) return;
+    const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
     const nodes = [];
     while (walker.nextNode()) nodes.push(walker.currentNode);
     const toks = [];
+
     for (const node of nodes) {
       const frag = document.createDocumentFragment();
-      for (const piece of node.textContent.split(/(\s+)/)) {
-        if (!piece) continue;
-        if (/^\s+$/.test(piece)) {
+      const words = node.textContent.split(/(\s+)/);
+      for (const word of words) {
+        if (!word) continue;
+        if (/^\s+$/.test(word)) {
           frag.appendChild(document.createTextNode(" "));
           continue;
         }
-        for (const bit of piece.match(/[A-Za-z0-9]+|[^A-Za-z0-9]/g)) {
+        const chunk = document.createElement("span");
+        chunk.className = "chunk";
+        for (const piece of word.match(/[A-Za-z0-9]+|'[a-z]+|[^A-Za-z0-9]/g)) {
           const t = document.createElement("span");
           t.className = "tok";
-          t.textContent = bit;
-          frag.appendChild(t);
+          t.textContent = piece;
+          chunk.appendChild(t);
           toks.push(t);
         }
+        frag.appendChild(chunk);
       }
       node.replaceWith(frag);
     }
 
-    bio.removeAttribute("data-in");
-    let at = 420;
-    toks.forEach((t, i) => {
-      setTimeout(() => t.classList.add("on"), at);
-      at += 14 + t.textContent.length * 5 + (i % 3) * 6;
-    });
-    return at;
-  }
-
-  function enter() {
-    const total = stream();
-    if (total) for (const el of $$(".sections [data-in], .elsewhere")) el.style.setProperty("--d0", total * 0.75 + "ms");
-    frame().then(() => home.classList.add("in"));
-  }
-
-  // previews: one card that slides along beside the row you're on
-
-  const tpl = $("#t-previews").content;
-  const tilts = [-1.6, 1.2, -0.6, 1.8, -1.2, 0.8];
-  let shown = null;
-  let hideTimer = 0;
-
-  function fill(pv) {
-    const src = tpl.querySelector(`[data-for="${pv}"]`);
-    if (!src) return false;
-    const el = src.cloneNode(true);
-    el.classList.add("pv");
-    card.classList.toggle("is-stack", el.classList.contains("stack"));
-    for (const img of $$("img[data-src]", el)) {
-      img.addEventListener("load", () => img.classList.add("ready"), { once: true });
-      img.addEventListener("error", () => console.error("preview image didnt load", img.dataset.src), { once: true });
-      img.src = img.dataset.src;
+    if (reduce) {
+      toks.forEach((t) => t.classList.add("on"));
+      const mark = el.querySelector("[data-scrib]");
+      if (mark) mark.classList.add("drawn");
+      return toks;
     }
-    $$(".toks span", el).forEach((s, i) => s.style.setProperty("--n", i));
-    const grid = $(".grid28", el);
-    if (grid) drawDigit(grid);
-    card.replaceChildren(el);
-    card.classList.remove("swap");
-    void card.offsetWidth;
-    card.classList.add("swap");
-    frame().then(() => {
-      if (card.firstChild !== el) return;
-      el.classList.add("play");
-      countUp(el);
-    });
-    return true;
-  }
 
-  function countUp(el) {
-    const n = $("[data-count]", el);
-    if (!n) return;
-    const to = Number(n.dataset.count);
-    if (reduce) return (n.textContent = to);
-    const t0 = performance.now();
-    const step = (now) => {
-      const p = Math.min(1, (now - t0) / 900);
-      n.textContent = Math.round(to * (1 - Math.pow(1 - p, 3)));
-      if (p < 1 && card.contains(n)) requestAnimationFrame(step);
-    };
-    requestAnimationFrame(step);
-  }
-
-  // a hand drawn 2, inked a pixel at a time
-  const DIGIT = [
-    "..............",
-    "....#####.....",
-    "...##...##....",
-    "..........##..",
-    "..........##..",
-    ".........##...",
-    "........##....",
-    ".......##.....",
-    "......##......",
-    ".....##.......",
-    "....##........",
-    "...##.........",
-    "...#########..",
-    "..............",
-  ];
-
-  function drawDigit(grid) {
-    const cells = [];
-    DIGIT.join("").split("").forEach((c) => {
-      const i = document.createElement("i");
-      grid.appendChild(i);
-      if (c === "#") cells.push(i);
-    });
-    cells.forEach((c, k) => setTimeout(() => c.classList.add("ink"), reduce ? 0 : 200 + k * 28));
-  }
-
-  function showPreview(row) {
-    if (!hover) return;
-    clearTimeout(hideTimer);
-    const pv = row.dataset.pv;
-    if (shown === pv) return;
-    if (!fill(pv)) return hidePreview();
-    const index = $$(".row", viewBody).indexOf(row);
-    const top = row.getBoundingClientRect().top - preview.getBoundingClientRect().top;
-    const offset = card.classList.contains("is-stack") ? -6 : -14;
-    card.style.setProperty("--y", Math.max(0, top + offset) + "px");
-    card.style.setProperty("--r", tilts[index % tilts.length] * 0.5 + "deg");
-    preview.classList.add("on");
-    shown = pv;
-  }
-
-  function hidePreview() {
-    clearTimeout(hideTimer);
-    hideTimer = setTimeout(() => {
-      preview.classList.remove("on");
-      shown = null;
-    }, 120);
-  }
-
-  viewBody.addEventListener("pointerover", (e) => {
-    const row = e.target.closest(".row");
-    if (row) showPreview(row);
-  });
-  viewBody.addEventListener("pointerleave", hidePreview);
-  viewBody.addEventListener("focusin", (e) => {
-    const row = e.target.closest(".row");
-    if (row) showPreview(row);
-  });
-  viewBody.addEventListener("focusout", (e) => {
-    if (!viewBody.contains(e.relatedTarget)) hidePreview();
-  });
-
-  // views: work, writing and playground open in place, with real urls so back works
-
-  const SECTIONS = { work: "work", writing: "writing", playground: "playground" };
-  const ALIASES = { play: "playground", sprout: "work", blog: "writing" };
-  const labels = Object.fromEntries($$(".sections a").map((a) => [a.dataset.section, a.querySelector(".label")]));
-  let current = null;
-
-  const fromHash = () => {
-    const h = location.hash.slice(1);
-    return SECTIONS[h] ? h : ALIASES[h] || null;
-  };
-
-  // only one element can carry each transition name, so the word that flies is set right before each swap
-  function markLabel(key) {
-    for (const l of Object.values(labels)) l.style.viewTransitionName = "";
-    if (key && labels[key]) labels[key].style.viewTransitionName = "title";
-  }
-
-  function render(key) {
-    clearTimeout(hideTimer);
-    preview.classList.remove("on");
-    shown = null;
-    if (!key) {
-      view.hidden = true;
-      home.hidden = false;
-      home.classList.add("in");
-      document.title = "nav";
-    } else {
-      viewTitle.textContent = SECTIONS[key];
-      viewBody.replaceChildren($("#t-" + key).content.cloneNode(true));
-      $$(".view-head, .group h3, .row, .aside", view).forEach((el, k) => el.style.setProperty("--k", k));
-      home.hidden = true;
-      view.hidden = false;
-      document.title = SECTIONS[key] + " · nav";
-    }
-    current = key;
-    window.scrollTo(0, 0);
-  }
-
-  function go(key, { animate = true } = {}) {
-    if (key === current) return;
-    const leaving = current;
-    markLabel(key || leaving);
-    if (!animate || reduce || !document.startViewTransition) {
-      render(key);
-      if (animate && key) {
-        view.classList.remove("arriving");
-        void view.offsetWidth;
-        view.classList.add("arriving");
+    let i = 0;
+    function next() {
+      const t = toks[i++];
+      t.classList.add("on");
+      if (i < toks.length) setTimeout(next, 38 + t.textContent.length * 11 + (i % 3) * 14);
+      else {
+        const mark = el.querySelector("[data-scrib]");
+        if (mark) setTimeout(() => mark.classList.add("drawn"), 350);
       }
-    } else {
-      document.startViewTransition(() => render(key));
-    }
-    if (key) requestAnimationFrame(() => viewTitle.focus({ preventScroll: true }));
-    else if (leaving && labels[leaving]) requestAnimationFrame(() => labels[leaving].parentElement.focus({ preventScroll: true }));
-  }
-
-  for (const a of $$(".sections a")) {
-    a.addEventListener("click", (e) => {
-      if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button > 0) return;
-      e.preventDefault();
-      const key = a.dataset.section;
-      history.pushState({ view: key }, "", "#" + key);
-      go(key);
-    });
-  }
-
-  function goHome(e) {
-    if (e && (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button > 0)) return;
-    if (e) e.preventDefault();
-    if (!current) return;
-    if (history.state && history.state.view) history.back();
-    else {
-      history.replaceState(null, "", location.pathname + location.search);
-      go(null);
-    }
-  }
-
-  viewName.addEventListener("click", goHome);
-  $(".name a").addEventListener("click", (e) => {
-    if (!current) e.preventDefault();
-  });
-  addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && current) goHome();
-  });
-  addEventListener("popstate", () => go(fromHash()));
-
-  // the secret: "make stuff up" downloads tale and it writes a story right under the bio
-
-  const secret = $(".secret");
-  const story = $(".story");
-  const storyText = $(".story-text");
-  const storyNote = $(".story-note");
-  const again = $(".story-again");
-  const done = $(".story-close");
-  const START = "Once upon a time";
-
-  const ENGINE = "https://cdn.jsdelivr.net/npm/@wllama/wllama@3.6.1/esm/index.js";
-  const WASM = { default: "https://cdn.jsdelivr.net/npm/@wllama/wllama@3.6.1/esm/wasm/wllama.wasm" };
-  const COMPAT = "https://cdn.jsdelivr.net/npm/@wllama/wllama-compat@3.6.1/wasm/";
-  const UA = navigator.userAgent;
-  const WEBKIT = /iPhone|iPad|iPod/.test(UA) || (/Safari/.test(UA) && !/Chrome|Chromium|Edg|Android/.test(UA));
-
-  let llm = null;
-  let busy = false;
-  let aborter = null;
-
-  async function load() {
-    const { Wllama } = await import(ENGINE);
-    const w = new Wllama(WASM, { suppressNativeLog: true });
-    // safari passes the memory64 check but cant run that build
-    if (WEBKIT) {
-      const base = w.getWorkerResources.bind(w);
-      w.getWorkerResources = () => ({ ...base(), wasmPath: COMPAT + "wllama.wasm", jsPath: COMPAT + "wllama.js", compat: true });
-    }
-    await w.loadModelFromUrl("https://huggingface.co/navthings/tale/resolve/main/tale-q8_0.gguf", {
-      n_ctx: 384,
-      progressCallback: ({ loaded, total }) => {
-        if (!total) return;
-        const p = Math.round((loaded / total) * 100);
-        secret.style.setProperty("--p", p + "%");
-        storyNote.textContent = "downloading tale, " + p + "% of 52mb";
-      },
-    });
-    return w;
-  }
-
-  function caret() {
-    const c = document.createElement("span");
-    c.className = "caret";
-    return c;
-  }
-
-  async function tell() {
-    if (busy) return;
-    busy = true;
-    again.hidden = true;
-    done.hidden = true;
-    story.classList.add("open");
-    const out = document.createElement("span");
-    const head = document.createElement("span");
-    head.style.color = "var(--ink-3)";
-    head.textContent = START;
-    storyText.replaceChildren(head, out, caret());
-
-    if (!llm) {
-      secret.classList.add("busy");
-      storyNote.textContent = "downloading tale, 52mb";
-      try {
-        llm = await load();
-      } catch (err) {
-        console.error("tale didnt load", err);
-        secret.classList.remove("busy");
-        secret.style.setProperty("--p", "0%");
-        storyText.replaceChildren("it couldnt load here. your browser might not have the memory for it.");
-        storyNote.textContent = "";
-        again.textContent = "try again";
-        again.hidden = false;
-        done.hidden = false;
-        busy = false;
-        return;
-      }
-      secret.classList.remove("busy");
-      secret.classList.add("done");
-      again.textContent = "another one";
     }
 
-    storyNote.textContent = "tale, 52mb, running on your computer";
-    aborter = new AbortController();
-    let text = "";
+    const fontsReady = document.fonts ? document.fonts.ready : Promise.resolve();
+    Promise.all([Promise.race([fontsReady, new Promise((r) => setTimeout(r, 700))]), ready]).then(() => setTimeout(next, 250));
+    return toks;
+  }
+
+  // when someone lands here from outside, or reloads, the logo draws itself and flies into the nav
+  function intro() {
+    let seen = false;
     try {
-      await llm.createCompletion({
-        prompt: START,
-        stream: true,
-        abortSignal: aborter.signal,
-        max_tokens: 140,
-        temperature: 0.8,
-        temp: 0.8,
-        top_k: 40,
-        penalty_repeat: 1.1,
-        penalty_last_n: 64,
-        onData: (chunk) => {
-          const piece = chunk.choices && chunk.choices[0] ? chunk.choices[0].text : "";
-          if (!piece) return;
-          text += piece;
-          out.textContent = text;
-        },
-      });
+      seen = sessionStorage.getItem("intro") === "1";
+      sessionStorage.setItem("intro", "1");
     } catch (err) {
-      if (!aborter.signal.aborted) {
-        console.error("tale stopped", err);
-        storyNote.textContent = "it stopped halfway, sorry";
+      seen = true;
+    }
+    const target = document.querySelector(".island-mark img");
+    const fromHere = document.referrer && document.referrer.startsWith(location.origin);
+    const nav = performance.getEntriesByType ? performance.getEntriesByType("navigation")[0] : null;
+    const reload = !!nav && nav.type === "reload";
+    if (reduce || !target || window.scrollY > 0 || location.hash) return Promise.resolve();
+    if (!reload && (seen || fromHere)) return Promise.resolve();
+
+    const root = document.documentElement;
+    const veil = document.createElement("div");
+    veil.className = "veil";
+    veil.innerHTML = '<svg viewBox="66 64 384 378" aria-hidden="true"></svg>';
+    const svg = veil.firstChild;
+    document.body.appendChild(veil);
+    root.classList.add("intro");
+    const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+
+    return new Promise((resolve) => {
+      let done = false;
+      function finish() {
+        if (done) return;
+        done = true;
+        veil.classList.add("gone");
+        root.classList.remove("intro");
+        setTimeout(() => veil.remove(), 600);
+        resolve();
+      }
+      for (const ev of ["wheel", "keydown", "pointerdown", "touchstart"]) addEventListener(ev, finish, { once: true, passive: true });
+      setTimeout(finish, 4000);
+
+      (async () => {
+        try {
+          const text = await (await fetch(target.src)).text();
+          const glyph = new DOMParser().parseFromString(text, "image/svg+xml").querySelector("g");
+          svg.innerHTML = glyph.innerHTML;
+        } catch (err) {
+          console.error("intro mark didnt load", err);
+          return finish();
+        }
+        for (const shape of svg.querySelectorAll("path, circle")) {
+          const len = shape.getTotalLength();
+          shape.style.strokeDasharray = len;
+          shape.animate([{ strokeDashoffset: len }, { strokeDashoffset: 0 }], {
+            duration: 1100,
+            easing: "cubic-bezier(0.6, 0, 0.3, 1)",
+            fill: "both",
+          });
+        }
+        veil.classList.add("draw");
+        await wait(1300);
+        if (done) return;
+
+        // land exactly on the glyph inside the nav icon
+        const from = svg.getBoundingClientRect();
+        const to = target.getBoundingClientRect();
+        const tx = to.left + (66 / 512) * to.width;
+        const ty = to.top + (64 / 512) * to.height;
+        const scale = ((384 / 512) * to.width) / from.width;
+        svg.style.transform = `translate(${tx - from.left}px, ${ty - from.top}px) scale(${scale})`;
+        veil.classList.add("fly");
+        root.classList.add("intro-fly");
+        await wait(760);
+        finish();
+        root.classList.remove("intro-fly");
+      })();
+    });
+  }
+
+  // drag the number in the sentence under the hero and the headline samples less likely words, like a model does
+  function temperature(toks) {
+    const knob = document.getElementById("temp");
+    if (!knob || !toks) return;
+    const value = knob.querySelector(".knob-v");
+    const note = document.getElementById("temp-note");
+    if (!window.site.finePointer) note.textContent = ". tap the number.";
+
+    // runs of words in the headline and what a hotter model might say instead
+    const GROUPS = [
+      [["hi"], [["hey"], ["hello"], ["oi"], ["g'day"]]],
+      [["build"], [["train"], ["make"], ["bake"], ["grow"]]],
+      [["language"], [["story"], ["chat"], ["word"], ["llama"]]],
+      [["models"], [["llamas"], ["parrots"], ["robots"], ["guys"]]],
+      [["research"], [["study"], ["poke at"], ["argue about"], ["worry about"]]],
+      [["how", "they", "learn"], [["why", "they", "work"], ["what", "they", "know"], ["where", "they", "break"], ["why", "they", "lie"]]],
+    ];
+    const slots = [];
+    for (const [words, alts] of GROUPS) {
+      const start = toks.findIndex((el, i) => words.every((w, k) => toks[i + k] && toks[i + k].textContent === w));
+      if (start >= 0) slots.push({ els: toks.slice(start, start + words.length), orig: words, alts });
+    }
+    const stop = toks[toks.length - 1];
+    if (stop && stop.textContent === ".") slots.push({ els: [stop], orig: ["."], alts: [["!"], ["?"], ["!!"]], hot: true });
+
+    // lower temperature keeps to the first, likelier alternatives
+    function pick(alts, t) {
+      const w = alts.map((_, k) => Math.exp(-k / (t * 1.6)));
+      let r = Math.random() * w.reduce((a, b) => a + b, 0);
+      for (let k = 0; k < w.length; k++) if ((r -= w[k]) <= 0) return alts[k];
+      return alts[alts.length - 1];
+    }
+
+    function set(slot, words) {
+      slot.els.forEach((el, i) => {
+        if (el.textContent === words[i]) return;
+        el.textContent = words[i];
+        el.classList.remove("re");
+        void el.offsetWidth;
+        el.classList.add("re");
+      });
+    }
+
+    function caption(t) {
+      if (t < 0.05) return ", so it always picks the likeliest word.";
+      if (t < 0.5) return ", about what lilchat runs at.";
+      if (t < 0.85) return ", so it starts picking less likely words.";
+      if (t < 1.2) return ", so a lot of words are up for grabs.";
+      return ", so its mostly guessing.";
+    }
+
+    // one sample per setting, so the headline holds still once you let go
+    let t = 0;
+    function sample() {
+      for (const slot of slots) {
+        const chance = t <= 0.3 ? 0 : slot.hot ? clamp((t - 1.1) / 0.4) * 0.6 : clamp((t - 0.3) / 0.9) * 0.85;
+        set(slot, Math.random() < chance ? pick(slot.alts, t) : slot.orig);
       }
     }
 
-    // end on a full sentence if it got cut off
-    const end = text.lastIndexOf(".");
-    if (end > 40) out.textContent = text.slice(0, end + 1);
-    storyText.lastChild.remove();
-    busy = false;
-    if (story.classList.contains("open")) {
-      again.hidden = false;
-      done.hidden = false;
+    function setTemp(v) {
+      const next = Math.round(clamp(v, 0, 1.5) * 10) / 10;
+      if (next === t && value.textContent === t.toFixed(1)) return;
+      t = next;
+      value.textContent = t.toFixed(1);
+      knob.setAttribute("aria-valuenow", t.toFixed(1));
+      knob.classList.toggle("hot", t > 1.1);
+      note.textContent = caption(t);
+      sample();
     }
+
+    // drag sideways to change it, a plain tap nudges it up
+    knob.addEventListener("pointerdown", (e) => {
+      if (e.button > 0) return;
+      e.preventDefault();
+      knob.setPointerCapture(e.pointerId);
+      knob.classList.add("held");
+      const x0 = e.clientX;
+      const t0 = t;
+      let moved = false;
+      const move = (ev) => {
+        if (Math.abs(ev.clientX - x0) > 3) moved = true;
+        if (moved) setTemp(t0 + (ev.clientX - x0) / 110);
+      };
+      const up = () => {
+        knob.classList.remove("held");
+        knob.removeEventListener("pointermove", move);
+        if (!moved) setTemp(t >= 1.5 ? 0 : t + 0.3);
+      };
+      knob.addEventListener("pointermove", move);
+      knob.addEventListener("pointerup", up, { once: true });
+      knob.addEventListener("pointercancel", up, { once: true });
+    });
+    knob.addEventListener("keydown", (e) => {
+      const step = { ArrowRight: 0.1, ArrowUp: 0.1, ArrowLeft: -0.1, ArrowDown: -0.1 }[e.key];
+      if (step) setTemp(t + step);
+      else if (e.key === "Home") setTemp(0);
+      else if (e.key === "End") setTemp(1.5);
+      else return;
+      e.preventDefault();
+    });
+
+    // the wiggly underline shows up once the headline has finished typing
+    setTimeout(() => knob.classList.add("drawn"), reduce ? 0 : 2600);
   }
 
-  secret.addEventListener("click", tell);
-  again.addEventListener("click", tell);
-  done.addEventListener("click", () => {
-    if (aborter) aborter.abort();
-    story.classList.remove("open");
-  });
-
-  // start wherever the url says
-  const startKey = fromHash();
-  if (startKey) {
-    render(startKey);
-    frame().then(() => home.classList.add("in"));
-  } else {
-    current = null;
-    enter();
+  // hero drifts and fades as you leave it
+  function heroOut() {
+    const inner = document.querySelector(".hero-inner");
+    if (!inner || reduce) return;
+    onScroll.push((y, vh) => {
+      if (y > vh * 1.3) return;
+      const p = clamp(y / (vh * 0.6));
+      return () => {
+        inner.style.transform = `translate3d(0, ${(y * 0.22).toFixed(1)}px, 0) scale(${(1 - p * 0.04).toFixed(4)})`;
+        inner.style.opacity = (1 - p).toFixed(3);
+      };
+    });
   }
-  markLabel(null);
+
+  // project cards stack up, the one underneath sinks back a little
+  function stack() {
+    const cards = $$(".card");
+    if (cards.length < 2 || reduce) return;
+    let stickyTops = [];
+    let sticky = [];
+    function measure() {
+      stickyTops = cards.map((c) => parseFloat(getComputedStyle(c).top) || 0);
+      sticky = cards.map((c) => getComputedStyle(c).position === "sticky");
+    }
+    measure();
+    window.addEventListener("resize", measure);
+
+    // a plain overlay per card, so darkening one doesn't restyle everything inside it
+    const shades = cards.map((card) => {
+      const shade = document.createElement("span");
+      shade.className = "card-shade";
+      shade.setAttribute("aria-hidden", "true");
+      card.appendChild(shade);
+      return shade;
+    });
+
+    onScroll.push((y, vh) => {
+      const tops = cards.map((c) => c.getBoundingClientRect().top);
+      return () => {
+        for (let i = 0; i < cards.length - 1; i++) {
+          if (!sticky[i]) {
+            cards[i].style.transform = "";
+            shades[i].style.opacity = "0";
+            continue;
+          }
+          const p = clamp((vh - tops[i + 1]) / (vh - stickyTops[i + 1]));
+          cards[i].style.transform = p > 0 ? `scale(${(1 - p * 0.05).toFixed(4)})` : "";
+          shades[i].style.opacity = (p * 0.05).toFixed(3);
+        }
+      };
+    });
+  }
+
+  // the lilchat card plays back a real conversation once it's on screen
+  function chat() {
+    const box = document.querySelector("[data-chat]");
+    if (!box) return;
+    const card = box.closest("[data-live]");
+    const bubbles = $$(".bubble", box);
+    const note = box.querySelector(".chat-note");
+    const texts = bubbles.map((b) => b.textContent);
+
+    if (reduce) {
+      bubbles.forEach((b) => b.classList.add("on"));
+      note.classList.add("on");
+      return;
+    }
+    bubbles.forEach((b) => b.classList.contains("bot") && (b.textContent = ""));
+
+    const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+    async function play() {
+      for (let i = 0; i < bubbles.length; i++) {
+        const b = bubbles[i];
+        if (b.classList.contains("you")) {
+          await wait(i ? 700 : 300);
+          b.classList.add("on");
+          continue;
+        }
+        await wait(350);
+        b.innerHTML = '<span class="dots3"><i></i><i></i><i></i></span>';
+        b.classList.add("on");
+        await wait(900);
+        const words = texts[i].split(" ");
+        b.textContent = "";
+        for (let w = 0; w < words.length; w++) {
+          b.textContent += (w ? " " : "") + words[w];
+          await wait(55 + words[w].length * 12);
+        }
+      }
+      await wait(500);
+      note.classList.add("on");
+    }
+
+    card.addEventListener("live", play, { once: true });
+  }
+
+  // hovering a post shows its first line in a little card that trails the cursor
+  function peek() {
+    const rows = $$("[data-peek]");
+    if (!rows.length || !window.site.finePointer) return;
+    const card = document.createElement("div");
+    card.className = "peek";
+    card.setAttribute("aria-hidden", "true");
+    card.innerHTML = '<span class="cap"></span><p></p>';
+    document.body.appendChild(card);
+    const label = card.querySelector("span");
+    const text = card.querySelector("p");
+    let x = 0;
+    let y = 0;
+    let tx = 0;
+    let ty = 0;
+    let raf = 0;
+    let on = false;
+
+    function frame() {
+      const dx = tx - x;
+      x += dx * 0.18;
+      y += (ty - y) * 0.18;
+      const tilt = clamp(dx * 0.08, -6, 6);
+      card.style.transform = `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0) rotate(${tilt.toFixed(2)}deg)`;
+      raf = on || Math.abs(dx) > 0.5 ? requestAnimationFrame(frame) : 0;
+    }
+
+    for (const row of rows) {
+      row.addEventListener("pointerenter", (e) => {
+        if (!on) {
+          x = tx = e.clientX + 32;
+          y = ty = e.clientY + 30;
+        }
+        on = true;
+        label.textContent = row.querySelector(".cap").textContent + " · " + row.querySelector(".kind").textContent;
+        text.textContent = row.dataset.peek;
+        card.classList.add("on");
+        if (!raf) raf = requestAnimationFrame(frame);
+      });
+      row.addEventListener("pointermove", (e) => {
+        tx = e.clientX + 32;
+        ty = e.clientY + 30;
+      });
+      row.addEventListener("pointerleave", () => {
+        on = false;
+        card.classList.remove("on");
+      });
+    }
+    window.addEventListener("scroll", () => {
+      if (!on) return;
+      on = false;
+      card.classList.remove("on");
+    }, { passive: true });
+  }
+
+  // the playground form swaps its placeholder to whatever the chosen model is good at
+  function ask() {
+    const form = document.querySelector("[data-ask]");
+    if (!form) return;
+    const input = form.querySelector("input[name=q]");
+    for (const radio of $$("input[name=model]", form)) {
+      radio.addEventListener("change", () => {
+        input.placeholder = radio.dataset.placeholder;
+      });
+    }
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const model = form.querySelector("input[name=model]:checked").value;
+      const q = input.value.trim();
+      window.location.href = "playground/?model=" + model + (q ? "&q=" + encodeURIComponent(q) : "");
+    });
+  }
+
+  temperature(tokens(intro()));
+  heroOut();
+  stack();
+  chat();
+  peek();
+  ask();
+  requestTick();
 })();
