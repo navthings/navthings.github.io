@@ -63,9 +63,7 @@
       -webkit-tap-highlight-color: transparent;
     }
 
-    .g .links button:hover,
-    .g .act button:hover,
-    .g .pick:hover {
+    .g .links button:hover {
       color: var(--ink);
     }
 
@@ -103,59 +101,6 @@
       color: var(--accent);
       font-size: 14px;
       min-height: 1.6em;
-    }
-
-    .g .sync {
-      margin-top: 18px;
-      font-size: 14px;
-      color: var(--ink-3);
-    }
-
-    .g .sync p {
-      margin-bottom: 8px;
-    }
-
-    .g .sync form {
-      display: flex;
-      gap: 14px;
-      align-items: baseline;
-    }
-
-    .g .compose {
-      margin-top: 36px;
-      display: grid;
-      gap: 14px;
-    }
-
-    .g .compose .row {
-      display: flex;
-      gap: 18px;
-    }
-
-    .g .compose .row input {
-      max-width: 150px;
-    }
-
-    .g .compose textarea {
-      max-width: none;
-      min-height: 120px;
-      resize: vertical;
-      line-height: 1.55;
-    }
-
-    .g .pick {
-      font-size: 14px;
-      color: var(--ink-3);
-      cursor: pointer;
-    }
-
-    .g .picked {
-      font-size: 13px;
-      color: var(--ink-3);
-    }
-
-    .g .compose .links {
-      margin-top: 0;
     }
 
     .g .projects {
@@ -196,28 +141,6 @@
       font-weight: 500;
     }
 
-    .g .eh .act {
-      margin-left: auto;
-      color: var(--ink-4);
-      opacity: 0;
-      transition: opacity 0.15s;
-    }
-
-    .g .e:hover .act,
-    .g .e:focus-within .act {
-      opacity: 1;
-    }
-
-    @media (hover: none) {
-      .g .eh .act {
-        opacity: 1;
-      }
-    }
-
-    .g .act button.sure {
-      color: var(--accent);
-    }
-
     .g .tx {
       margin-top: 8px;
       line-height: 1.6;
@@ -250,19 +173,6 @@
       color: var(--ink-3);
     }
 
-    .g .status {
-      position: fixed;
-      left: 50%;
-      bottom: 20px;
-      transform: translateX(-50%);
-      font-size: 13px;
-      color: var(--ink-3);
-      background: var(--bg);
-      border: 1px solid var(--line);
-      padding: 4px 14px;
-      border-radius: 999px;
-      white-space: nowrap;
-    }
   </style>
 </head>
 
@@ -292,97 +202,38 @@
     <div id="open" hidden>
       <p class="sub" id="count"></p>
       <div class="links">
-        <button type="button" id="newbtn">new entry</button>
-        <button type="button" id="syncbtn">sync</button>
         <button type="button" id="lockbtn">lock</button>
       </div>
-      <div class="sync" id="syncbox" hidden>
-        <p>to post from this device, paste a github fine-grained token with access to only navthings.github.io and contents set to read and write. it's shared with goals and stays on this device, encrypted with the password.</p>
-        <form id="syncform">
-          <input type="text" id="tok" placeholder="github_pat_..." autocomplete="off" spellcheck="false" />
-          <button type="submit">save</button>
-          <button type="button" id="untok">remove</button>
-        </form>
-      </div>
-      <form class="compose" id="compose" hidden>
-        <input type="text" id="proj" list="projs" placeholder="project" autocomplete="off" />
-        <datalist id="projs"></datalist>
-        <div class="row">
-          <input type="date" id="day" />
-          <input type="number" id="hrs" min="0" step="0.25" placeholder="hours" />
-        </div>
-        <textarea id="txt" placeholder="what happened"></textarea>
-        <label class="pick">add images or video<input type="file" id="files" accept="image/*,video/*" multiple hidden /></label>
-        <div class="picked" id="picked"></div>
-        <div class="links">
-          <button type="submit" id="post">post</button>
-          <button type="button" id="cancel">cancel</button>
-        </div>
-      </form>
       <div class="projects" id="projects"></div>
       <div id="list"></div>
     </div>
-    <p class="status" id="status" hidden></p>
-  </main>
+      </main>
   <script>
-    const REPO = "navthings/navthings.github.io";
-    const GH = `https://api.github.com/repos/${REPO}/contents/`;
-    const DATA = "journal/data.json";
     const ITER = 600000;
-    const MAX = 40 * 1024 * 1024;
     const START = ["rps", "rocket"];
     const enc = new TextEncoder();
     const dec = new TextDecoder();
     const $ = (id) => document.getElementById(id);
 
     let key = null;
-    let salt = null;
-    let token = null;
-    let sha = null;
     let state = { entries: [] };
     let filter = null;
     const urls = new Map();
 
-    const b64 = (buf) => btoa(String.fromCharCode(...new Uint8Array(buf)));
     const unb64 = (s) => Uint8Array.from(atob(s), (c) => c.charCodeAt(0));
     const esc = (s) => String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
-    const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
-    const today = () => {
-      const d = new Date();
-      return new Date(d - d.getTimezoneOffset() * 6e4).toISOString().slice(0, 10);
-    };
     const hrs = (n) => (Math.round(n * 100) / 100) + "h";
 
-    const store = {
-      get(k) { try { return localStorage.getItem(k); } catch { return null; } },
-      set(k, v) { try { localStorage.setItem(k, v); } catch {} },
-      del(k) { try { localStorage.removeItem(k); } catch {} },
-    };
-
-    function say(msg, ms = 2500) {
-      const el = $("status");
-      el.textContent = msg;
-      el.hidden = false;
-      clearTimeout(say.t);
-      if (ms) say.t = setTimeout(() => (el.hidden = true), ms);
-    }
-
     // crypto, same password and salt as goals
-    async function deriveKey(pw, saltBytes) {
+    async function deriveKey(pw, salt) {
       const base = await crypto.subtle.importKey("raw", enc.encode(pw), "PBKDF2", false, ["deriveKey"]);
       return crypto.subtle.deriveKey(
-        { name: "PBKDF2", salt: saltBytes, iterations: ITER, hash: "SHA-256" },
+        { name: "PBKDF2", salt, iterations: ITER, hash: "SHA-256" },
         base,
         { name: "AES-GCM", length: 256 },
         false,
-        ["encrypt", "decrypt"]
+        ["decrypt"]
       );
-    }
-
-    async function seal(text) {
-      const iv = crypto.getRandomValues(new Uint8Array(12));
-      const ct = await crypto.subtle.encrypt({ name: "AES-GCM", iv }, key, enc.encode(text));
-      return { v: 1, salt: b64(salt), iv: b64(iv), ct: b64(ct) };
     }
 
     async function open(blob) {
@@ -390,125 +241,31 @@
       return dec.decode(pt);
     }
 
-    async function sealBytes(buf) {
-      const iv = crypto.getRandomValues(new Uint8Array(12));
-      const ct = await crypto.subtle.encrypt({ name: "AES-GCM", iv }, key, buf);
-      const out = new Uint8Array(12 + ct.byteLength);
-      out.set(iv);
-      out.set(new Uint8Array(ct), 12);
-      return out;
-    }
-
     async function openBytes(buf) {
       const b = new Uint8Array(buf);
       return crypto.subtle.decrypt({ name: "AES-GCM", iv: b.slice(0, 12) }, key, b.slice(12));
-    }
-
-    // github
-    const auth = () => ({ Authorization: `Bearer ${token}`, Accept: "application/vnd.github+json" });
-
-    function toB64(bytes) {
-      return new Promise((res, rej) => {
-        const fr = new FileReader();
-        fr.onload = () => res(fr.result.split(",")[1]);
-        fr.onerror = () => rej(fr.error);
-        fr.readAsDataURL(new Blob([bytes]));
-      });
-    }
-
-    async function ghData() {
-      const r = await fetch(GH + DATA + "?t=" + Date.now(), { headers: auth(), cache: "no-store" });
-      if (r.status === 404) { sha = null; return null; }
-      if (!r.ok) throw new Error(`github said ${r.status}`);
-      const j = await r.json();
-      sha = j.sha;
-      return JSON.parse(atob(j.content.replace(/\n/g, "")));
-    }
-
-    async function ghPut(path, b64content, message, fileSha) {
-      const body = { message, content: b64content };
-      if (fileSha) body.sha = fileSha;
-      const r = await fetch(GH + path, { method: "PUT", headers: auth(), body: JSON.stringify(body) });
-      if (!r.ok) throw new Error(`github said ${r.status}`);
-      return (await r.json()).content.sha;
-    }
-
-    async function ghDel(path) {
-      const r = await fetch(GH + path + "?t=" + Date.now(), { headers: auth(), cache: "no-store" });
-      if (!r.ok) return;
-      const { sha: s } = await r.json();
-      await fetch(GH + path, { method: "DELETE", headers: auth(), body: JSON.stringify({ message: "journal", sha: s }) });
-    }
-
-    // read, change, write back; retries once if another device saved first
-    async function commit(change) {
-      for (let tries = 0; tries < 2; tries++) {
-        const remote = await ghData();
-        if (remote) state = JSON.parse(await open(remote));
-        change(state);
-        state.updated = new Date().toISOString();
-        try {
-          sha = await ghPut(DATA, btoa(JSON.stringify(await seal(JSON.stringify(state))) + "\n"), "journal", sha);
-          return;
-        } catch (e) {
-          if (tries || !/409|422/.test(e.message)) throw e;
-        }
-      }
     }
 
     async function unlock(pw) {
       const r = await fetch("/goals/data.json?t=" + Date.now(), { cache: "no-store" });
       if (!r.ok) throw new Error("couldn't load the key file");
       const goals = await r.json();
-      salt = unb64(goals.salt);
-      key = await deriveKey(pw, salt);
+      key = await deriveKey(pw, unb64(goals.salt));
       try {
         await open(goals);
       } catch {
         key = null;
         throw new Error("wrong password");
       }
-
-      const sealedTok = store.get("goals.tok");
-      if (sealedTok) {
-        try { token = await open(JSON.parse(sealedTok)); } catch { store.del("goals.tok"); }
-      }
-
-      let blob = null;
-      if (token) {
-        try { blob = await ghData(); } catch (e) { say(`couldn't reach github (${e.message})`); }
-      }
-      if (!blob) {
-        const p = await fetch("data.json?t=" + Date.now(), { cache: "no-store" });
-        if (p.ok) blob = await p.json();
-      }
-      state = blob ? JSON.parse(await open(blob)) : { entries: [] };
+      const p = await fetch("data.json?t=" + Date.now(), { cache: "no-store" });
+      state = p.ok ? JSON.parse(await open(await p.json())) : { entries: [] };
     }
 
     // media
-    async function shrink(file) {
-      if (!file.type.startsWith("image/") || file.type === "image/gif") return { buf: await file.arrayBuffer(), type: file.type };
-      try {
-        const bmp = await createImageBitmap(file);
-        const s = Math.min(1, 2000 / Math.max(bmp.width, bmp.height));
-        const c = document.createElement("canvas");
-        c.width = Math.round(bmp.width * s);
-        c.height = Math.round(bmp.height * s);
-        c.getContext("2d").drawImage(bmp, 0, 0, c.width, c.height);
-        const out = await new Promise((res) => c.toBlob(res, "image/jpeg", 0.85));
-        return { buf: await out.arrayBuffer(), type: "image/jpeg" };
-      } catch {
-        return { buf: await file.arrayBuffer(), type: file.type };
-      }
-    }
-
     async function loadMedia(el) {
       const id = el.dataset.m;
       if (!urls.has(id)) {
-        let r = await fetch("m/" + id);
-        if (!r.ok && token) {
-          r = await fetch(GH + "journal/m/" + id, { headers: { Authorization: `Bearer ${token}`, Accept: "application/vnd.github.raw" }, cache: "no-store" });
-        }
+        const r = await fetch("m/" + id);
         if (!r.ok) { el.replaceWith(Object.assign(document.createElement("p"), { className: "empty", textContent: "media not live yet, give github pages a minute" })); return; }
         const plain = await openBytes(await r.arrayBuffer());
         urls.set(id, URL.createObjectURL(new Blob([plain], { type: el.dataset.t })));
@@ -536,38 +293,31 @@
       const all = state.entries;
       const total = all.reduce((s, e) => s + (e.hours || 0), 0);
       $("count").textContent = all.length ? `${hrs(total)} over ${all.length} entr${all.length === 1 ? "y" : "ies"}` : "nothing logged yet";
-      $("syncbtn").textContent = token ? "sync on" : "sync";
 
       const per = new Map((state.projects || START).map((n) => [n, 0]));
       for (const e of all) per.set(e.project, (per.get(e.project) || 0) + (e.hours || 0));
       const names = [...per.keys()].sort((a, b) => per.get(b) - per.get(a));
-      $("projs").innerHTML = names.map((n) => `<option value="${esc(n)}">`).join("");
-      $("projects").innerHTML = names.length
-        ? `<button type="button" data-p="" class="${filter ? "" : "on"}">all</button>` +
-          names.map((n) => `<button type="button" data-p="${esc(n)}" class="${filter === n ? "on" : ""}">${esc(n)} ${hrs(per.get(n))}</button>`).join("") +
-          `<button type="button" data-add>add project</button>`
-        : "";
+      $("projects").innerHTML =
+        `<button type="button" data-p="" class="${filter ? "" : "on"}">all</button>` +
+        names.map((n) => `<button type="button" data-p="${esc(n)}" class="${filter === n ? "on" : ""}">${esc(n)} ${hrs(per.get(n))}</button>`).join("");
 
       const shown = all
         .filter((e) => !filter || e.project === filter)
         .sort((a, b) => b.date.localeCompare(a.date) || b.id.localeCompare(a.id));
 
       $("list").innerHTML = shown.length
-        ? shown.map((e) => `<article class="e" data-id="${e.id}">
-            <div class="eh"><span>${fmt(e.date)}</span><span class="p">${esc(e.project)}</span>${e.hours ? `<span>${hrs(e.hours)}</span>` : ""}
-              <span class="act"><button type="button" data-del>delete</button></span></div>
+        ? shown.map((e) => `<article class="e">
+            <div class="eh"><span>${fmt(e.date)}</span><span class="p">${esc(e.project)}</span>${e.hours ? `<span>${hrs(e.hours)}</span>` : ""}</div>
             ${e.text ? `<p class="tx">${esc(e.text)}</p>` : ""}
-            ${e.media && e.media.length ? `<div class="media">${e.media.map((m) => `<div class="wait" data-m="${m.id}" data-t="${esc(m.type)}"></div>`).join("")}</div>` : ""}
+            ${e.media && e.media.length ? `<div class="media">${e.media.map((m) => `<div class="wait" data-m="${esc(m.id)}" data-t="${esc(m.type)}"></div>`).join("")}</div>` : ""}
           </article>`).join("")
         : `<p class="empty">${filter ? "nothing for this one yet" : ""}</p>`;
 
       document.querySelectorAll("[data-m]").forEach((el) => seen.observe(el));
     }
 
-    // events
     $("lockform").onsubmit = async (e) => {
       e.preventDefault();
-      $("err").textContent = "";
       const pw = $("pw").value;
       if (!pw) return;
       $("err").textContent = "opening…";
@@ -586,140 +336,11 @@
 
     $("lockbtn").onclick = () => location.reload();
 
-    $("syncbtn").onclick = () => ($("syncbox").hidden = !$("syncbox").hidden);
-
-    $("syncform").onsubmit = async (e) => {
-      e.preventDefault();
-      const v = $("tok").value.trim();
-      if (!v) return;
-      token = v;
-      try {
-        await ghData();
-      } catch (err) {
-        token = null;
-        say(`that token didn't work (${err.message})`);
-        return;
-      }
-      store.set("goals.tok", JSON.stringify(await seal(token)));
-      $("tok").value = "";
-      $("syncbox").hidden = true;
-      render();
-      say("sync on");
-    };
-
-    $("untok").onclick = () => {
-      store.del("goals.tok");
-      token = null;
-      $("syncbox").hidden = true;
-      render();
-      say("sync off on this device");
-    };
-
-    $("newbtn").onclick = () => {
-      if (!token) { $("syncbox").hidden = false; say("add a token first so posts can save"); return; }
-      $("compose").hidden = !$("compose").hidden;
-      if (!$("compose").hidden) {
-        if (!$("day").value) $("day").value = today();
-        if (filter && !$("proj").value) $("proj").value = filter;
-        $("proj").focus();
-      }
-    };
-
-    $("cancel").onclick = () => ($("compose").hidden = true);
-
-    $("files").onchange = () => {
-      const f = [...$("files").files];
-      const big = f.filter((x) => x.size > MAX);
-      $("picked").textContent = f.length ? f.map((x) => x.name).join(", ") + (big.length ? ` (too big, keep videos under 40mb: ${big.map((x) => x.name).join(", ")})` : "") : "";
-    };
-
-    $("compose").onsubmit = async (e) => {
-      e.preventDefault();
-      const project = $("proj").value.trim().toLowerCase();
-      const text = $("txt").value.trim();
-      const files = [...$("files").files].filter((x) => x.size <= MAX);
-      if (!project) { $("proj").focus(); return; }
-      if (!text && !files.length && !$("hrs").value) return;
-
-      $("post").disabled = true;
-      const entry = { id: uid(), project, date: $("day").value || today(), hours: parseFloat($("hrs").value) || 0, text, media: [] };
-      try {
-        for (let i = 0; i < files.length; i++) {
-          say(`uploading ${i + 1} of ${files.length}…`, 0);
-          const { buf, type } = await shrink(files[i]);
-          const id = uid();
-          await ghPut("journal/m/" + id, await toB64(await sealBytes(buf)), "journal");
-          entry.media.push({ id, type });
-        }
-        say("saving…", 0);
-        await commit((s) => s.entries.push(entry));
-      } catch (err) {
-        say(`couldn't post (${err.message})`, 5000);
-        $("post").disabled = false;
-        return;
-      }
-      $("post").disabled = false;
-      $("compose").reset();
-      $("picked").textContent = "";
-      $("compose").hidden = true;
-      render();
-      say("posted");
-    };
-
     $("projects").onclick = (e) => {
-      if (e.target.closest("[data-add]")) {
-        if (!token) { $("syncbox").hidden = false; say("add a token first so it saves"); return; }
-        const f = document.createElement("form");
-        f.innerHTML = `<input type="text" placeholder="name" autocomplete="off" style="max-width:140px;padding:0">`;
-        e.target.replaceWith(f);
-        const inp = f.firstChild;
-        inp.focus();
-        inp.onblur = () => render();
-        f.onsubmit = async (ev) => {
-          ev.preventDefault();
-          const n = inp.value.trim().toLowerCase();
-          inp.onblur = null;
-          if (!n) return render();
-          say("saving…", 0);
-          try {
-            await commit((s) => (s.projects = [...new Set([...(s.projects || START), n])]));
-          } catch (err) {
-            say(`couldn't save (${err.message})`, 5000);
-            return render();
-          }
-          render();
-          say("added");
-        };
-        return;
-      }
       const b = e.target.closest("[data-p]");
       if (!b) return;
       filter = b.dataset.p || null;
       render();
-    };
-
-    $("list").onclick = async (e) => {
-      const b = e.target.closest("[data-del]");
-      if (!b) return;
-      if (!token) { say("add a token first"); return; }
-      if (!b.classList.contains("sure")) {
-        b.classList.add("sure");
-        b.textContent = "sure?";
-        setTimeout(() => { b.classList.remove("sure"); b.textContent = "delete"; }, 3000);
-        return;
-      }
-      const id = b.closest(".e").dataset.id;
-      const gone = state.entries.find((x) => x.id === id);
-      say("deleting…", 0);
-      try {
-        await commit((s) => (s.entries = s.entries.filter((x) => x.id !== id)));
-        for (const m of (gone && gone.media) || []) await ghDel("journal/m/" + m.id);
-      } catch (err) {
-        say(`couldn't delete (${err.message})`, 5000);
-        return;
-      }
-      render();
-      say("deleted");
     };
   </script>
   <script src="/assets/base.js"></script>
