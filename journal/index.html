@@ -312,7 +312,7 @@
           <input type="number" id="hrs" min="0" step="0.25" placeholder="hours" />
         </div>
         <textarea id="txt" placeholder="what happened"></textarea>
-        <label class="pick">add images or video<input type="file" id="files" accept="image/*,video/*" multiple hidden /></label>
+        <label class="pick">add images or video, or paste them in<input type="file" id="files" accept="image/*,video/*" multiple hidden /></label>
         <div class="picked" id="picked"></div>
         <div class="links">
           <button type="submit" id="post">post</button>
@@ -341,6 +341,7 @@
     let sha = null;
     let state = { entries: [] };
     let filter = null;
+    let pending = [];
     const urls = new Map();
 
     const b64 = (buf) => btoa(String.fromCharCode(...new Uint8Array(buf)));
@@ -627,17 +628,39 @@
 
     $("cancel").onclick = () => ($("compose").hidden = true);
 
-    $("files").onchange = () => {
-      const f = [...$("files").files];
-      const big = f.filter((x) => x.size > MAX);
-      $("picked").textContent = f.length ? f.map((x) => x.name).join(", ") + (big.length ? ` (too big, keep videos under 40mb: ${big.map((x) => x.name).join(", ")})` : "") : "";
-    };
+    function showPicked() {
+      const big = pending.filter((x) => x.size > MAX);
+      $("picked").innerHTML = pending.length
+        ? esc(pending.map((x) => x.name).join(", ")) + (big.length ? ` (too big, keep videos under 40mb: ${esc(big.map((x) => x.name).join(", "))})` : "") + ` <button type="button" id="unpick">clear</button>`
+        : "";
+      if (pending.length) $("unpick").onclick = () => { pending = []; showPicked(); };
+    }
+
+    function addFiles(list) {
+      const fs = [...list].filter((f) => /^(image|video)\//.test(f.type));
+      fs.forEach((f, i) => { if (!f.name || f.name === "image.png") Object.defineProperty(f, "name", { value: `pasted ${pending.length + i + 1}` }); });
+      pending.push(...fs);
+      showPicked();
+      return fs.length;
+    }
+
+    $("files").onchange = () => { addFiles($("files").files); $("files").value = ""; };
+
+    // paste
+    document.addEventListener("paste", (e) => {
+      if ($("compose").hidden || !e.clipboardData) return;
+      if (addFiles(e.clipboardData.files)) e.preventDefault();
+    });
+
+    // drop
+    $("compose").addEventListener("dragover", (e) => e.preventDefault());
+    $("compose").addEventListener("drop", (e) => { e.preventDefault(); addFiles(e.dataTransfer.files); });
 
     $("compose").onsubmit = async (e) => {
       e.preventDefault();
       const project = $("proj").value.trim().toLowerCase();
       const text = $("txt").value.trim();
-      const files = [...$("files").files].filter((x) => x.size <= MAX);
+      const files = pending.filter((x) => x.size <= MAX);
       if (!project) { $("proj").focus(); return; }
       if (!text && !files.length && !$("hrs").value) return;
 
@@ -660,7 +683,8 @@
       }
       $("post").disabled = false;
       $("compose").reset();
-      $("picked").textContent = "";
+      pending = [];
+      showPicked();
       $("compose").hidden = true;
       render();
       say("posted");
