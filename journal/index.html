@@ -330,6 +330,7 @@
     const DATA = "journal/data.json";
     const ITER = 600000;
     const MAX = 40 * 1024 * 1024;
+    const START = ["rps", "rocket"];
     const enc = new TextEncoder();
     const dec = new TextDecoder();
     const $ = (id) => document.getElementById(id);
@@ -537,13 +538,14 @@
       $("count").textContent = all.length ? `${hrs(total)} over ${all.length} entr${all.length === 1 ? "y" : "ies"}` : "nothing logged yet";
       $("syncbtn").textContent = token ? "sync on" : "sync";
 
-      const per = new Map();
+      const per = new Map((state.projects || START).map((n) => [n, 0]));
       for (const e of all) per.set(e.project, (per.get(e.project) || 0) + (e.hours || 0));
       const names = [...per.keys()].sort((a, b) => per.get(b) - per.get(a));
       $("projs").innerHTML = names.map((n) => `<option value="${esc(n)}">`).join("");
       $("projects").innerHTML = names.length
         ? `<button type="button" data-p="" class="${filter ? "" : "on"}">all</button>` +
-          names.map((n) => `<button type="button" data-p="${esc(n)}" class="${filter === n ? "on" : ""}">${esc(n)} ${hrs(per.get(n))}</button>`).join("")
+          names.map((n) => `<button type="button" data-p="${esc(n)}" class="${filter === n ? "on" : ""}">${esc(n)} ${hrs(per.get(n))}</button>`).join("") +
+          `<button type="button" data-add>add project</button>`
         : "";
 
       const shown = all
@@ -665,6 +667,31 @@
     };
 
     $("projects").onclick = (e) => {
+      if (e.target.closest("[data-add]")) {
+        if (!token) { $("syncbox").hidden = false; say("add a token first so it saves"); return; }
+        const f = document.createElement("form");
+        f.innerHTML = `<input type="text" placeholder="name" autocomplete="off" style="max-width:140px;padding:0">`;
+        e.target.replaceWith(f);
+        const inp = f.firstChild;
+        inp.focus();
+        inp.onblur = () => render();
+        f.onsubmit = async (ev) => {
+          ev.preventDefault();
+          const n = inp.value.trim().toLowerCase();
+          inp.onblur = null;
+          if (!n) return render();
+          say("saving…", 0);
+          try {
+            await commit((s) => (s.projects = [...new Set([...(s.projects || START), n])]));
+          } catch (err) {
+            say(`couldn't save (${err.message})`, 5000);
+            return render();
+          }
+          render();
+          say("added");
+        };
+        return;
+      }
       const b = e.target.closest("[data-p]");
       if (!b) return;
       filter = b.dataset.p || null;
