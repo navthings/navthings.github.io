@@ -10,24 +10,24 @@
     } catch (err) {}
   </script>
   <meta name="robots" content="noindex, nofollow" />
-  <title>navthings</title>
+  <title>this week</title>
   <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
   <meta name="theme-color" content="#0c0c0c" media="(prefers-color-scheme: dark)" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="manifest" href="manifest.json" />
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-title" content="goals" />
+  <meta name="apple-mobile-web-app-title" content="this week" />
   <link rel="preload" href="/assets/fonts/geist.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="stylesheet" href="/assets/base.css" />
   <style>
-    .g {
-      max-width: 600px;
+    .w {
+      max-width: 560px;
       margin: 0 auto;
-      padding: max(14vh, 88px) 24px 120px;
+      padding: max(13vh, 84px) 24px 140px;
     }
 
-    .g .home {
+    .w .home {
       display: inline-block;
       font-size: 15px;
       font-weight: 500;
@@ -36,338 +36,343 @@
       transition: color 0.2s ease;
     }
 
-    .g .home:hover {
-      color: var(--ink);
-    }
+    .w .home:hover { color: var(--ink); }
 
-    .g h1 {
+    .w h1 {
       margin-top: 6px;
       font-size: 30px;
       line-height: 1.15;
       letter-spacing: -0.035em;
       font-weight: 500;
+      text-wrap: balance;
     }
 
-    .g .sub {
-      margin-top: 14px;
-      color: var(--ink-3);
-    }
-
-    .g .links {
+    .w .sub {
       margin-top: 10px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 18px;
       color: var(--ink-3);
-      font-size: 14px;
+      font-variant-numeric: tabular-nums;
     }
 
-    .g button {
-      -webkit-tap-highlight-color: transparent;
+    .w .sub b {
+      font-weight: 400;
+      color: var(--ink-2);
     }
 
-    .g .links button:hover,
-    .g .act button:hover {
-      color: var(--ink);
+    .w .memo {
+      margin-top: 22px;
+      color: var(--ink-2);
+      max-width: 52ch;
     }
 
-    .g form.lock {
+    /* lock */
+
+    .w form.lock {
       margin-top: 40px;
       display: flex;
       gap: 14px;
       align-items: baseline;
     }
 
-    .g input[type="password"],
-    .g input[type="text"] {
+    .w input[type="password"],
+    .w input[type="text"] {
       font: inherit;
       color: var(--ink);
       background: none;
       border: 0;
       border-bottom: 1px solid var(--line);
+      border-radius: 0;
       padding: 6px 0;
       outline: none;
       width: 100%;
       max-width: 320px;
     }
 
-    .g input:focus {
-      border-bottom-color: var(--ink);
+    .w input:focus { border-bottom-color: var(--ink); }
+
+    .w .lock button,
+    .w .sync button {
+      color: var(--ink-3);
+      transition: color 0.2s ease;
     }
 
-    .g .err {
+    .w .lock button:hover,
+    .w .sync button:hover { color: var(--ink); }
+
+    .w .err {
       margin-top: 12px;
       color: var(--accent);
       font-size: 14px;
       min-height: 1.6em;
     }
 
-    .g .sync {
-      margin-top: 18px;
-      font-size: 14px;
+    /* projects */
+
+    .w .proj { margin-top: 52px; }
+
+    .w .proj h2 {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      font-size: 15px;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+    }
+
+    .w .proj h2 .c {
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--ink-4);
+      font-variant-numeric: tabular-nums;
+      transition: color 0.3s ease;
+    }
+
+    .w .proj h2 .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      align-self: center;
+      transform: scale(0);
+      transition: transform 0.5s var(--spring);
+    }
+
+    .w .proj.all h2 .dot { transform: scale(1); }
+    .w .proj.all h2 .c { color: var(--ink-3); }
+
+    .w ul { margin-top: 10px; }
+
+    .w li {
+      position: relative;
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 9px 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .w li:last-child { border-bottom: 1px solid var(--line); }
+
+    .w .tick {
+      position: relative;
+      flex: none;
+      width: 18px;
+      height: 18px;
+      margin-top: 4px;
+      border-radius: 50%;
+      border: 1.5px solid var(--ink-4);
+      display: grid;
+      place-items: center;
+      transition: background 0.25s var(--ease), border-color 0.25s var(--ease);
+      touch-action: manipulation;
+    }
+
+    .w .tick:hover { border-color: var(--ink-3); }
+
+    .w .tick svg {
+      width: 10px;
+      height: 10px;
+      fill: none;
+      stroke: var(--bg);
+      stroke-width: 2.2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-dasharray: 14;
+      stroke-dashoffset: 14;
+    }
+
+    .w li.done .tick {
+      background: var(--ink);
+      border-color: var(--ink);
+    }
+
+    .w li.done .tick svg { stroke-dashoffset: 0; }
+
+    .w li.pop .tick { animation: pop 0.5s var(--spring); }
+    .w li.pop .tick svg { transition: stroke-dashoffset 0.28s ease 0.08s; }
+
+    @keyframes pop {
+      0% { transform: scale(1); }
+      30% { transform: scale(0.78); }
+      70% { transform: scale(1.12); }
+      100% { transform: scale(1); }
+    }
+
+    .w .body {
+      flex: 1;
+      min-width: 0;
+      line-height: 1.55;
+    }
+
+    /* the strike draws itself across, line by line */
+    .w .t {
+      background: linear-gradient(var(--ink-3), var(--ink-3)) no-repeat 0 58% / 0% 1px;
+      -webkit-box-decoration-break: clone;
+      box-decoration-break: clone;
+      transition: color 0.35s ease;
+    }
+
+    .w li.done .t {
       color: var(--ink-3);
+      background-size: 100% 1px;
     }
 
-    .g .sync p {
-      margin-bottom: 8px;
+    .w li.pop .t { transition: background-size 0.42s var(--ease), color 0.35s ease 0.2s; }
+
+    .w .meta {
+      display: block;
+      font-size: 13px;
+      color: var(--ink-4);
     }
 
-    .g .sync form {
+    .w .x {
+      flex: none;
+      font-size: 13px;
+      color: var(--ink-4);
+      padding-top: 3px;
+      opacity: 0;
+      transition: opacity 0.2s ease, color 0.2s ease;
+    }
+
+    .w li:hover .x,
+    .w .x:focus-visible { opacity: 1; }
+    .w .x:hover { color: var(--ink); }
+
+    @media (hover: none) { .w .x { opacity: 1; } }
+
+    .w .spark {
+      position: absolute;
+      left: 9px;
+      top: 22px;
+      width: 3px;
+      height: 3px;
+      margin: -1.5px;
+      border-radius: 50%;
+      background: var(--ink-3);
+      pointer-events: none;
+      animation: spark 0.55s var(--ease) forwards;
+    }
+
+    @keyframes spark {
+      from { transform: translate(0, 0); opacity: 1; }
+      to { transform: translate(var(--dx), var(--dy)); opacity: 0; }
+    }
+
+    .w .add {
+      margin-top: 10px;
+      font-size: 14px;
+      color: var(--ink-4);
+      transition: color 0.2s ease;
+    }
+
+    .w .add:hover { color: var(--ink-2); }
+
+    .w .adding {
+      margin-top: 6px;
       display: flex;
       gap: 14px;
       align-items: baseline;
     }
 
-    .g section {
-      margin-top: 64px;
+    .w .adding input { max-width: none; }
+
+    .w .empty {
+      margin-top: 52px;
+      color: var(--ink-3);
     }
 
-    .g h2 {
-      font-size: 22px;
-      font-weight: 500;
-      letter-spacing: -0.02em;
-    }
+    /* earlier weeks */
 
-    .g h2 span {
-      margin-left: 10px;
+    .w .earlier { margin-top: 84px; }
+
+    .w .earlier h3 {
       font-size: 14px;
       font-weight: 400;
-      color: var(--ink-4);
-      letter-spacing: 0;
-    }
-
-    .g .note {
-      margin-top: 4px;
       color: var(--ink-3);
-      font-size: 15px;
+      margin-bottom: 6px;
     }
 
-    .g ul {
+    .w details { border-top: 1px solid var(--line); }
+    .w details:last-of-type { border-bottom: 1px solid var(--line); }
+
+    .w summary {
       list-style: none;
-      margin-top: 18px;
-    }
-
-    .g li {
       display: flex;
-      flex-wrap: wrap;
-      align-items: flex-start;
-      gap: 0 14px;
+      justify-content: space-between;
       padding: 9px 0;
-      border-top: 1px solid var(--line);
-    }
-
-    .g li:last-child {
-      border-bottom: 1px solid var(--line);
-    }
-
-    .g .tick {
-      flex: none;
-      width: 16px;
-      height: 16px;
-      margin-top: 5px;
-      border-radius: 50%;
-      border: 1.5px solid var(--ink-4);
-      transition: background 0.2s var(--ease), border-color 0.2s var(--ease);
-    }
-
-    .g .tick[style] {
-      background: conic-gradient(var(--ink) var(--p), transparent 0);
-    }
-
-    .g .n {
-      margin-left: 8px;
-      font-size: 13px;
-      color: var(--ink-3);
-      font-variant-numeric: tabular-nums;
-    }
-
-    .g li.done .tick {
-      background: var(--ink);
-      border-color: var(--ink);
-    }
-
-    .g .t {
-      flex: 1;
-      text-align: left;
-      line-height: 1.55;
-    }
-
-    .g li.done .t {
-      color: var(--ink-4);
-      text-decoration: line-through;
-      text-decoration-color: var(--ink-4);
-    }
-
-    .g .s {
-      margin-left: 8px;
-      font-size: 12px;
-      color: var(--ink-4);
-    }
-
-    .g .act {
-      flex: none;
-      display: flex;
-      gap: 12px;
-      font-size: 13px;
-      color: var(--ink-4);
-      opacity: 0;
-      transition: opacity 0.15s;
-    }
-
-    .g li:hover .act,
-    .g li:focus-within .act {
-      opacity: 1;
-    }
-
-    /* mouse: actions float over the end of the row so the text keeps the full width */
-    @media (hover: hover) {
-      .g li {
-        position: relative;
-      }
-
-      .g .act {
-        position: absolute;
-        right: 0;
-        top: 9px;
-        padding-left: 64px;
-        background: linear-gradient(to right, rgb(255 255 255 / 0), var(--bg) 52px);
-        pointer-events: none;
-      }
-
-      .g li:hover .act,
-      .g li:focus-within .act {
-        pointer-events: auto;
-      }
-    }
-
-    /* touch screens: tap the text to show the actions on their own line, tap the circle to tick */
-    @media (hover: none) {
-      .g .act {
-        display: none;
-        width: 100%;
-        padding-left: 30px;
-        opacity: 1;
-        flex-wrap: wrap;
-        font-size: 14px;
-        gap: 6px 20px;
-      }
-
-      .g li.sel .act {
-        display: flex;
-      }
-    }
-
-    .g li input[type="text"] {
-      max-width: none;
-      flex: 1;
-      padding: 0;
-    }
-
-    .g h3 {
-      margin-top: 30px;
-      font-size: 13px;
-      font-weight: 500;
-      letter-spacing: 0.04em;
-      color: var(--ink-3);
-    }
-
-    .g h3 + ul {
-      margin-top: 8px;
-    }
-
-    .g .add {
-      margin-top: 8px;
-      font-size: 13px;
-      color: var(--ink-4);
-    }
-
-    .g .add button:hover {
-      color: var(--ink);
-    }
-
-    .g .addform input {
-      font-size: 15px;
-    }
-
-    .g .meta {
-      width: 100%;
-      padding-left: 30px;
-      font-size: 13px;
-      color: var(--ink-3);
-      overflow-wrap: anywhere;
-    }
-
-    .g .meta a {
-      color: inherit;
-      text-decoration: underline;
-      text-decoration-color: var(--ink-4);
-      text-underline-offset: 2px;
-    }
-
-    .g .rules {
-      margin-top: 28px;
-      font-size: 14px;
+      cursor: pointer;
       color: var(--ink-2);
-    }
-
-    .g .ck li {
-      gap: 0 16px;
       font-variant-numeric: tabular-nums;
     }
 
-    .g .ck .when {
-      width: 96px;
+    .w summary::-webkit-details-marker { display: none; }
+    .w summary span { color: var(--ink-4); }
+    .w summary:hover { color: var(--ink); }
+
+    .w .past {
+      padding: 2px 0 14px;
+      font-size: 14px;
       color: var(--ink-3);
     }
 
-    .g .ck .score {
-      flex: 1;
-    }
+    .w .past p { padding: 2px 0; }
+    .w .past .pn { margin-top: 8px; color: var(--ink-2); }
+    .w .past .y { color: var(--ink-4); text-decoration: line-through; }
 
-    .g .ck .up {
-      color: var(--ink);
-    }
+    /* footer */
 
-    .g .ck .down {
-      color: var(--accent);
-    }
-
-    .g .ckform {
+    .w .links {
+      margin-top: 64px;
       display: flex;
       flex-wrap: wrap;
-      gap: 10px 18px;
-      align-items: baseline;
+      gap: 18px;
       font-size: 14px;
       color: var(--ink-3);
     }
 
-    .g .ckform input[type="text"] {
-      width: 40px;
-      text-align: center;
+    .w .links button { transition: color 0.2s ease; }
+    .w .links button:hover { color: var(--ink); }
+
+    .w .sync {
+      margin-top: 18px;
+      font-size: 14px;
+      color: var(--ink-3);
     }
 
-    .g .ckform input.label {
-      width: 160px;
-      text-align: left;
+    .w .sync p { margin-bottom: 8px; max-width: 52ch; }
+
+    .w .sync form {
+      display: flex;
+      gap: 14px;
+      align-items: baseline;
     }
 
-    .g .status {
+    .w .status {
       position: fixed;
       left: 50%;
-      bottom: 20px;
+      bottom: 28px;
       transform: translateX(-50%);
-      font-size: 13px;
-      color: var(--ink-3);
-      background: var(--bg);
-      border: 1px solid var(--line);
-      padding: 4px 14px;
+      display: flex;
+      gap: 14px;
+      padding: 8px 16px;
       border-radius: 999px;
+      background: var(--card);
+      box-shadow: var(--shadow);
+      font-size: 14px;
+      color: var(--ink-2);
       white-space: nowrap;
     }
 
-    .g .status button {
-      margin-left: 8px;
-      color: var(--ink);
+    .w .status button { color: var(--ink); }
+
+    .w .open-in { animation: rise 0.6s var(--spring) both; }
+
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: none; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .w *, .w *::after { animation: none !important; transition: none !important; }
     }
   </style>
 </head>
@@ -386,26 +391,31 @@
     </button>
   </div>
 
-  <main class="g">
+  <main class="w">
     <a class="home" href="/">nav</a>
-    <h1>goals</h1>
+    <h1 id="title">this week</h1>
+    <p class="sub" id="sub"></p>
 
     <div id="locked">
       <form class="lock" id="lockform">
         <input type="password" id="pw" placeholder="password" autocomplete="current-password" autofocus />
-        <button type="submit">open</button>
+        <button type="submit" id="lockgo">open</button>
       </form>
       <p class="err" id="err"></p>
     </div>
 
     <div id="open" hidden>
-      <p class="sub" id="count"></p>
+      <p class="memo" id="memo" hidden></p>
+      <div id="projects"></div>
+      <div class="earlier" id="earlier" hidden>
+        <h3>earlier</h3>
+        <div id="pastlist"></div>
+      </div>
       <div class="links">
         <button type="button" id="syncbtn">sync</button>
-        <button type="button" id="backupbtn">backup</button>
+        <button type="button" id="soundbtn">sound on</button>
         <button type="button" id="lockbtn">lock</button>
       </div>
-      <div class="rules" id="rules"></div>
       <div class="sync" id="syncbox" hidden>
         <p>to save from any device, paste a github fine-grained token with access to only navthings.github.io and contents set to read and write. it stays on this device, encrypted with the password.</p>
         <form id="syncform">
@@ -414,43 +424,42 @@
           <button type="button" id="untok">remove</button>
         </form>
       </div>
-      <div id="list"></div>
     </div>
 
-    <p class="status" id="status" hidden></p>
+    <p class="status" id="status" role="status" hidden></p>
   </main>
 
+  <script src="/assets/base.js"></script>
   <script>
     const REPO = "navthings/navthings.github.io";
-    const PATH = "goals/data.json";
-    const API = `https://api.github.com/repos/${REPO}/contents/${PATH}`;
+    const API = (p) => `https://api.github.com/repos/${REPO}/contents/goals/${p}`;
     const ITER = 600000;
+    const KEEP = ["dice-of-god", "liltvc", "vex", "maths + physics"];
     const enc = new TextEncoder();
     const dec = new TextDecoder();
     const $ = (id) => document.getElementById(id);
+    const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     let key = null;
     let salt = null;
     let state = null;
     let token = null;
-    let sha = null;
+    let shas = {};
     let saveTimer = null;
     let undo = null;
+    let fresh = false;
 
     const b64 = (buf) => btoa(String.fromCharCode(...new Uint8Array(buf)));
     const unb64 = (s) => Uint8Array.from(atob(s), (c) => c.charCodeAt(0));
+    const uid = () => Math.random().toString(36).slice(2, 9);
 
     const store = {
-      get(k) {
-        try { return localStorage.getItem(k); } catch { return null; }
-      },
-      set(k, v) {
-        try { localStorage.setItem(k, v); return true; } catch { return false; }
-      },
-      del(k) {
-        try { localStorage.removeItem(k); } catch {}
-      },
+      get(k) { try { return localStorage.getItem(k); } catch { return null; } },
+      set(k, v) { try { localStorage.setItem(k, v); } catch {} },
+      del(k) { try { localStorage.removeItem(k); } catch {} },
     };
+
+    // password side: same scheme as before, so the old password and saved token still work
 
     async function deriveKey(pw, saltBytes) {
       const base = await crypto.subtle.importKey("raw", enc.encode(pw), "PBKDF2", false, ["deriveKey"]);
@@ -469,9 +478,291 @@
       return { v: 1, salt: b64(salt), iv: b64(iv), ct: b64(ct) };
     }
 
-    async function open(blob) {
+    async function unseal(blob) {
       const pt = await crypto.subtle.decrypt({ name: "AES-GCM", iv: unb64(blob.iv) }, key, unb64(blob.ct));
       return dec.decode(pt);
+    }
+
+    // claude side: plans arrive sealed to a public key, only this page holds the private half
+
+    async function makeInboxKeys() {
+      const pair = await crypto.subtle.generateKey(
+        { name: "RSA-OAEP", modulusLength: 2048, publicExponent: new Uint8Array([1, 0, 1]), hash: "SHA-256" },
+        true,
+        ["encrypt", "decrypt"]
+      );
+      state.pub = b64(await crypto.subtle.exportKey("spki", pair.publicKey));
+      state.priv = b64(await crypto.subtle.exportKey("pkcs8", pair.privateKey));
+    }
+
+    async function openPlan(entry) {
+      const priv = await crypto.subtle.importKey("pkcs8", unb64(state.priv), { name: "RSA-OAEP", hash: "SHA-256" }, false, ["decrypt"]);
+      const raw = await crypto.subtle.decrypt({ name: "RSA-OAEP" }, priv, unb64(entry.k));
+      const aes = await crypto.subtle.importKey("raw", raw, "AES-GCM", false, ["decrypt"]);
+      const pt = await crypto.subtle.decrypt({ name: "AES-GCM", iv: unb64(entry.iv) }, aes, unb64(entry.ct));
+      return JSON.parse(dec.decode(pt));
+    }
+
+    // github
+
+    async function ghGet(name) {
+      const r = await fetch(API(name) + "?t=" + Date.now(), {
+        headers: { Authorization: `Bearer ${token}`, Accept: "application/vnd.github+json" },
+        cache: "no-store",
+      });
+      if (r.status === 404) { shas[name] = undefined; return null; }
+      if (!r.ok) throw new Error(`github said ${r.status}`);
+      const j = await r.json();
+      shas[name] = j.sha;
+      return atob(j.content.replace(/\n/g, ""));
+    }
+
+    async function ghPut(name, text, msg, retry = true) {
+      const r = await fetch(API(name), {
+        method: "PUT",
+        headers: { Authorization: `Bearer ${token}`, Accept: "application/vnd.github+json" },
+        body: JSON.stringify({ message: msg, content: btoa(text), sha: shas[name] }),
+      });
+      if ((r.status === 409 || r.status === 422) && retry) {
+        await ghGet(name);
+        return ghPut(name, text, msg, false);
+      }
+      if (!r.ok) throw new Error(`github said ${r.status}`);
+      shas[name] = (await r.json()).content.sha;
+    }
+
+    // dates. weeks are named by their monday
+
+    const pad = (n) => String(n).padStart(2, "0");
+    const iso = (d) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+    const parse = (s) => { const [y, m, d] = s.split("-").map(Number); return new Date(y, m - 1, d); };
+    function mondayOf(d) {
+      const x = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+      x.setDate(x.getDate() - ((x.getDay() + 6) % 7));
+      return x;
+    }
+    function range(id) {
+      const a = parse(id);
+      const b = new Date(a);
+      b.setDate(b.getDate() + 6);
+      const mon = (d) => d.toLocaleDateString("en-AU", { month: "short" }).toLowerCase();
+      return a.getMonth() === b.getMonth() ? `${a.getDate()} to ${b.getDate()} ${mon(b)}` : `${a.getDate()} ${mon(a)} to ${b.getDate()} ${mon(b)}`;
+    }
+
+    // state
+
+    function blank() {
+      return { schema: 2, updated: new Date().toISOString(), weeks: [], seen: [], pub: null, priv: null };
+    }
+
+    function weekNow() {
+      return state.weeks[0] || null;
+    }
+
+    function ensureWeek(id) {
+      let w = state.weeks.find((x) => x.id === id);
+      if (w) return w;
+      const prev = state.weeks.filter((x) => x.id < id)[0];
+      w = { id, note: "", projects: [] };
+      // whatever didn't get done comes along
+      if (prev) {
+        for (const p of prev.projects) for (const t of p.tasks) {
+          if (t.done) continue;
+          projectIn(w, p.name).tasks.push({ id: uid(), t: t.t, done: false, carried: (t.carried || 0) + 1 });
+        }
+      }
+      state.weeks.push(w);
+      state.weeks.sort((a, b) => (a.id < b.id ? 1 : -1));
+      return w;
+    }
+
+    function projectIn(w, name) {
+      let p = w.projects.find((x) => x.name === name);
+      if (!p) { p = { name, tasks: [] }; w.projects.push(p); }
+      return p;
+    }
+
+    function takePlan(plan) {
+      const w = ensureWeek(plan.week);
+      if (plan.note) w.note = plan.note;
+      const order = [];
+      for (const pp of plan.projects || []) {
+        const p = projectIn(w, pp.name);
+        order.push(p);
+        const have = new Set(p.tasks.map((t) => t.t.toLowerCase()));
+        for (const text of pp.tasks || []) {
+          if (have.has(text.toLowerCase())) continue;
+          p.tasks.push({ id: uid(), t: text, done: false });
+          have.add(text.toLowerCase());
+        }
+      }
+      w.projects = [...order, ...w.projects.filter((p) => !order.includes(p))];
+      state.seen.push(plan.week);
+      // a week that never got anything in it isn't worth keeping
+      state.weeks = state.weeks.filter((x) => x.id === plan.week || x.projects.some((p) => p.tasks.length));
+    }
+
+    async function checkInbox() {
+      let box = null;
+      // github first when synced, since the live site takes a minute to catch up
+      try {
+        if (token) {
+          const text = await ghGet("inbox.json");
+          if (text) box = JSON.parse(text);
+        }
+      } catch {}
+      if (!box) {
+        try {
+          const r = await fetch("inbox.json?t=" + Date.now(), { cache: "no-store" });
+          if (r.ok) box = await r.json();
+        } catch {}
+      }
+      if (!box || !state.priv) return false;
+      let took = false;
+      for (const entry of [...(box.weeks || [])].sort((a, b) => (a.week < b.week ? -1 : 1))) {
+        if (state.seen.includes(entry.week)) continue;
+        try {
+          takePlan(await openPlan(entry));
+          took = true;
+        } catch {
+          // sealed to an older key, nothing to do
+          state.seen.push(entry.week);
+        }
+      }
+      return took;
+    }
+
+    async function publishKey() {
+      if (!token || !state.pub) return;
+      try {
+        const live = await ghGet("inbox.pub");
+        if (live && live.trim() === state.pub) return;
+        await ghPut("inbox.pub", state.pub + "\n", "goals: inbox key");
+      } catch (e) {
+        say(`couldn't publish the inbox key (${e.message})`);
+      }
+    }
+
+    // unlock
+
+    async function unlock(pw) {
+      const r = await fetch("data.json?t=" + Date.now(), { cache: "no-store" });
+      let site = r.ok ? await r.json() : null;
+      let localBlob = null;
+      try { localBlob = JSON.parse(store.get("goals.local")); } catch {}
+      salt = site ? unb64(site.salt) : localBlob ? unb64(localBlob.salt) : crypto.getRandomValues(new Uint8Array(16));
+      key = await deriveKey(pw, salt);
+
+      let best = null;
+      if (site) {
+        try {
+          best = JSON.parse(await unseal(site));
+        } catch {
+          key = null;
+          throw new Error("wrong password");
+        }
+      }
+
+      const sealedTok = store.get("goals.tok");
+      if (sealedTok) {
+        try { token = await unseal(JSON.parse(sealedTok)); } catch { store.del("goals.tok"); }
+      }
+
+      if (token) {
+        try {
+          const live = await ghGet("data.json");
+          if (live) best = JSON.parse(await unseal(JSON.parse(live)));
+        } catch (e) {
+          say(navigator.onLine ? `couldn't reach github (${e.message}), using the last saved copy` : "offline. ticks save here and go up next time you're online");
+        }
+      }
+
+      if (localBlob) {
+        try {
+          const mine = JSON.parse(await unseal(localBlob));
+          if (mine.schema === 2 && (!best || best.schema !== 2 || mine.updated > best.updated)) best = mine;
+        } catch {}
+      }
+
+      // anything from the old goals page gets left behind
+      if (!best || best.schema !== 2) {
+        state = blank();
+        fresh = true;
+      } else {
+        state = best;
+      }
+      if (!state.priv) await makeInboxKeys();
+
+      const took = await checkInbox();
+      if (!state.weeks.length) ensureWeek(iso(mondayOf(new Date())));
+      if (!weekNow().projects.length) KEEP.forEach((name) => projectIn(weekNow(), name));
+
+      await publishKey();
+      if (fresh || took) changed(false);
+    }
+
+    function changed(redraw = true) {
+      state.updated = new Date().toISOString();
+      if (redraw) render();
+      clearTimeout(saveTimer);
+      saveTimer = setTimeout(save, 1200);
+    }
+
+    async function save() {
+      const blob = JSON.stringify(await seal(JSON.stringify(state)));
+      store.set("goals.local", blob);
+      if (!token) {
+        if (!save.told) say("saved on this device. set up sync to save it everywhere");
+        save.told = true;
+        return;
+      }
+      if (!navigator.onLine) return say("offline, saved here. it goes up when you're back");
+      try {
+        if (shas["data.json"] === undefined) await ghGet("data.json");
+        await ghPut("data.json", blob + "\n", "update goals");
+      } catch (e) {
+        say(`saved here, github failed (${e.message})`);
+      }
+    }
+
+    // feel
+
+    let audio = null;
+    let sound = store.get("goals.sound") !== "off";
+
+    function chime(notes, gain = 0.05) {
+      if (!sound) return;
+      try {
+        audio ||= new (window.AudioContext || window.webkitAudioContext)();
+        const t0 = audio.currentTime;
+        notes.forEach((f, i) => {
+          const t = t0 + i * 0.09;
+          const o = audio.createOscillator();
+          const g = audio.createGain();
+          o.type = "sine";
+          o.frequency.setValueAtTime(f, t);
+          g.gain.setValueAtTime(0.0001, t);
+          g.gain.exponentialRampToValueAtTime(gain, t + 0.012);
+          g.gain.exponentialRampToValueAtTime(0.0001, t + 0.5);
+          o.connect(g).connect(audio.destination);
+          o.start(t);
+          o.stop(t + 0.55);
+        });
+      } catch {}
+    }
+
+    function sparks(li) {
+      if (reduce) return;
+      for (let i = 0; i < 7; i++) {
+        const s = document.createElement("span");
+        s.className = "spark";
+        const a = (i / 7) * Math.PI * 2 + Math.random() * 0.4;
+        const d = 13 + Math.random() * 7;
+        s.style.setProperty("--dx", Math.cos(a) * d + "px");
+        s.style.setProperty("--dy", Math.sin(a) * d + "px");
+        li.append(s);
+        setTimeout(() => s.remove(), 600);
+      }
     }
 
     function say(msg, withUndo) {
@@ -483,648 +774,270 @@
         b.textContent = "undo";
         b.onclick = () => {
           if (!undo) return;
-          undo.list.splice(undo.ii, 0, undo.item);
-          if (undo.dead) state.removed.pop();
+          undo.list.splice(undo.i, 0, undo.task);
           undo = null;
+          el.hidden = true;
           changed();
         };
         el.append(b);
       }
       el.hidden = false;
       clearTimeout(say.t);
-      say.t = setTimeout(() => (el.hidden = true), withUndo ? 6000 : 2500);
+      say.t = setTimeout(() => (el.hidden = true), withUndo ? 6000 : 2400);
     }
 
-    async function ghGet() {
-      const r = await fetch(API + "?t=" + Date.now(), {
-        headers: { Authorization: `Bearer ${token}`, Accept: "application/vnd.github+json" },
-        cache: "no-store",
-      });
-      if (!r.ok) throw new Error(`github said ${r.status}`);
-      const j = await r.json();
-      sha = j.sha;
-      return JSON.parse(atob(j.content.replace(/\n/g, "")));
+    // drawing
+
+    const counts = (tasks) => [tasks.filter((t) => t.done).length, tasks.length];
+
+    function header() {
+      const w = weekNow();
+      const all = w.projects.flatMap((p) => p.tasks);
+      const [d, n] = counts(all);
+      const cur = iso(mondayOf(new Date()));
+      const label = w.id > cur ? "next week" : w.id < cur ? "last plan" : "this week";
+      $("title").textContent = n && d === n ? "week done" : label;
+      $("sub").innerHTML = `${range(w.id)}${n ? ` <b>·</b> ${d === n ? `all ${n}. go outside.` : `${d} of ${n}`}` : ""}`;
+      document.title = $("title").textContent;
     }
 
-    async function ghPut(blob, retry = true) {
-      const r = await fetch(API, {
-        method: "PUT",
-        headers: { Authorization: `Bearer ${token}`, Accept: "application/vnd.github+json" },
-        body: JSON.stringify({
-          message: "update goals",
-          content: btoa(JSON.stringify(blob) + "\n"),
-          sha,
-        }),
-      });
-      if ((r.status === 409 || r.status === 422) && retry) {
-        await ghGet();
-        return ghPut(blob, false);
-      }
-      if (!r.ok) throw new Error(`github said ${r.status}`);
-      sha = (await r.json()).content.sha;
-    }
-
-    async function unlock(pw) {
-      const r = await fetch("data.json?t=" + Date.now(), { cache: "no-store" });
-      if (!r.ok) throw new Error("couldn't load the goals file");
-      const site = await r.json();
-      salt = unb64(site.salt);
-      key = await deriveKey(pw, salt);
-
-      let best;
-      try {
-        best = JSON.parse(await open(site));
-      } catch {
-        key = null;
-        throw new Error("wrong password");
-      }
-
-      const sealedTok = store.get("goals.tok");
-      if (sealedTok) {
-        try {
-          token = await open(JSON.parse(sealedTok));
-        } catch {
-          store.del("goals.tok");
-        }
-      }
-
-      if (token) {
-        try {
-          best = JSON.parse(await open(await ghGet()));
-        } catch (e) {
-          say(navigator.onLine ? `couldn't reach github (${e.message}), using the last saved copy` : "offline. changes save here and go to github next time you're online");
-        }
-      } else if (!navigator.onLine) {
-        say("offline. changes save on this device");
-      }
-
-      // the newer copy is the base, and anything only the older copy has gets added in, unless it was removed on purpose
-      const local = store.get("goals.local");
-      let mine = null;
-      if (local) {
-        try {
-          mine = JSON.parse(await open(JSON.parse(local)));
-        } catch {}
-      }
-      if (mine && mine.updated > best.updated) {
-        state = mine;
-        normalise();
-        mergeIn(best);
-        // edits made offline haven't reached github yet
-        if (token && navigator.onLine) save();
-        return;
-      }
-      state = best;
-      normalise();
-      if (mine) {
-        carryTicks(mine);
-        mergeIn(mine);
-      }
-    }
-
-    const goalKey = (sec, t) => sec.title + "|" + t;
-
-    function sectionOf(item) {
-      return state.sections.find((sec) => itemsOf(sec).includes(item));
-    }
-
-    function tombstone(item) {
-      const sec = sectionOf(item);
-      if (sec) state.removed.push(goalKey(sec, item.t));
-    }
-
-    function mergeIn(other) {
-      const gone = new Set([...(state.removed || []), ...(other.removed || [])]);
-      for (const osec of other.sections) {
-        let sec = state.sections.find((s) => s.title === osec.title);
-        if (!sec) {
-          sec = { title: osec.title, note: osec.note, groups: [] };
-          state.sections.push(sec);
-        }
-        const have = new Set(itemsOf(sec).map((i) => i.t));
-        for (const og of osec.groups || [{ name: "", items: osec.items || [] }]) {
-          const fresh = og.items.filter((i) => !have.has(i.t) && !gone.has(goalKey(sec, i.t)));
-          if (!fresh.length) continue;
-          let g = sec.groups.find((x) => x.name === og.name);
-          if (!g) {
-            g = { name: og.name, items: [] };
-            sec.groups.push(g);
-          }
-          g.items.push(...fresh.map((i) => ({ ...i })));
-          fresh.forEach((i) => have.add(i.t));
-        }
-      }
-      if (!state.rules.length && other.rules) state.rules = other.rules;
-      if (!state.checks.length && other.checks) state.checks = other.checks;
-    }
-
-    function carryTicks(mine) {
-      // goals match by year + wording, since some wording repeats across years
-      const old = new Map();
-      for (const sec of mine.sections) {
-        const items = sec.groups ? sec.groups.flatMap((g) => g.items) : sec.items || [];
-        for (const i of items) old.set(sec.title + "|" + i.t, i);
-      }
-      for (const sec of state.sections) for (const i of itemsOf(sec)) {
-        const m = old.get(sec.title + "|" + i.t);
-        if (!m) continue;
-        if (m.done) i.done = true;
-        if (i.n > 0 && m.c) i.c = Math.min(i.n, Math.max(i.c || 0, m.c));
-        for (const k of ["d", "p", "w"]) if (m[k] && !i[k]) i[k] = m[k];
-        settle(i);
-      }
-      if (mine.checks && mine.checks.length > state.checks.length) state.checks = mine.checks;
-    }
-
-    function changed() {
-      state.updated = new Date().toISOString();
-      render();
-      clearTimeout(saveTimer);
-      saveTimer = setTimeout(save, 1500);
-    }
-
-    async function save() {
-      const blob = await seal(JSON.stringify(state));
-      store.set("goals.local", JSON.stringify(blob));
-      if (!token) {
-        say("saved on this device. set up sync to save it everywhere");
-        return;
-      }
-      if (!navigator.onLine) {
-        say("offline, saved on this device. it goes to github when you're back");
-        return;
-      }
-      try {
-        await ghPut(blob);
-        say("saved");
-      } catch (e) {
-        say(`saved on this device, github failed (${e.message})`);
-      }
-    }
-
-    function btn(label, fn) {
-      const b = document.createElement("button");
-      b.type = "button";
-      b.textContent = label;
-      b.onclick = fn;
-      return b;
-    }
-
-    // older saves had items straight on the section, newer ones group them
-    function normalise() {
-      for (const sec of state.sections) {
-        if (!sec.groups) sec.groups = [{ name: "", items: sec.items || [] }];
-        delete sec.items;
-      }
-      state.checks ||= [];
-      state.rules ||= [];
-      state.removed ||= [];
-    }
-
-    const itemsOf = (sec) => sec.groups.flatMap((g) => g.items);
-    const allItems = () => state.sections.flatMap(itemsOf);
-
-    const today = () => {
-      const d = new Date();
-      return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
-    };
-
-    const fmt = (iso) => {
-      const [y, m, d] = iso.split("-").map(Number);
-      return new Date(y, m - 1, d).toLocaleDateString("en-AU", { day: "numeric", month: "short", year: "numeric" }).toLowerCase();
-    };
-
-    // done follows the count for counted goals, and the date follows done
-    function settle(item) {
-      if (item.n > 0) item.done = (item.c || 0) >= item.n;
-      if (item.done && !item.d) item.d = today();
-      if (!item.done) delete item.d;
-    }
-
-    function where(item) {
-      for (const sec of state.sections)
-        for (const g of sec.groups) {
-          const ii = g.items.indexOf(item);
-          if (ii !== -1) return { list: g.items, ii };
-        }
-      return null;
-    }
-
-    function linkify(text) {
-      const frag = document.createDocumentFragment();
-      text.split(/(\s+)/).forEach((w) => {
-        if (/^(https?:\/\/|(github\.com|huggingface\.co|arxiv\.org|doi\.org|kaggle\.com|navthings\.github\.io)\/)/.test(w)) {
-          const a = document.createElement("a");
-          a.href = w.startsWith("http") ? w : "https://" + w;
-          a.target = "_blank";
-          a.rel = "noopener";
-          a.textContent = w;
-          frag.append(a);
-        } else frag.append(w);
-      });
-      return frag;
-    }
-
-    function row(item, list, ii) {
+    function taskRow(task, p, w, live) {
       const li = document.createElement("li");
-      const counted = item.n > 0;
-      if (item.done) li.className = "done";
+      if (task.done) li.classList.add("done");
 
-      // counted goals: the circle fills up and each click adds one
-      const tick = btn("", () => {
-        if (counted) item.c = Math.min(item.n, (item.c || 0) + 1);
-        else item.done = !item.done;
-        settle(item);
-        changed();
-      });
+      const tick = document.createElement("button");
+      tick.type = "button";
       tick.className = "tick";
-      if (counted && !item.done) tick.style.setProperty("--p", `${((item.c || 0) / item.n) * 100}%`);
-      tick.setAttribute("aria-label", counted ? "add one" : item.done ? "mark not done" : "mark done");
-
-      const t = btn(item.t, () => {
-        if (matchMedia("(hover: none)").matches) li.classList.toggle("sel");
-        else tick.onclick();
-      });
-      t.className = "t";
-      if (counted) {
-        const n = document.createElement("span");
-        n.className = "n";
-        n.textContent = `${item.c || 0}/${item.n}`;
-        t.append(n);
-      }
-      if (item.s) {
-        const tag = document.createElement("span");
-        tag.className = "s";
-        tag.textContent = "stretch";
-        t.append(tag);
-      }
-
-      const act = document.createElement("span");
-      act.className = "act";
-
-      const inline = (value, placeholder, apply) => {
-        const inp = document.createElement("input");
-        inp.type = "text";
-        inp.value = value;
-        inp.placeholder = placeholder;
-        let gone = false;
-        const finish = (keep) => {
-          if (gone) return;
-          gone = true;
-          if (keep && apply(inp.value.trim())) changed();
-          else render();
-        };
-        inp.onkeydown = (e) => {
-          if (e.key === "Enter") finish(true);
-          if (e.key === "Escape") finish(false);
-        };
-        inp.onblur = () => finish(true);
-        t.replaceWith(inp);
-        act.remove();
-        inp.focus();
+      tick.setAttribute("aria-pressed", String(!!task.done));
+      tick.setAttribute("aria-label", (task.done ? "untick " : "tick ") + task.t);
+      tick.innerHTML = '<svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1.8 5.3 4.1 7.5 8.3 2.7"/></svg>';
+      tick.onclick = () => {
+        task.done = !task.done;
+        task.at = task.done ? new Date().toISOString() : undefined;
+        li.classList.toggle("done", task.done);
+        tick.setAttribute("aria-pressed", String(task.done));
+        tick.setAttribute("aria-label", (task.done ? "untick " : "tick ") + task.t);
+        if (task.done) {
+          li.classList.remove("pop");
+          void li.offsetWidth;
+          li.classList.add("pop");
+          sparks(li);
+          if (navigator.vibrate) navigator.vibrate(8);
+          const [pd, pn] = counts(p.tasks);
+          const [wd, wn] = counts(w.projects.flatMap((x) => x.tasks));
+          if (wd === wn) chime([659, 784, 988, 1319], 0.045);
+          else if (pd === pn) chime([784, 1175], 0.045);
+          else chime([1046], 0.035);
+        }
+        projectState(li.closest(".proj"), p);
+        header();
+        changed(false);
       };
 
-      act.append(
-        btn("edit", () =>
-          inline(item.t, "", (v) => {
-            if (!v || v === item.t) return false;
-            tombstone(item);
-            item.t = v;
-            return true;
-          })
-        )
-      );
-      if (counted) {
-        act.append(
-          btn("-1", () => {
-            item.c = Math.max(0, (item.c || 0) - 1);
-            settle(item);
-            changed();
-          })
-        );
+      const body = document.createElement("div");
+      body.className = "body";
+      const t = document.createElement("span");
+      t.className = "t";
+      t.textContent = task.t;
+      body.append(t);
+      if (task.carried) {
+        const m = document.createElement("span");
+        m.className = "meta";
+        m.textContent = task.carried === 1 ? "from last week" : `carried ${task.carried} weeks`;
+        body.append(m);
       }
-      act.append(
-        btn("count", () =>
-          inline(counted ? String(item.n) : "", "out of how many? 0 turns it off", (v) => {
-            const n = parseInt(v, 10);
-            if (Number.isNaN(n) || n < 0) return false;
-            if (n === 0) {
-              delete item.n;
-              delete item.c;
-              item.done = false;
-            } else {
-              item.n = n;
-              item.c = Math.min(item.c || 0, n);
-            }
-            settle(item);
-            return true;
-          })
-        ),
-        btn("proof", () =>
-          inline(item.p || "", "score, link or note", (v) => {
-            if (v === (item.p || "")) return false;
-            if (v) item.p = v;
-            else delete item.p;
-            return true;
-          })
-        ),
-        btn(item.w ? "unpin" : "pin", () => {
-          if (!item.w && allItems().filter((i) => i.w).length >= 3) {
-            say("3 pinned max, unpin one first");
-            return;
-          }
-          if (item.w) delete item.w;
-          else item.w = true;
-          changed();
-        }),
-        btn(item.s ? "core" : "stretch", () => {
-          item.s = !item.s;
-          changed();
-        }),
-        btn("remove", () => {
-          tombstone(item);
-          undo = { list, ii, item: list.splice(ii, 1)[0], dead: true };
+
+      li.append(tick, body);
+
+      if (live) {
+        const x = document.createElement("button");
+        x.type = "button";
+        x.className = "x";
+        x.textContent = "remove";
+        x.setAttribute("aria-label", "remove " + task.t);
+        x.onclick = () => {
+          const i = p.tasks.indexOf(task);
+          p.tasks.splice(i, 1);
+          undo = { list: p.tasks, i, task };
           changed();
           say("removed", true);
-        })
-      );
-
-      li.append(tick, t, act);
-
-      if ((item.done && item.d) || item.p) {
-        const meta = document.createElement("div");
-        meta.className = "meta";
-        if (item.done && item.d) meta.append(`done ${fmt(item.d)}`);
-        if (item.done && item.d && item.p) meta.append(" · ");
-        if (item.p) meta.append(linkify(item.p));
-        li.append(meta);
+        };
+        li.append(x);
       }
       return li;
     }
 
-    function adder(g) {
-      const wrap = document.createElement("div");
-      wrap.className = "add";
-      const open = btn("add", () => {
-        const f = document.createElement("form");
-        f.className = "addform";
-        const inp = document.createElement("input");
-        inp.type = "text";
-        inp.placeholder = "add a goal";
-        f.append(inp);
-        f.onsubmit = (e) => {
-          e.preventDefault();
-          const v = inp.value.trim();
-          if (!v) return;
-          g.items.push({ t: v, done: false });
-          changed();
-        };
-        inp.onkeydown = (e) => {
-          if (e.key === "Escape") render();
-        };
-        open.replaceWith(f);
-        inp.focus();
-      });
-      wrap.append(open);
-      return wrap;
+    function projectState(sec, p) {
+      const [d, n] = counts(p.tasks);
+      sec.classList.toggle("all", n > 0 && d === n);
+      sec.querySelector(".c").textContent = n ? (d === n ? "done" : `${d} of ${n}`) : "";
     }
 
-    function heading(text, countText, note) {
-      const frag = document.createDocumentFragment();
-      const h = document.createElement("h2");
-      h.textContent = text;
-      if (countText) {
-        const c = document.createElement("span");
-        c.textContent = countText;
-        h.append(c);
-      }
-      frag.append(h);
-      if (note) {
-        const n = document.createElement("p");
-        n.className = "note";
-        n.textContent = note;
-        frag.append(n);
-      }
-      return frag;
-    }
-
-    const SCORES = ["grades", "depth", "proof", "voice"];
-
-    function checkins() {
-      const s = document.createElement("section");
-      s.append(heading("check-ins", "", "end of every term, score each out of 10. it multiplies, so fix the lowest one first."));
-      const ul = document.createElement("ul");
-      ul.className = "ck";
-      const list = state.checks;
-      for (let k = list.length - 1; k >= 0; k--) {
-        const c = list[k];
-        const prev = list[k - 1];
-        const li = document.createElement("li");
-        const when = document.createElement("span");
-        when.className = "when";
-        when.textContent = c.label || fmt(c.d);
-        const score = document.createElement("span");
-        score.className = "score";
-        SCORES.forEach((name, j) => {
-          if (j) score.append(" · ");
-          const v = c[name];
-          score.append(`${name} ${v == null ? "–" : v}`);
-          if (prev && v != null && prev[name] != null && v !== prev[name]) {
-            const d = document.createElement("span");
-            d.className = v > prev[name] ? "up" : "down";
-            d.textContent = ` (${v > prev[name] ? "+" : ""}${v - prev[name]})`;
-            score.append(d);
-          }
-        });
-        const act = document.createElement("span");
-        act.className = "act";
-        act.append(
-          btn("remove", () => {
-            const gone = list.splice(k, 1)[0];
-            undo = { list, ii: k, item: gone };
-            changed();
-            say("removed", true);
-          })
-        );
-        li.append(when, score, act);
-        ul.append(li);
-      }
-      s.append(ul);
-
-      const wrap = document.createElement("div");
-      wrap.className = "add";
-      const open = btn("add a check-in", () => {
+    function adder(sec, p) {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.className = "add";
+      b.textContent = "add";
+      b.onclick = () => {
         const f = document.createElement("form");
-        f.className = "ckform";
-        const label = document.createElement("input");
-        label.type = "text";
-        label.className = "label";
-        label.placeholder = "term, e.g. t1 year 9";
-        f.append(label);
-        const inputs = SCORES.map((name) => {
-          const l = document.createElement("label");
-          const inp = document.createElement("input");
-          inp.type = "text";
-          inp.inputMode = "numeric";
-          const last = list[list.length - 1];
-          if (last && last[name] != null) inp.value = last[name];
-          l.append(`${name} `, inp);
-          f.append(l);
-          return inp;
-        });
+        f.className = "adding";
+        const input = document.createElement("input");
+        input.type = "text";
+        input.id = "add-" + p.name.replace(/\W+/g, "-");
+        input.placeholder = "something small";
+        input.setAttribute("aria-label", "add to " + p.name);
         const go = document.createElement("button");
         go.type = "submit";
-        go.textContent = "save";
-        f.append(go);
+        go.textContent = "add";
+        f.append(input, go);
         f.onsubmit = (e) => {
           e.preventDefault();
-          const c = { d: today() };
-          if (label.value.trim()) c.label = label.value.trim();
-          SCORES.forEach((name, j) => {
-            const v = parseInt(inputs[j].value, 10);
-            c[name] = Number.isNaN(v) ? null : Math.max(0, Math.min(10, v));
-          });
-          list.push(c);
+          const v = input.value.trim();
+          if (!v) return render();
+          p.tasks.push({ id: uid(), t: v, done: false, mine: true });
           changed();
+          const again = document.querySelector(`[data-name="${CSS.escape(p.name)}"] .add`);
+          if (again) again.click();
         };
-        open.replaceWith(f);
-        label.focus();
-      });
-      wrap.append(open);
-      s.append(wrap);
-      return s;
+        input.onkeydown = (e) => { if (e.key === "Escape") render(); };
+        b.replaceWith(f);
+        input.focus();
+      };
+      return b;
     }
 
     function render() {
-      const all = allItems();
-      $("count").textContent = `${all.filter((i) => i.done).length} of ${all.length} done.`;
+      const w = weekNow();
+      header();
 
-      const rules = $("rules");
-      rules.replaceChildren(...state.rules.map((r) => Object.assign(document.createElement("p"), { textContent: r })));
+      $("memo").hidden = !w.note;
+      $("memo").textContent = w.note || "";
 
-      const list = $("list");
-      list.replaceChildren();
-
-      const pinned = all.filter((i) => i.w);
-      const week = document.createElement("section");
-      week.append(heading("this week", pinned.length ? `${pinned.filter((i) => i.done).length}/${pinned.length}` : "", pinned.length ? "" : "pin up to 3 goals to see them here."));
-      if (pinned.length) {
+      const box = $("projects");
+      box.innerHTML = "";
+      const any = w.projects.some((p) => p.tasks.length);
+      if (!any) {
+        const e = document.createElement("p");
+        e.className = "empty";
+        e.textContent = "nothing planned yet. the plan for the week lands here on sunday night.";
+        box.append(e);
+      }
+      for (const p of w.projects) {
+        const sec = document.createElement("section");
+        sec.className = "proj";
+        sec.dataset.name = p.name;
+        const h = document.createElement("h2");
+        h.innerHTML = '<span class="n"></span><span class="dot" aria-hidden="true"></span><span class="c"></span>';
+        h.querySelector(".n").textContent = p.name;
         const ul = document.createElement("ul");
-        for (const item of pinned) {
-          const at = where(item);
-          ul.append(row(item, at.list, at.ii));
-        }
-        week.append(ul);
+        for (const t of p.tasks) ul.append(taskRow(t, p, w, true));
+        sec.append(h);
+        if (p.tasks.length) sec.append(ul);
+        sec.append(adder(sec, p));
+        projectState(sec, p);
+        box.append(sec);
       }
-      list.append(week);
 
-      for (const sec of state.sections) {
-        const s = document.createElement("section");
-        const items = itemsOf(sec);
-        s.append(heading(sec.title, `${items.filter((i) => i.done).length}/${items.length}`, sec.note));
-        for (const g of sec.groups) {
-          if (g.name) {
-            const gh = document.createElement("h3");
-            gh.textContent = g.name;
-            s.append(gh);
+      const past = state.weeks.slice(1);
+      $("earlier").hidden = !past.length;
+      const list = $("pastlist");
+      list.innerHTML = "";
+      for (const pw of past) {
+        const all = pw.projects.flatMap((p) => p.tasks);
+        const [d, n] = counts(all);
+        const det = document.createElement("details");
+        const s = document.createElement("summary");
+        s.innerHTML = `<b></b><span>${n ? `${d} of ${n}` : "empty"}</span>`;
+        s.querySelector("b").textContent = range(pw.id);
+        s.querySelector("b").style.fontWeight = "400";
+        const div = document.createElement("div");
+        div.className = "past";
+        for (const p of pw.projects) {
+          if (!p.tasks.length) continue;
+          const pn = document.createElement("p");
+          pn.className = "pn";
+          pn.textContent = p.name;
+          div.append(pn);
+          for (const t of p.tasks) {
+            const row = document.createElement("p");
+            row.textContent = t.t;
+            if (t.done) row.className = "y";
+            div.append(row);
           }
-          const ul = document.createElement("ul");
-          g.items.forEach((item, ii) => ul.append(row(item, g.items, ii)));
-          s.append(ul, adder(g));
         }
-        list.append(s);
+        det.append(s, div);
+        list.append(det);
       }
 
-      list.append(checkins());
       $("syncbtn").textContent = token ? "sync is on" : "sync";
+      $("soundbtn").textContent = sound ? "sound on" : "sound off";
     }
 
-    function backup() {
-      const lines = [`goals backup, ${fmt(today())}`, ""];
-      if (state.rules.length) lines.push("rules", ...state.rules.map((r) => `- ${r}`), "");
-      for (const sec of state.sections) {
-        lines.push(`## ${sec.title}`);
-        for (const g of sec.groups) {
-          if (g.name) lines.push(`### ${g.name}`);
-          for (const i of g.items) {
-            let l = `[${i.done ? "x" : " "}] ${i.t}`;
-            if (i.n > 0) l += ` (${i.c || 0}/${i.n})`;
-            if (i.s) l += " (stretch)";
-            if (i.w) l += " (this week)";
-            if (i.done && i.d) l += ` - done ${fmt(i.d)}`;
-            if (i.p) l += ` - proof: ${i.p}`;
-            lines.push(l);
-          }
-        }
-        lines.push("");
-      }
-      lines.push("## check-ins");
-      for (const c of state.checks) lines.push(`${c.label || fmt(c.d)}: ${SCORES.map((n) => `${n} ${c[n] == null ? "-" : c[n]}`).join(", ")}`);
-      lines.push("", "---- raw data, for restoring ----", JSON.stringify(state));
-      const a = document.createElement("a");
-      a.href = URL.createObjectURL(new Blob([lines.join("\n")], { type: "text/plain" }));
-      a.download = `goals-${today()}.txt`;
-      document.body.append(a);
-      a.click();
-      a.remove();
-      setTimeout(() => URL.revokeObjectURL(a.href), 1000);
-    }
+    // controls
 
     $("lockform").onsubmit = async (e) => {
       e.preventDefault();
-      $("err").textContent = "opening...";
+      const pw = $("pw").value;
+      if (!pw) return ($("err").textContent = "type the password first");
+      $("err").textContent = "";
+      $("lockgo").textContent = "opening";
       try {
-        await unlock($("pw").value);
+        await unlock(pw);
         $("pw").value = "";
-        $("err").textContent = "";
         $("locked").hidden = true;
         $("open").hidden = false;
+        $("open").classList.add("open-in");
         render();
       } catch (err) {
         $("err").textContent = err.message;
+      } finally {
+        $("lockgo").textContent = "open";
       }
     };
 
+    $("pw").oninput = () => ($("err").textContent = "");
+
     $("lockbtn").onclick = () => location.reload();
-    $("backupbtn").onclick = backup;
 
-    // push anything saved while offline as soon as the connection comes back
-    addEventListener("online", () => {
-      if (state && token) save();
-    });
-
-    if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch((e) => console.warn("offline mode off:", e));
+    $("soundbtn").onclick = () => {
+      sound = !sound;
+      store.set("goals.sound", sound ? "on" : "off");
+      render();
+      if (sound) chime([1046], 0.035);
+    };
 
     $("syncbtn").onclick = () => ($("syncbox").hidden = !$("syncbox").hidden);
 
     $("syncform").onsubmit = async (e) => {
       e.preventDefault();
       const v = $("tok").value.trim();
-      if (!v) return;
+      if (!v) return say("paste a token first");
       token = v;
       try {
-        await ghGet();
+        await ghGet("data.json");
       } catch (err) {
         token = null;
-        say(`that token didn't work (${err.message})`);
-        return;
+        return say(`that token didn't work (${err.message})`);
       }
       store.set("goals.tok", JSON.stringify(await seal(token)));
       $("tok").value = "";
       $("syncbox").hidden = true;
+      await publishKey();
       render();
-      await save();
+      save();
     };
 
     $("untok").onclick = () => {
       store.del("goals.tok");
       token = null;
-      sha = null;
       $("syncbox").hidden = true;
       render();
-      say("sync off on this device");
+      say("sync is off on this device");
     };
+
+    $("sub").textContent = range(iso(mondayOf(new Date())));
+
+    if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(() => {});
   </script>
-  <script src="/assets/base.js"></script>
 </body>
 </html>

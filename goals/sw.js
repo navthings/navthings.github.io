@@ -1,4 +1,4 @@
-const CACHE = "goals-v4";
+const CACHE = "goals-v5";
 const CORE = ["./", "./data.json", "./manifest.json", "/assets/base.css", "/assets/base.js", "/assets/fonts/geist.woff2", "/favicon.svg", "/apple-touch-icon.png"];
 
 self.addEventListener("install", (e) => {
@@ -14,14 +14,19 @@ self.addEventListener("activate", (e) => {
   );
 });
 
-// the page and the goals file try the network first so updates show up, everything else comes from the cache
+// the page, the goals file and the weekly plan try the network first so updates show up, everything else comes from the cache
 self.addEventListener("fetch", (e) => {
   const req = e.request;
   const url = new URL(req.url);
   if (req.method !== "GET" || url.origin !== location.origin) return;
 
   const key = url.origin + url.pathname;
-  const fresh = req.mode === "navigate" || url.pathname.endsWith("/goals/") || url.pathname.endsWith("data.json");
+  const fresh =
+    req.mode === "navigate" ||
+    url.pathname.endsWith("/goals/") ||
+    url.pathname.endsWith("data.json") ||
+    url.pathname.endsWith("inbox.json") ||
+    url.pathname.endsWith("inbox.pub");
 
   if (fresh) {
     e.respondWith(

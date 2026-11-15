@@ -1,6 +1,6 @@
 {
-  "name": "goals",
-  "short_name": "goals",
+  "name": "this week",
+  "short_name": "this week",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
