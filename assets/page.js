@@ -5,6 +5,22 @@
   // the header settles in one line after another
   $$(".page-head > *").forEach((el, k) => el.style.setProperty("--k", k));
 
+  // titles rise in word by word, unless a page transition already moved them
+  const title = document.querySelector(".page-title");
+  if (title && !reduce && title.children.length === 0 && !document.documentElement.classList.contains("vt-in")) {
+    const words = title.textContent.trim().split(/\s+/);
+    title.textContent = "";
+    words.forEach((w, j) => {
+      const s = document.createElement("span");
+      s.className = "w";
+      s.style.setProperty("--j", j);
+      s.textContent = w;
+      title.append(s, j < words.length - 1 ? " " : "");
+    });
+    title.setAttribute("aria-label", words.join(" "));
+    title.classList.add("split");
+  }
+
   // things fade in once as they scroll into view
   const seen = new IntersectionObserver((entries) => {
     for (const e of entries) {

@@ -216,8 +216,8 @@
     const D = [-V[0], -V[1], -V[2]];
 
     if (!born) born = now;
-    const p = Math.min(1, (now - born) / 700);
-    const reveal = calm ? 1 : Math.floor(p * 18) / 18;
+    // intro: characters scramble in from the middle, then settle
+    const intro = calm ? 1 : Math.min(1, (now - born) / 1300);
     const midX = cols / 2, midY = rows / 2 - (0.3 * s) / ch;
     const e = 0.006;
     const lit = [], dim = [];
@@ -225,11 +225,10 @@
     for (let j = 0; j < rows; j++) {
       let a = "", b = "";
       const v = -(j + 0.5 - midY) * ch / s - bob;
-      const showRow = j / rows <= reveal;
       for (let i = 0; i < cols; i++) {
         const u = (i + 0.5 - midX) * cw / s;
         let chr = " ", bright = false;
-        if (showRow && u * u + v * v < 7.6) {
+        if (u * u + v * v < 7.6) {
           const o = toObj([u, v, 3]);
           let tt = 0.3, hit = false;
           for (let k = 0; k < 64 && tt < 6; k++) {
@@ -249,13 +248,18 @@
             const idx = Math.floor(br * ramp.length);
             chr = ramp[idx];
             bright = idx >= 6;
+            if (intro < 1) {
+              const lt = intro * 1.8 - Math.hypot(u, v) / 3.4;
+              if (lt <= 0) { chr = " "; bright = false; }
+              else if (lt < 1 && Math.random() > lt) { chr = ramp[(Math.random() * ramp.length) | 0]; bright = Math.random() < 0.5; }
+            }
           }
         }
         if (chr === " ") {
           // soft shadow on the floor
           const fy = (v + 2.3 + bob) / 0.1, fx = u / (1.3 - bob);
           const f = 1 - Math.hypot(fx, fy);
-          if (showRow && f > 0) chr = f > 0.6 ? ":" : f > 0.3 ? "." : "`";
+          if (intro > 0.6 && f > 0) chr = f > 0.6 ? ":" : f > 0.3 ? "." : "`";
         }
         if (bright) { a += chr; b += " "; } else { a += " "; b += chr; }
       }

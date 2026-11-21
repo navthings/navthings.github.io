@@ -1246,3 +1246,22 @@ pre,
   text-decoration-color: color-mix(in srgb, var(--ink) 45%, transparent);
   text-decoration-thickness: 1.5px;
 }
+
+/* titles: words rise in with a little tilt, like a type animation */
+.page-head > .page-title.split {
+  animation: none;
+}
+
+.page-title .w {
+  display: inline-block;
+  animation: rise 0.95s cubic-bezier(0.2, 1.2, 0.3, 1) backwards;
+  animation-delay: calc(var(--j) * 60ms + 140ms);
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(0.45em) rotate(5deg);
+    filter: blur(6px);
+  }
+}
