@@ -212,3 +212,12 @@ li {
     transition: none;
   }
 }
+
+/* phosphor glows a little, like an old crt */
+:root[data-theme="phosphor"] body {
+  text-shadow: 0 0 10px rgba(255, 179, 65, 0.28);
+}
+
+:root[data-theme="phosphor"] .toy canvas {
+  filter: drop-shadow(0 0 5px rgba(255, 179, 65, 0.4));
+}

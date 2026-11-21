@@ -290,3 +290,7 @@ html.theming * {
     transition-delay: 0ms !important;
   }
 }
+
+:root[data-theme="phosphor"] body {
+  text-shadow: 0 0 10px rgba(255, 179, 65, 0.22);
+}
