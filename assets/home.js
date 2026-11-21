@@ -103,14 +103,14 @@
 
   // springs
   const sp = { yaw: 0, yawV: 0, pitch: 0, pitchV: 0, roll: 0, rollV: 0, spin: 0, spinV: 0 };
-  const mouse = { x: innerWidth * 0.3, y: innerHeight * 0.5, vx: 0, seen: 0 };
+  const mouse = { x: null, y: null, vx: 0, seen: 0 };
   let held = null, spins = 0, lastTurn = 0;
   let lastMove = performance.now();
 
   addEventListener("pointermove", (e) => {
     const now = performance.now();
     const dt = Math.max(0.008, (now - lastMove) / 1000);
-    mouse.vx += ((e.clientX - mouse.x) / dt - mouse.vx) * 0.3;
+    if (mouse.x !== null) mouse.vx += ((e.clientX - mouse.x) / dt - mouse.vx) * 0.3;
     mouse.x = e.clientX; mouse.y = e.clientY;
     mouse.seen = now; lastMove = now;
     if (held) {
@@ -154,8 +154,10 @@
       yawT = calm ? 0 : Math.sin(t * 0.5) * 0.55;
       pitchT = calm ? 0 : Math.sin(t * 0.37) * 0.12;
     } else {
-      yawT = Math.max(-0.95, Math.min(0.95, ((mouse.x - cx) / innerWidth) * 1.9));
-      pitchT = Math.max(-0.6, Math.min(0.6, ((mouse.y - cy) / innerHeight) * 1.1));
+      // innerWidth can be 0 while the tab is still hidden, so guard the divide
+      const iw = innerWidth || 1, ih = innerHeight || 1;
+      yawT = Math.max(-0.95, Math.min(0.95, (((mouse.x ?? cx) - cx) / iw) * 1.9));
+      pitchT = Math.max(-0.6, Math.min(0.6, (((mouse.y ?? cy) - cy) / ih) * 1.1));
     }
     mouse.vx *= Math.exp(-dt * 6);
     const rollT = Math.max(-0.35, Math.min(0.35, -mouse.vx * 0.0003));
@@ -169,6 +171,7 @@
       sp.spinV += (5 * (home - sp.spin) - 1.1 * sp.spinV) * dt;
       sp.spin += sp.spinV * dt;
     }
+    for (const k in sp) if (!Number.isFinite(sp[k])) sp[k] = 0;
     const turn = Math.round(sp.spin / (Math.PI * 2));
     if (turn !== lastTurn) {
       spins += Math.abs(turn - lastTurn);
@@ -180,6 +183,7 @@
   const draw = (now) => {
     const dpr = devicePixelRatio || 1;
     const W = canvas.clientWidth, H = canvas.clientHeight;
+    if (!W || !H) return;
     if (canvas.width !== Math.round(W * dpr) || canvas.height !== Math.round(H * dpr)) {
       canvas.width = Math.round(W * dpr);
       canvas.height = Math.round(H * dpr);
@@ -206,7 +210,7 @@
 
     // light comes from the cursor side
     const rect = canvas.getBoundingClientRect();
-    const mx = (mouse.x - rect.left) / W - 0.5, my = (mouse.y - rect.top) / H - 0.5;
+    const mx = mouse.x === null ? 0 : (mouse.x - rect.left) / W - 0.5, my = mouse.y === null ? 0 : (mouse.y - rect.top) / H - 0.5;
     const lv = [mx * 1.8 - 0.45, -my * 1.8 + 0.6, 0.75];
     const ll = Math.hypot(...lv);
     const L = toObj(lv.map((v) => v / ll));
