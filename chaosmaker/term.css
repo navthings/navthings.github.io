@@ -1,0 +1,81 @@
+.term {
+  margin-top: 36px;
+  padding: 18px 20px;
+  border-radius: 18px;
+  background: var(--ink);
+  color: var(--bg);
+  font: 500 14px/1.6 var(--mono);
+  height: min(460px, 62vh);
+  overflow-y: auto;
+  cursor: text;
+  box-shadow: 0 1px 1px rgba(58, 32, 184, 0.08), 0 18px 40px -14px rgba(58, 32, 184, 0.45);
+  animation: up 0.7s var(--spring) 0.25s backwards;
+}
+
+.term-out {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.term-out .dim {
+  color: color-mix(in srgb, var(--bg) 60%, var(--ink));
+}
+
+.term-out .err {
+  color: #ffb39a;
+}
+
+.term-line {
+  display: flex;
+  gap: 0;
+}
+
+.term-prompt {
+  white-space: pre;
+  color: color-mix(in srgb, var(--bg) 70%, var(--ink));
+}
+
+.term-in {
+  flex: 1;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  caret-color: var(--bg);
+}
+
+.term ::selection {
+  background: var(--bg);
+  color: var(--ink);
+}
+
+.term-hint {
+  margin-top: 10px;
+  font: 500 12px var(--mono);
+  color: var(--ink-3);
+}
+
+.thanks p {
+  margin-top: 48px;
+  color: var(--ink-2);
+  font-size: 15px;
+}
+
+.thanks a {
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--ink) 45%, transparent);
+  text-underline-offset: 3px;
+}
+
+.thanks a:hover {
+  color: var(--accent);
+  text-decoration-style: wavy;
+}
+
+.lede code {
+  font-size: 0.85em;
+}

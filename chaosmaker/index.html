@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script>
+    document.documentElement.classList.add("js");
+    addEventListener("pagereveal", (e) => document.documentElement.classList.add(e.viewTransition ? "vt-in" : "revealed"), { once: true });
+  </script>
+
+  <title>chaosmaker · navthings</title>
+
+  <meta name="description" content="a tiny unix machine running in your browser, built on termos by chaosmaker. look around my projects and posts from a terminal." />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="navthings" />
+  <meta property="og:title" content="chaosmaker" />
+  <meta property="og:description" content="a tiny unix machine running in your browser, built on termos by chaosmaker." />
+  <meta property="og:url" content="https://navthings.github.io/chaosmaker/" />
+  <meta property="og:image" content="https://navthings.github.io/assets/og/chaosmaker.png?v=1" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="chaosmaker" />
+  <meta name="twitter:description" content="a tiny unix machine running in your browser, built on termos by chaosmaker." />
+  <meta name="twitter:image" content="https://navthings.github.io/assets/og/chaosmaker.png?v=1" />
+  <link rel="canonical" href="https://navthings.github.io/chaosmaker/" />
+  <meta name="theme-color" content="#f4efff" />
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../apple-touch-icon.png" />
+  <link rel="stylesheet" href="../assets/base.css" />
+  <link rel="stylesheet" href="../assets/page.css" />
+  <link rel="stylesheet" href="term.css" />
+</head>
+
+<body>
+  <a class="skip" href="#main">skip to content</a>
+
+  <main class="page wide" id="main">
+    <header class="page-head">
+      <a class="page-name" href="../">nav</a>
+      <p class="crumb"><span>chaosmaker</span></p>
+      <h1 class="page-title">chaosmaker</h1>
+      <p class="lede">a tiny unix machine running right here in your browser. its built on <a href="https://git.gornodox.dev/ChaosMaker/termos" target="_blank" rel="noopener">termos</a>, a whole little os written in typescript by chaosmaker. type <code>help</code> to start.</p>
+    </header>
+
+    <section class="term" aria-label="terminal">
+      <div class="term-out" role="log" aria-live="polite"></div>
+      <label class="term-line">
+        <span class="term-prompt"></span>
+        <input class="term-in" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="command" />
+      </label>
+    </section>
+    <p class="term-hint">up and down for history, tab to complete. files you make go away when you leave.</p>
+
+    <footer class="page-foot thanks">
+      <p>thanks to <a href="https://git.gornodox.dev/ChaosMaker" target="_blank" rel="noopener">ChaosMaker</a> for termos, and for letting me build something on it. its apache 2.0, the source is on <a href="https://git.gornodox.dev/ChaosMaker/termos" target="_blank" rel="noopener">their gitea</a>.</p>
+    </footer>
+  </main>
+
+  <script src="../assets/base.js"></script>
+  <script src="../assets/page.js"></script>
+  <script type="module" src="term.js"></script>
+</body>
+</html>
