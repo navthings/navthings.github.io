@@ -1236,3 +1236,13 @@ pre,
   font-size: clamp(120px, 22vw, 200px);
   line-height: 0.9;
 }
+
+/* links in posts were too faint in lilac */
+.links a,
+.prose a,
+.cs-text a,
+.also a,
+.tl-links a {
+  text-decoration-color: color-mix(in srgb, var(--ink) 45%, transparent);
+  text-decoration-thickness: 1.5px;
+}
