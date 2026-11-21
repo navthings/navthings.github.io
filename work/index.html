@@ -15,22 +15,22 @@
     addEventListener("pagereveal", (e) => document.documentElement.classList.add(e.viewTransition ? "vt-in" : "revealed"), { once: true });
   </script>
 
-  <title>work · navthings</title>
+  <title>things ive made · navthings</title>
 
-  <meta name="description" content="case studies: pretraining lilbase and sprout, finetuning lilchat and sprout, a paper on corpus size, and in-browser inference." />
+  <meta name="description" content="things nav has made: a radioactive dice, a rocket that balances itself, a rock paper scissors robot, and the small language models before that." />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="navthings" />
-  <meta property="og:title" content="work" />
-  <meta property="og:description" content="case studies: pretraining lilbase and sprout, finetuning lilchat and sprout, a paper on corpus size, and in-browser inference." />
+  <meta property="og:title" content="things ive made" />
+  <meta property="og:description" content="things nav has made: a radioactive dice, a rocket that balances itself, a rock paper scissors robot, and the small language models before that." />
   <meta property="og:url" content="https://navthings.github.io/work/" />
-  <meta property="og:image" content="https://navthings.github.io/assets/og/work.png?v=3" />
+  <meta property="og:image" content="https://navthings.github.io/assets/og/work.png?v=4" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
   <meta property="og:image:alt" content="the models so far, on navthings" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="work" />
-  <meta name="twitter:description" content="case studies: pretraining lilbase and sprout, finetuning lilchat and sprout, a paper on corpus size, and in-browser inference." />
-  <meta name="twitter:image" content="https://navthings.github.io/assets/og/work.png?v=3" />
+  <meta name="twitter:title" content="things ive made" />
+  <meta name="twitter:description" content="things nav has made: a radioactive dice, a rocket that balances itself, a rock paper scissors robot, and the small language models before that." />
+  <meta name="twitter:image" content="https://navthings.github.io/assets/og/work.png?v=4" />
   <link rel="canonical" href="https://navthings.github.io/work/" />
   <meta name="theme-color" content="#f4efff" />
   <link rel="icon" type="image/svg+xml" href="../favicon.svg" />
@@ -53,10 +53,23 @@
   <main class="page" id="main">
     <header class="page-head">
       <a class="page-name" href="../">nav</a>
-      <p class="crumb"><a href="../work/">work</a><span>timeline</span></p>
-      <h1 class="page-title">the models so far</h1>
-      <p class="lede">in the order i made them, starting with a transformer that only knew one sentence. the dots grow with the number of parameters. the whole thing took 29 days.</p>
+      <p class="crumb"><span>things ive made</span></p>
+      <h1 class="page-title" style="view-transition-name: title">things ive made</h1>
+      <p class="lede">newest first. most of it lives on <a href="https://github.com/navthings" target="_blank" rel="noopener">github</a>, and the small language models i trained before all this are further down.</p>
     </header>
+
+    <ul class="list builds">
+        <li><a class="row" href="https://github.com/navthings/dice-of-god" target="_blank" rel="noopener"><span class="t"><b>dice of god</b> dice that roll from radioactive decay</span><span class="m">nov</span></a></li>
+        <li><a class="row" href="https://github.com/navthings/liltube" target="_blank" rel="noopener"><span class="t"><b>liltube</b> youtube with only the good channels</span><span class="m">nov</span></a></li>
+        <li><a class="row" href="https://github.com/navthings/lilalt" target="_blank" rel="noopener"><span class="t"><b>lilalt</b> beeps your rockets max height after it lands</span><span class="m">nov</span></a></li>
+        <li><a class="row" href="https://github.com/navthings/lilpid" target="_blank" rel="noopener"><span class="t"><b>liltvc</b> a rocket that balances itself on a stand</span><span class="m">nov</span></a></li>
+        <li><a class="row" href="https://github.com/navthings/airgpt" target="_blank" rel="noopener"><span class="t"><b>airgpt</b> train a chatbot from scratch on a mac</span><span class="m">oct</span></a></li>
+        <li><a class="row" href="https://github.com/navthings/babel" target="_blank" rel="noopener"><span class="t"><b>babel</b> my own library of babel, mining it for real english</span><span class="m">oct</span></a></li>
+        <li><a class="row" href="https://github.com/navthings/lilrps" target="_blank" rel="noopener"><span class="t"><b>lilrps</b> rock paper scissors robot that reads your hand early</span><span class="m">oct</span></a></li>
+    </ul>
+
+    <h2 class="sub" id="models">the models so far</h2>
+    <p class="lede">in the order i made them, starting with a transformer that only knew one sentence. the dots grow with the number of parameters. the whole thing took 29 days.</p>
 
     <ol class="tl" role="list">
         <li class="tl-line" aria-hidden="true"><span class="tl-fill"></span></li>
