@@ -183,28 +183,6 @@ svg {
   }
 }
 
-/* switching theme wipes the new colours out from the toggle in a circle */
-html.theming ::view-transition-old(root) {
-  animation: none;
-}
-
-html.theming ::view-transition-new(root) {
-  animation: wipe 0.7s cubic-bezier(0.65, 0, 0.35, 1) both;
-}
-
-html.theming * {
-  view-transition-name: none !important;
-}
-
-@keyframes wipe {
-  from {
-    clip-path: circle(0 at var(--tx, 100%) var(--ty, 0));
-  }
-  to {
-    clip-path: circle(var(--tr, 150vmax) at var(--tx, 100%) var(--ty, 0));
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
