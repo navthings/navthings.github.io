@@ -239,3 +239,42 @@ a:focus-visible {
   background: linear-gradient(currentColor, currentColor) 0 100% / 100% 1.5px no-repeat;
   padding-bottom: 2px;
 }
+
+/* the channel pfp sits next to the handle, with a slow live ring */
+.pfp {
+  position: relative;
+  display: inline-block;
+  width: 1.15em;
+  height: 1.15em;
+  margin: 0 0.3em 0 0.1em;
+  vertical-align: -0.2em;
+}
+
+.pfp img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  display: block;
+}
+
+.pfp::after {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  border: 2px solid #ff3b30;
+  animation: live 2.4s ease-in-out infinite;
+}
+
+@keyframes live {
+  50% {
+    transform: scale(1.12);
+    opacity: 0.35;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pfp::after {
+    animation: none;
+  }
+}
