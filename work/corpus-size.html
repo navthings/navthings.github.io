@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script>
     try {
-      const t = localStorage.getItem("theme");
-      if (t === "light" || t === "dark") document.documentElement.dataset.theme = t;
+      const t = localStorage.getItem("colorway");
+      if (t === "tomato" || t === "phosphor") document.documentElement.dataset.theme = t;
     } catch (err) {}
   </script>
   <script>
@@ -32,8 +32,7 @@
   <meta name="twitter:description" content="same model, four amounts of data. what happened when i trained lilstory on 1, 5, 10 and 15 percent of tinystories." />
   <meta name="twitter:image" content="https://navthings.github.io/assets/og/corpus-size.png?v=1" />
   <link rel="canonical" href="https://navthings.github.io/work/corpus-size.html" />
-  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
-  <meta name="theme-color" content="#0c0c0c" media="(prefers-color-scheme: dark)" />
+  <meta name="theme-color" content="#f4efff" />
   <link rel="icon" type="image/svg+xml" href="../favicon.svg" />
   <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png" />
   <link rel="apple-touch-icon" href="../apple-touch-icon.png" />
@@ -55,7 +54,6 @@
     }
   }
   </script>
-  <link rel="preload" href="../assets/fonts/geist.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="stylesheet" href="../assets/base.css" />
   <link rel="stylesheet" href="../assets/work.css" />
   <link rel="stylesheet" href="../assets/page.css" />
@@ -64,23 +62,16 @@
 <body>
   <a class="skip" href="#main">skip to content</a>
 
-  <div class="controls">
-    <button class="theme" type="button" aria-label="switch to dark mode" aria-pressed="false">
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <mask id="moon-cut"><rect width="24" height="24" fill="#fff" /><circle class="cut" cx="24" cy="2" r="7" fill="#000" /></mask>
-        <circle class="disc" cx="12" cy="12" r="5" mask="url(#moon-cut)" />
-        <g class="rays">
-          <path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4" />
-        </g>
-      </svg>
-      <span class="theme-tip" aria-hidden="true">following your system</span>
-    </button>
+  <div class="ways" role="group" aria-label="colours">
+    <button type="button" data-way="lilac" aria-label="lilac"><i></i></button>
+    <button type="button" data-way="tomato" aria-label="tomato"><i></i></button>
+    <button type="button" data-way="phosphor" aria-label="phosphor"><i></i></button>
   </div>
 
   <main class="page wide" id="main">
     <header class="page-head">
       <a class="page-name" href="../">nav</a>
-      <p class="crumb"><a href="../#work">work</a><span>research</span><span>sep 2026</span></p>
+      <p class="crumb"><a href="../work/">work</a><span>research</span><span>sep 2026</span></p>
       <h1 class="page-title" style="view-transition-name: t-paper">the paper</h1>
       <p class="lede">i wanted to see how much the amount of data actually matters if you keep everything else the same. so i trained the same model four times on more and more of tinystories, and wrote it up.</p>
       <dl class="facts">

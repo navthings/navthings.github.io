@@ -1118,3 +1118,82 @@ html.vt-in .page-head > * {
     transform: none;
   }
 }
+
+/* nov 2026 refresh: serif italic titles like the home, mono for code, wavy links */
+
+.page-name {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 28px;
+  letter-spacing: 0;
+  line-height: 1;
+  color: var(--ink);
+}
+
+.page-name:hover {
+  color: var(--accent);
+}
+
+.page-title {
+  margin-top: 14px;
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 54px;
+  letter-spacing: -0.01em;
+  line-height: 1.02;
+}
+
+.prose,
+.cs-text {
+  font-size: 17.5px;
+}
+
+.prose h2,
+.cs-h {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 28px;
+  letter-spacing: 0;
+  line-height: 1.1;
+}
+
+.prose ul,
+.cs-text ul {
+  list-style: "> ";
+}
+
+.links a:hover,
+.prose a:hover,
+.cs-text a:hover,
+.also a:hover,
+.tl-links a:hover {
+  color: var(--accent);
+  text-decoration-color: currentColor;
+  text-decoration-style: wavy;
+}
+
+code,
+pre,
+.cmd {
+  font-family: var(--mono);
+}
+
+.group h2,
+.crumb {
+  font-family: var(--mono);
+  font-size: 12px;
+}
+
+::selection {
+  background: var(--ink);
+  color: var(--bg);
+}
+
+@media (max-width: 620px) {
+  .page-title {
+    font-size: 42px;
+  }
+}

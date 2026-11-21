@@ -157,7 +157,7 @@
   display: block;
   padding: 16px 20px;
   background: var(--ink);
-  color: #eaeaea;
+  color: var(--bg);
   font-family: var(--sans);
   font-size: 13.5px;
   line-height: 1.6;
@@ -400,7 +400,7 @@ html:not(.js) .pair .track b {
 
 .fmt .you {
   background: var(--ink);
-  color: #fff;
+  color: var(--bg);
 }
 
 .fmt .bot {

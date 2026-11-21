@@ -142,20 +142,20 @@
 
 .model.on {
   background: var(--ink);
-  color: #a9a9a9;
+  color: color-mix(in srgb, var(--bg) 70%, var(--ink));
 }
 
 .model.on .name {
-  color: #fff;
+  color: var(--bg);
 }
 
 .model.on .state {
-  color: #8a8a8a;
+  color: color-mix(in srgb, var(--bg) 55%, var(--ink));
 }
 
 .model.on .bar {
-  background: #2a2a2a;
-  color: #fff;
+  background: color-mix(in srgb, var(--ink) 80%, var(--bg));
+  color: var(--bg);
 }
 
 .model.on:not(.loading) .bar,
@@ -233,7 +233,7 @@
 .msg.you {
   align-self: flex-end;
   background: var(--ink);
-  color: #fff;
+  color: var(--bg);
   border-bottom-right-radius: 6px;
 }
 
@@ -310,7 +310,7 @@
 }
 
 .suggest-row .btn:hover {
-  background: #fafafa;
+  background: var(--card-2);
 }
 
 .composer {
@@ -615,7 +615,7 @@ textarea:focus-visible {
 }
 
 .tk.cut b {
-  background: #ffe2d4;
+  background: color-mix(in srgb, var(--accent) 22%, transparent);
 }
 
 .tk.same b {

@@ -21,81 +21,38 @@
   });
 
 
-  // theme: a tap flips it, holding hands it back to the device
+  // colourways: lilac, tomato, phosphor. the new one wipes out from the swatch
 
-  const themeBtn = $(".theme");
-  if (!themeBtn) return;
-  const systemDark = matchMedia("(prefers-color-scheme: dark)");
+  const ways = $$(".ways button");
+  if (!ways.length) return;
   const metas = $$('meta[name="theme-color"]');
-  const isDark = () => (root.dataset.theme ? root.dataset.theme === "dark" : systemDark.matches);
+  const current = () => root.dataset.theme || "lilac";
 
-  function syncTheme() {
-    const dark = isDark();
-    themeBtn.setAttribute("aria-pressed", String(dark));
-    themeBtn.setAttribute("aria-label", dark ? "switch to light mode" : "switch to dark mode");
-    for (const m of metas) {
-      if (root.dataset.theme) m.content = dark ? "#0c0c0c" : "#ffffff";
-      else m.content = m.media.includes("dark") ? "#0c0c0c" : "#ffffff";
-    }
+  function sync() {
+    for (const b of ways) b.setAttribute("aria-pressed", String(b.dataset.way === current()));
+    const bg = getComputedStyle(root).getPropertyValue("--bg").trim();
+    for (const m of metas) m.content = bg;
   }
 
-  function setTheme(value) {
-    if (value) root.dataset.theme = value;
-    else delete root.dataset.theme;
-    try {
-      if (value) localStorage.setItem("theme", value);
-      else localStorage.removeItem("theme");
-    } catch (err) {
-      console.warn("couldnt save the theme", err);
-    }
-    syncTheme();
+  function setWay(w) {
+    if (w === "lilac") delete root.dataset.theme;
+    else root.dataset.theme = w;
+    try { localStorage.setItem("colorway", w); } catch (err) { console.warn("couldnt save the colourway", err); }
+    sync();
   }
 
-  // the new colours spread out in a circle from the button
-  function changeTheme(value) {
-    const before = isDark();
-    if (!document.startViewTransition || reduce) return setTheme(value);
-    const r = themeBtn.getBoundingClientRect();
-    const x = r.left + r.width / 2;
-    const y = r.top + r.height / 2;
+  for (const b of ways) b.addEventListener("click", () => {
+    const w = b.dataset.way;
+    if (w === current()) return;
+    if (!document.startViewTransition || reduce) return setWay(w);
+    const r = b.getBoundingClientRect();
+    const x = r.left + r.width / 2, y = r.top + r.height / 2;
     root.style.setProperty("--tx", x + "px");
     root.style.setProperty("--ty", y + "px");
     root.style.setProperty("--tr", Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y)) + "px");
     root.classList.add("theming");
-    const t = document.startViewTransition(() => {
-      setTheme(value);
-      if (isDark() === before) root.classList.remove("theming");
-    });
-    t.finished.finally(() => root.classList.remove("theming"));
-  }
-
-  let holdTimer = 0;
-  let held = false;
-  themeBtn.addEventListener("pointerdown", (e) => {
-    if (e.button > 0) return;
-    held = false;
-    themeBtn.classList.add("holding");
-    holdTimer = setTimeout(() => {
-      held = true;
-      themeBtn.classList.remove("holding", "pulse");
-      void themeBtn.offsetWidth;
-      themeBtn.classList.add("pulse", "told");
-      changeTheme(null);
-      setTimeout(() => themeBtn.classList.remove("told"), 1600);
-    }, 600);
+    document.startViewTransition(() => setWay(w)).finished.finally(() => root.classList.remove("theming"));
   });
-  for (const ev of ["pointerup", "pointerleave", "pointercancel"]) {
-    themeBtn.addEventListener(ev, () => {
-      clearTimeout(holdTimer);
-      themeBtn.classList.remove("holding");
-    });
-  }
-  themeBtn.addEventListener("click", () => {
-    if (held) return (held = false);
-    changeTheme(isDark() ? "light" : "dark");
-  });
-  themeBtn.addEventListener("contextmenu", (e) => e.preventDefault());
-  systemDark.addEventListener("change", syncTheme);
-  syncTheme();
+  sync();
 
 })();
