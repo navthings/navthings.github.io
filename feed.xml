@@ -3,9 +3,23 @@
   <channel>
     <title>navthings</title>
     <link>https://navthings.github.io/</link>
-    <description>nav, machine learning engineer and researcher. notes on pretraining, finetuning and scaling experiments.</description>
+    <description>nav builds random stuff in perth. notes on what i made and how.</description>
     <language>en</language>
     <atom:link href="https://navthings.github.io/feed.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>i redid my whole website</title>
+      <link>https://navthings.github.io/blog/website.html</link>
+      <guid>https://navthings.github.io/blog/website.html</guid>
+      <pubDate>Sat, 21 Nov 2026 07:00:00 +0000</pubDate>
+      <description>my site still said machine learning engineer and researcher, which isnt really me anymore. so i redid all of it, with a 3d ascii version of my logo you can fling around.</description>
+    </item>
+    <item>
+      <title>hack club took over my life</title>
+      <link>https://navthings.github.io/blog/hackclub.html</link>
+      <guid>https://navthings.github.io/blog/hackclub.html</guid>
+      <pubDate>Sat, 21 Nov 2026 06:00:00 +0000</pubDate>
+      <description>im on team sami in hack clubs fallen program, building hardware to show in shenzhen in december. somehow im the captain now.</description>
+    </item>
     <item>
       <title>airgpt, train a chatbot from scratch on a mac</title>
       <link>https://navthings.github.io/blog/airgpt.html</link>

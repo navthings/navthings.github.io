@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script>
+    try {
+      const t = localStorage.getItem("colorway");
+      if (t === "tomato" || t === "phosphor") document.documentElement.dataset.theme = t;
+    } catch (err) {}
+  </script>
+  <script>
+    document.documentElement.classList.add("js");
+    // the only moment to know if a page transition brought us here is before the first paint
+    addEventListener("pagereveal", (e) => document.documentElement.classList.add(e.viewTransition ? "vt-in" : "revealed"), { once: true });
+  </script>
+
+  <title>i redid my whole website · navthings</title>
+
+  <meta name="description" content="my site still said machine learning engineer and researcher, which isnt really me anymore. so i redid all of it, with a 3d ascii version of my logo you can fling around." />
+  <meta property="og:type" content="article" />
+  <meta property="article:published_time" content="2026-11-21" />
+  <meta property="og:site_name" content="navthings" />
+  <meta property="og:title" content="i redid my whole website" />
+  <meta property="og:description" content="my site still said machine learning engineer and researcher, which isnt really me anymore. so i redid all of it, with a 3d ascii version of my logo you can fling around." />
+  <meta property="og:url" content="https://navthings.github.io/blog/website.html" />
+  <meta property="og:image" content="https://navthings.github.io/assets/og/post-website.png?v=3" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="i redid my whole website, a post on navthings" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="i redid my whole website" />
+  <meta name="twitter:description" content="my site still said machine learning engineer and researcher, which isnt really me anymore. so i redid all of it, with a 3d ascii version of my logo you can fling around." />
+  <meta name="twitter:image" content="https://navthings.github.io/assets/og/post-website.png?v=3" />
+  <link rel="canonical" href="https://navthings.github.io/blog/website.html" />
+  <meta name="theme-color" content="#f4efff" />
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../apple-touch-icon.png" />
+  <link rel="alternate" type="application/rss+xml" title="navthings" href="../feed.xml" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "i redid my whole website",
+    "datePublished": "2026-11-21",
+    "description": "my site still said machine learning engineer and researcher, which isnt really me anymore. so i redid all of it, with a 3d ascii version of my logo you can fling around.",
+    "url": "https://navthings.github.io/blog/website.html",
+    "image": "https://navthings.github.io/assets/og/post-website.png?v=3",
+    "author": {
+      "@type": "Person",
+      "name": "nav",
+      "url": "https://navthings.github.io/"
+    }
+  }
+  </script>
+  <link rel="stylesheet" href="../assets/base.css" />
+  <link rel="stylesheet" href="../assets/page.css" />
+</head>
+
+<body>
+  <a class="skip" href="#main">skip to content</a>
+
+  <div class="ways" role="group" aria-label="colours">
+    <button type="button" data-way="lilac" aria-label="lilac"><i></i></button>
+    <button type="button" data-way="tomato" aria-label="tomato"><i></i></button>
+    <button type="button" data-way="phosphor" aria-label="phosphor"><i></i></button>
+  </div>
+
+  <main class="page" id="main">
+    <header class="page-head">
+      <a class="page-name" href="../">nav</a>
+      <p class="crumb"><a href="../blog/">writing</a><time datetime="2026-11-21">21 nov 2026</time></p>
+      <h1 class="page-title" style="view-transition-name: p-website">i redid my whole website</h1>
+    </header>
+
+    <article class="prose">
+        <p>i looked at my website and it said "machine learning engineer and researcher" at the top. thats not really me anymore. i still like the models i made, but lately i build random stuff, i do olympiad maths, im captain of a <a href="hackclub.html">hack club</a> team and im starting a youtube channel. the site was showing the september version of me, so i redid all of it.</p>
+        <h2>the inspo</h2>
+        <p>two sites. <a href="https://tongyu.fish" target="_blank" rel="noopener">tongyu.fish</a> is my favourite. a big name, a few lines, and an ascii shark that follows your mouse. it has so much personality and barely anything on it. and <a href="https://gabin.gay" target="_blank" rel="noopener">gabin.gay</a>, which has hand drawn flowers you can throw around the page. both feel like a person made them, not a template.</p>
+        <h2>the thing on the home page</h2>
+        <p>i wanted one ascii toy like tongyus shark. first idea was my rocket, then a utah teapot that poured tea when you clicked it, which was funny but kinda mid. now its my @n logo, made 3d and drawn in ascii like donut.c. it looks at your cursor, the light follows your cursor, and you can grab it and fling it. it spins and then settles back facing you. theres a spin counter if you want to waste time.</p>
+        <p>under the hood the logo gets turned into a distance field once when the page loads, then every character on the left side of the screen is a ray that checks if it hits the logo. the motion is all springs, which is why it overshoots a tiny bit and feels alive instead of robotic.</p>
+        <h2>colours</h2>
+        <p>i go through phases, so theres three colourways: lilac, tomato and phosphor (amber on black, like an old terminal). the little dots in the bottom right switch them, and the new colour wipes across the page from the dot you clicked. it remembers your pick.</p>
+        <h2>roads</h2>
+        <p>i was playing mini motorways and wanted that feeling where a road draws itself and a tiny car drives along it. so on the writing and work pages, hovering a row lays down a little road and a car drives to it. the 404 page is a whole tiny city now.</p>
+        <p>claude helped me write a lot of the code for this. the taste is mine though, i made it redo the home like five times.</p>
+    </article>
+
+    <nav class="pager" aria-label="more posts">
+      <a class="older" href="hackclub.html"><span>older</span>hack club took over my life</a>
+    </nav>
+
+    <footer class="page-foot">
+      <nav class="elsewhere" aria-label="elsewhere">
+        <a href="https://github.com/navthings" target="_blank" rel="noopener">github</a>
+        <a href="https://huggingface.co/navthings" target="_blank" rel="noopener">hugging face</a>
+        <a href="https://ollama.com/navthings" target="_blank" rel="noopener">ollama</a>
+        <a href="https://orcid.org/0009-0002-2764-866X" target="_blank" rel="noopener">orcid</a>
+        <a class="email" href="mailto:navneet.dagdiya@gmail.com"><span class="slot"><span>email</span><span aria-hidden="true">copied</span></span></a>
+      </nav>
+    </footer>
+  </main>
+
+  <script src="../assets/base.js"></script>
+  <script src="../assets/page.js"></script>
+</body>
+</html>
