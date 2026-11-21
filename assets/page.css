@@ -1198,57 +1198,6 @@ pre,
   }
 }
 
-/* mini motorways: hovering a row lays a road under it and a tiny car drives to the end, then back */
-
-.list .row {
-  position: relative;
-  padding: 8px 0 14px;
-}
-
-.list .row::after,
-.list .row::before {
-  content: "";
-  position: absolute;
-  bottom: 3px;
-  pointer-events: none;
-}
-
-.list .row::after {
-  left: 0;
-  right: 0;
-  height: 6px;
-  border-radius: 3px;
-  background: var(--ink-4);
-  clip-path: inset(0 100% 0 0 round 3px);
-  transition: clip-path 0.4s var(--ease) 0.5s;
-}
-
-.list .row::before {
-  z-index: 1;
-  left: 1px;
-  bottom: 4px;
-  width: 11px;
-  height: 4px;
-  border-radius: 1.5px;
-  background: var(--accent);
-  opacity: 0;
-  transition: left 0.55s cubic-bezier(0.5, 0, 0.3, 1), opacity 0.15s ease 0.5s;
-}
-
-@media (hover: hover) {
-  .list .row:hover::after,
-  .list .row:focus-visible::after {
-    clip-path: inset(0 0 0 0 round 3px);
-    transition: clip-path 0.45s var(--ease);
-  }
-
-  .list .row:hover::before,
-  .list .row:focus-visible::before {
-    left: calc(100% - 12px);
-    opacity: 1;
-    transition: left 1s cubic-bezier(0.55, 0, 0.2, 1) 0.28s, opacity 0.12s ease 0.25s;
-  }
-}
 
 .builds .t b {
   font-weight: 500;
