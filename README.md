@@ -2,7 +2,7 @@ navthings.github.io
 
 this is my website lol. its just plain html css and js on github pages, no framework no build step no nothing. if u want to see it go to navthings.github.io
 
-index.html is the home page. its my @n logo in 3d ascii on the left (like donut.c) and a few lines about me on the right. it looks at ur cursor and u can grab it and fling it, theres a spin counter if u wanna waste time. all the code for that is in assets/home.js, it turns my logo into a distance field and raymarches every character
+index.html is the home page. its my @n logo in 3d ascii on the left (like donut.c) and a few lines about me on the right. it looks at ur cursor and u can grab it and fling it, all the code for that is in assets/home.js, it turns my logo into a distance field and raymarches every character
 
 work/ is things ive made. the new stuff first (dice of god, liltube, lilalt, liltvc etc) and then the timeline of all my language models and the case studies for lilbase, sprout, lilchat, the paper and the playground
 
