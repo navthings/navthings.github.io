@@ -103,7 +103,7 @@
   // springs
   const sp = { yaw: 0, yawV: 0, pitch: 0, pitchV: 0, roll: 0, rollV: 0, spin: 0, spinV: 0 };
   const mouse = { x: null, y: null, vx: 0, seen: 0 };
-  let held = null, lastTurn = 0;
+  let held = null;
   let lastMove = performance.now();
 
   addEventListener("pointermove", (e) => {
@@ -194,8 +194,6 @@
       sp.spin += sp.spinV * dt;
     }
     for (const k in sp) if (!Number.isFinite(sp[k])) sp[k] = 0;
-    const turn = Math.round(sp.spin / (Math.PI * 2));
-    lastTurn = turn;
   };
 
   const draw = (now) => {
