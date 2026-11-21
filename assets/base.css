@@ -1,6 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500&family=Instrument+Serif:ital@0;1&family=IBM+Plex+Mono:wght@500&display=swap");
 
-/* three colourways, lilac is the default. same ones as the home */
 :root {
   --bg: #f4efff;
   --ink: #3a20b8;
@@ -19,33 +18,6 @@
   --serif: "Instrument Serif", Georgia, serif;
   --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
   color-scheme: light;
-}
-
-:root[data-theme="tomato"] {
-  --bg: #fbf1e1;
-  --ink: #c42d17;
-  --ink-2: #94402f;
-  --ink-3: #9c5a4b;
-  --ink-4: #e8c3b3;
-  --line: #f1dfcb;
-  --card: #fffaf2;
-  --card-2: #f6e7d3;
-  --shadow: 0 1px 1px rgba(196, 45, 23, 0.04), 0 8px 24px -6px rgba(120, 40, 20, 0.16), 0 0 0 1px rgba(196, 45, 23, 0.08);
-  --accent: #1f3a8a;
-}
-
-:root[data-theme="phosphor"] {
-  --bg: #12100b;
-  --ink: #ffb341;
-  --ink-2: #d9a257;
-  --ink-3: #ad8443;
-  --ink-4: #4d3c20;
-  --line: #2a2215;
-  --card: #1a170f;
-  --card-2: #221d13;
-  --shadow: 0 0 0 1px rgba(255, 179, 65, 0.1), 0 12px 32px -8px rgba(0, 0, 0, 0.7);
-  --accent: #fff1cf;
-  color-scheme: dark;
 }
 
 *,
@@ -111,53 +83,6 @@ svg {
   outline: 2px solid var(--ink);
   outline-offset: 4px;
   border-radius: 4px;
-}
-
-/* colourway swatches, bottom right */
-
-.ways {
-  position: fixed;
-  right: 12px;
-  bottom: 10px;
-  z-index: 20;
-  display: flex;
-}
-
-.ways button {
-  width: 34px;
-  height: 44px;
-  display: grid;
-  place-items: center;
-  touch-action: manipulation;
-}
-
-.ways i {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  box-shadow: 0 0 0 2px var(--bg), 0 0 0 3.5px var(--ink-3);
-  transition: transform 0.25s var(--spring), box-shadow 0.25s ease;
-}
-
-.ways button:hover i,
-.ways button:focus-visible i {
-  transform: scale(1.3);
-}
-
-.ways button[aria-pressed="true"] i {
-  box-shadow: 0 0 0 2px var(--bg), 0 0 0 3.5px var(--ink);
-}
-
-.ways [data-way="lilac"] i {
-  background: #3a20b8;
-}
-
-.ways [data-way="tomato"] i {
-  background: #c42d17;
-}
-
-.ways [data-way="phosphor"] i {
-  background: #ffb341;
 }
 
 /* links to elsewhere, and email copies itself */
@@ -291,6 +216,3 @@ html.theming * {
   }
 }
 
-:root[data-theme="phosphor"] body {
-  text-shadow: 0 0 10px rgba(255, 179, 65, 0.22);
-}

@@ -14,16 +14,7 @@
     const cs = getComputedStyle(root);
     col = { ink: cs.getPropertyValue("--ink").trim(), dim: cs.getPropertyValue("--dim").trim() };
   };
-  const ways = [...document.querySelectorAll(".ways button")];
-  const setWay = (w) => {
-    if (w === "lilac") delete root.dataset.theme;
-    else root.dataset.theme = w;
-    ways.forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.way === w)));
-    try { localStorage.setItem("colorway", w); } catch (err) {}
-    readColours();
-  };
-  ways.forEach((b) => b.addEventListener("click", () => setWay(b.dataset.way)));
-  setWay(root.dataset.theme || "lilac");
+  readColours();
 
   // rasterise the logo, then a signed distance field (felzenszwalb edt)
   const N = 384;

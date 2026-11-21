@@ -4,12 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script>
-    try {
-      const t = localStorage.getItem("colorway");
-      if (t === "tomato" || t === "phosphor") document.documentElement.dataset.theme = t;
-    } catch (err) {}
-  </script>
-  <script>
     document.documentElement.classList.add("js");
     // the only moment to know if a page transition brought us here is before the first paint
     addEventListener("pagereveal", (e) => document.documentElement.classList.add(e.viewTransition ? "vt-in" : "revealed"), { once: true });
@@ -62,12 +56,6 @@
 <body>
   <a class="skip" href="#main">skip to content</a>
 
-  <div class="ways" role="group" aria-label="colours">
-    <button type="button" data-way="lilac" aria-label="lilac"><i></i></button>
-    <button type="button" data-way="tomato" aria-label="tomato"><i></i></button>
-    <button type="button" data-way="phosphor" aria-label="phosphor"><i></i></button>
-  </div>
-
   <main class="page" id="main">
     <header class="page-head">
       <a class="page-name" href="../">nav</a>
@@ -82,8 +70,6 @@
         <h2>the thing on the home page</h2>
         <p>i wanted one ascii toy like tongyus shark. first idea was my rocket, then a utah teapot that poured tea when you clicked it, which was funny but kinda mid. now its my @n logo, made 3d and drawn in ascii like donut.c. it looks at your cursor, the light follows your cursor, and you can grab it and fling it. it spins and then settles back facing you. theres a spin counter if you want to waste time.</p>
         <p>under the hood the logo gets turned into a distance field once when the page loads, then every character on the left side of the screen is a ray that checks if it hits the logo. the motion is all springs, which is why it overshoots a tiny bit and feels alive instead of robotic.</p>
-        <h2>colours</h2>
-        <p>i go through phases, so theres three colourways: lilac, tomato and phosphor (amber on black, like an old terminal). the little dots in the bottom right switch them, and the new colour wipes across the page from the dot you clicked. it remembers your pick.</p>
         <p>claude helped me write a lot of the code for this. the taste is mine though, i made it redo the home like five times.</p>
     </article>
 
@@ -94,7 +80,6 @@
     <footer class="page-foot">
       <nav class="elsewhere" aria-label="elsewhere">
         <a href="https://github.com/navthings" target="_blank" rel="noopener">github</a>
-        <a href="https://youtube.com/@regretably" target="_blank" rel="noopener">youtube</a>
         <a href="https://huggingface.co/navthings" target="_blank" rel="noopener">hugging face</a>
         <a href="https://ollama.com/navthings" target="_blank" rel="noopener">ollama</a>
         <a href="https://orcid.org/0009-0002-2764-866X" target="_blank" rel="noopener">orcid</a>

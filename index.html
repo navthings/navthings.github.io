@@ -3,12 +3,6 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <script>
-    try {
-      const t = localStorage.getItem("colorway");
-      if (t) document.documentElement.dataset.theme = t;
-    } catch (err) {}
-  </script>
   <title>nav</title>
   <meta name="description" content="hi, im nav. i build random stuff in perth and film it for @regretably." />
   <meta property="og:type" content="website" />
@@ -69,12 +63,6 @@
       <p class="hint in" style="--i: 8" aria-live="polite">(grab it. fling it.)</p>
     </section>
   </main>
-
-  <div class="ways" role="group" aria-label="colours">
-    <button type="button" data-way="lilac" aria-label="lilac"><i></i></button>
-    <button type="button" data-way="tomato" aria-label="tomato"><i></i></button>
-    <button type="button" data-way="phosphor" aria-label="phosphor"><i></i></button>
-  </div>
 
   <script src="assets/home.js" defer></script>
 </body>

@@ -3,12 +3,6 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <script>
-    try {
-      const t = localStorage.getItem("colorway");
-      if (t === "tomato" || t === "phosphor") document.documentElement.dataset.theme = t;
-    } catch (err) {}
-  </script>
   <meta name="robots" content="noindex, nofollow" />
   <title>this week</title>
   <meta name="theme-color" content="#f4efff" />
@@ -376,11 +370,6 @@
 </head>
 
 <body>
-  <div class="ways" role="group" aria-label="colours">
-    <button type="button" data-way="lilac" aria-label="lilac"><i></i></button>
-    <button type="button" data-way="tomato" aria-label="tomato"><i></i></button>
-    <button type="button" data-way="phosphor" aria-label="phosphor"><i></i></button>
-  </div>
 
   <main class="w">
     <a class="home" href="/">nav</a>

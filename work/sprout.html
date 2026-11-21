@@ -4,12 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script>
-    try {
-      const t = localStorage.getItem("colorway");
-      if (t === "tomato" || t === "phosphor") document.documentElement.dataset.theme = t;
-    } catch (err) {}
-  </script>
-  <script>
     document.documentElement.classList.add("js");
     // the only moment to know if a page transition brought us here is before the first paint
     addEventListener("pagereveal", (e) => document.documentElement.classList.add(e.viewTransition ? "vt-in" : "revealed"), { once: true });
@@ -44,12 +38,6 @@
 
 <body>
   <a class="skip" href="#main">skip to content</a>
-
-  <div class="ways" role="group" aria-label="colours">
-    <button type="button" data-way="lilac" aria-label="lilac"><i></i></button>
-    <button type="button" data-way="tomato" aria-label="tomato"><i></i></button>
-    <button type="button" data-way="phosphor" aria-label="phosphor"><i></i></button>
-  </div>
 
   <main class="page wide" id="main">
     <header class="page-head">
@@ -261,7 +249,6 @@
     <footer class="page-foot">
       <nav class="elsewhere" aria-label="elsewhere">
         <a href="https://github.com/navthings" target="_blank" rel="noopener">github</a>
-        <a href="https://youtube.com/@regretably" target="_blank" rel="noopener">youtube</a>
         <a href="https://huggingface.co/navthings" target="_blank" rel="noopener">hugging face</a>
         <a href="https://ollama.com/navthings" target="_blank" rel="noopener">ollama</a>
         <a href="https://orcid.org/0009-0002-2764-866X" target="_blank" rel="noopener">orcid</a>
