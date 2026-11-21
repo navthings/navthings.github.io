@@ -1282,19 +1282,8 @@ pre,
   color: var(--ink);
 }
 
-/* the 404 city */
-.city {
-  display: block;
-  position: relative;
-  left: 50%;
-  width: min(880px, calc(100vw - 32px));
-  height: 380px;
-  margin-top: 48px;
-  transform: translateX(-50%);
-}
-
-@media (max-width: 620px) {
-  .city {
-    height: 300px;
-  }
+.lost {
+  margin-top: 18px;
+  font-size: clamp(120px, 22vw, 200px);
+  line-height: 0.9;
 }
