@@ -89,7 +89,7 @@
   }
   const pxUnit = 1 / ((y1 - y0) / 3.6);
   const gcx = (x0 + x1) / 2, gcy = (y0 + y1) / 2;
-  const half = { x: ((x1 - x0) / 2) * pxUnit + 0.15, y: 1.95 };
+  const half = { x: ((x1 - x0) / 2) * pxUnit + 0.25, y: 2.05 };
 
   const sd2 = (x, y) => {
     let gx = gcx + x / pxUnit, gy = gcy - y / pxUnit, out = 0;
@@ -100,12 +100,13 @@
     const b = field[o + N] + (field[o + N + 1] - field[o + N]) * tx;
     return (a + (b - a) * ty + out) * pxUnit;
   };
-  const DEPTH = 0.24, BEVEL = 0.12;
+  // bold thickens the hand drawn strokes a bit
+  const DEPTH = 0.26, BEVEL = 0.13, BOLD = 0.07;
   const sdf = (x, y, z) => {
     const bx = Math.max(Math.abs(x) - half.x, 0), by = Math.max(Math.abs(y) - half.y, 0), bz = Math.max(Math.abs(z) - DEPTH, 0);
     const box = Math.hypot(bx, by, bz);
     if (box > 0.2) return box;
-    const qx = sd2(x, y) + BEVEL, qz = Math.abs(z) - DEPTH + BEVEL;
+    const qx = sd2(x, y) - BOLD + BEVEL, qz = Math.abs(z) - DEPTH + BEVEL;
     return Math.min(Math.max(qx, qz), 0) + Math.hypot(Math.max(qx, 0), Math.max(qz, 0)) - BEVEL;
   };
 
@@ -149,8 +150,8 @@
   canvas.addEventListener("pointercancel", letGo);
 
   const ramp = ".'`,:;-~=+!*?%#&$@";
-  const born = performance.now();
-  let last = born;
+  let born = 0;
+  let last = performance.now();
 
   const step = (dt, now) => {
     const r = canvas.getBoundingClientRect();
@@ -199,7 +200,7 @@
     ctx.textBaseline = "top";
     const cw = ctx.measureText("M").width || 6.6, ch = small ? 10 : 12;
     const cols = Math.floor(W / cw), rows = Math.floor(H / ch);
-    const s = Math.min(W / 5.4, H / 5.6);
+    const s = Math.min(W / 4.9, H / 5.3);
     const bob = calm ? 0 : Math.sin(now / 900) * 0.07;
 
     const yaw = sp.yaw + sp.spin, pitch = sp.pitch, roll = sp.roll;
@@ -223,6 +224,7 @@
     const V = toObj([0, 0, 1]);
     const D = [-V[0], -V[1], -V[2]];
 
+    if (!born) born = now;
     const p = Math.min(1, (now - born) / 700);
     const reveal = calm ? 1 : Math.floor(p * 18) / 18;
     const midX = cols / 2, midY = rows / 2 - (0.3 * s) / ch;
@@ -252,7 +254,7 @@
             const nl = Math.hypot(nx, ny, nz) || 1;
             const diff = Math.max(0, (nx * L[0] + ny * L[1] + nz * L[2]) / nl);
             const spec = Math.max(0, (nx * Hh[0] + ny * Hh[1] + nz * Hh[2]) / nl) ** 36;
-            const br = Math.min(0.999, 0.04 + 0.78 * diff * diff + 0.55 * spec);
+            const br = Math.min(0.999, 0.08 + 0.82 * diff ** 1.6 + 0.55 * spec);
             const idx = Math.floor(br * ramp.length);
             chr = ramp[idx];
             bright = idx >= 6;
@@ -275,7 +277,7 @@
   };
 
   const loop = (now) => {
-    const dt = Math.min((now - last) / 1000, 0.05);
+    const dt = Math.max(0, Math.min((now - last) / 1000, 0.05));
     last = now;
     step(dt / 2, now); step(dt / 2, now);
     draw(now);
