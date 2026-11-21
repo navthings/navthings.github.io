@@ -140,6 +140,31 @@
   canvas.addEventListener("pointerup", letGo);
   canvas.addEventListener("pointercancel", letGo);
 
+  // the @n reacts to the links next to it
+  const kick = (a) => {
+    const h = a.getAttribute("href") || "";
+    if (h.startsWith("work")) sp.spinV += 13;
+    else if (h.startsWith("blog")) sp.pitchV += 7;
+    else if (h.startsWith("mailto")) sp.rollV += 5;
+    else if (h.includes("youtube")) sp.spinV -= 13;
+    else sp.yawV += 6;
+  };
+  for (const a of document.querySelectorAll(".about a")) {
+    a.addEventListener("pointerenter", () => !calm && kick(a));
+    // letters wave on hover
+    const text = a.textContent;
+    a.setAttribute("aria-label", text);
+    a.textContent = "";
+    [...text].forEach((c, i) => {
+      const s = document.createElement("span");
+      s.className = "ch";
+      s.style.setProperty("--c", i);
+      s.setAttribute("aria-hidden", "true");
+      s.textContent = c;
+      a.append(s);
+    });
+  }
+
   const ramp = ".'`,:;-~=+!*?%#&$@";
   let born = 0;
   let last = performance.now();
