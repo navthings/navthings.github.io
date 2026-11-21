@@ -271,11 +271,17 @@
     lit.forEach((l, j) => ctx.fillText(l, 0, j * ch));
   };
 
+  // stop drawing when its scrolled off screen, saves battery on phones
+  let onScreen = true;
+  if (typeof IntersectionObserver !== "undefined") new IntersectionObserver(([e]) => (onScreen = e.isIntersecting)).observe(canvas);
+
   const loop = (now) => {
     const dt = Math.max(0, Math.min((now - last) / 1000, 0.05));
     last = now;
-    step(dt / 2, now); step(dt / 2, now);
-    draw(now);
+    if (onScreen) {
+      step(dt / 2, now); step(dt / 2, now);
+      draw(now);
+    }
     requestAnimationFrame(loop);
   };
   if (document.fonts) document.fonts.ready.then(readColours);

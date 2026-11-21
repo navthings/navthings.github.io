@@ -2,17 +2,17 @@ navthings.github.io
 
 this is my website lol. its just plain html css and js on github pages, no framework no build step no nothing. if u want to see it go to navthings.github.io
 
-index.html is the home page. its got my name, what im doing rn, my work, my writing and links to find me. theres also a lil digit thing where u draw a number and a tiny neural net i made from scratch trys to guess it
+index.html is the home page. its my @n logo in 3d ascii on the left (like donut.c) and a few lines about me on the right. it looks at ur cursor and u can grab it and fling it, theres a spin counter if u wanna waste time. all the code for that is in assets/home.js, it turns my logo into a distance field and raymarches every character
 
-work/ is the case studies. these are the longer more serious ones where i explain how i actually built stuff like lilbase, sprout, lilchat, the corpus size paper and the playground. like what broke and how i fixed it
+work/ is things ive made. the new stuff first (dice of god, liltube, lilalt, liltvc etc) and then the timeline of all my language models and the case studies for lilbase, sprout, lilchat, the paper and the playground
 
-blog/ is my writing. short posts for basicly every model ive trained, from liltransformer (my first ever ml thing, it only knows one sentence) all the way to sprout and airgpt. also the one about my mlx pr getting merged which was lowkey the coolest thing ever
+blog/ is my writing. posts for basicly every model ive trained from liltransformer (it only knows one sentence) to sprout and airgpt, my mlx pr, and the newer ones about hack club and redoing this site
 
-playground/ lets u talk to my models in ur browser. they download once and run on ur own computer with wllama, theres no server at all. works best on chrome, safari is ok, firefox is slow sry
+playground/ lets u talk to my models in ur browser. they download once and run on ur own computer with wllama, no server at all. chrome is best, safari is ok, firefox is slow sry
 
-assets/ is all the css, js, fonts, og images and the little data files the home page needs (tokenizer, mnist samples etc)
+chaosmaker/ is a real little unix terminal running termos, which is an os in typescript made by chaosmaker (git.gornodox.dev/ChaosMaker/termos). the filesystem is my projects and posts so u can cd around and cat stuff. termos is apache 2.0, its license is in there too
 
-404.html is for when u get lost. feed.xml is the rss feed if ur into that. sitemap and robots are just there for google
+assets/ is all the css, js, og images and the little data files stuff needs. 404.html is for when u get lost. feed.xml is the rss feed if ur into that. sitemap and robots are just there for google
 
 everything is lowercase on purpose dont @ me
 
