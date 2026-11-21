@@ -7,6 +7,8 @@
   font: 500 14px/1.6 var(--mono);
   height: min(460px, 62vh);
   overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--bg) 35%, var(--ink)) transparent;
   cursor: text;
   box-shadow: 0 1px 1px rgba(58, 32, 184, 0.08), 0 18px 40px -14px rgba(58, 32, 184, 0.45);
   animation: up 0.7s var(--spring) 0.25s backwards;
